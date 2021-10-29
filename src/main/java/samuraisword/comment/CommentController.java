@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -72,10 +73,16 @@ public class CommentController {
 		return FORM_COMMENT;
 	}
 	
-	@PostMapping(value = { "/comments/{id_comment}" })
+	@PostMapping(value = { "/comments/edit/{id_comment}" })
 	public String processEditForm(@PathVariable("id_comment") int idComment, @Valid Comment comment, BindingResult result, Map<String, Object> model) {
-		commentService.saveComment(comment);
-		return FORM_COMMENT;
+		if (result.hasErrors()) {
+			model.put("comment", comment);
+			return FORM_COMMENT;
+		}
+		Comment commentToUpdate = commentService.findById(idComment).get();
+		BeanUtils.copyProperties(comment, commentToUpdate, "id","user");
+		commentService.saveComment(commentToUpdate);
+		return "redirect:/comments";
 	}
 	
 	@GetMapping(value = { "/comments/delete/{id_comment}" })
