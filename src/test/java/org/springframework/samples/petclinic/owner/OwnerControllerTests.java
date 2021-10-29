@@ -18,12 +18,16 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
-import org.springframework.samples.petclinic.configuration.SecurityConfiguration;
-import org.springframework.samples.petclinic.user.AuthoritiesService;
-import org.springframework.samples.petclinic.user.UserService;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+
+import samuraisword.samples.petclinic.configuration.SecurityConfiguration;
+import samuraisword.samples.petclinic.owner.Owner;
+import samuraisword.samples.petclinic.owner.OwnerController;
+import samuraisword.samples.petclinic.owner.OwnerService;
+import samuraisword.samples.petclinic.user.AuthoritiesService;
+import samuraisword.samples.petclinic.user.UserService;
 
 /**
  * Test class for {@link OwnerController}

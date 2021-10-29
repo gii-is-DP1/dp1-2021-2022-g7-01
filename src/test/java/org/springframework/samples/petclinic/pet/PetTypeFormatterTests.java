@@ -15,6 +15,10 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import samuraisword.samples.petclinic.pet.PetService;
+import samuraisword.samples.petclinic.pet.PetType;
+import samuraisword.samples.petclinic.pet.PetTypeFormatter;
+
 /**
  * Test class for {@link PetTypeFormatter}
  *
