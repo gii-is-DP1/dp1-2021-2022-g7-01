@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import lombok.Getter;
@@ -19,10 +20,10 @@ import samuraisword.samples.petclinic.user.User;
 @Table(name = "comments")
 public class Comment extends BaseEntity {
 	
-	@NotNull
+	@NotEmpty
 	private String title;
 	
-	@NotNull
+	@NotEmpty
 	private String body;
 	     
 	private Date createDate;
