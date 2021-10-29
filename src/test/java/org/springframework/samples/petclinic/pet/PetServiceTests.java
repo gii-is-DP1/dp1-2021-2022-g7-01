@@ -27,12 +27,17 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.samples.petclinic.owner.Owner;
-import org.springframework.samples.petclinic.owner.OwnerService;
-import org.springframework.samples.petclinic.pet.exceptions.DuplicatedPetNameException;
-import org.springframework.samples.petclinic.util.EntityUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import samuraisword.samples.petclinic.owner.Owner;
+import samuraisword.samples.petclinic.owner.OwnerService;
+import samuraisword.samples.petclinic.pet.Pet;
+import samuraisword.samples.petclinic.pet.PetService;
+import samuraisword.samples.petclinic.pet.PetType;
+import samuraisword.samples.petclinic.pet.Visit;
+import samuraisword.samples.petclinic.pet.exceptions.DuplicatedPetNameException;
+import samuraisword.samples.petclinic.util.EntityUtils;
 
 /**
  * Integration test of the Service and the Repository layer.

@@ -40,6 +40,12 @@
 					<span>Veterinarians</span>
 				</petclinic:menuItem>
 
+				<petclinic:menuItem active="${name eq 'comments'}" url="/comments"
+					title="comments">
+					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+					<span>Comments</span>
+				</petclinic:menuItem>
+
 				<petclinic:menuItem active="${name eq 'error'}" url="/oups"
 					title="trigger a RuntimeException to see how it is handled">
 					<span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
