@@ -13,7 +13,7 @@ INSERT INTO users(username,password,enabled) VALUES ('alefr99','123123',TRUE);
 INSERT INTO authorities(id,username,authority) VALUES (4,'alefr99','admin');
 
 INSERT INTO users(username,password,enabled) VALUES ('diecrequi','diecrequi',TRUE);
-INSERT INTO authorities(id,username,authority) VALUES (4,'diecrequi','admin');
+INSERT INTO authorities(id,username,authority) VALUES (5,'diecrequi','admin');
 
 INSERT INTO vets VALUES (1, 'James', 'Carter');
 INSERT INTO vets VALUES (2, 'Helen', 'Leary');
