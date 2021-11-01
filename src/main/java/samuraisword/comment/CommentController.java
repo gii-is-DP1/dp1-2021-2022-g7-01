@@ -38,8 +38,12 @@ public class CommentController {
 
 	@GetMapping(value = { "/comments" })
 	public String listComments(Map<String, Object> model) {
+		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		System.out.println(userDetails.getUsername());
 		Collection<Comment> listComments = commentService.findAll();
 		model.put("listComments", listComments);
+		model.put("username", userDetails.getUsername());
+		
 		return "comments/listComments";
 	}
 
