@@ -23,9 +23,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.samples.petclinic.user.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import samuraisword.samples.petclinic.owner.Owner;
+import samuraisword.samples.petclinic.owner.OwnerService;
+import samuraisword.samples.petclinic.user.User;
 
 /**
  * Integration test of the Service and the Repository layer.
