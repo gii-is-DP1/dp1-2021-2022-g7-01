@@ -7,7 +7,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -30,13 +29,32 @@ public class Logro extends BaseEntity {
 	@NotEmpty
 	private String body;
 
-	
-	@NotEmpty
-	private String categoria;
 
+	@ManyToOne
+	@JoinColumn(name = "typeL")
+	private LogroType type;
 	
-	@NotEmpty
-	private String rol;
+	public LogroType getType() {
+		return this.type;
+	}
+
+	public void LogroType(LogroType type) {
+		this.type = type;
+	}
+	
+	@ManyToOne
+	@JoinColumn(name = "typeR")
+	private RolType types;
+	
+	public RolType getTypes() {
+		return this.types;
+	}
+
+	public void Rol(RolType types) {
+		this.types = types;
+	}
+	
+
 	
 	@ManyToOne
 	@JoinColumn(name="username")

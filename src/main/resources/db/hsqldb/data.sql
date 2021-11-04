@@ -71,4 +71,14 @@ INSERT INTO visits(id,pet_id,visit_date,description) VALUES (4, 7, '2013-01-04',
 
 INSERT INTO comments (id, title, body, create_date, username) VALUES (1, 'Welcome to Samurai Sword', 'Welcome to everyone that want to play this game with us!', '2021-10-28', 'admin1');
 
-INSERT INTO logros (id, title, body, categoria, rol, username) VALUES (1, 'Welcome to Samurai Sword', 'Welcome to everyone that want to play this game with us!', 'Bronce', 'Ronin', 'admin1');
+INSERT INTO types1 VALUES (1, 'Bronce');
+INSERT INTO types1 VALUES (2, 'Plata');
+INSERT INTO types1 VALUES (3, 'Oro');
+INSERT INTO types1 VALUES (4, 'Diamante');
+
+INSERT INTO types2 VALUES (1, 'Shogun');
+INSERT INTO types2 VALUES (2, 'Ninja');
+INSERT INTO types2 VALUES (3, 'Samurai');
+INSERT INTO types2 VALUES (4, 'Ronin');
+
+INSERT INTO logros (id, title, body, typeL, typeR, username) VALUES (1, 'Welcome to Samurai Sword', 'Welcome to everyone that want to play this game with us!', 4, 1, 'admin1');

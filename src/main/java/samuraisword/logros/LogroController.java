@@ -13,10 +13,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-
+import samuraisword.samples.petclinic.pet.PetType;
 import samuraisword.samples.petclinic.user.User;
 import samuraisword.samples.petclinic.user.UserService;
 
@@ -64,6 +65,16 @@ public class LogroController {
 			logroService.saveLogros(logro);
 			return "redirect:/logros";
 		}
+	}
+	
+	@ModelAttribute("types1")
+	public Collection<LogroType> populatelogroTypes() {
+		return this.logroService.findLogroTypes();
+	}
+	
+	@ModelAttribute("types2")
+	public Collection<RolType> populateRolTypes() {
+		return this.logroService.findRolTypes();
 	}
 	
 	@GetMapping(value = { "/logros/edit/{id_logro}" })
