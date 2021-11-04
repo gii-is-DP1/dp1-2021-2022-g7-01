@@ -45,6 +45,12 @@
 					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
 					<span>Comments</span>
 				</petclinic:menuItem>
+				
+				<petclinic:menuItem active="${name eq 'logros'}" url="/logros"
+					title="logros">
+					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+					<span>Logros</span>
+				</petclinic:menuItem>
 
 				<petclinic:menuItem active="${name eq 'error'}" url="/oups"
 					title="trigger a RuntimeException to see how it is handled">

@@ -1,0 +1,101 @@
+[33mcommit 8a5399131d5d6f49d05ce8234a4125a82258677d[m[33m ([m[1;36mHEAD -> [m[1;32malefrarod[m[33m, [m[1;31morigin/master[m[33m, [m[1;32mmaster[m[33m)[m
+Merge: 19973f3 76f98f6
+Author: Diego Crespo Quinta <71274936+diegocrequi@users.noreply.github.com>
+Date:   Mon Nov 1 23:01:29 2021 +0100
+
+    Merge pull request #45 from gii-is-DP1/diegocrequi
+    
+    Cambiar id usuario
+
+[33mcommit 76f98f6f1c787bac44140a202e4970a375d16061[m
+Author: diegocrequi <diegocrespodcq98@gmail.com>
+Date:   Mon Nov 1 23:00:30 2021 +0100
+
+    Cambiar id usuario
+
+[33mcommit 19973f3e62ab53045c38dbb682cfbf22d5457562[m
+Merge: 3f4ca81 01eee1a
+Author: Diego Crespo Quinta <71274936+diegocrequi@users.noreply.github.com>
+Date:   Mon Nov 1 22:59:23 2021 +0100
+
+    Merge pull request #44 from gii-is-DP1/diegocrequi
+    
+    Añadir usuario diecrequi
+
+[33mcommit 01eee1abdcfaa383cd31882af13b0d8f36982a38[m
+Author: diegocrequi <diegocrespodcq98@gmail.com>
+Date:   Mon Nov 1 22:58:20 2021 +0100
+
+    Añadir usuario diecrequi
+
+[33mcommit 3f4ca81e7fcef9551516d107f7a7922150121684[m
+Merge: fa69fdc 1cf99cb
+Author: alefrarod <alefraile1@gmail.com>
+Date:   Mon Nov 1 22:44:50 2021 +0100
+
+    Merge pull request #43 from gii-is-DP1/alefrarod
+    
+    Usuario puede editar y eliminar mensaje propios
+
+[33mcommit 1cf99cb87ffcd6219c8350b796b3c6a5e1e0704f[m[33m ([m[1;31morigin/alefrarod[m[33m)[m
+Author: alefr99 <alefraile1@gmail.com>
+Date:   Mon Nov 1 21:08:02 2021 +0100
+
+    Usuario puede editar y eliminar mensaje propios
+
+[33mcommit fa69fdc3e61ceecaea4245959c1d367e63657dd4[m
+Merge: da1d7fa a2b00ac
+Author: Diego Crespo Quinta <71274936+diegocrequi@users.noreply.github.com>
+Date:   Fri Oct 29 16:06:50 2021 +0200
+
+    Merge pull request #19 from gii-is-DP1/diegocrequi
+    
+    Se añaden los documentos del primer sprint
+
+[33mcommit a2b00accd9557166b65a0af8a266fd149fbf9b73[m
+Author: diegocrequi <diegocrespodcq98@gmail.com>
+Date:   Fri Oct 29 16:06:21 2021 +0200
+
+    Se añaden los documentos del primer sprint
+
+[33mcommit da1d7fa09ebe9ec5ec845cc75b05ab5a4351949d[m
+Merge: feb655d 43e8e24
+Author: Diego Crespo Quinta <71274936+diegocrequi@users.noreply.github.com>
+Date:   Fri Oct 29 03:00:58 2021 +0200
+
+    Merge pull request #18 from gii-is-DP1/diegocrequi
+    
+    Diegocrequi
+
+[33mcommit 43e8e2438b651172f5c4dfb509663cd75c095391[m
+Author: diegocrequi <diegocrespodcq98@gmail.com>
+Date:   Fri Oct 29 03:00:15 2021 +0200
+
+    Fix editar comentario
+
+[33mcommit 68ee1269b925c5991f0cbd51f4019b6085dd4218[m
+Author: diegocrequi <diegocrespodcq98@gmail.com>
+Date:   Fri Oct 29 02:47:47 2021 +0200
+
+    Crear módulo de Comentario
+
+[33mcommit feb655db437d55444a3d8815a769ed784b096aee[m
+Merge: 3fd9445 fb7a90b
+Author: Diego Crespo Quinta <71274936+diegocrequi@users.noreply.github.com>
+Date:   Tue Oct 26 20:28:40 2021 +0200
+
+    Merge pull request #9 from gii-is-DP1/diegocrequi
+    
+    Modificar readme.md
+
+[33mcommit fb7a90b7c0a464bc275a5f202d5491db5101e2d9[m
+Author: diegocrequi <diegocrespodcq98@gmail.com>
+Date:   Tue Oct 26 20:26:03 2021 +0200
+
+    Modificar readme.md
+
+[33mcommit 3fd94454c3023028ab60dc6f04164e8ac952d260[m
+Author: github-classroom[bot] <66690702+github-classroom[bot]@users.noreply.github.com>
+Date:   Fri Oct 1 13:46:37 2021 +0000
+
+    Initial commit
