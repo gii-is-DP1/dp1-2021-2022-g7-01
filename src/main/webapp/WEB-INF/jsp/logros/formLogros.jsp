@@ -6,24 +6,25 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
 
-<petclinic:layout pageName="comments">
+<petclinic:layout pageName="logros">
     <h2>
-        <c:if test="${comment['new']}">New </c:if> Comment
+        <c:if test="${logro['new']}">New </c:if> Logro
     </h2>
-    <form:form modelAttribute="comment" class="form-horizontal" id="add-owner-form">
+    <form:form modelAttribute="logros" class="form-horizontal" id="add-owner-form">
         <div class="form-group has-feedback">
             <petclinic:inputField label="Title" name="title"/>
             <petclinic:inputField label="Body" name="body"/>
-            
+            <petclinic:inputField label="Categoria" name="categoria"/>
+            <petclinic:inputField label="Rol" name="rol"/>
         </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
                 <c:choose>
-                    <c:when test="${comment['new']}">
-                        <button class="btn btn-default" type="submit">Add Comment</button>
+                    <c:when test="${logro['new']}">
+                        <button class="btn btn-default" type="submit">Add Logro</button>
                     </c:when>
                     <c:otherwise>
-                        <button class="btn btn-default" type="submit">Update Comment</button>
+                        <button class="btn btn-default" type="submit">Update Logro</button>
                     </c:otherwise>
                 </c:choose>
             </div>
