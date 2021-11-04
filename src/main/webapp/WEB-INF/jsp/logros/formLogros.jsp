@@ -12,10 +12,14 @@
     </h2>
     <form:form modelAttribute="logros" class="form-horizontal" id="add-owner-form">
         <div class="form-group has-feedback">
-            <petclinic:inputField label="Title" name="title"/>
-            <petclinic:inputField label="Body" name="body"/>
-            <petclinic:inputField label="Categoria" name="categoria"/>
-            <petclinic:inputField label="Rol" name="rol"/>
+            <petclinic:inputField label="Name" name="title"/>
+            <petclinic:inputField label="Description" name="body"/>
+            <div class="control-group">
+            <petclinic:selectField name="type" label="Difficulty " names="${types1}" size="5"/>
+                </div>
+                <div class="control-group">
+            <petclinic:selectField name="types" label="Rol " names="${types2}" size="5"/>
+                </div>
         </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">

@@ -8,7 +8,6 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import samuraisword.samples.petclinic.pet.PetType;
 
 @Service
 public class LogroService {
@@ -20,7 +19,16 @@ public class LogroService {
 		this.logroRepository = logroRepository;
 	}
 	
+	@Transactional(readOnly = true)
+	public Collection<LogroType> findLogroTypes() throws DataAccessException {
+		return logroRepository.findLogroTypes();
+	}
 	
+	
+	@Transactional(readOnly = true)
+	public Collection<RolType> findRolTypes() throws DataAccessException {
+		return logroRepository.findRolTypes();
+	}
 	
 	public Collection<Logro> findAll() {
 		return logroRepository.findAll();

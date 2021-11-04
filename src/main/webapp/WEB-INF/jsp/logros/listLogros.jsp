@@ -15,8 +15,8 @@
 			<article>
 				<h3>${logro.title}</h3>
 				<p>${logro.body}</p>
-				<p>${logro.categoria}</p>
-				<p>${logro.rol}</p>
+				<p>Dificultad: ${logro.type}</p>
+				<p>Rol: ${logro.types}</p>
 				 <p style="text-align: right">Logro creado por: ${logro.user.username}</p>
 				<spring:url value="logros/edit/{id_logro}" var="editUrl">
 					<spring:param name="id_logro" value="${logro.id}" />
