@@ -6,13 +6,39 @@
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags"%>
 
 <petclinic:layout pageName="logros">
-	<h2>Logros</h2>
+	<h1 align = "center">Logros</h1>
 	<div class="container">
 		<div style="width: 100%; display: flex; justify-content: flex-end">
 			<a href="/logros/new" class="btn btn-default">Create Logro</a>
 		</div>
 		<c:forEach items="${listLogros}" var="logro">
 			<article>
+			<div align = "center">	
+				<h2 >ninja</h2>
+				
+				<spring:url value="/resources/images/roles/general.jpg" htmlEscape="true" var="petsImage"/>
+            <img  class="img-responsive" src="${petsImage}" align = "bottom" />
+            <table>
+            	<tr>
+            		<th>
+            		<p><a href = "">Imagen logro 1</a>  descripción</p>
+            		
+            		</th>
+            		<th>
+            		<p><a href = "">Imagen logro 1</a>  descripción</p>
+            		
+            		</th>
+            		<th>
+            		<p><a href = "">Imagen logro 1</a>  descripción</p>
+            		
+            		</th>
+            		<th>
+            		<p><a href = "">Imagen logro 1</a>  descripción</p>
+            		
+            		</th>
+            	</tr>
+            </table>
+			</div>
 				<h3>${logro.title}</h3>
 				<p>${logro.body}</p>
 				<p>Dificultad: ${logro.type}</p>
