@@ -80,5 +80,6 @@ INSERT INTO types2 VALUES (1, 'Shogun');
 INSERT INTO types2 VALUES (2, 'Ninja');
 INSERT INTO types2 VALUES (3, 'Samurai');
 INSERT INTO types2 VALUES (4, 'Ronin');
+INSERT INTO types2 VALUES (5, 'Ninguno');
 
-INSERT INTO logros (id, title, body, typeL, typeR, username) VALUES (1, 'Welcome to Samurai Sword', 'Welcome to everyone that want to play this game with us!', 4, 1, 'admin1');
+INSERT INTO logros (id, title, body, typeL, typeR, username) VALUES (1, 'Primer comentario', 'Realizar tu primer comentario', 1, 5, 'admin1');
