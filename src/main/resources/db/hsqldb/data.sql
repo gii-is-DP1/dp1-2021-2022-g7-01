@@ -15,6 +15,9 @@ INSERT INTO authorities(id,username,authority) VALUES (4,'alefr99','admin');
 INSERT INTO users(username,password,enabled) VALUES ('diecrequi','diecrequi',TRUE);
 INSERT INTO authorities(id,username,authority) VALUES (5,'diecrequi','admin');
 
+INSERT INTO friends(id_user, id_user_friend) VALUES ('diecrequi', 'alefr99');
+INSERT INTO friends(id_user, id_user_friend) VALUES ('vet1', 'diecrequi');
+
 INSERT INTO vets VALUES (1, 'James', 'Carter');
 INSERT INTO vets VALUES (2, 'Helen', 'Leary');
 INSERT INTO vets VALUES (3, 'Linda', 'Douglas');
