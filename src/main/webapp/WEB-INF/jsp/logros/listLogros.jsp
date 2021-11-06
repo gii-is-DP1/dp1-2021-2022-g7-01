@@ -14,10 +14,32 @@
 		<c:forEach items="${listLogros}" var="logro">
 			<article>
 			<div align = "center">	
-				<h2 >ninja</h2>
-				
+			<c:if test="${logro.types=='Ninguno'}">
+				<h2 >Ninguno</h2>
 				<spring:url value="/resources/images/roles/general.jpg" htmlEscape="true" var="petsImage"/>
             <img  class="img-responsive" src="${petsImage}" align = "bottom" />
+			</c:if>
+			<c:if test="${logro.types=='Ronin'}">
+				<h2 >Ronin</h2>
+				<spring:url value="/resources/images/roles/ronin.PNG" htmlEscape="true" var="petsImage"/>
+            <img  class="img-responsive" src="${petsImage}" align = "bottom" />
+			</c:if>
+			<c:if test="${logro.types=='Ninja'}">
+				<h2 >Ninja</h2>
+				<spring:url value="/resources/images/roles/ninja.png" htmlEscape="true" var="petsImage"/>
+            <img  class="img-responsive" src="${petsImage}" align = "bottom" />
+			</c:if>
+			<c:if test="${logro.types=='Shogun'}">
+				<h2 >Shogun</h2>
+				<spring:url value="/resources/images/roles/shogun.PNG" htmlEscape="true" var="petsImage"/>
+            <img  class="img-responsive" src="${petsImage}" align = "bottom" />
+			</c:if>
+			<c:if test="${logro.types=='Samurai'}">
+				<h2 >Samurai</h2>
+				<spring:url value="/resources/images/roles/samurai.PNG" htmlEscape="true" var="petsImage"/>
+            <img  class="img-responsive" src="${petsImage}" align = "bottom" />
+			</c:if>
+				
             <table>
             	<tr>
             		<th>
@@ -56,7 +78,7 @@
 					<a href="${fn:escapeXml(editUrl)}" class="btn btn-default">Delete
 						Logro</a>
 				
-
+		
 			</article>
 
 			<hr style="border-top: 1px solid #34302D">
