@@ -61,9 +61,6 @@ td {
 		<div style="width: 100%; display: flex; justify-content: flex-end">
 			<a href="/logros/new" class="btn btn-default">Create Logro</a>
 		</div>
-		
-			
-			
 		<c:forEach items="${listLogros}" var="Rol">
 		<div align = "center">
 			<spring:url value="/resources/images/roles/${Rol.types}.jpg" htmlEscape="true" var="rol"/>
@@ -86,9 +83,4 @@ td {
 			</c:forEach>
 				</tr>
 				</table>
-
-			<hr style="border-top: 1px solid #34302D">
-		</div>
-		</c:forEach>
-	</div>
 </petclinic:layout>
