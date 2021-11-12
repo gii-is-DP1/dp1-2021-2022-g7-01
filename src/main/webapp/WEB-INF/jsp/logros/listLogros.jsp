@@ -85,6 +85,7 @@ td {
 			</c:forEach>
 				</tr>
 				</table>
+<<<<<<< HEAD
 
 			<hr style="border-top: 1px solid #34302D">
 		</div>
@@ -92,4 +93,6 @@ td {
 	</div>
 	
 	
+=======
+>>>>>>> master
 </petclinic:layout>
