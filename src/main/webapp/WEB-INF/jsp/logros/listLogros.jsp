@@ -4,84 +4,83 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags"%>
+<style>
+[id^="difum"] {
+  opacity: 50%;
+}
 
+[id^="rol"] {
+  width: 9%;
+}
+[id^="Bronce"]{
+  background-color: #f6ecdb;
+}
+[id^="Plata"]{
+  background-color: #dde4e6;
+}
+[id^="Oro"]{
+  background-color: fbf2c9;
+}
+[id^="Diamante"]{
+  background-color: e2f8fd;
+}
+
+table{
+  border: 1px solid black;
+  border-collapse: collapse;
+  text-align: center;
+  width:100%;
+  position: relative;
+}
+
+ th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+  text-align: center;
+}
+th { 
+ padding: 10px 50px;
+ text-align: center;
+ border: 1px solid #999;
+            }
+td { 
+ padding: 5px 40px;
+ text-align: center;
+ border: 1px solid #999;
+            }
+
+ tr:nth-child(1) {
+ background: #dedede;
+ width:auto;
+            }
+
+</style>
 <petclinic:layout pageName="logros">
 	<h1 align = "center">Logros</h1>
 	<div class="container">
 		<div style="width: 100%; display: flex; justify-content: flex-end">
 			<a href="/logros/new" class="btn btn-default">Create Logro</a>
 		</div>
-		<c:forEach items="${listLogros}" var="logro">
-			<article>
-			<div align = "center">	
-			<c:if test="${logro.types=='Ninguno'}">
-				<h2 >Ninguno</h2>
-				<spring:url value="/resources/images/roles/general.jpg" htmlEscape="true" var="petsImage"/>
-            <img  class="img-responsive" src="${petsImage}" align = "bottom" />
-			</c:if>
-			<c:if test="${logro.types=='Ronin'}">
-				<h2 >Ronin</h2>
-				<spring:url value="/resources/images/roles/ronin.PNG" htmlEscape="true" var="petsImage"/>
-            <img  class="img-responsive" src="${petsImage}" align = "bottom" />
-			</c:if>
-			<c:if test="${logro.types=='Ninja'}">
-				<h2 >Ninja</h2>
-				<spring:url value="/resources/images/roles/ninja.png" htmlEscape="true" var="petsImage"/>
-            <img  class="img-responsive" src="${petsImage}" align = "bottom" />
-			</c:if>
-			<c:if test="${logro.types=='Shogun'}">
-				<h2 >Shogun</h2>
-				<spring:url value="/resources/images/roles/shogun.PNG" htmlEscape="true" var="petsImage"/>
-            <img  class="img-responsive" src="${petsImage}" align = "bottom" />
-			</c:if>
-			<c:if test="${logro.types=='Samurai'}">
-				<h2 >Samurai</h2>
-				<spring:url value="/resources/images/roles/samurai.PNG" htmlEscape="true" var="petsImage"/>
-            <img  class="img-responsive" src="${petsImage}" align = "bottom" />
-			</c:if>
+		<c:forEach items="${listLogros}" var="Rol">
+		<div align = "center">
+			<spring:url value="/resources/images/roles/${Rol.types}.jpg" htmlEscape="true" var="rol"/>
+			<h2> ${Rol.types} <img class="img-responsive" src="${rol}" align = "bottom" id = "rol"> </h2> 
+			
+           <table>
+           <tr>
+			<c:forEach items="${listLogros}" var="logro">
+				<c:if test = "${Rol.types == logro.types}">
 				
-            <table>
-            	<tr>
-            		<th>
-            		<p><a href = "">Imagen logro 1</a>  descripción</p>
-            		
-            		</th>
-            		<th>
-            		<p><a href = "">Imagen logro 1</a>  descripción</p>
-            		
-            		</th>
-            		<th>
-            		<p><a href = "">Imagen logro 1</a>  descripción</p>
-            		
-            		</th>
-            		<th>
-            		<p><a href = "">Imagen logro 1</a>  descripción</p>
-            		
-            		</th>
-            	</tr>
-            </table>
-			</div>
-				<h3>${logro.title}</h3>
-				<p>${logro.body}</p>
-				<p>Dificultad: ${logro.type}</p>
-				<p>Rol: ${logro.types}</p>
-				 <p style="text-align: right">Logro creado por: ${logro.user.username}</p>
-				<spring:url value="logros/edit/{id_logro}" var="editUrl">
-					<spring:param name="id_logro" value="${logro.id}" />
-				</spring:url>
-				
-					<a href="${fn:escapeXml(editUrl)}" class="btn btn-default">Edit
-						Logro</a>
-					<spring:url value="logros/delete/{id_logro}" var="editUrl">
-						<spring:param name="id_logro" value="${logro.id}" />
-					</spring:url>
-					<a href="${fn:escapeXml(editUrl)}" class="btn btn-default">Delete
-						Logro</a>
-				
-		
-			</article>
-
-			<hr style="border-top: 1px solid #34302D">
-		</c:forEach>
-	</div>
+					
+					<th>
+					<spring:url value="/resources/images/difficulty/${logro.type}.png" htmlEscape="true" var="difficulty"/>
+            	<div id = "${logro.type}">
+					<p id = "difum"> <img title="${logro.body}" src="${difficulty}"  id = "difficulty"/> ${logro.title}</p>
+					</div>
+					</th>
+				</c:if>
+				 
+			</c:forEach>
+				</tr>
+				</table>
 </petclinic:layout>
