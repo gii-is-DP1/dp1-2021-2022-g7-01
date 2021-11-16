@@ -9,7 +9,7 @@
 	<h2>Logros</h2>
 	<div class="container">
 		<div style="width: 100%; display: flex; justify-content: flex-end">
-			<a href="/logros/new" class="btn btn-default">Create Logro</a>
+			<a href="/logros/new" class="btn btn-default">Create logro</a>
 		</div>
 		<c:forEach items="${listLogros}" var="logro">
 			<article>
