@@ -6,24 +6,36 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.springframework.core.style.ToStringCreator;
+
 import lombok.Getter;
 import lombok.Setter;
+import samuraisword.samples.petclinic.model.BaseEntity;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "users")
-public class User{
 
+
+public class User {
+
+
+	
 	@Id
 	String username;
+	
+	String email;
 	
 	String password;
 	
@@ -51,4 +63,26 @@ public class User{
 		listAllFriends.addAll(listFriendsOf);
 		return listAllFriends;
 	}
+	
+	
+	public boolean isNew() {
+		return this.username == null;
+	}
+	
+	
+	
+	
+	
+	
+	@Override
+	public String toString() {
+		return new ToStringCreator(this)
+
+				.append("username", this.getUsername()).append("new", this.isNew())
+				.append("email", this.getEmail()).toString();
+	}
+	
+	
+	
+	
 }

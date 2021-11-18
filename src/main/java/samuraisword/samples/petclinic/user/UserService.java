@@ -16,12 +16,15 @@
 package samuraisword.samples.petclinic.user;
 
 
+import java.util.Collection;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import samuraisword.samples.petclinic.owner.Owner;
 
 /**
  * Mostly used as a facade for all Petclinic controllers Also a placeholder
@@ -48,4 +51,14 @@ public class UserService {
 	public Optional<User> findUser(String username) {
 		return userRepository.findById(username);
 	}
+	
+
+	@Transactional(readOnly = true)
+	public Collection<User> findUserByUsername(String username) throws DataAccessException {
+		return userRepository.findByUsername(username);
+	}
+	
+	
+	
+	
 }
