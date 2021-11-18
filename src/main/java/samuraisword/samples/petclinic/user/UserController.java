@@ -22,14 +22,14 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import samuraisword.samples.petclinic.owner.Owner;
-import samuraisword.samples.petclinic.owner.OwnerService;
+import samuraisword.samples.petclinic.pet.exceptions.DuplicatedUserNameException;
 
 /**
  * @author Juergen Hoeller
@@ -64,14 +64,24 @@ public class UserController {
 	}
 
 	@PostMapping(value = "/users/new")
-	public String processCreationForm(@Valid User user, BindingResult result) {
+	public String processCreationForm(@Valid User user, BindingResult result, ModelMap model) {
 		if (result.hasErrors()) {
+			model.put("user", user);
 			return VIEWS_USER_CREATE_FORM;
 		}
 		else {
+			
+				try{
+					this.userService.registerUser(user);
+				}catch(DuplicatedUserNameException ex){
+					result.rejectValue("username", "duplicate", "already exists");
+					return VIEWS_USER_CREATE_FORM;
+            }
+			
+			//try catch
 			//creating owner, user, and authority
-			this.userService.saveUser(user);
-			authoritiesService.saveAuthorities(user.getUsername(), "user");
+			
+		//	authoritiesService.saveAuthorities(user.getUsername(), "user");
 			return "redirect:/";
 		}
 	}

@@ -25,6 +25,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import samuraisword.samples.petclinic.owner.Owner;
+import samuraisword.samples.petclinic.pet.exceptions.DuplicatedPetNameException;
+import samuraisword.samples.petclinic.pet.exceptions.DuplicatedUserNameException;
 
 /**
  * Mostly used as a facade for all Petclinic controllers Also a placeholder
@@ -46,6 +48,16 @@ public class UserService {
 	public void saveUser(User user) throws DataAccessException {
 		user.setEnabled(true);
 		userRepository.save(user);
+	}
+	
+	@Transactional(rollbackFor = DuplicatedUserNameException.class)
+	public void registerUser(User user) throws DataAccessException, DuplicatedUserNameException {
+		Optional<User> userAux=findUser(user.getUsername());
+		if(userAux.isPresent()) {
+			throw new DuplicatedUserNameException();
+		}else {
+			saveUser(user);
+		}
 	}
 	
 	public Optional<User> findUser(String username) {

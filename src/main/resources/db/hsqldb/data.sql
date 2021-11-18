@@ -2,8 +2,6 @@
 INSERT INTO users(username,email,password,enabled) VALUES ('admin1','eladmin@yahoo.com','4dm1n',TRUE);
 INSERT INTO authorities(id,username,authority) VALUES (1,'admin1','admin');
 
-
-
 INSERT INTO users(username,email,password,enabled) VALUES ('alefr99','alefraile1@gmail.com','123123',TRUE);
 INSERT INTO authorities(id,username,authority) VALUES (4,'alefr99','admin');
 
