@@ -46,15 +46,6 @@ public class UserController {
 
 	private static final String VIEWS_USER_CREATE_FORM = "users/createUserForm";
 
-<<<<<<< HEAD
-	private final OwnerService ownerService;
-	private final UserService userService;
-
-	@Autowired
-	public UserController(OwnerService clinicService, UserService userService) {
-		this.ownerService = clinicService;
-		this.userService = userService;
-=======
 	private final UserService userService;
 	private final AuthoritiesService authoritiesService;
 
@@ -62,7 +53,6 @@ public class UserController {
 	public UserController(UserService samuraiService,AuthoritiesService authoritiesService) {
 		this.userService = samuraiService;
 		this.authoritiesService= authoritiesService;
->>>>>>> master
 	}
 
 	@InitBinder
