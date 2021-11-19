@@ -17,16 +17,20 @@ package samuraisword.samples.petclinic.user;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import samuraisword.samples.petclinic.pet.exceptions.DuplicatedUserNameException;
@@ -125,4 +129,29 @@ public class UserController {
 
 	
 
+	@GetMapping(value = "users/profile/{usernameProfile}")
+	public String viewProfile(@PathVariable("usernameProfile") String usernameProfile, Map<String, Object> model) {
+		Optional<User> userOptional = userService.findUser(usernameProfile);
+		if(userOptional.isEmpty()) {
+			return "exception";
+		} else {
+			UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			model.put("userProfile", userOptional.get());
+			model.put("username", userDetails.getUsername());
+			return "users/profile";
+		}
+	}
+	
+	@PostMapping(value = "users/profile/edit/{usernameProfile}")
+	public String editProfile(@PathVariable("usernameProfile") String usernameProfile, Map<String, Object> model) {
+		Optional<User> userOptional = userService.findUser(usernameProfile);
+		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if(userOptional.isEmpty() || userOptional.get().getUsername().equals(userDetails.getUsername())) {
+			return "exception";
+		} else {
+			model.put("userProfile", userOptional.get());
+			model.put("username", userDetails.getUsername());
+			return "users/editProfile";
+		}
+	}
 }

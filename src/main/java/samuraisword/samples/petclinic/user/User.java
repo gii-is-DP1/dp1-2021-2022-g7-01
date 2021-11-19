@@ -45,7 +45,7 @@ public class User {
 	@NotEmpty
 	@NotBlank
 	String username;
-	
+
 	@NotEmpty
 	@NotBlank
 	@Email
