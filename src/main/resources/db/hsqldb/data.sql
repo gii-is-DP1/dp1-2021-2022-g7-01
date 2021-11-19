@@ -2,6 +2,7 @@
 INSERT INTO users(username,email,password,enabled) VALUES ('admin1','eladmin@yahoo.com','4dm1n',TRUE);
 INSERT INTO authorities(id,username,authority) VALUES (1,'admin1','admin');
 
+
 INSERT INTO users(username,email,password,enabled) VALUES ('alefr99','alefraile1@gmail.com','123123',TRUE);
 INSERT INTO authorities(id,username,authority) VALUES (4,'alefr99','admin');
 
@@ -9,7 +10,6 @@ INSERT INTO users(username,email,password,enabled) VALUES ('diecrequi','diecrequ
 INSERT INTO authorities(id,username,authority) VALUES (5,'diecrequi','admin');
 
 INSERT INTO friends(id_user, id_user_friend) VALUES ('diecrequi', 'alefr99');
-
 
 INSERT INTO vets VALUES (1, 'James', 'Carter');
 INSERT INTO vets VALUES (2, 'Helen', 'Leary');
@@ -53,3 +53,32 @@ INSERT INTO types2 VALUES (4, 'Ronin');
 INSERT INTO types2 VALUES (5, 'Ninguno');
 
 INSERT INTO logros (id, title, body, typeL, typeR, username) VALUES (1, 'Primer comentario', 'Realizar tu primer comentario', 1, 5, 'admin1');
+
+INSERT INTO cards(name,image,cards_Per_Deck) VALUES ('puntuacion','puntuacion.png',1);
+INSERT INTO cards(name,image,cards_Per_Deck) VALUES ('armadura','property/armadura.png',4);
+INSERT INTO cards(name,image,cards_Per_Deck) VALUES ('bushido','property/bushido.png',3);
+INSERT INTO cards(name,image,cards_Per_Deck) VALUES ('concentracion','property/concentracion.png',6);
+INSERT INTO cards(name,image,cards_Per_Deck) VALUES ('desenvainado rapido','property/desenvainado rapido.png',3);
+
+INSERT INTO cards(name,image,cards_Per_Deck) VALUES ('ceremona del te','action/ceremona del te.png',4);
+INSERT INTO cards(name,image,cards_Per_Deck) VALUES ('daimio','action/daimio.png',3);
+INSERT INTO cards(name,image,cards_Per_Deck) VALUES ('distraccion','action/distraccion.png',5);
+INSERT INTO cards(name,image,cards_Per_Deck) VALUES ('geisha','action/geisha.png',7);
+INSERT INTO cards(name,image,cards_Per_Deck) VALUES ('grito de batalla','action/grito de batalla.png',4);
+INSERT INTO cards(name,image,cards_Per_Deck) VALUES ('jiu-jitsu','action/jiu-jitsu.png',3);
+INSERT INTO cards(name,image,cards_Per_Deck) VALUES ('parada','action/parada.png',15);
+INSERT INTO cards(name,image,cards_Per_Deck) VALUES ('respiracion','action/respiracion.png',3);
+
+INSERT INTO cards(name,image,cards_Per_Deck) VALUES ('bo','attack/bo.png',5);
+INSERT INTO cards(name,image,cards_Per_Deck) VALUES ('bokken','attack/bokken.png',6);
+INSERT INTO cards(name,image,cards_Per_Deck) VALUES ('daiku','attack/daiku.png',1);
+INSERT INTO cards(name,image,cards_Per_Deck) VALUES ('kanabo','attack/kanabo.png',1);
+INSERT INTO cards(name,image,cards_Per_Deck) VALUES ('katana','attack/katana.png',1);
+INSERT INTO cards(name,image,cards_Per_Deck) VALUES ('kiseru','attack/kiseru.png',5);
+INSERT INTO cards(name,image,cards_Per_Deck) VALUES ('kusarigama','attack/kusarigama.png',4);
+INSERT INTO cards(name,image,cards_Per_Deck) VALUES ('nagayari','attack/nagayari.png',1);
+INSERT INTO cards(name,image,cards_Per_Deck) VALUES ('naginata','attack/naginata.png',2);
+INSERT INTO cards(name,image,cards_Per_Deck) VALUES ('nodachi','attack/nodachi.png',1);
+INSERT INTO cards(name,image,cards_Per_Deck) VALUES ('shuriken','attack/shuriken.png',3);
+INSERT INTO cards(name,image,cards_Per_Deck) VALUES ('tanegashima','attack/tanegashima.png',1);
+INSERT INTO cards(name,image,cards_Per_Deck) VALUES ('wakizashi','attack/wakizashi.png',1);
