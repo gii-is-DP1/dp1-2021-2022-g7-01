@@ -49,7 +49,7 @@ th, td {
 	<h1 align="center">Logros</h1>
 	<div class="container">
 		<div style="width: 100%; display: flex; justify-content: flex-end">
-			<a href="/logros/new" class="btn btn-default">Create Logro</a>
+			<a href="/logros/new" class="btn btn-default">Create logro</a>
 		</div>
 		<c:forEach items="${types2}" var="Rol">
 			<c:set value="0" var="vueltas" />
