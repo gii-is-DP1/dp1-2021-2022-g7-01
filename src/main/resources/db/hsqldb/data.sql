@@ -12,7 +12,7 @@ INSERT INTO authorities(id,username,authority) VALUES (3,'vet1','veterinarian');
 INSERT INTO users(username,password,enabled) VALUES ('alefr99','123123',TRUE);
 INSERT INTO authorities(id,username,authority) VALUES (4,'alefr99','admin');
 
-INSERT INTO users(username,password,enabled) VALUES ('diecrequi','diecrequi',TRUE);
+INSERT INTO users(username,email,password,enabled) VALUES ('diecrequi','diecrequi@gmail.com','diecrequi',TRUE);
 INSERT INTO authorities(id,username,authority) VALUES (5,'diecrequi','admin');
 
 INSERT INTO friends(id_user, id_user_friend) VALUES ('diecrequi', 'alefr99');

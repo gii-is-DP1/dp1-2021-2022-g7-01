@@ -25,6 +25,8 @@ public class User{
 	@Id
 	String username;
 	
+	String email;
+	
 	String password;
 	
 	boolean enabled;
