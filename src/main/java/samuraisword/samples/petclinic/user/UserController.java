@@ -77,6 +77,7 @@ public class UserController {
 			
 				try{
 					this.userService.registerUser(user);
+					authoritiesService.saveAuthorities(user.getUsername(), "user");
 				}catch(DuplicatedUserNameException ex){
 					result.rejectValue("username", "duplicate", "already exists");
 					return VIEWS_USER_CREATE_FORM;
@@ -85,7 +86,7 @@ public class UserController {
 			//try catch
 			//creating owner, user, and authority
 			
-		//	authoritiesService.saveAuthorities(user.getUsername(), "user");
+			
 			return "redirect:/";
 		}
 	}

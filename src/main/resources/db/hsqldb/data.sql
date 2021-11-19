@@ -9,7 +9,36 @@ INSERT INTO authorities(id,username,authority) VALUES (4,'alefr99','admin');
 INSERT INTO users(username,email,password,enabled) VALUES ('diecrequi','diecrequi@gmail.com','diecrequi',TRUE);
 INSERT INTO authorities(id,username,authority) VALUES (5,'diecrequi','admin');
 
+INSERT INTO users(username,email,password,enabled) VALUES ('alfcadmor','alfcadmor@gmail.com','alfcadmor',TRUE);
+INSERT INTO authorities(id,username,authority) VALUES (6,'alfcadmor','admin');
+
+INSERT INTO users(username,email,password,enabled) VALUES ('pedolirod','pedolirod@gmail.com','pedolirod',TRUE);
+INSERT INTO authorities(id,username,authority) VALUES (7,'pedolirod','admin');
+
+INSERT INTO users(username,email,password,enabled) VALUES ('antquiher1','antquiher1@gmail.com','antquiher1',TRUE);
+INSERT INTO authorities(id,username,authority) VALUES (8,'antquiher1','admin');
+
+INSERT INTO users(username,email,password,enabled) VALUES ('juanlo','juanlo@gmail.com','juanlo',TRUE);
+INSERT INTO authorities(id,username,authority) VALUES (9,'juanlo','admin');
+
+
 INSERT INTO friends(id_user, id_user_friend) VALUES ('diecrequi', 'alefr99');
+INSERT INTO friends(id_user, id_user_friend) VALUES ('diecrequi', 'alfcadmor');
+INSERT INTO friends(id_user, id_user_friend) VALUES ('diecrequi', 'pedolirod');
+INSERT INTO friends(id_user, id_user_friend) VALUES ('diecrequi', 'antquiher1');
+INSERT INTO friends(id_user, id_user_friend) VALUES ('diecrequi', 'juanlo');
+
+
+
+INSERT INTO friends(id_user, id_user_friend) VALUES ('alefr99', 'alfcadmor');
+INSERT INTO friends(id_user, id_user_friend) VALUES ('alefr99', 'pedolirod');
+INSERT INTO friends(id_user, id_user_friend) VALUES ('alefr99', 'juanlo');
+INSERT INTO friends(id_user, id_user_friend) VALUES ('alfcadmor', 'antquiher1');
+INSERT INTO friends(id_user, id_user_friend) VALUES ('alfcadmor', 'juanlo');
+INSERT INTO friends(id_user, id_user_friend) VALUES ('juanlo', 'antquiher1');
+INSERT INTO friends(id_user, id_user_friend) VALUES ('pedolirod', 'antquiher1');
+
+
 
 INSERT INTO vets VALUES (1, 'James', 'Carter');
 INSERT INTO vets VALUES (2, 'Helen', 'Leary');
