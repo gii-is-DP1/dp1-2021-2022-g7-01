@@ -15,6 +15,7 @@
  */
 package samuraisword.samples.petclinic.user;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
 
@@ -24,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,8 +33,7 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import samuraisword.samples.petclinic.owner.Owner;
-import samuraisword.samples.petclinic.owner.OwnerService;
+import samuraisword.samples.petclinic.pet.exceptions.DuplicatedUserNameException;
 
 /**
  * @author Juergen Hoeller
@@ -43,8 +44,9 @@ import samuraisword.samples.petclinic.owner.OwnerService;
 @Controller
 public class UserController {
 
-	private static final String VIEWS_OWNER_CREATE_FORM = "users/createOwnerForm";
+	private static final String VIEWS_USER_CREATE_FORM = "users/createUserForm";
 
+<<<<<<< HEAD
 	private final OwnerService ownerService;
 	private final UserService userService;
 
@@ -52,6 +54,15 @@ public class UserController {
 	public UserController(OwnerService clinicService, UserService userService) {
 		this.ownerService = clinicService;
 		this.userService = userService;
+=======
+	private final UserService userService;
+	private final AuthoritiesService authoritiesService;
+
+	@Autowired
+	public UserController(UserService samuraiService,AuthoritiesService authoritiesService) {
+		this.userService = samuraiService;
+		this.authoritiesService= authoritiesService;
+>>>>>>> master
 	}
 
 	@InitBinder
@@ -61,22 +72,72 @@ public class UserController {
 
 	@GetMapping(value = "/users/new")
 	public String initCreationForm(Map<String, Object> model) {
-		Owner owner = new Owner();
-		model.put("owner", owner);
-		return VIEWS_OWNER_CREATE_FORM;
+		User user = new User();
+		model.put("user", user);
+		return VIEWS_USER_CREATE_FORM;
 	}
 
 	@PostMapping(value = "/users/new")
-	public String processCreationForm(@Valid Owner owner, BindingResult result) {
+	public String processCreationForm(@Valid User user, BindingResult result, ModelMap model) {
 		if (result.hasErrors()) {
-			return VIEWS_OWNER_CREATE_FORM;
+			model.put("user", user);
+			return VIEWS_USER_CREATE_FORM;
 		}
 		else {
+			
+				try{
+					this.userService.registerUser(user);
+				}catch(DuplicatedUserNameException ex){
+					result.rejectValue("username", "duplicate", "already exists");
+					return VIEWS_USER_CREATE_FORM;
+            }
+			
+			//try catch
 			//creating owner, user, and authority
-			this.ownerService.saveOwner(owner);
+			
+		//	authoritiesService.saveAuthorities(user.getUsername(), "user");
 			return "redirect:/";
 		}
 	}
+	
+	@GetMapping(value="/users/find")
+	public String initFindForm(Map<String,Object> model) {
+		model.put("user", new User());
+		return "users/findUsers";
+		
+	}
+	
+	
+	@GetMapping(value = "/users")
+	public String processFindForm(User user, BindingResult result, Map<String, Object> model) {
+
+		// allow parameterless GET request for /owners to return all records
+		if (user.getUsername() == null) {
+			user.setUsername(""); // empty string signifies broadest possible search
+		}
+
+		// find owners by last name
+		Collection<User> results = this.userService.findUserByUsername(user.getUsername());
+		if (results.isEmpty()) {
+			// no owners found
+			result.rejectValue("username", "notFound", "not found");
+			return "users/findUsers";
+		}
+		else if (results.size() == 1) {
+			// 1 owner found
+			//user = results.iterator().next();
+			//return "redirect:/users/" + user.getUsername();
+			model.put("selections", results);
+			return "users/usersList";
+		}
+		else {
+			// multiple owners found
+			model.put("selections", results);
+			return "users/usersList";
+		}
+	}
+
+	
 
 	@GetMapping(value = "users/profile/{usernameProfile}")
 	public String viewProfile(@PathVariable("usernameProfile") String usernameProfile, Map<String, Object> model) {

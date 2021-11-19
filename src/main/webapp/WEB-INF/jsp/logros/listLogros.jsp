@@ -5,9 +5,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags"%>
 <style>
-[id^="difum"] {
-	opacity: 50%;
-}
 
 [id^="rol"] {
 	width: 9%;
@@ -29,36 +26,22 @@
 	background-color: e2f8fd;
 }
 
-table {
-	border: 1px solid black;
-	border-collapse: collapse;
-	text-align: center;
+table, th, td {
+	padding: 5px;
+}
+table{
 	width: 100%;
-	position: relative;
-}
-
-th, td {
-	border: 1px solid black;
+	border-spacing: 15px;
 	border-collapse: collapse;
-	text-align: center;
+	table-layout: fixed;
+}
+th, td {
+	border: 10px solid #f1f1f1;
+	text-overflow: ellipsis;
+	border-radius:50px;
+	overflow:hidden;
 }
 
-th {
-	padding: 10px 50px;
-	text-align: center;
-	border: 1px solid #999;
-}
-
-td {
-	padding: 5px 40px;
-	text-align: center;
-	border: 1px solid #999;
-}
-
-tr:nth-child(1) {
-	background: #dedede;
-	width: auto;
-}
 </style>
 
 
@@ -66,38 +49,44 @@ tr:nth-child(1) {
 	<h1 align="center">Logros</h1>
 	<div class="container">
 		<div style="width: 100%; display: flex; justify-content: flex-end">
-			<a href="/logros/new" class="btn btn-default">Create Logro</a>
+			<a href="/logros/new" class="btn btn-default">Create logro</a>
 		</div>
-		<c:forEach items="${listLogros}" var="Rol">
+		<c:forEach items="${types2}" var="Rol">
+			<c:set value="0" var="vueltas"/>
 			<div align="center">
-				<spring:url value="/resources/images/roles/${Rol.types}.jpg"
+				<spring:url value="/resources/images/roles/${Rol}.jpg"
 					htmlEscape="true" var="rol" />
 				<h2>
-					${Rol.types} <img class="img-responsive" src="${rol}"
+					${Rol} <img class="img-responsive" src="${rol}"
 						align="bottom" id="rol">
 				</h2>
 
 				<table>
 					<tr>
 						<c:forEach items="${listLogros}" var="logro">
-							<c:if test="${Rol.types == logro.types}">
-
-
-								<th><spring:url
+							<c:if test="${Rol == logro.types}">
+								<c:set value="${vueltas+1}" var="vueltas"/>
+								<th id = "${logro.type}"><spring:url
 										value="/resources/images/difficulty/${logro.type}.png"
 										htmlEscape="true" var="difficulty" />
-									<div id="${logro.type}">
-										<p id="difum">
-											<img title="${logro.body}" src="${difficulty}"
-												id="difficulty" /> ${logro.title}
-										</p>
-									</div></th>
+									
+										<img style = "float:left;" title="" src="${difficulty}"
+												id="difficulty" />
+										<h4 id="difum">
+											 ${logro.title}
+										</h4>
+										<p id = "description">${logro.body} <c:out value="${status.count}" /></p>
+									</th>
+									<c:if test = "${vueltas>3}">
+										</tr>
+										<c:set value="0" var="vueltas"/>
+										<tr>
+									</c:if>
 							</c:if>
 
 						</c:forEach>
 					</tr>
 					</table>
-
 				<hr style="border-top: 1px solid #34302D">
 			</div>
 		</c:forEach>
