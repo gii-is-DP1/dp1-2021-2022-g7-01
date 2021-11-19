@@ -9,6 +9,10 @@
 	width: 9%;
 }
 
+.division{
+	display: none;
+}
+
 [id^="Bronce"] {
 	background-color: #f6ecdb;
 }
@@ -47,11 +51,16 @@ th, td {
 
 <petclinic:layout pageName="logros">
 	<h1 align="center">Logros</h1>
-	<div class="container">
+	<div class="container" >
 		<div style="width: 100%; display: flex; justify-content: flex-end">
 			<a href="/logros/new" class="btn btn-default">Create logro</a>
 		</div>
 		<c:forEach items="${types2}" var="Rol">
+		<button onclick="myFunction(${Rol})">${Rol}</button>
+		</c:forEach>
+		<c:forEach items="${types2}" var="Rol">
+		
+		<div id="${Rol}" class="division">
 			<c:set value="0" var="vueltas" />
 			<div align="center">
 				<spring:url value="/resources/images/roles/${Rol}.png"
@@ -87,6 +96,21 @@ th, td {
 				</table>
 				<hr style="border-top: 1px solid #34302D">
 			</div>
+			</div>
 		</c:forEach>
+		
 	</div>
+	<script>
+	
+	function myFunction(rol) {
+		console.log(rol);
+		//var x = document.getElementById(rol);
+		if(rol.style.display == "inline"){
+			rol.style.display = "none";
+		}
+		else{
+			rol.style.display = "inline";
+		}
+	}
+	</script>
 </petclinic:layout>
