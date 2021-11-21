@@ -72,19 +72,19 @@ public class UserController {
 		if (result.hasErrors()) {
 			model.put("user", user);
 			return VIEWS_USER_CREATE_FORM;
-		} else {
-
-			try {
-				this.userService.registerUser(user);
-			} catch (DuplicatedUserNameException ex) {
-				result.rejectValue("username", "duplicate", "already exists");
-				return VIEWS_USER_CREATE_FORM;
-			}
-
-			// try catch
-			// creating owner, user, and authority
-
-			// authoritiesService.saveAuthorities(user.getUsername(), "user");
+		}
+		else {
+			
+				try{
+					this.userService.registerUser(user);
+					authoritiesService.saveAuthorities(user.getUsername(), "user");
+				}catch(DuplicatedUserNameException ex){
+					result.rejectValue("username", "duplicate", "already exists");
+					return VIEWS_USER_CREATE_FORM;
+            }
+			
+			//try catch
+			//creating owner, user, and authority
 			return "redirect:/";
 		}
 	}
