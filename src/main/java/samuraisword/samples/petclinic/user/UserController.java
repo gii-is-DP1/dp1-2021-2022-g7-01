@@ -44,7 +44,7 @@ import samuraisword.samples.petclinic.pet.exceptions.DuplicatedUserNameException
 @Controller
 public class UserController {
 
-	private static final String VIEWS_USER_CREATE_FORM = "users/createOrUpdateUserForm";
+	private static final String VIEWS_USER_CREATE_FORM = "users/createUserForm";
 
 	private final UserService userService;
 	private final AuthoritiesService authoritiesService;
@@ -138,30 +138,20 @@ public class UserController {
 	}
 
 	@GetMapping(value = "users/profile/edit/{usernameProfile}")
-	public String editProfile(@PathVariable("usernameProfile") String usernameProfile, Map<String, Object> model) {
+	public String viewEditProfile(@PathVariable("usernameProfile") String usernameProfile, Map<String, Object> model) {
 		Optional<User> userOptional = userService.findUser(usernameProfile);
 		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		if (userOptional.isEmpty() || !userOptional.get().getUsername().equals(userDetails.getUsername())) {
 			return "exception";
 		} else {
 			model.put("user", userOptional.get());
-			return VIEWS_USER_CREATE_FORM;
+			return "users/editProfile";
 		}
 	}
-
+	
 	@PostMapping(value = "users/profile/edit")
-	public String saveEditProfile(@Valid User user, BindingResult result, Map<String, Object> model) {
-		if (result.hasErrors()) {
-			model.put("user", user);
-			return VIEWS_USER_CREATE_FORM;
-		} else {
-			try {
-				this.userService.registerUser(user);
-			} catch (DuplicatedUserNameException ex) {
-				result.rejectValue("username", "duplicate", "already exists");
-				return VIEWS_USER_CREATE_FORM;
-			}
-			return "redirect:/";
-		}
+	public String saveEditProfile(@Valid User user, BindingResult result,  Map<String, Object> model) {
+		userService.saveUser(user);
+		return "redirect:/users/profile/" + user.getUsername();
 	}
 }

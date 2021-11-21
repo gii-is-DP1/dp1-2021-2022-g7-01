@@ -37,8 +37,9 @@ import samuraisword.samples.petclinic.model.BaseEntity;
 @Setter
 @Entity
 @Table(name = "users")
-public class User extends BaseEntity {
+public class User {
 
+	@Id
 	@NotEmpty
 	@NotBlank
 	String username;

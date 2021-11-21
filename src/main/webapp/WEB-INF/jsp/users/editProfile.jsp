@@ -7,19 +7,16 @@
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags"%>
 
 <petclinic:layout pageName="owners">
-	<h2>
-		<c:if test="${owner['new']}">New </c:if>
-		Owner
-	</h2>
+	<h2>Edit ${user.username}</h2>
 	<form:form modelAttribute="user" class="form-horizontal"
-		id="edit-user-form">
+		action="/users/profile/edit" id="edit-user-form">
 		<div class="form-group has-feedback">
-			<petclinic:inputField label="Username" name="username" />
+			<form:hidden path="username" />
 			<petclinic:inputField label="Email" name="email" />
 			<petclinic:inputField label="Password" name="password" />
 		</div>
 		<div class="form-group">
-			<button class="btn btn-default" type="submit">Update Owner</button>
+			<button class="btn btn-default" type="submit">Update user</button>
 		</div>
 	</form:form>
 </petclinic:layout>

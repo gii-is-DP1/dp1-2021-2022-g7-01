@@ -17,16 +17,19 @@
 					style="width: 150px;" />
 			</div>
 			<div class="col-sm-8">
-				<form:form modelAttribute="userProfile" class="form-horizontal"
-					id="user-form" style="margin: 10px 0">
-					<petclinic:inputField label="Username" name="username"
-						readonly="true" />
-					<petclinic:inputField label="Email" name="email" readonly="true" />
-				</form:form>
+				<div class="row" style="margin: 0 0 20px 0">
+					<div class="col-sm-6">
+						<h3>Username: ${userProfile.username}</h3>
+					</div>
+					<div class="col-sm-6">
+						<h3>Email: ${userProfile.email}</h3>
+					</div>
+				</div>
 				<div style="display: flex; justify-content: space-around;">
 					<c:if test="${userProfile.username == username}">
 						<a class="btn btn-default"
-						href="<c:url value="/users/profile/edit/${userProfile.username}" />">Edit profile</a>
+							href="<c:url value="/users/profile/edit/${userProfile.username}" />">Edit
+							profile</a>
 					</c:if>
 					<a class="btn btn-default"
 						href="<c:url value="/stats/${userProfile.username}" />">Statistics</a>
