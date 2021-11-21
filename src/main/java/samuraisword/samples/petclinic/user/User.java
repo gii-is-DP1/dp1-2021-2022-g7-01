@@ -7,6 +7,8 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -30,18 +32,13 @@ import org.springframework.core.style.ToStringCreator;
 import jdk.jfr.BooleanFlag;
 import lombok.Getter;
 import lombok.Setter;
+import samuraisword.samples.petclinic.model.BaseEntity;
 @Getter
 @Setter
 @Entity
 @Table(name = "users")
+public class User extends BaseEntity {
 
-
-public class User {
-
-
-	
-
-	@Id
 	@NotEmpty
 	@NotBlank
 	String username;

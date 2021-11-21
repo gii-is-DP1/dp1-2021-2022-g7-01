@@ -44,15 +44,15 @@ import samuraisword.samples.petclinic.pet.exceptions.DuplicatedUserNameException
 @Controller
 public class UserController {
 
-	private static final String VIEWS_USER_CREATE_FORM = "users/createUserForm";
+	private static final String VIEWS_USER_CREATE_FORM = "users/createOrUpdateUserForm";
 
 	private final UserService userService;
 	private final AuthoritiesService authoritiesService;
 
 	@Autowired
-	public UserController(UserService samuraiService,AuthoritiesService authoritiesService) {
+	public UserController(UserService samuraiService, AuthoritiesService authoritiesService) {
 		this.userService = samuraiService;
-		this.authoritiesService= authoritiesService;
+		this.authoritiesService = authoritiesService;
 	}
 
 	@InitBinder
@@ -72,32 +72,30 @@ public class UserController {
 		if (result.hasErrors()) {
 			model.put("user", user);
 			return VIEWS_USER_CREATE_FORM;
-		}
-		else {
-			
-				try{
-					this.userService.registerUser(user);
-				}catch(DuplicatedUserNameException ex){
-					result.rejectValue("username", "duplicate", "already exists");
-					return VIEWS_USER_CREATE_FORM;
-            }
-			
-			//try catch
-			//creating owner, user, and authority
-			
-		//	authoritiesService.saveAuthorities(user.getUsername(), "user");
+		} else {
+
+			try {
+				this.userService.registerUser(user);
+			} catch (DuplicatedUserNameException ex) {
+				result.rejectValue("username", "duplicate", "already exists");
+				return VIEWS_USER_CREATE_FORM;
+			}
+
+			// try catch
+			// creating owner, user, and authority
+
+			// authoritiesService.saveAuthorities(user.getUsername(), "user");
 			return "redirect:/";
 		}
 	}
-	
-	@GetMapping(value="/users/find")
-	public String initFindForm(Map<String,Object> model) {
+
+	@GetMapping(value = "/users/find")
+	public String initFindForm(Map<String, Object> model) {
 		model.put("user", new User());
 		return "users/findUsers";
-		
+
 	}
-	
-	
+
 	@GetMapping(value = "/users")
 	public String processFindForm(User user, BindingResult result, Map<String, Object> model) {
 
@@ -112,46 +110,58 @@ public class UserController {
 			// no owners found
 			result.rejectValue("username", "notFound", "not found");
 			return "users/findUsers";
-		}
-		else if (results.size() == 1) {
+		} else if (results.size() == 1) {
 			// 1 owner found
-			//user = results.iterator().next();
-			//return "redirect:/users/" + user.getUsername();
+			// user = results.iterator().next();
+			// return "redirect:/users/" + user.getUsername();
 			model.put("selections", results);
 			return "users/usersList";
-		}
-		else {
+		} else {
 			// multiple owners found
 			model.put("selections", results);
 			return "users/usersList";
 		}
 	}
 
-	
-
 	@GetMapping(value = "users/profile/{usernameProfile}")
 	public String viewProfile(@PathVariable("usernameProfile") String usernameProfile, Map<String, Object> model) {
 		Optional<User> userOptional = userService.findUser(usernameProfile);
-		if(userOptional.isEmpty()) {
+		if (userOptional.isEmpty()) {
 			return "exception";
 		} else {
-			UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
+					.getPrincipal();
 			model.put("userProfile", userOptional.get());
 			model.put("username", userDetails.getUsername());
 			return "users/profile";
 		}
 	}
-	
-	@PostMapping(value = "users/profile/edit/{usernameProfile}")
+
+	@GetMapping(value = "users/profile/edit/{usernameProfile}")
 	public String editProfile(@PathVariable("usernameProfile") String usernameProfile, Map<String, Object> model) {
 		Optional<User> userOptional = userService.findUser(usernameProfile);
 		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		if(userOptional.isEmpty() || userOptional.get().getUsername().equals(userDetails.getUsername())) {
+		if (userOptional.isEmpty() || !userOptional.get().getUsername().equals(userDetails.getUsername())) {
 			return "exception";
 		} else {
-			model.put("userProfile", userOptional.get());
-			model.put("username", userDetails.getUsername());
-			return "users/editProfile";
+			model.put("user", userOptional.get());
+			return VIEWS_USER_CREATE_FORM;
+		}
+	}
+
+	@PostMapping(value = "users/profile/edit")
+	public String saveEditProfile(@Valid User user, BindingResult result, Map<String, Object> model) {
+		if (result.hasErrors()) {
+			model.put("user", user);
+			return VIEWS_USER_CREATE_FORM;
+		} else {
+			try {
+				this.userService.registerUser(user);
+			} catch (DuplicatedUserNameException ex) {
+				result.rejectValue("username", "duplicate", "already exists");
+				return VIEWS_USER_CREATE_FORM;
+			}
+			return "redirect:/";
 		}
 	}
 }

@@ -25,8 +25,8 @@
 				</form:form>
 				<div style="display: flex; justify-content: space-around;">
 					<c:if test="${userProfile.username == username}">
-						<button class="btn btn-default" type="submit">Edit
-							profile</button>
+						<a class="btn btn-default"
+						href="<c:url value="/users/profile/edit/${userProfile.username}" />">Edit profile</a>
 					</c:if>
 					<a class="btn btn-default"
 						href="<c:url value="/stats/${userProfile.username}" />">Statistics</a>
