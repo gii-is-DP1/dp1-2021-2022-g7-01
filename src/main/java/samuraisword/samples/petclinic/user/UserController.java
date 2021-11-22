@@ -121,6 +121,12 @@ public class UserController {
 			return "users/usersList";
 		}
 	}
+	
+	@GetMapping(value = "users/myprofile")
+	public String viewMyProfile() {
+		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		return "redirect:/users/profile/" + userDetails.getUsername();
+	}
 
 	@GetMapping(value = "users/profile/{usernameProfile}")
 	public String viewProfile(@PathVariable("usernameProfile") String usernameProfile, Map<String, Object> model) {

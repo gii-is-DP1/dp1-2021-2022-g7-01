@@ -34,21 +34,21 @@
 					<span>Find users</span>
 				</petclinic:menuItem>
 
-				
+
 
 				<petclinic:menuItem active="${name eq 'comments'}" url="/comments"
 					title="comments">
 					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
 					<span>Comments</span>
 				</petclinic:menuItem>
-				
+
 				<petclinic:menuItem active="${name eq 'logros'}" url="/logros"
 					title="logros">
 					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
 					<span>Achievements</span>
 				</petclinic:menuItem>
-				
-				
+
+
 				<petclinic:menuItem active="${name eq 'cards'}" url="/cards"
 					title="cards">
 					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
@@ -65,10 +65,10 @@
 			<ul class="nav navbar-nav navbar-right">
 				<sec:authorize access="isAuthenticated()">
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
-						data-toggle="dropdown" > <span class="glyphicon glyphicon-user"> </span> 
-							
-							<strong><sec:authentication property="name" /></strong> <span
-							class="glyphicon glyphicon-chevron-down" > </span>
+						data-toggle="dropdown"> <span
+							class="glyphicon glyphicon-user"> </span>  <strong><sec:authentication
+									property="name" /></strong> <span
+							class="glyphicon glyphicon-chevron-down"> </span>
 					</a>
 						<ul class="dropdown-menu">
 							<li>
@@ -84,21 +84,19 @@
 												<strong><sec:authentication property="name" /></strong>
 											</p>
 											<p class="text-left">
-											 
-												<a href="<c:url value="/logout" />"
+												<a href="<c:url value="/users/myprofile" />"
+													class="btn btn-primary btn-block btn-sm">Profile</a> <a
+													href="<c:url value="/logout" />"
 													class="btn btn-primary btn-block btn-sm">Logout</a>
-													<a href="<c:url value="/logros" />"
-													class="btn btn-primary btn-block btn-sm">Logros</a>
-													<a href="<c:url value="/comments" />"
-													class="btn btn-primary btn-block btn-sm">Comments</a>
+
 											</p>
 										</div>
 									</div>
 								</div>
 							</li>
 							<li class="divider"></li>
-							</ul></li>				
-							</sec:authorize>
+						</ul></li>
+				</sec:authorize>
 			</ul>
 		</div>
 
