@@ -72,19 +72,18 @@ public class UserController {
 		if (result.hasErrors()) {
 			model.put("user", user);
 			return VIEWS_USER_CREATE_FORM;
-		}
-		else {
-			
-				try{
-					this.userService.registerUser(user);
-					authoritiesService.saveAuthorities(user.getUsername(), "user");
-				}catch(DuplicatedUserNameException ex){
-					result.rejectValue("username", "duplicate", "already exists");
-					return VIEWS_USER_CREATE_FORM;
-            }
-			
-			//try catch
-			//creating owner, user, and authority
+		} else {
+
+			try {
+				this.userService.registerUser(user);
+				authoritiesService.saveAuthorities(user.getUsername(), "user");
+			} catch (DuplicatedUserNameException ex) {
+				result.rejectValue("username", "duplicate", "already exists");
+				return VIEWS_USER_CREATE_FORM;
+			}
+
+			// try catch
+			// creating owner, user, and authority
 			return "redirect:/";
 		}
 	}
@@ -148,10 +147,15 @@ public class UserController {
 			return "users/editProfile";
 		}
 	}
-	
+
 	@PostMapping(value = "users/profile/edit")
-	public String saveEditProfile(@Valid User user, BindingResult result,  Map<String, Object> model) {
-		userService.saveUser(user);
-		return "redirect:/users/profile/" + user.getUsername();
+	public String saveEditProfile(@Valid User user, BindingResult result, Map<String, Object> model) {
+		if (result.hasErrors()) {
+			model.put("user", user);
+			return "users/editProfile";
+		} else {
+			userService.saveUser(user);
+			return "redirect:/users/profile/" + user.getUsername();
+		}
 	}
 }
