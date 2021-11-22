@@ -44,7 +44,6 @@ public class UserService {
 		this.userRepository = userRepository;
 	}
 
-	@Transactional
 	public void saveUser(User user) throws DataAccessException {
 		user.setEnabled(true);
 		userRepository.save(user);
@@ -52,6 +51,16 @@ public class UserService {
 	
 	@Transactional(rollbackFor = DuplicatedUserNameException.class)
 	public void registerUser(User user) throws DataAccessException, DuplicatedUserNameException {
+		Optional<User> userAux=findUser(user.getUsername());
+		if(userAux.isPresent()) {
+			throw new DuplicatedUserNameException();
+		}else {
+			saveUser(user);
+		}
+	}
+	
+	@Transactional(rollbackFor = DuplicatedUserNameException.class)
+	public void updateUser(User user) throws DataAccessException, DuplicatedUserNameException {
 		Optional<User> userAux=findUser(user.getUsername());
 		if(userAux.isPresent()) {
 			throw new DuplicatedUserNameException();
