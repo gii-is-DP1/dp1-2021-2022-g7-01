@@ -30,6 +30,7 @@ import org.springframework.core.style.ToStringCreator;
 import jdk.jfr.BooleanFlag;
 import lombok.Getter;
 import lombok.Setter;
+import samuraisword.player.Player;
 @Getter
 @Setter
 @Entity
@@ -55,6 +56,9 @@ public class User {
 	@NotBlank
 	@Size(min=8, message="Necesita como mínimo 8 caracteres")
 	String password;
+	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+	List<Player> listPlayers;
 	
 	boolean enabled;
 	

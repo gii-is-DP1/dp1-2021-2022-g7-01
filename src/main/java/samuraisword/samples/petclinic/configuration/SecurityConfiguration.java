@@ -45,6 +45,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.antMatchers("/profile/**").authenticated()
 				.antMatchers("/cards/**").authenticated()
 				.antMatchers("/players/**").authenticated()
+				.antMatchers("/game/**").authenticated()
 				.anyRequest().denyAll()
 				.and()
 				 	.formLogin()
