@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 
 import lombok.Getter;
 import lombok.Setter;
+import samuraisword.logros.RolType;
 import samuraisword.samples.petclinic.model.BaseEntity;
 import samuraisword.samples.petclinic.user.User;
 
@@ -27,8 +28,7 @@ public class Player extends BaseEntity{
 	
 	private String photo;
 	
-	@NotEmpty
-	private Rol rol;
+
 	
 	@NotEmpty
 	private Integer maxHearts;
@@ -41,6 +41,10 @@ public class Player extends BaseEntity{
 		
 	@NotEmpty
 	private Integer position;
+	
+	@ManyToOne
+	@JoinColumn(name = "rol")
+	private RolType rol;
 	
 	@OneToOne
 	@JoinColumn(name="username")

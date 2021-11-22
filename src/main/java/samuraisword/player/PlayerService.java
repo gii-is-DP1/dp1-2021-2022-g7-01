@@ -3,15 +3,20 @@ package samuraisword.player;
 import java.util.Collection;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import samuraisword.logros.RolType;
 
 
 @Service
 public class PlayerService {
 	
-	@Autowired
+	 
 	private PlayerRepository playerRepository;
 	
 	@Autowired
@@ -34,11 +39,24 @@ public class PlayerService {
 		return (int) this.playerRepository.count();
 	}
 	
+	@Transactional
+	public void savePlayers(@Valid Player player) {
+		playerRepository.save(player);
+	}
+	
+	@Transactional
 	public void deletePlayer(int idPlayer) {
 		playerRepository.deleteById(null);
 	}
 	
+	@Transactional
 	public void deleteAllPlayers() {
 		playerRepository.deleteAll();
 	}
+
+		@Transactional(readOnly = true)
+	public Collection<RolType> findRolTypes() throws DataAccessException {
+		return playerRepository.findRolTypes();
+	}
+
 }
