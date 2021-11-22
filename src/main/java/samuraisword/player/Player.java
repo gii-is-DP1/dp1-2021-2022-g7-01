@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 
 import lombok.Getter;
 import lombok.Setter;
+import samuraisword.game.Game;
 import samuraisword.samples.petclinic.model.BaseEntity;
 import samuraisword.samples.petclinic.user.User;
 
@@ -22,27 +23,36 @@ import samuraisword.samples.petclinic.user.User;
 
 public class Player extends BaseEntity{
 	
-	@NotEmpty
-	private String name;
 	
-	private String photo;
 	
-	@NotEmpty
+	
 	private Rol rol;
 	
-	@NotEmpty
+	@ManyToOne
+	private Game game;
+	
+	
 	private Integer maxHearts;
 	
-	@NotEmpty
+	
 	private Integer currentHearts;
 	
-	@NotEmpty
+	
 	private Integer honor;
 		
-	@NotEmpty
+	
 	private Integer position;
 	
 	@OneToOne
 	@JoinColumn(name="username")
 	private User user;
+	
+	
+
+	@Override
+	public String toString() {
+		return ""+user.getUsername();
+	}
+	
+	
 }

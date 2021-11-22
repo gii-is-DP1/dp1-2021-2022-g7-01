@@ -5,34 +5,24 @@ import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
-import javax.validation.Constraint;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
-import org.hibernate.annotations.ForeignKey;
-import org.junit.validator.ValidateWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.core.style.ToStringCreator;
 
-import jdk.jfr.BooleanFlag;
 import lombok.Getter;
 import lombok.Setter;
-import samuraisword.samples.petclinic.model.BaseEntity;
+import samuraisword.player.Player;
+
 @Getter
 @Setter
 @Entity
@@ -53,6 +43,9 @@ public class User {
 	@NotBlank
 	@Size(min=8, message="Necesita como mínimo 8 caracteres")
 	String password;
+	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+	List<Player> listPlayers;
 	
 	boolean enabled;
 	
