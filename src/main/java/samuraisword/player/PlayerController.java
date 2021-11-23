@@ -67,7 +67,7 @@ public class PlayerController {
 			User user = userService.findUser(userDetails.getUsername()).get();
 			player.setUser(user);
 			playerService.savePlayers(player);
-			return "redirect:/logros";
+			return "redirect:/players";
 		}
 	}
 	
@@ -96,13 +96,13 @@ public class PlayerController {
 		return "redirect:/players";
 	}
 	
-	@GetMapping(value = { "/logros/delete/{id_player}" })
+	@GetMapping(value = { "/players/delete/{id_player}" })
 	public String deletePlayersForm(@PathVariable("id_player") int idPlayer, Map<String, Object> model) {
 		playerService.deletePlayer(idPlayer);
 		return "redirect:/players";
 	}
 	
-	@GetMapping(value = { "/logros/deleteAll" })
+	@GetMapping(value = { "/players/deleteAll" })
 	public String deletePlayers(Map<String, Object> model) {
 		playerService.deleteAllPlayers();
 		return "redirect:/players";
