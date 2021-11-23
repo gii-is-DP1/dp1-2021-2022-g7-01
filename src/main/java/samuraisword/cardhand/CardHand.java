@@ -17,7 +17,10 @@ import samuraisword.samples.petclinic.model.BaseEntity;
 @Entity
 @Table(name = "cardhands")
 public class CardHand extends BaseEntity {
-	@NotEmpty
-	private List<Card> cards;
+	
+	
+//Hay que comentarlo porque la asociacion con Cards no funciona	
+//	@NotEmpty
+//	private List<Card> cards;
 	
 }

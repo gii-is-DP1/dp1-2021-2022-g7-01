@@ -47,9 +47,7 @@ public class Player extends BaseEntity{
 	@JoinColumn(name="username")
 	private User user;
 	
-	@OneToOne
-	@JoinColumn(name="cardhand")
-	private CardHand cardHand;
+	
 	
 	
 
