@@ -18,7 +18,7 @@
     
         
 				<h2>Bienvenido a la sala #${gameId} creada por ${listPlayer.get(0).getUser().getUsername()}</h2>
-				<h2>${now} </h2>
+				<h2>${now}</h2>
 				<p>Jugadores en sala (<b>${listPlayer.size()}</b>)</p>
 				<br><br>
 				<div class="container">
@@ -27,10 +27,10 @@
 				<c:forEach items="${listPlayer}" var="player">
 				<c:choose>
 				<c:when test="${user==player.user.username}">
-				<img  title="${player.user.username}" align="left" class="img-responsive" src="/resources/images/user.png" height="80" width="90" vspace="5" hspace="20"></img>
+				<img style="content: ${player.user.username}" title="${player.user.username}" align="left" class="img-responsive" src="/resources/images/user.png" height="80" width="90" vspace="5" hspace="20"></img>
 				</c:when>
-				<c:otherwise>
-				<img  title="${player.user.username}" align="left" class="img-responsive" src="/resources/images/user.png" height="50" width="70" vspace="10" hspace="10"></img>
+				<c:otherwise>				
+				<img  title="${player.user.username}" align="left" class="img-responsive" src="/resources/images/user.png" height="50" width="70" vspace="10" hspace="10"></img>				
 				</c:otherwise>
 				</c:choose>
 				<c:choose>
@@ -48,7 +48,7 @@
 				</c:forEach>
 				
 				<c:if test="${listPlayer.size()<7}">
-				<img  title="${player.user.username}" align="left" class="img-responsive" src="/resources/images/anadir.png" height="50" width="70" hspace="20" vspace="10"></img>		
+				<img  title="${player.user.username}" align="left" class="img-responsive" src="/resources/images/anadir.png" height="50" width="70" hspace="20" vspace="10"></img>						
 				</c:if>
 				
 				
@@ -71,6 +71,7 @@
     			</h2>
     			<div align="center">
     			<br>
+    			
     			<c:if test="${listPlayer.size()>=4}">
 				<button style="background-color: #00FF00">Empezar partida</button>
 				</c:if>
@@ -80,5 +81,11 @@
 				
 				
 				</c:if>
+				<c:if test="${listPlayer.get(0).getUser().getUsername()==user}">
+    			<spring:url value="delete/{gameId}" var="editUrl">
+						<spring:param name="gameId" value="${gameId}" />
+					</spring:url>
+					<a href="${fn:escapeXml(editUrl)}" class="btn btn-default">Delete
+						Game</a></c:if>
 				</div>
     </petclinic:layout>

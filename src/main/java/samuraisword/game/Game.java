@@ -32,10 +32,9 @@ public class Game extends BaseEntity{
 	
 	private LocalDateTime fechaFin;
 	
-	private Status status;
+	
 
 	public Game() {
-		this.status=Status.OPEN;
 		this.listPlayers=new ArrayList<>();
 	}
 	

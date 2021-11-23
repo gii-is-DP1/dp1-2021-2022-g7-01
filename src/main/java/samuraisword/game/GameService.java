@@ -30,5 +30,9 @@ public Optional<Game> findById(int idGame) {
 		gameRepository.save(game);	
 
 	}	
+	
+	public void deleteGame(int idGame) {
+		gameRepository.deleteById(idGame);
+	}
 
 }

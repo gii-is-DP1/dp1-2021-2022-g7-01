@@ -77,5 +77,11 @@ public class GameController {
 		model.put("gameId", gameId);
 		return "game/game";
 	}
+	
+	@GetMapping(value = { "/game/delete/{id_game}" })
+	public String deleteCommentForm(@PathVariable("id_game") int gameId, Map<String, Object> model) {
+		gameService.deleteGame(gameId);
+		return "redirect:/game/new";
+	}
 
 }

@@ -25,7 +25,8 @@ button {
     <div class="row">
         <div class="col-md-12" align="center">
             <sec:authorize access="!isAuthenticated()">
-            	<form method="get" action="/login">
+          
+            	<form method="post" action="/login">
  					<button type="submit" class="btn btn-default" id = "Login">Login</button>
 				</form>
 				<form method="get" action="/users/new">
