@@ -83,7 +83,11 @@ INSERT INTO types2 VALUES (5, 'Ninguno');
 
 INSERT INTO logros (id, title, body, typeL, typeR, username) VALUES (1, 'Primer comentario', 'Realizar tu primer comentario', 1, 5, 'admin1');
 
-INSERT INTO players (id, name, photo, max_hearts, current_hearts, honor, position, rol, username) VALUES (1, 'jugador1', 'foto', 5, 5, 1, 1, 5, 'admin1');
+
+
+--Hay que comentarlo porque la entidad player no funciona bien todavia
+--INSERT INTO players (id, name, photo, max_hearts, current_hearts, honor, position, rol, username) VALUES (1, 'jugador1', 'foto', 5, 5, 1, 1, 5, 'admin1');
+
 
 INSERT INTO cards(name,image,cards_Per_Deck) VALUES ('puntuacion','puntuacion.png',1);
 INSERT INTO cards(name,image,cards_Per_Deck) VALUES ('armadura','property/armadura.png',4);

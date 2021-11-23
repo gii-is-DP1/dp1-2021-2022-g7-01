@@ -50,7 +50,7 @@ public class PlayerService {
 	
 	@Transactional
 	public void deletePlayer(int idPlayer) {
-		playerRepository.deleteById(null);
+		playerRepository.deleteById(idPlayer);
 	}
 	
 	@Transactional
