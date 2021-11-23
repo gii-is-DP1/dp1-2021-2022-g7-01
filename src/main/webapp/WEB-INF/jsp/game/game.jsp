@@ -11,15 +11,18 @@
  	 top: 50px;
  	 left: -65px;
 	}
+	
+	
+	
 	</style>
 
     <h2>
     <div align="center">
     
         
-				<h2>Bienvenido a la sala #${gameId} creada por ${listPlayer.get(0).getUser().getUsername()}</h2>
+				<h2>Welcome to the room #${gameId} create by ${listPlayer.get(0).getUser().getUsername()}</h2>
 				<h2>${now}</h2>
-				<p>Jugadores en sala (<b>${listPlayer.size()}</b>)</p>
+				<p>Players in room (<b>${listPlayer.size()}</b>)</p>
 				<br><br>
 				<div class="container">
 				
@@ -29,17 +32,16 @@
 				<c:when test="${user==player.user.username}">
 				<img style="content: ${player.user.username}" title="${player.user.username}" align="left" class="img-responsive" src="/resources/images/user.png" height="80" width="90" vspace="5" hspace="20"></img>
 				</c:when>
-				<c:otherwise>				
-				<img  title="${player.user.username}" align="left" class="img-responsive" src="/resources/images/user.png" height="50" width="70" vspace="10" hspace="10"></img>				
-				
-				
-				<c:if test="${listPlayer.get(0).getUser().getUsername()==user}">
+				<c:otherwise>		<div align="right">		
+				<img  title="${player.user.username}" align="left" class="img-responsive" src="/resources/images/user.png" height="50" width="70" vspace="10" hspace="10"></img>							
+		
+			<c:if test="${listPlayer.get(0).getUser().getUsername()==user}">
 				<spring:url value="/game/{gameId}/players/delete/{playerId}" var="editUrl">
                         <spring:param name="playerId" value="${player.id}" />
                         <spring:param name="gameId" value="${gameId}" />
-                    </spring:url>
-                <a href="${fn:escapeXml(editUrl)}" class="btn btn-default" align="left" class="img-responsive" >Echar ${player.user.username}</a>
-				</c:if>
+                    </spring:url>     
+                <a   href="${fn:escapeXml(editUrl)}" class="btn btn-default"  class="img-responsive" >Throw ${player.user.username}</a>	
+				 </c:if></div>
 				
 				
 				</c:otherwise>
@@ -69,7 +71,7 @@
 				
 				
 				<div align="right" class="col-sm-16">
-				<h2>Amigos (${listFriends.size()})</h2>
+				<h2>Friends (${listFriends.size()})</h2>
 				<c:if test="${listFriends.size()!=0}">
 				<c:forEach var="i" begin="0" end="${listFriends.size()-1}">
 				
