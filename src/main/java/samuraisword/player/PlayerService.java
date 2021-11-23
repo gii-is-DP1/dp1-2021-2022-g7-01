@@ -10,7 +10,11 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
+import samuraisword.game.Game;
+
 import samuraisword.logros.RolType;
+
 
 
 @Service
@@ -53,6 +57,13 @@ public class PlayerService {
 	public void deleteAllPlayers() {
 		playerRepository.deleteAll();
 	}
+
+	
+	@Transactional
+	public void savePlayer(Player player) throws DataAccessException {
+		playerRepository.save(player);		
+	}	
+
 
 		@Transactional(readOnly = true)
 	public Collection<RolType> findRolTypes() throws DataAccessException {
