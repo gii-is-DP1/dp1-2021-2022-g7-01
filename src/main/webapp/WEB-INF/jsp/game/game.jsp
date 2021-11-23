@@ -31,11 +31,23 @@
 				</c:when>
 				<c:otherwise>				
 				<img  title="${player.user.username}" align="left" class="img-responsive" src="/resources/images/user.png" height="50" width="70" vspace="10" hspace="10"></img>				
+				
+				
+				<c:if test="${listPlayer.get(0).getUser().getUsername()==user}">
+				<spring:url value="/game/{gameId}/players/delete/{playerId}" var="editUrl">
+                        <spring:param name="playerId" value="${player.id}" />
+                        <spring:param name="gameId" value="${gameId}" />
+                    </spring:url>
+                <a href="${fn:escapeXml(editUrl)}" class="btn btn-default" align="left" class="img-responsive" >Echar ${player.user.username}</a>
+				</c:if>
+				
+				
 				</c:otherwise>
 				</c:choose>
 				<c:choose>
 				<c:when test="${listPlayer.get(0).getUser().getUsername()==player.user.username}">
 				
+			
 				<div >
 				
 				<img class="estrella" title="${player.user.username}" align="left" class="img-responsive" src="/resources/images/star.png" height="20" width="20" vspace="10" hspace="10"></img>

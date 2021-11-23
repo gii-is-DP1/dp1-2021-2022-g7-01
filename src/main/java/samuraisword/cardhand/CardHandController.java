@@ -66,7 +66,12 @@ public class CardHandController {
 				}
 		}
 		
-		cardHand.setCards(deck);
+			
+		//hay que comentarlo porque la asociacion con Cards no funciona	
+		//cardHand.setCards(deck);
+			
+			
+			
 		cardHandService.save(cardHand);
 		
 		return "redirect:/cardHands";

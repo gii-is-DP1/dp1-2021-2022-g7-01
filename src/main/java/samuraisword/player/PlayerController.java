@@ -40,17 +40,17 @@ public class PlayerController {
 	}
 	
 	@GetMapping(value = { "players" })
-	public String listLogros(Map<String, Object> model) {
+	public String listPlayers(Map<String, Object> model) {
 		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		Collection<Player> listPlayers = playerService.findAll();
 		model.put("listPlayers", listPlayers);
 		model.put("username", userDetails.getUsername());
 		
-		return "logros/listLogros";
+		return "players/listPlayers";
 	}
 	
 	@GetMapping(value = { "/players/new" })
-	public String newLogroForm(Map<String, Object> model) {
+	public String newPlayerForm(Map<String, Object> model) {
 		Player player = new Player();
 		model.put("players", player);
 		return FORM_PLAYER;
@@ -96,10 +96,10 @@ public class PlayerController {
 		return "redirect:/players";
 	}
 	
-	@GetMapping(value = { "/players/delete/{id_player}" })
+	@GetMapping(value = { "game/{id_game}/players/delete/{id_player}" })
 	public String deletePlayersForm(@PathVariable("id_player") int idPlayer, Map<String, Object> model) {
 		playerService.deletePlayer(idPlayer);
-		return "redirect:/players";
+		return "redirect:/game/{id_game}";
 	}
 	
 	@GetMapping(value = { "/players/deleteAll" })
@@ -107,6 +107,10 @@ public class PlayerController {
 		playerService.deleteAllPlayers();
 		return "redirect:/players";
 	}
+	
+	
+	
+	
 	
 	
 //	private final PlayerService playerService;
