@@ -5,14 +5,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-
-import org.springframework.beans.factory.annotation.Value;
-
 import lombok.Getter;
 import lombok.Setter;
-
+import samuraisword.cardhand.CardHand;
 import samuraisword.game.Game;
 
 import samuraisword.logros.RolType;
@@ -51,6 +46,10 @@ public class Player extends BaseEntity{
 	@OneToOne
 	@JoinColumn(name="username")
 	private User user;
+	
+	@OneToOne
+	@JoinColumn(name="cardhand")
+	private CardHand cardHand;
 	
 	
 
