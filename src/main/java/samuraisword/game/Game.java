@@ -19,8 +19,7 @@ import samuraisword.samples.petclinic.model.BaseEntity;
 @Getter
 @Setter
 @Entity
-@Table(name = "game")
-
+@Table(name = "games")
 public class Game extends BaseEntity{
 	
 
@@ -28,9 +27,9 @@ public class Game extends BaseEntity{
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "game")
 	private List<Player> listPlayers;
 	
-	private LocalDateTime fechaInicio;
+	private LocalDateTime startDate;
 	
-	private LocalDateTime fechaFin;
+	private LocalDateTime endDate;
 	
 	
 
