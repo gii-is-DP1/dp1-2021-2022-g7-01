@@ -58,7 +58,7 @@ public class UserController {
 	@InitBinder
 	public void setAllowedFields(WebDataBinder dataBinder) {
 		dataBinder.setDisallowedFields("id");
-	}
+	}	
 
 	@GetMapping(value = "/users/new")
 	public String initCreationForm(Map<String, Object> model) {
