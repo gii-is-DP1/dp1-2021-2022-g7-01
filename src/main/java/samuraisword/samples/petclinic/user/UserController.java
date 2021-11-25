@@ -135,50 +135,6 @@ public class UserController {
 	}
 
 
-	@GetMapping(value = "users/myprofile")
-	public String viewMyProfile() {
-		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		return "redirect:/users/profile/" + userDetails.getUsername();
-	}
-
-	@GetMapping(value = "users/profile/{usernameProfile}")
-	public String viewProfile(@PathVariable("usernameProfile") String usernameProfile, Map<String, Object> model) {
-		Optional<User> userOptional = userService.findUser(usernameProfile);
-		if (userOptional.isEmpty()) {
-			return "exception";
-		} else {
-			UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
-					.getPrincipal();
-			model.put("userProfile", userOptional.get());
-			model.put("username", userDetails.getUsername());
-			return "users/profile";
-		}
-	}
-
-	@GetMapping(value = "users/profile/edit/{usernameProfile}")
-	public String viewEditProfile(@PathVariable("usernameProfile") String usernameProfile, Map<String, Object> model) {
-		Optional<User> userOptional = userService.findUser(usernameProfile);
-		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		if (userOptional.isEmpty() || !userOptional.get().getUsername().equals(userDetails.getUsername())) {
-			return "exception";
-		} else {
-			model.put("user", userOptional.get());
-			return "users/editProfile";
-		}
-	}
-
-	@PostMapping(value = "users/profile/edit")
-	public String saveEditProfile(@Valid User user, BindingResult result, Map<String, Object> model) {
-		if (result.hasErrors()) {
-			model.put("user", user);
-			return "users/editProfile";
-		} else {
-			userService.saveUser(user);
-			return "redirect:/users/profile/" + user.getUsername();
-		}
-	}
-
-
 	@PostMapping(value = "users/SendRequest/{usernameProfile}")
 	public String procesSendController(@PathVariable("usernameProfile") String usernameProfile) {
 		System.out.println("Test");
@@ -186,29 +142,6 @@ public class UserController {
 		String user1 = userDetails.getUsername();
 		userService.sendRequested(user1, usernameProfile);
 		return "welcome";
-	}
-
-	@GetMapping(value = "users/profile/changeAvatar/{usernameProfile}")
-	public String viewChangeAvatar(@PathVariable("usernameProfile") String usernameProfile, Map<String, Object> model) {
-		Optional<User> userOptional = userService.findUser(usernameProfile);
-		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		if (userOptional.isEmpty() || !userOptional.get().getUsername().equals(userDetails.getUsername())) {
-			return "exception";
-		} else {
-			model.put("user", userOptional.get());
-			return "users/changeAvatar";
-		}
-	}
-
-	@PostMapping(value = "users/profile/changeAvatar")
-	public String saveChangeAvatar(@Valid User user, BindingResult result, Map<String, Object> model) {
-		if (result.hasErrors()) {
-			model.put("user", user);
-			return "users/changeAvatar";
-		} else {
-			userService.saveUser(user);
-			return "redirect:/users/profile/" + user.getUsername();
-		}
 	}
 
 }
