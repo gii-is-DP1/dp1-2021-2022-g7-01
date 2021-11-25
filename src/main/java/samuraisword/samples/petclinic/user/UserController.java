@@ -125,6 +125,7 @@ public class UserController {
 		}
 	}
 
+
 	@GetMapping(value = "users/friendRequest")
 	public String listRequestAll(Map<String, Object> model) {
 		UserDetails userRequested = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -132,6 +133,7 @@ public class UserController {
 		model.put("friendRequest", u);
 		return "users/friendRequest";
 	}
+
 
 	@GetMapping(value = "users/myprofile")
 	public String viewMyProfile() {
@@ -176,6 +178,7 @@ public class UserController {
 		}
 	}
 
+
 	@PostMapping(value = "users/SendRequest/{usernameProfile}")
 	public String procesSendController(@PathVariable("usernameProfile") String usernameProfile) {
 		System.out.println("Test");
@@ -183,6 +186,29 @@ public class UserController {
 		String user1 = userDetails.getUsername();
 		userService.sendRequested(user1, usernameProfile);
 		return "welcome";
+	}
+
+	@GetMapping(value = "users/profile/changeAvatar/{usernameProfile}")
+	public String viewChangeAvatar(@PathVariable("usernameProfile") String usernameProfile, Map<String, Object> model) {
+		Optional<User> userOptional = userService.findUser(usernameProfile);
+		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if (userOptional.isEmpty() || !userOptional.get().getUsername().equals(userDetails.getUsername())) {
+			return "exception";
+		} else {
+			model.put("user", userOptional.get());
+			return "users/changeAvatar";
+		}
+	}
+
+	@PostMapping(value = "users/profile/changeAvatar")
+	public String saveChangeAvatar(@Valid User user, BindingResult result, Map<String, Object> model) {
+		if (result.hasErrors()) {
+			model.put("user", user);
+			return "users/changeAvatar";
+		} else {
+			userService.saveUser(user);
+			return "redirect:/users/profile/" + user.getUsername();
+		}
 	}
 
 }

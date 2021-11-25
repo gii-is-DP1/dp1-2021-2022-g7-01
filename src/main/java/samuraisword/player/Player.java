@@ -19,42 +19,34 @@ import samuraisword.samples.petclinic.user.User;
 @Setter
 @Entity
 @Table(name = "players")
-
 public class Player extends BaseEntity{
-	
-	
 	
 	@ManyToOne
 	private Game game;
 	
-	
 	private Integer maxHearts;
-	
 	
 	private Integer currentHearts;
 	
-	
 	private Integer honor;
-		
 	
 	private Integer position;
 	
-	@ManyToOne
-	@JoinColumn(name = "rol")
-	private RolType rol;
+	private Boolean wonGame;
+	
+	private Rol rol;
 	
 	@OneToOne
 	@JoinColumn(name="username")
 	private User user;
 	
+	@OneToOne
+	@JoinColumn(name = "card_hand_id")
+	private CardHand cardHand;
 	
-	
-	
-
 	@Override
 	public String toString() {
-		return ""+user.getUsername();
+		return "" + user.getUsername();
 	}
-	
 	
 }
