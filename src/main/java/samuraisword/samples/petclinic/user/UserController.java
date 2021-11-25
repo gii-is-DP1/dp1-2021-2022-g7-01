@@ -16,12 +16,14 @@
 package samuraisword.samples.petclinic.user;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -33,6 +35,7 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import samuraisword.logros.Logro;
 import samuraisword.samples.petclinic.pet.exceptions.DuplicatedUserNameException;
 
 /**
@@ -58,7 +61,7 @@ public class UserController {
 	@InitBinder
 	public void setAllowedFields(WebDataBinder dataBinder) {
 		dataBinder.setDisallowedFields("id");
-	}	
+	}
 
 	@GetMapping(value = "/users/new")
 	public String initCreationForm(Map<String, Object> model) {
@@ -121,73 +124,24 @@ public class UserController {
 			return "users/usersList";
 		}
 	}
-<<<<<<< HEAD
-	
-	@GetMapping(value = "users/myprofile")
-	public String viewMyProfile() {
+
+
+	@GetMapping(value = "users/friendRequest")
+	public String listRequestAll(Map<String, Object> model) {
+		UserDetails userRequested = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		Collection<String> u = userService.listRequestAll(userRequested.getUsername());
+		model.put("friendRequest", u);
+		return "users/friendRequest";
+	}
+
+
+	@PostMapping(value = "users/SendRequest/{usernameProfile}")
+	public String procesSendController(@PathVariable("usernameProfile") String usernameProfile) {
+		System.out.println("Test");
 		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		return "redirect:/users/profile/" + userDetails.getUsername();
+		String user1 = userDetails.getUsername();
+		userService.sendRequested(user1, usernameProfile);
+		return "welcome";
 	}
 
-	@GetMapping(value = "users/profile/{usernameProfile}")
-	public String viewProfile(@PathVariable("usernameProfile") String usernameProfile, Map<String, Object> model) {
-		Optional<User> userOptional = userService.findUser(usernameProfile);
-		if (userOptional.isEmpty()) {
-			return "exception";
-		} else {
-			UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
-					.getPrincipal();
-			model.put("userProfile", userOptional.get());
-			model.put("username", userDetails.getUsername());
-			return "users/profile";
-		}
-	}
-
-	@GetMapping(value = "users/profile/edit/{usernameProfile}")
-	public String viewEditProfile(@PathVariable("usernameProfile") String usernameProfile, Map<String, Object> model) {
-		Optional<User> userOptional = userService.findUser(usernameProfile);
-		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		if (userOptional.isEmpty() || !userOptional.get().getUsername().equals(userDetails.getUsername())) {
-			return "exception";
-		} else {
-			model.put("user", userOptional.get());
-			return "users/editProfile";
-		}
-	}
-
-	@PostMapping(value = "users/profile/edit")
-	public String saveEditProfile(@Valid User user, BindingResult result, Map<String, Object> model) {
-		if (result.hasErrors()) {
-			model.put("user", user);
-			return "users/editProfile";
-		} else {
-			userService.saveUser(user);
-			return "redirect:/users/profile/" + user.getUsername();
-		}
-	}
-
-	@GetMapping(value = "users/profile/changeAvatar/{usernameProfile}")
-	public String viewChangeAvatar(@PathVariable("usernameProfile") String usernameProfile, Map<String, Object> model) {
-		Optional<User> userOptional = userService.findUser(usernameProfile);
-		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		if (userOptional.isEmpty() || !userOptional.get().getUsername().equals(userDetails.getUsername())) {
-			return "exception";
-		} else {
-			model.put("user", userOptional.get());
-			return "users/changeAvatar";
-		}
-	}
-
-	@PostMapping(value = "users/profile/changeAvatar")
-	public String saveChangeAvatar(@Valid User user, BindingResult result, Map<String, Object> model) {
-		if (result.hasErrors()) {
-			model.put("user", user);
-			return "users/changeAvatar";
-		} else {
-			userService.saveUser(user);
-			return "redirect:/users/profile/" + user.getUsername();
-		}
-	}
-=======
->>>>>>> master
 }

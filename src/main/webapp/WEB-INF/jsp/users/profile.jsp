@@ -44,6 +44,13 @@
 							href="<c:url value="/users/profile/edit/${userProfile.username}" />">Edit
 							profile</a>
 					</c:if>
+					<c:if test="${userProfile.username != username}">
+						<form:form class="form-horizontal"
+							action="/users/SendRequest/${userProfile.username}"
+							id="edit-user-form">
+							<button class="btn btn-default" type="submit">Send friend request</button>
+						</form:form>
+					</c:if>
 					<a class="btn btn-default"
 						href="<c:url value="/users/statistics/${userProfile.username}" />">Statistics</a>
 					<a class="btn btn-default"
