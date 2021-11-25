@@ -24,7 +24,7 @@ public class Comment extends BaseEntity {
 	
 	@NotEmpty
 	private String body;
-	     
+	
 	private Date createDate;
 	
 	@ManyToOne
