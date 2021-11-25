@@ -14,7 +14,7 @@
         <tr>
             <th style="width: 150px;">UserName</th>
             <th style="width: 200px;">Email</th>
-            <th>Send request</th>
+            <th style="text-align: center;">Send request</th>
             
         </tr>
         </thead>
@@ -30,7 +30,7 @@
                 <td>
                     <c:out value="${user.email}"/>
                 </td>
-                <td>
+                <td style="text-align: center;">
                 <form:form class="form-horizontal"
 							action="/friendRequest/SendRequest/${user.username}"
 							id="edit-user-form">

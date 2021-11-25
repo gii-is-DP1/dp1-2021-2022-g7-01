@@ -12,8 +12,8 @@
         <thead>
         <tr>
             <th style="width: 150px;">UserName</th>
-            <th style="width: 200px;">Accept</th>
-            <th style="width: 200px;">Decline</th>
+            <th style="text-align: center;">Accept</th>
+            <th style="text-align: center;">Decline</th>
             
         </tr>
         </thead>
@@ -26,14 +26,14 @@
                     </spring:url>
                     <a href="${fn:escapeXml(userUrl)}"> ${friendRequest} </a>
                 </td>
-                <td>
+                <td style="text-align: center;">
                 <form:form class="form-horizontal"
 							action="/friendRequest/AcceptRequest/${friendRequest}"
 							id="edit-user-form">
 							<button class="btn btn-default" type="submit">Accept friend request</button>
 				</form:form>
                 </td>
-      			<td>
+      			<td style="text-align: center;">
                 <form:form class="form-horizontal"
 							action="/friendRequest/declineRequest/${friendRequest}"
 							id="edit-user-form">
