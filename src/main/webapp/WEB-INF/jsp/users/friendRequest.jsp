@@ -13,6 +13,7 @@
         <tr>
             <th style="width: 150px;">UserName</th>
             <th style="width: 200px;">Accept</th>
+            <th style="width: 200px;">Decline</th>
             
         </tr>
         </thead>
@@ -27,20 +28,18 @@
                 </td>
                 <td>
                 <form:form class="form-horizontal"
-							action="/users/SendRequest/${user.username}"
+							action="/friendRequest/AcceptRequest/${friendRequest}"
 							id="edit-user-form">
 							<button class="btn btn-default" type="submit">Accept friend request</button>
 				</form:form>
                 </td>
-      
-<!--
-                <td> 
-                    <c:out value="${owner.user.username}"/> 
+      			<td>
+                <form:form class="form-horizontal"
+							action="/friendRequest/declineRequest/${friendRequest}"
+							id="edit-user-form">
+							<button class="btn btn-default" type="submit">Decline friend request</button>
+				</form:form>
                 </td>
-                <td> 
-                   <c:out value="${owner.user.password}"/> 
-                </td> 
--->
                 
             </tr>
         </c:forEach>

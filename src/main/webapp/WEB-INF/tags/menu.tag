@@ -85,9 +85,12 @@
 											</p>
 											<p class="text-left">
 												<a href="<c:url value="/users/myprofile" />"
-													class="btn btn-primary btn-block btn-sm">Profile</a> <a
-													href="<c:url value="/logout" />"
+													class="btn btn-primary btn-block btn-sm">Profile</a>
+													<a href="<c:url value="/friendRequest" />"
+													class="btn btn-primary btn-block btn-sm">Friend request</a>
+													<a href="<c:url value="/logout" />"
 													class="btn btn-primary btn-block btn-sm">Logout</a>
+													
 
 											</p>
 										</div>

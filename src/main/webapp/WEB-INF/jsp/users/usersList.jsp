@@ -32,20 +32,11 @@
                 </td>
                 <td>
                 <form:form class="form-horizontal"
-							action="/users/SendRequest/${user.username}"
+							action="/friendRequest/SendRequest/${user.username}"
 							id="edit-user-form">
-							<button class="btn btn-default" type="submit">Send friend request</button>
+							<button class="btn btn-default" type="submit">send friend request</button>
 						</form:form>
                 </td>
-      
-<!--
-                <td> 
-                    <c:out value="${owner.user.username}"/> 
-                </td>
-                <td> 
-                   <c:out value="${owner.user.password}"/> 
-                </td> 
--->
                 
             </tr>
         </c:forEach>
