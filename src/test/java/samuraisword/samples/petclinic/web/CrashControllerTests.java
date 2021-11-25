@@ -1,4 +1,4 @@
-package org.springframework.samples.petclinic.web;
+package samuraisword.samples.petclinic.web;
 
 /**
  * Test class for {@link CrashController}

@@ -27,6 +27,15 @@ INSERT INTO friends(id_user, id_user_friend) VALUES ('diecrequi', 'pedolirod');
 INSERT INTO friends(id_user, id_user_friend) VALUES ('diecrequi', 'antquiher1');
 INSERT INTO friends(id_user, id_user_friend) VALUES ('diecrequi', 'juanlo');
 
+INSERT INTO friend_Requests(id_user, id_user_requested) VALUES ('diecrequi', 'alefr99');
+INSERT INTO friend_Requests(id_user, id_user_requested) VALUES ('diecrequi', 'admin1');
+INSERT INTO friend_Requests(id_user, id_user_requested) VALUES ('juanlo', 'diecrequi');
+INSERT INTO friend_Requests(id_user, id_user_requested) VALUES ('diecrequi', 'admin1');
+INSERT INTO friend_Requests(id_user, id_user_requested) VALUES ('juanlo', 'admin1');
+INSERT INTO friend_Requests(id_user, id_user_requested) VALUES ('antquiher1', 'admin1');
+INSERT INTO friend_Requests(id_user, id_user_requested) VALUES ('pedolirod', 'admin1');
+
+
 INSERT INTO friends(id_user, id_user_friend) VALUES ('alefr99', 'alfcadmor');
 INSERT INTO friends(id_user, id_user_friend) VALUES ('alefr99', 'pedolirod');
 INSERT INTO friends(id_user, id_user_friend) VALUES ('alefr99', 'juanlo');
@@ -76,6 +85,7 @@ INSERT INTO characters VALUES (1, 'tomoe');
 
 INSERT INTO logros (id, title, body, typeL, typeR, username) VALUES (1, 'Primer comentario', 'Realizar tu primer comentario', 1, 5, 'admin1');
 
+
 INSERT INTO cards(name,image,cards_Per_Deck) VALUES ('puntuacion','puntuacion.png',1);
 INSERT INTO cards(name,image,cards_Per_Deck) VALUES ('armadura','property/armadura.png',4);
 INSERT INTO cards(name,image,cards_Per_Deck) VALUES ('bushido','property/bushido.png',3);
@@ -108,3 +118,10 @@ INSERT INTO cards(name,image,cards_Per_Deck) VALUES ('wakizashi','attack/wakizas
 INSERT INTO games(id,end_date,start_date) VALUES (1, parsedatetime('24-11-2021 18:47:52', 'dd-MM-yyyy hh:mm:ss'),parsedatetime('24-11-2021 19:08:13', 'dd-MM-yyyy hh:mm:ss'));
 INSERT INTO players(id,current_hearts,honor,max_hearts,position,rol,won_game,game_id,username) VALUES (1,5,3,5,2,1,true,1,'diecrequi');
 INSERT INTO players(id,current_hearts,honor,max_hearts,position,rol,won_game,game_id,username) VALUES (2,4,5,4,3,1,true,1,'alefr99');
+
+
+
+--INSERT INTO cardhands(cards) VALUES (1, ['daimio','daimio','daimio','daimio','daimio']);
+
+--Hay que comentarlo porque la entidad player no funciona bien todavia
+--INSERT INTO players (id, game, photo, max_hearts, current_hearts, honor, position, rol, username) VALUES (1, 'jugador1', 'foto', 5, 5, 1, 1, 5, 'admin1');

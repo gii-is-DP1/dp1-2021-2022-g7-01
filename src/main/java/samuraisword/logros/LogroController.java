@@ -42,6 +42,16 @@ public class LogroController {
 		
 		return "logros/listLogros";
 	}
+	
+	@GetMapping(value = { "/logros/manage" })
+	public String achievementManage(Map<String, Object> model) {
+		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		Collection<Logro> listLogros = logroService.findAll();
+		model.put("listLogros", listLogros);
+		model.put("username", userDetails.getUsername());
+		
+		return "logros/achievementManage";
+	}
 
 	@GetMapping(value = { "/logros/new" })
 	public String newLogroForm(Map<String, Object> model) {
@@ -61,7 +71,7 @@ public class LogroController {
 			User user = userService.findUser(userDetails.getUsername()).get();
 			logro.setUser(user);
 			logroService.saveLogros(logro);
-			return "redirect:/logros";
+			return "redirect:/logros/manage";
 		}
 	}
 	
@@ -78,7 +88,7 @@ public class LogroController {
 	@GetMapping(value = { "/logros/edit/{id_logro}" })
 	public String editLogroForm(@PathVariable("id_logro") int idLogro, Map<String, Object> model) {
 		Logro logro = logroService.findById(idLogro).get();
-		model.put("logros", logro);
+		model.put("logro", logro);
 		return FORM_LOGRO;
 	}
 	
@@ -86,18 +96,18 @@ public class LogroController {
 	@PostMapping(value = { "/logros/edit/{id_logro}" })
 	public String processEditForm(@PathVariable("id_logro") int idLogro, @Valid Logro logro, BindingResult result, Map<String, Object> model) {
 		if (result.hasErrors()) {
-			model.put("logros", logro);
+			model.put("logro", logro);
 			return FORM_LOGRO;
 		}
 		Logro logroToUpdate = logroService.findById(idLogro).get();
 		BeanUtils.copyProperties(logro, logroToUpdate, "id","user");
 		logroService.saveLogros(logroToUpdate);
-		return "redirect:/logros";
+		return "redirect:/logros/manage";
 	}
 	
 	@GetMapping(value = { "/logros/delete/{id_logro}" })
 	public String deleteLogrosForm(@PathVariable("id_logro") int idLogro, Map<String, Object> model) {
 		logroService.deleteLogro(idLogro);
-		return "redirect:/logros";
+		return "redirect:/logros/manage";
 	}
 }
