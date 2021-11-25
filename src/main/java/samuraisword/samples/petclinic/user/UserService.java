@@ -95,7 +95,7 @@ public class UserService {
 		Collection<String>ListRequest = userRepository.listRequestAll(username1);
 		Collection<String>ListRequest2 = userRepository.listRequestAll(username2);
 		Collection<String>ListFriend = getAllFriendOf(username1);
-		if((!ListRequest.contains(username2) && !ListRequest2.contains(username1)) || !ListFriend.contains(username2)) {
+		if((!ListRequest.contains(username2) && !ListRequest2.contains(username1)) && !ListFriend.contains(username2)) {
 			userRepository.sendRequest(username1,username2);
 		}
 	}
