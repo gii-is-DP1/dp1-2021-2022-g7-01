@@ -124,6 +124,10 @@ public class UserController {
 			return "users/usersList";
 		}
 	}
+<<<<<<< HEAD
+
+	
+=======
 
 
 	@GetMapping(value = "friendRequest")
@@ -134,6 +138,7 @@ public class UserController {
 		return "users/friendRequest";
 	}
 
+>>>>>>> master
 
 	@PostMapping(value = "friendRequest/SendRequest/{usernameProfile}")
 	public String procesSendController(@PathVariable("usernameProfile") String usernameProfile) {
