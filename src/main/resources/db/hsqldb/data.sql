@@ -27,7 +27,13 @@ INSERT INTO friends(id_user, id_user_friend) VALUES ('diecrequi', 'alfcadmor');
 INSERT INTO friends(id_user, id_user_friend) VALUES ('diecrequi', 'pedolirod');
 INSERT INTO friends(id_user, id_user_friend) VALUES ('diecrequi', 'antquiher1');
 INSERT INTO friends(id_user, id_user_friend) VALUES ('diecrequi', 'juanlo');
-
+INSERT INTO friend_Requests(id_user, id_user_requested) VALUES ('diecrequi', 'alefr99');
+INSERT INTO friend_Requests(id_user, id_user_requested) VALUES ('diecrequi', 'admin1');
+INSERT INTO friend_Requests(id_user, id_user_requested) VALUES ('juanlo', 'diecrequi');
+INSERT INTO friend_Requests(id_user, id_user_requested) VALUES ('diecrequi', 'admin1');
+INSERT INTO friend_Requests(id_user, id_user_requested) VALUES ('juanlo', 'admin1');
+INSERT INTO friend_Requests(id_user, id_user_requested) VALUES ('antquiher1', 'admin1');
+INSERT INTO friend_Requests(id_user, id_user_requested) VALUES ('pedolirod', 'admin1');
 
 
 INSERT INTO friends(id_user, id_user_friend) VALUES ('alefr99', 'alfcadmor');
