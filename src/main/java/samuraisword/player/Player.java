@@ -46,7 +46,7 @@ public class Player extends BaseEntity{
 	
 	@Override
 	public String toString() {
-		return ""+user.getUsername();
+		return "" + user.getUsername();
 	}
 	
 }
