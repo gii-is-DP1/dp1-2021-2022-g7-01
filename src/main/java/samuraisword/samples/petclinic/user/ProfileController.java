@@ -112,4 +112,27 @@ public class ProfileController {
 			return "users/gameHistory";
 		}
 	}
+	
+	@GetMapping(value = "users/profile/changeAvatar/{usernameProfile}")
+	public String viewChangeAvatar(@PathVariable("usernameProfile") String usernameProfile, Map<String, Object> model) {
+		Optional<User> userOptional = userService.findUser(usernameProfile);
+		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if (userOptional.isEmpty() || !userOptional.get().getUsername().equals(userDetails.getUsername())) {
+			return "exception";
+		} else {
+			model.put("user", userOptional.get());
+			return "users/changeAvatar";
+		}
+	}
+
+	@PostMapping(value = "users/profile/changeAvatar")
+	public String saveChangeAvatar(@Valid User user, BindingResult result, Map<String, Object> model) {
+		if (result.hasErrors()) {
+			model.put("user", user);
+			return "users/changeAvatar";
+		} else {
+			userService.saveUser(user);
+			return "redirect:/users/profile/" + user.getUsername();
+		}
+	}
 }

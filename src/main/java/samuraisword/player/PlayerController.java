@@ -25,75 +25,13 @@ import samuraisword.samples.petclinic.user.User;
 import samuraisword.samples.petclinic.user.UserService;
 
 @Controller
-public class PlayerController {
-	
-	private static final String FORM_PLAYER = "players/formPlayers";
-	
+public class PlayerController {	
 	
 	private final PlayerService playerService;
-	private final UserService userService;
 	
 	@Autowired
-	public PlayerController(PlayerService playerService, UserService userService) {
+	public PlayerController(PlayerService playerService) {
 		this.playerService = playerService;
-		this.userService = userService;
-	}
-	
-	@GetMapping(value = { "players" })
-	public String listPlayers(Map<String, Object> model) {
-		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		Collection<Player> listPlayers = playerService.findAll();
-		model.put("listPlayers", listPlayers);
-		model.put("username", userDetails.getUsername());
-		
-		return "players/listPlayers";
-	}
-	
-	@GetMapping(value = { "/players/new" })
-	public String newPlayerForm(Map<String, Object> model) {
-		Player player = new Player();
-		model.put("players", player);
-		return FORM_PLAYER;
-	}
-
-	@Valid
-	@PostMapping(value = "/players/new")
-	public String processCreationForm(@Valid Player player, BindingResult result, ModelMap model) {
-		if (result.hasErrors()) {
-			model.put("players", player);
-			return FORM_PLAYER;
-		} else {
-			UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-			User user = userService.findUser(userDetails.getUsername()).get();
-			player.setUser(user);
-			playerService.savePlayers(player);
-			return "redirect:/players";
-		}
-	}
-	
-	@ModelAttribute("types2")
-	public Collection<RolType> populateRolTypes() {
-		return this.playerService.findRolTypes();
-	}
-	
-	@GetMapping(value = { "/players/edit/{id_player}" })
-	public String editPlayerForm(@PathVariable("id_player") int idPlayer, Map<String, Object> model) {
-		Player player = playerService.findById(idPlayer).get();
-		model.put("players", player);
-		return FORM_PLAYER;
-	}
-	
-	@Valid
-	@PostMapping(value = { "/players/edit/{id_player}" })
-	public String processEditForm(@PathVariable("id_player") int idPlayer, @Valid Player player, BindingResult result, Map<String, Object> model) {
-		if (result.hasErrors()) {
-			model.put("players", player);
-			return FORM_PLAYER;
-		}
-		Player playerToUpdate = playerService.findById(idPlayer).get();
-		BeanUtils.copyProperties(player, playerToUpdate, "id","user");
-		playerService.savePlayers(playerToUpdate);
-		return "redirect:/players";
 	}
 	
 	@GetMapping(value = { "game/{id_game}/players/delete/{id_player}" })
@@ -101,19 +39,4 @@ public class PlayerController {
 		playerService.deletePlayer(idPlayer);
 		return "redirect:/game/{id_game}";
 	}
-	
-	@GetMapping(value = { "/players/deleteAll" })
-	public String deletePlayers(Map<String, Object> model) {
-		playerService.deleteAllPlayers();
-		return "redirect:/players";
-	}
-	
-	
-	
-	
-	
-	
-//	private final PlayerService playerService;
-//	private final UserService userService;
-	
 }
