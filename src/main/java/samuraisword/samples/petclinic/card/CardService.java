@@ -26,6 +26,11 @@ public class CardService {
 	public Optional<Card> findById(int idCard) {
 		return cardRepository.findById(idCard);
 	}
+	
+	public Optional<Card> findByName(String name){
+		return cardRepository.findByName(name);
+	}
+	
 	@Transactional
 	public void saveCard(Card card) {
 		cardRepository.save(card);
