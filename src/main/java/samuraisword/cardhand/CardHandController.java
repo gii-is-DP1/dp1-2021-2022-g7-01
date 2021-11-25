@@ -60,18 +60,14 @@ public class CardHandController {
 			List<Card> deck = new ArrayList<>();
 			
 			for(Card card : allCards) {
-				Integer frequency = card.getCardsPerDeck();
-				for(int i = 0; i < frequency; i++) {
+				Integer frequencyOfAppearance = card.getCardsPerDeck();
+				for(int i = 0; i < frequencyOfAppearance; i++) {
 					deck.add(card);
 				}
 		}
-		
-			
-		//hay que comentarlo porque la asociacion con Cards no funciona	
-		//cardHand.setCards(deck);
-			
-			
-			
+	  
+		cardHand.setCardList(deck);
+						
 		cardHandService.save(cardHand);
 		
 		return "redirect:/cardHands";
