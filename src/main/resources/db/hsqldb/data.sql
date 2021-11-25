@@ -1,7 +1,6 @@
 -- One admin user, named admin1 with passwor 4dm1n and authority admin
-INSERT INTO users(username,email,password,enabled) VALUES ('admin1','eladmin@yahoo.com','4dm1n',TRUE);
+INSERT INTO users(username,email,password,enabled) VALUES ('admin1','eladmin@gmail.com','4dm1n',TRUE);
 INSERT INTO authorities(id,username,authority) VALUES (1,'admin1','admin');
-
 
 INSERT INTO users(username,email,password,enabled) VALUES ('alefr99','alefraile1@gmail.com','123123',TRUE);
 INSERT INTO authorities(id,username,authority) VALUES (4,'alefr99','admin');
@@ -28,8 +27,6 @@ INSERT INTO friends(id_user, id_user_friend) VALUES ('diecrequi', 'pedolirod');
 INSERT INTO friends(id_user, id_user_friend) VALUES ('diecrequi', 'antquiher1');
 INSERT INTO friends(id_user, id_user_friend) VALUES ('diecrequi', 'juanlo');
 
-
-
 INSERT INTO friends(id_user, id_user_friend) VALUES ('alefr99', 'alfcadmor');
 INSERT INTO friends(id_user, id_user_friend) VALUES ('alefr99', 'pedolirod');
 INSERT INTO friends(id_user, id_user_friend) VALUES ('alefr99', 'juanlo');
@@ -37,8 +34,6 @@ INSERT INTO friends(id_user, id_user_friend) VALUES ('alfcadmor', 'antquiher1');
 INSERT INTO friends(id_user, id_user_friend) VALUES ('alfcadmor', 'juanlo');
 INSERT INTO friends(id_user, id_user_friend) VALUES ('juanlo', 'antquiher1');
 INSERT INTO friends(id_user, id_user_friend) VALUES ('pedolirod', 'antquiher1');
-
-
 
 INSERT INTO vets VALUES (1, 'James', 'Carter');
 INSERT INTO vets VALUES (2, 'Helen', 'Leary');
@@ -63,10 +58,6 @@ INSERT INTO types VALUES (3, 'lizard');
 INSERT INTO types VALUES (4, 'snake');
 INSERT INTO types VALUES (5, 'bird');
 INSERT INTO types VALUES (6, 'hamster');
-
-
-
-
 
 INSERT INTO comments (id, title, body, create_date, username) VALUES (1, 'Welcome to Samurai Sword', 'Welcome to everyone that want to play this game with us!', '2021-10-28', 'admin1');
 
@@ -113,14 +104,11 @@ INSERT INTO cards(name,image,cards_Per_Deck) VALUES ('shuriken','attack/shuriken
 INSERT INTO cards(name,image,cards_Per_Deck) VALUES ('tanegashima','attack/tanegashima.png',1);
 INSERT INTO cards(name,image,cards_Per_Deck) VALUES ('wakizashi','attack/wakizashi.png',1);
 
+INSERT INTO games(id,end_date,start_date) VALUES (1, parsedatetime('24-11-2021 18:47:52', 'dd-MM-yyyy hh:mm:ss'),parsedatetime('24-11-2021 19:08:13', 'dd-MM-yyyy hh:mm:ss'));
+INSERT INTO players(id,current_hearts,honor,max_hearts,position,rol,won_game,game_id,username) VALUES (1,5,3,5,2,1,true,1,'diecrequi');
+
 
 --INSERT INTO cardhands(cards) VALUES (1, ['daimio','daimio','daimio','daimio','daimio']);
 
 --Hay que comentarlo porque la entidad player no funciona bien todavia
 --INSERT INTO players (id, game, photo, max_hearts, current_hearts, honor, position, rol, username) VALUES (1, 'jugador1', 'foto', 5, 5, 1, 1, 5, 'admin1');
-
-
-
-
-
-

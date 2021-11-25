@@ -47,6 +47,7 @@ public class User {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
 	List<Player> listPlayers;
 	
+	
 	boolean enabled;
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
