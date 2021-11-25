@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import samuraisword.comment.Comment;
+
 @Service
 public class CardService {
 	
@@ -24,5 +26,12 @@ public class CardService {
 	public Optional<Card> findById(int idCard) {
 		return cardRepository.findById(idCard);
 	}
+	@Transactional
+	public void saveCard(Card card) {
+		cardRepository.save(card);
+	}
 	
+	public void deleteCard(int idCard) {
+		cardRepository.deleteById(idCard);
+	}
 }
