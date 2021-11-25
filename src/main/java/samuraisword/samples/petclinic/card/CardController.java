@@ -48,7 +48,7 @@ public class CardController {
 	@GetMapping(value = { "/cards/new" })
 	public String newLogroForm(Map<String, Object> model) {
 		Card card = new Card();
-		model.put("cards", card);
+		model.put("card", card);
 		return FORM_CARD;
 	}
 
