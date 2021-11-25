@@ -45,9 +45,9 @@
 							profile</a>
 					</c:if>
 					<a class="btn btn-default"
-						href="<c:url value="/stats/${userProfile.username}" />">Statistics</a>
+						href="<c:url value="/users/statistics/${userProfile.username}" />">Statistics</a>
 					<a class="btn btn-default"
-						href="<c:url value="/history/${userProfile.username}" />">Game
+						href="<c:url value="/users/game-history/${userProfile.username}" />">Game
 						history</a>
 				</div>
 			</div>

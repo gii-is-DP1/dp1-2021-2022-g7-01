@@ -121,6 +121,7 @@ public class UserController {
 			return "users/usersList";
 		}
 	}
+<<<<<<< HEAD
 	
 	@GetMapping(value = "users/myprofile")
 	public String viewMyProfile() {
@@ -187,4 +188,6 @@ public class UserController {
 			return "redirect:/users/profile/" + user.getUsername();
 		}
 	}
+=======
+>>>>>>> master
 }
