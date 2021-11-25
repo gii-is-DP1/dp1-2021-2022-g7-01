@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
@@ -21,6 +22,8 @@ import org.springframework.core.style.ToStringCreator;
 
 import lombok.Getter;
 import lombok.Setter;
+import samuraisword.logros.LogroType;
+import samuraisword.logros.RolType;
 import samuraisword.player.Player;
 
 @Getter
@@ -47,6 +50,12 @@ public class User {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
 	List<Player> listPlayers;
 	
+	@ManyToOne
+	@JoinColumn(name = "avatar")
+	private SamuraraiCharacter avatar;
+	public SamuraraiCharacter getAvatar() {
+		return this.avatar;
+	}
 	
 	boolean enabled;
 	

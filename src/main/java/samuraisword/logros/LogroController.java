@@ -46,7 +46,7 @@ public class LogroController {
 	@GetMapping(value = { "/logros/new" })
 	public String newLogroForm(Map<String, Object> model) {
 		Logro logro = new Logro();
-		model.put("logros", logro);
+		model.put("logro", logro);
 		return FORM_LOGRO;
 	}
 

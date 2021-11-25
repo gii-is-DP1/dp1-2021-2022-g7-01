@@ -10,7 +10,7 @@
     <h2>
         <c:if test="${logro['new']}">New </c:if> Logro
     </h2>
-    <form:form modelAttribute="logros" class="form-horizontal" id="add-owner-form">
+    <form:form modelAttribute="logro" class="form-horizontal" id="add-owner-form">
         <div class="form-group has-feedback">
             <petclinic:inputField label="Name" name="title"/>
             <petclinic:inputField label="Description" name="body"/>

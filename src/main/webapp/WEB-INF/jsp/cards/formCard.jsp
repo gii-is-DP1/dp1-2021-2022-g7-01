@@ -10,7 +10,7 @@
     <h2>
          <c:if test="${card['new']}">New </c:if> Card
     </h2>
-    <form:form modelAttribute="cards" class="form-horizontal" id="add-owner-form">
+    <form:form modelAttribute="card" class="form-horizontal" id="add-owner-form">
         <div class="form-group has-feedback">
             <petclinic:inputField label="Name" name="name"/>
             <petclinic:inputField label="Image" name="image"/>
