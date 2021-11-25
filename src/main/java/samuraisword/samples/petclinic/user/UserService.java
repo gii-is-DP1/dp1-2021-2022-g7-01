@@ -102,9 +102,14 @@ public class UserService {
 	
 	@Transactional(readOnly = true)
 	public void acceptRequest(String username1, String username2) throws DataAccessException {
-//		userRepository.deleteRequest(username1,username2);
-//		userRepository.deleteRequest(username2,username1);
+		userRepository.deleteRequest(username1,username2);
+		userRepository.deleteRequest(username2,username1);
 		userRepository.acceptRequest(username1, username2);
 	}
 	
+	@Transactional(readOnly = true)
+	public void declineRequest(String username1, String username2) throws DataAccessException {
+		userRepository.deleteRequest(username1,username2);
+		userRepository.deleteRequest(username2,username1);
+	}
 }

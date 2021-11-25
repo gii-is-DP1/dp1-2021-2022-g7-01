@@ -46,7 +46,7 @@
 					</c:if>
 					<c:if test="${userProfile.username != username}">
 						<form:form class="form-horizontal"
-							action="/users/SendRequest/${userProfile.username}"
+							action="/friendRequest/SendRequest/${userProfile.username}"
 							id="edit-user-form">
 							<button class="btn btn-default" type="submit">Send friend request</button>
 						</form:form>
