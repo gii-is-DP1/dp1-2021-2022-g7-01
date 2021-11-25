@@ -16,12 +16,14 @@
 package samuraisword.samples.petclinic.user;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -33,6 +35,7 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import samuraisword.logros.Logro;
 import samuraisword.samples.petclinic.pet.exceptions.DuplicatedUserNameException;
 
 /**
@@ -58,7 +61,7 @@ public class UserController {
 	@InitBinder
 	public void setAllowedFields(WebDataBinder dataBinder) {
 		dataBinder.setDisallowedFields("id");
-	}	
+	}
 
 	@GetMapping(value = "/users/new")
 	public String initCreationForm(Map<String, Object> model) {
@@ -121,29 +124,43 @@ public class UserController {
 			return "users/usersList";
 		}
 	}
+<<<<<<< HEAD
 
 	
+=======
 
-	@GetMapping(value = "users/profile/changeAvatar/{usernameProfile}")
-	public String viewChangeAvatar(@PathVariable("usernameProfile") String usernameProfile, Map<String, Object> model) {
-		Optional<User> userOptional = userService.findUser(usernameProfile);
-		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		if (userOptional.isEmpty() || !userOptional.get().getUsername().equals(userDetails.getUsername())) {
-			return "exception";
-		} else {
-			model.put("user", userOptional.get());
-			return "users/changeAvatar";
-		}
+
+	@GetMapping(value = "friendRequest")
+	public String listRequestAll(Map<String, Object> model) {
+		UserDetails userRequested = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		Collection<String> u = userService.listRequestAll(userRequested.getUsername());
+		model.put("friendRequest", u);
+		return "users/friendRequest";
 	}
 
-	@PostMapping(value = "users/profile/changeAvatar")
-	public String saveChangeAvatar(@Valid User user, BindingResult result, Map<String, Object> model) {
-		if (result.hasErrors()) {
-			model.put("user", user);
-			return "users/changeAvatar";
-		} else {
-			userService.saveUser(user);
-			return "redirect:/users/profile/" + user.getUsername();
-		}
+>>>>>>> master
+
+	@PostMapping(value = "friendRequest/SendRequest/{usernameProfile}")
+	public String procesSendController(@PathVariable("usernameProfile") String usernameProfile) {
+		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		String user1 = userDetails.getUsername();
+		userService.sendRequested(user1, usernameProfile);
+		return "welcome";
+	}
+	
+	@PostMapping(value = "friendRequest/AcceptRequest/{usernameProfile}")
+	public String acceptController(@PathVariable("usernameProfile") String usernameProfile) {
+		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		String user1 = userDetails.getUsername();
+		userService.acceptRequest(user1, usernameProfile);
+		return "welcome";
+	}
+	
+	@PostMapping(value = "friendRequest/declineRequest/{usernameProfile}")
+	public String declineRequest(@PathVariable("usernameProfile") String usernameProfile) {
+		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		String user1 = userDetails.getUsername();
+		userService.declineRequest(user1, usernameProfile);
+		return "welcome";
 	}
 }
