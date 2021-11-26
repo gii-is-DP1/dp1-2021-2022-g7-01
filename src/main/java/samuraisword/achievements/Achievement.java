@@ -1,4 +1,4 @@
-package samuraisword.logros;
+package samuraisword.achievements;
 
 
 
@@ -16,8 +16,8 @@ import samuraisword.samples.petclinic.user.User;
 @Getter
 @Setter
 @Entity
-@Table(name = "logros")
-public class Logro extends BaseEntity {
+@Table(name = "achievements")
+public class Achievement extends BaseEntity {
 	
 	
 	
@@ -32,13 +32,13 @@ public class Logro extends BaseEntity {
 
 	@ManyToOne
 	@JoinColumn(name = "typeL")
-	private LogroType type;
+	private AchievementType type;
 	
-	public LogroType getType() {
+	public AchievementType getType() {
 		return this.type;
 	}
 
-	public void LogroType(LogroType type) {
+	public void AchievementType(AchievementType type) {
 		this.type = type;
 	}
 	

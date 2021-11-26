@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import samuraisword.logros.Logro;
-import samuraisword.logros.LogroService;
-import samuraisword.logros.RolType;
+import samuraisword.achievements.Achievement;
+import samuraisword.achievements.AchievementService;
+import samuraisword.achievements.RolType;
 import samuraisword.samples.petclinic.user.User;
 import samuraisword.samples.petclinic.user.UserService;
 
