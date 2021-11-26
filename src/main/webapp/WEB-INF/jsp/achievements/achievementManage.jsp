@@ -5,10 +5,10 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
 
-<petclinic:layout pageName="logros/manage">
+<petclinic:layout pageName="achievements/manage">
     <h2>Manage achievements</h2>
     <div style="width: 100%; display: flex; justify-content: flex-end">
-			<a href="/logros/new" class="btn btn-default">Create achievement</a>
+			<a href="/achievements/new" class="btn btn-default">Create achievement</a>
 		</div>
 		
     <table id="cardsTable" class="table table-striped">
@@ -22,7 +22,7 @@
         </tr>
         </thead>
         <tbody>
-        <c:forEach items="${listLogros}" var="achievement">
+        <c:forEach items="${listAchievements}" var="achievement">
             <tr>
                 
                 <td>

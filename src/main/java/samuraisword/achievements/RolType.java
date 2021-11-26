@@ -1,4 +1,4 @@
-package samuraisword.logros;
+package samuraisword.achievements;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;

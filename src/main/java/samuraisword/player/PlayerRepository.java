@@ -7,7 +7,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
-import samuraisword.logros.RolType;
+import samuraisword.achievements.RolType;
 
 
 public interface PlayerRepository extends CrudRepository<Player, Integer> {

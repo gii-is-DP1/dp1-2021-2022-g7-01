@@ -1,4 +1,4 @@
-package samuraisword.logros;
+package samuraisword.achievements;
 
 import java.text.ParseException;
 import java.util.Collection;
@@ -11,10 +11,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class RolTypeFormatter implements Formatter<RolType> {
 
-	private final LogroService peService;
+	private final AchievementService peService;
 
 	@Autowired
-	public RolTypeFormatter(LogroService petService) {
+	public RolTypeFormatter(AchievementService petService) {
 		this.peService = petService;
 	}
 

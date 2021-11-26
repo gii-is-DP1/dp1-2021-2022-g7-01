@@ -42,8 +42,8 @@
 					<span>Comments</span>
 				</petclinic:menuItem>
 
-				<petclinic:menuItem active="${name eq 'logros'}" url="/logros"
-					title="logros">
+				<petclinic:menuItem active="${name eq 'achievements'}" url="/achievements"
+					title="achievements">
 					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
 					<span>Achievements</span>
 				</petclinic:menuItem>

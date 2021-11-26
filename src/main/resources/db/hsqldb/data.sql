@@ -83,7 +83,7 @@ INSERT INTO types2 VALUES (5, 'Ninguno');
 
 INSERT INTO characters VALUES (1, 'tomoe');
 
-INSERT INTO logros (id, title, body, typeL, typeR, username) VALUES (1, 'Primer comentario', 'Realizar tu primer comentario', 1, 5, 'admin1');
+INSERT INTO achievements (id, title, body, typeL, typeR, username) VALUES (1, 'Primer comentario', 'Realizar tu primer comentario', 1, 5, 'admin1');
 
 
 INSERT INTO cards(name,image,cards_Per_Deck) VALUES ('puntuacion','puntuacion.png',1);
