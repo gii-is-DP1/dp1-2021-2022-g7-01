@@ -6,11 +6,11 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
 
-<petclinic:layout pageName="logros">
+<petclinic:layout pageName="achievements">
     <h2>
-        <c:if test="${logro['new']}">New </c:if> Logro
+        <c:if test="${achievement['new']}">New </c:if> Achievement
     </h2>
-    <form:form modelAttribute="logro" class="form-horizontal" id="add-owner-form">
+    <form:form modelAttribute="achievement" class="form-horizontal" id="add-owner-form">
         <div class="form-group has-feedback">
             <petclinic:inputField label="Name" name="title"/>
             <petclinic:inputField label="Description" name="body"/>
@@ -24,11 +24,11 @@
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
                 <c:choose>
-                    <c:when test="${logro['new']}">
-                        <button class="btn btn-default" type="submit">Add Logro</button>
+                    <c:when test="${achievement['new']}">
+                        <button class="btn btn-default" type="submit">Add Achievement</button>
                     </c:when>
                     <c:otherwise>
-                        <button class="btn btn-default" type="submit">Update Logro</button>
+                        <button class="btn btn-default" type="submit">Update Achievement</button>
                     </c:otherwise>
                 </c:choose>
             </div>
