@@ -52,11 +52,10 @@ public class FriendServiceTests {
 		int count = ListReq.size();
 		assertThat(count!=previousCount);
 		
-		previousCount = antiListReq.size();
+		antiListReq = this.userService.listRequestAll("antquiher1");
 		this.userService.sendRequested("admin1", "antquiher1");
 		ListReq = this.userService.listRequestAll("antquiher1");
-		count = ListReq.size();
-		assertThat(count==previousCount).isTrue();
+		assertThat(antiListReq).isEqualTo(ListReq);
 	}
 	
 	@Test
