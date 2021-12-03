@@ -7,11 +7,9 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
+import samuraisword.achievements.RolType;
 import samuraisword.cardhand.CardHand;
 import samuraisword.game.Game;
-
-import samuraisword.logros.RolType;
-
 import samuraisword.samples.petclinic.model.BaseEntity;
 import samuraisword.samples.petclinic.user.User;
 

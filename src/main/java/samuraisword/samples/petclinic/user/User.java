@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
@@ -21,6 +22,8 @@ import org.springframework.core.style.ToStringCreator;
 
 import lombok.Getter;
 import lombok.Setter;
+import samuraisword.achievements.AchievementType;
+import samuraisword.achievements.RolType;
 import samuraisword.player.Player;
 
 @Getter
@@ -47,6 +50,12 @@ public class User {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
 	List<Player> listPlayers;
 	
+	@ManyToOne
+	@JoinColumn(name = "avatar")
+	private SamuraraiCharacter avatar;
+	public SamuraraiCharacter getAvatar() {
+		return this.avatar;
+	}
 	
 	boolean enabled;
 	
@@ -67,13 +76,31 @@ public class User {
 			  inverseJoinColumns = @JoinColumn(name = "id_user"))
 	private List<User> listFriendsOf;
 	
+	@ManyToMany
+	@JoinTable(
+			  name = "friendRequests", 
+			  joinColumns = @JoinColumn(name = "id_user"), 
+			  inverseJoinColumns = @JoinColumn(name = "id_user_requested"))
+	private List<User> listRequests;
+	
+	@ManyToMany
+	@JoinTable(
+			  name = "friendRequests", 
+			  joinColumns = @JoinColumn(name = "id_user_requested"), 
+			  inverseJoinColumns = @JoinColumn(name = "id_user"))
+	private List<User> listRequestsOf;
+	
 	public List<User> getListAllFriends() {
 		List<User> listAllFriends = new ArrayList<>(listFriends);
 		listAllFriends.addAll(listFriendsOf);
 		return listAllFriends;
 	}
 	
-	
+	public List<User> getListAllRequestFriends() {
+		List<User> listAllFriends = new ArrayList<>(listRequests);
+		listAllFriends.addAll(listRequestsOf);
+		return listAllFriends;
+	}
 	public boolean isNew() {
 		return this.username == null;
 	}

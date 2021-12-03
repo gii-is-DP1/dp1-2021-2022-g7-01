@@ -49,12 +49,13 @@ th, td {
 </style>
 
 
-<petclinic:layout pageName="logros">
-	<h1 align="center">Logros</h1>
+<petclinic:layout pageName="achievements">
+	<h1 align="center">Achievements</h1>
 	<div class="container" >
 		<div style="width: 100%; display: flex; justify-content: flex-end">
-			<a href="/logros/new" class="btn btn-default">Create logro</a>
+			<a href="/achievements/manage" class="btn btn-default">Manage achievement</a>
 		</div>
+		
 		<c:forEach items="${types2}" var="Rol">
 		<button onclick="myFunction(${Rol})">${Rol}</button>
 		</c:forEach>
@@ -72,16 +73,16 @@ th, td {
 
 				<table>
 					<tr>
-						<c:forEach items="${listLogros}" var="logro">
-							<c:if test="${Rol == logro.types}">
+						<c:forEach items="${listAchievements}" var="achievement">
+							<c:if test="${Rol == achievement.types}">
 								<c:set value="${vueltas+1}" var="vueltas" />
-								<th id="${logro.type}"><spring:url
-										value="/resources/images/difficulty/${logro.type}.png"
+								<th id="${achievement.type}"><spring:url
+										value="/resources/images/difficulty/${achievement.type}.png"
 										htmlEscape="true" var="difficulty" /> <img
 									style="float: left;" title="" src="${difficulty}"
 									id="difficulty" />
-									<h4 id="difum">${logro.title}</h4>
-									<p id="description">${logro.body}
+									<h4 id="difum">${achievement.title}</h4>
+									<p id="description">${achievement.body}
 										<c:out value="${status.count}" />
 									</p></th>
 								<c:if test="${vueltas>3}">

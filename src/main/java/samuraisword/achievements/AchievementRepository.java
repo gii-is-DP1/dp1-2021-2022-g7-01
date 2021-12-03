@@ -1,4 +1,4 @@
-package samuraisword.logros;
+package samuraisword.achievements;
 
 import java.util.Collection;
 import java.util.List;
@@ -11,12 +11,12 @@ import org.springframework.data.repository.CrudRepository;
 
 
 
-public interface LogroRepository extends CrudRepository<Logro, Integer> {
+public interface AchievementRepository extends CrudRepository<Achievement, Integer> {
 
-	Collection<Logro> findAll();
+	Collection<Achievement> findAll();
 	
-	@Query("SELECT ltype FROM LogroType ltype ORDER BY ltype.name")
-	List<LogroType> findLogroTypes() throws DataAccessException;
+	@Query("SELECT ltype FROM AchievementType ltype ORDER BY ltype.name")
+	List<AchievementType> findAchievementTypes() throws DataAccessException;
 	
 	@Query("SELECT rtype FROM RolType rtype ORDER BY rtype.name")
 	List<RolType> findRolTypes() throws DataAccessException;

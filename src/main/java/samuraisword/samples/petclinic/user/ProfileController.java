@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import samuraisword.achievements.RolType;
 import samuraisword.game.Game;
-import samuraisword.logros.RolType;
 import samuraisword.player.Player;
 import samuraisword.player.Rol;
 
@@ -110,6 +110,29 @@ public class ProfileController {
 			List<Player> listPlayers = userOpt.get().getListPlayers();
 			model.put("listPlayers", listPlayers);
 			return "users/gameHistory";
+		}
+	}
+	
+	@GetMapping(value = "users/profile/changeAvatar/{usernameProfile}")
+	public String viewChangeAvatar(@PathVariable("usernameProfile") String usernameProfile, Map<String, Object> model) {
+		Optional<User> userOptional = userService.findUser(usernameProfile);
+		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if (userOptional.isEmpty() || !userOptional.get().getUsername().equals(userDetails.getUsername())) {
+			return "exception";
+		} else {
+			model.put("user", userOptional.get());
+			return "users/changeAvatar";
+		}
+	}
+
+	@PostMapping(value = "users/profile/changeAvatar")
+	public String saveChangeAvatar(@Valid User user, BindingResult result, Map<String, Object> model) {
+		if (result.hasErrors()) {
+			model.put("user", user);
+			return "users/changeAvatar";
+		} else {
+			userService.saveUser(user);
+			return "redirect:/users/profile/" + user.getUsername();
 		}
 	}
 }

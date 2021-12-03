@@ -42,8 +42,8 @@
 					<span>Comments</span>
 				</petclinic:menuItem>
 
-				<petclinic:menuItem active="${name eq 'logros'}" url="/logros"
-					title="logros">
+				<petclinic:menuItem active="${name eq 'achievements'}" url="/achievements"
+					title="achievements">
 					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
 					<span>Achievements</span>
 				</petclinic:menuItem>
@@ -85,9 +85,12 @@
 											</p>
 											<p class="text-left">
 												<a href="<c:url value="/users/myprofile" />"
-													class="btn btn-primary btn-block btn-sm">Profile</a> <a
-													href="<c:url value="/logout" />"
+													class="btn btn-primary btn-block btn-sm">Profile</a>
+													<a href="<c:url value="/friendRequest" />"
+													class="btn btn-primary btn-block btn-sm">Friend request</a>
+													<a href="<c:url value="/logout" />"
 													class="btn btn-primary btn-block btn-sm">Logout</a>
+													
 
 											</p>
 										</div>

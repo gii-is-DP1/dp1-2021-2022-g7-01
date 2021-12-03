@@ -79,7 +79,37 @@ public class UserService {
 		return userRepository.findByUsername(username);
 	}
 	
+	public Collection<String> getAllFriendOf(String username) {
+		Collection<String>listRes = userRepository.listFriendAll1(username);
+		listRes.addAll(userRepository.listFriendAll2(username));
+		return listRes;
+	}
+
+	@Transactional(readOnly = true)
+	public Collection<String> listRequestAll(String username) throws DataAccessException {
+		return userRepository.listRequestAll(username);
+	}
 	
+	@Transactional(readOnly = true)
+	public void sendRequested(String username1, String username2) throws DataAccessException {
+		Collection<String>ListRequest = userRepository.listRequestAll(username1);
+		Collection<String>ListRequest2 = userRepository.listRequestAll(username2);
+		Collection<String>ListFriend = getAllFriendOf(username1);
+		if((!ListRequest.contains(username2) && !ListRequest2.contains(username1)) && !ListFriend.contains(username2)) {
+			userRepository.sendRequest(username1,username2);
+		}
+	}
 	
+	@Transactional(readOnly = true)
+	public void acceptRequest(String username1, String username2) throws DataAccessException {
+		userRepository.deleteRequest(username1,username2);
+		userRepository.deleteRequest(username2,username1);
+		userRepository.acceptRequest(username1, username2);
+	}
 	
+	@Transactional(readOnly = true)
+	public void declineRequest(String username1, String username2) throws DataAccessException {
+		userRepository.deleteRequest(username1,username2);
+		userRepository.deleteRequest(username2,username1);
+	}
 }

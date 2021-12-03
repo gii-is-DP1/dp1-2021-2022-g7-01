@@ -1,16 +1,16 @@
-package samuraisword.logros;
+package samuraisword.achievements;
 
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 
-public class LogroValidator implements Validator {
+public class AchievementValidator implements Validator {
 
 	private static final String REQUIRED = "required";
 
 	@Override
 	public void validate(Object obj, Errors errors) {
-		Logro pet = (Logro) obj;
+		Achievement pet = (Achievement) obj;
 		
 
 		// type validation
@@ -22,7 +22,7 @@ public class LogroValidator implements Validator {
 	
 		@Override
 		public boolean supports(Class<?> clazz) {
-			return Logro.class.isAssignableFrom(clazz);
+			return Achievement.class.isAssignableFrom(clazz);
 		}
 
 }
