@@ -22,8 +22,8 @@ import org.springframework.core.style.ToStringCreator;
 
 import lombok.Getter;
 import lombok.Setter;
-import samuraisword.logros.LogroType;
-import samuraisword.logros.RolType;
+import samuraisword.achievements.AchievementType;
+import samuraisword.achievements.RolType;
 import samuraisword.player.Player;
 
 @Getter

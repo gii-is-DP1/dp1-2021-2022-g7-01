@@ -11,10 +11,8 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
+import samuraisword.achievements.RolType;
 import samuraisword.game.Game;
-
-import samuraisword.logros.RolType;
 
 
 

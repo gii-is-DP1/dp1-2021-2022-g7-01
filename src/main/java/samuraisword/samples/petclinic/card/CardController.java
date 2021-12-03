@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import samuraisword.achievements.Achievement;
 import samuraisword.comment.Comment;
-import samuraisword.logros.Logro;
 import samuraisword.samples.petclinic.user.User;
 import samuraisword.samples.petclinic.user.UserService;
 
@@ -46,7 +46,7 @@ public class CardController {
 	}
 
 	@GetMapping(value = { "/cards/new" })
-	public String newLogroForm(Map<String, Object> model) {
+	public String newAchievementForm(Map<String, Object> model) {
 		Card card = new Card();
 		model.put("card", card);
 		return FORM_CARD;

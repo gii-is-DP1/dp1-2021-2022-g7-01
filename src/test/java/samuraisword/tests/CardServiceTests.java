@@ -14,7 +14,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import samuraisword.logros.Logro;
+import samuraisword.achievements.Achievement;
 import samuraisword.samples.petclinic.card.Card;
 import samuraisword.samples.petclinic.card.CardService;
 

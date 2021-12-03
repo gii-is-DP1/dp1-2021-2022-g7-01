@@ -1,6 +1,10 @@
 # Samurai Sword
 
-Este repositorio almacena el proyecto de desarrollo del juego de mesa [Samurai Sword](https://www.dvgiochi.com/catalogo/samurai-sword/?lang=eng).
+Este repositorio almacena el proyecto de desarrollo del juego de mesa [Samurai Sword](https://www.dvgiochi.com/catalogo/samurai-sword/?lang=eng). 
+
+# IMPORTANTE 
+
+El proyecto se lanza en el puerto 9999.
 
 # Reglas básicas del juego
 

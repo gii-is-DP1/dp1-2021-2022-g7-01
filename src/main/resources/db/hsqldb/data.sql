@@ -83,7 +83,7 @@ INSERT INTO types2 VALUES (5, 'Ninguno');
 
 INSERT INTO characters VALUES (1, 'tomoe');
 
-INSERT INTO logros (id, title, body, typeL, typeR, username) VALUES (1, 'Primer comentario', 'Realizar tu primer comentario', 1, 5, 'admin1');
+INSERT INTO achievements (id, title, body, typeL, typeR, username) VALUES (1, 'Primer comentario', 'Realizar tu primer comentario', 1, 5, 'admin1');
 
 
 INSERT INTO cards(name,image,cards_Per_Deck) VALUES ('puntuacion','puntuacion.png',1);
@@ -117,6 +117,8 @@ INSERT INTO cards(name,image,cards_Per_Deck) VALUES ('wakizashi','attack/wakizas
 
 INSERT INTO games(id,end_date,start_date) VALUES (1, parsedatetime('24-11-2021 18:47:52', 'dd-MM-yyyy hh:mm:ss'),parsedatetime('24-11-2021 19:08:13', 'dd-MM-yyyy hh:mm:ss'));
 INSERT INTO players(id,current_hearts,honor,max_hearts,position,rol,won_game,game_id,username) VALUES (1,5,3,5,2,1,true,1,'diecrequi');
+INSERT INTO players(id,current_hearts,honor,max_hearts,position,rol,won_game,game_id,username) VALUES (2,4,5,4,3,1,true,1,'alefr99');
+
 
 
 --INSERT INTO cardhands(cards) VALUES (1, ['daimio','daimio','daimio','daimio','daimio']);
