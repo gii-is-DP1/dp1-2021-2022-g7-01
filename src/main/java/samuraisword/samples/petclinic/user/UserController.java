@@ -124,11 +124,6 @@ public class UserController {
 			return "users/usersList";
 		}
 	}
-<<<<<<< HEAD
-
-	
-=======
-
 
 	@GetMapping(value = "friendRequest")
 	public String listRequestAll(Map<String, Object> model) {
@@ -138,8 +133,6 @@ public class UserController {
 		return "users/friendRequest";
 	}
 
->>>>>>> master
-
 	@PostMapping(value = "friendRequest/SendRequest/{usernameProfile}")
 	public String procesSendController(@PathVariable("usernameProfile") String usernameProfile) {
 		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -147,7 +140,7 @@ public class UserController {
 		userService.sendRequested(user1, usernameProfile);
 		return "welcome";
 	}
-	
+
 	@PostMapping(value = "friendRequest/AcceptRequest/{usernameProfile}")
 	public String acceptController(@PathVariable("usernameProfile") String usernameProfile) {
 		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -155,7 +148,7 @@ public class UserController {
 		userService.acceptRequest(user1, usernameProfile);
 		return "welcome";
 	}
-	
+
 	@PostMapping(value = "friendRequest/declineRequest/{usernameProfile}")
 	public String declineRequest(@PathVariable("usernameProfile") String usernameProfile) {
 		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
