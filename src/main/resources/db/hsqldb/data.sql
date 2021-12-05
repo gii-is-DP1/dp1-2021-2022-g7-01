@@ -81,8 +81,6 @@ INSERT INTO types2 VALUES (3, 'Samurai');
 INSERT INTO types2 VALUES (4, 'Ronin');
 INSERT INTO types2 VALUES (5, 'Ninguno');
 
-INSERT INTO characters VALUES (1, 'tomoe');
-
 INSERT INTO achievements (id, title, body, typeL, typeR, username) VALUES (1, 'Primer comentario', 'Realizar tu primer comentario', 1, 5, 'admin1');
 
 
@@ -119,7 +117,18 @@ INSERT INTO games(id,end_date,start_date) VALUES (1, parsedatetime('24-11-2021 1
 INSERT INTO players(id,current_hearts,honor,max_hearts,position,rol,won_game,game_id,username) VALUES (1,5,3,5,2,1,true,1,'diecrequi');
 INSERT INTO players(id,current_hearts,honor,max_hearts,position,rol,won_game,game_id,username) VALUES (2,4,5,4,3,1,true,1,'alefr99');
 
-
+INSERT INTO characters(id,name,life,image,text) VALUES (1,'Benkei',5,'characters/benkei.png','All other players have +1 Difficulty when they attack you.');
+INSERT INTO characters(id,name,life,image,text) VALUES (2,'Chiyome',4,'characters/chiyome.png','You can only be wounded by Weapon cards. You are not affected by Jujutsu and Battle Cry cards. You are affected normally by other Action cards, such as Tea Ceremony.');
+INSERT INTO characters(id,name,life,image,text) VALUES (3,'Ginchiyo',4,'characters/ginchiyo.png','You take 1 wound less than normal when attacked by any Weapon, to a minimum of 1 wound. E.g., a Nodachi would only deal 2 wounds to you instead of 3, but a Shuriken still inflicts 1 wound.');
+INSERT INTO characters(id,name,life,image,text) VALUES (4,'Goemon',5,'characters/goemon.png','You may play 1 additional Weapon card during your turn. So, if you have 1 Focus in play, you may play up to 3 Weapon cards each turn.');
+INSERT INTO characters(id,name,life,image,text) VALUES (5,'Hanzo',4,'characters/hanzo.png','You may play a Weapon card from your hand as a parry , unless it is the only card in your hand. You may use this ability even in response to cards such as Battle Cry.');
+INSERT INTO characters(id,name,life,image,text) VALUES (6,'Hideyoshi',4,'characters/hideyoshi.png','You may play a Weapon card from your hand as a parry , unless it is the only card in your hand. You may use this ability even in response to cards such as Battle Cry.');
+INSERT INTO characters(id,name,life,image,text) VALUES (7,'Ieyasu',5,'characters/ieyasu.png','During your Draw Phase, you may take the top card of the discard pile as your first draw. Any other cards you draw must come from the +draw deck.');
+INSERT INTO characters(id,name,life,image,text) VALUES (8,'Kojiro',5,'characters/kojiro.png','Your Weapons can hit any Difficulty, regardless of the value on your Weapon card.');
+INSERT INTO characters(id,name,life,image,text) VALUES (9,'Musashi',5,'characters/musashi.png','If you successfully attack another character with a Weapon card, you inflict 1 additional wound. This does not apply to cards that are not Weapons, like Jujutsu.');
+INSERT INTO characters(id,name,life,image,text) VALUES (10,'Nobunaga',5,'characters/nobunaga.png','During your Play Phase, you may discard 1 Resilience Point to draw 1 card from the deck. You may not use your last Resilience Point in this way.');
+INSERT INTO characters(id,name,life,image,text) VALUES (11,'Tomoe',5,'characters/tomoe.png','Each time you successfully attack another character with a Weapon card, you draw 1 card from the deck. You only draw 1 card, even if your Weapon does more than 1 wound.');
+INSERT INTO characters(id,name,life,image,text) VALUES (12,'Ushiwaka',4,'characters/ushiwaka.png','Each time you suffer a wound from a Weapon card, you draw 1 card from the deck (so 3 wounds = 3 cards).');
 
 --INSERT INTO cardhands(cards) VALUES (1, ['daimio','daimio','daimio','daimio','daimio']);
 
