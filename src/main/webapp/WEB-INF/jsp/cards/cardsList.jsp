@@ -46,7 +46,6 @@
 					<a href="${fn:escapeXml(editUrl)}" class="btn btn-default">Delete
 						Card</a>
                 </td>
-                
             </tr>
         </c:forEach>
 		</tbody>
