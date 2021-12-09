@@ -16,7 +16,7 @@
 					</div>
 					
 					<c:forEach var="i" begin="0" end="${gameDeck.getCardList().size()-1}">
-						<c:out value="${gameDeck.getCardList().get(i).getName()}"></c:out>
+						<p>${gameDeck.getCardList().get(i).getName()}</p>
 					</c:forEach>
 				</c:when>
 				

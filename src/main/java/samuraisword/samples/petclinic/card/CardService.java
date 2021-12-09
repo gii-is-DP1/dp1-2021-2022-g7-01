@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import samuraisword.comment.Comment;
+import samuraisword.samples.petclinic.user.User;
 
 @Service
 public class CardService {
@@ -38,5 +39,17 @@ public class CardService {
 	
 	public void deleteCard(int idCard) {
 		cardRepository.deleteById(idCard);
+	}
+
+	public Optional<String> findColor(String name) {
+		return cardRepository.findColor(name);
+	}
+
+	public Optional<Integer> findRange(String name) {
+		return cardRepository.findRange(name);
+	}
+	
+	public Optional<Integer> findDamage(String name) {
+		return cardRepository.findDamage(name);
 	}
 }
