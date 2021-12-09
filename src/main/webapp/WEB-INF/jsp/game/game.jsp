@@ -76,35 +76,37 @@ img.estrella {
 					<div align="center">
 						<br>
 
-						<c:if test="${listPlayer.size()>=4}">
-							<button style="background-color: #00FF00">Empezar
-								partida</button>
+						<c:if test="${listPlayer.size()>=0}">
+							<spring:url value="start/{gameId}" var="startUrl">
+								<spring:param name="gameId" value="${gameId}" />
+							</spring:url>
+								<a href="${fn:escapeXml(startUrl)}" class="btn btn-success">Start
+								Game</a>
 						</c:if>
-						<c:if test="${listPlayer.size()<4}">
+						<c:if test="${listPlayer.size()<0}">
 							<b>TIENEN QUE HABER AL MENOS 4 JUGADORES PARA EMPEZAR LA
 								PARTIDA</b>
 							<br>
-							<button disabled="disabled" style="background-color: #FF0000">Empezar
+							<button disabled="disabled" class="btn btn-secondary">Empezar
 								partida</button>
-
-
 						</c:if>
 						<c:if test="${listPlayer.get(0).getUser().getUsername()==user}">
 							<spring:url value="delete/{gameId}" var="editUrl">
 								<spring:param name="gameId" value="${gameId}" />
 							</spring:url>
-							<a href="${fn:escapeXml(editUrl)}" class="btn btn-default">Delete
+							<a href="${fn:escapeXml(editUrl)}" class="btn btn-danger">Delete
 								Game</a>
 						</c:if>
 					</div>
 				</div>
 			</div>
 		</div>
-		<div align="right" class="col-sm-2">
+		<div align="right" class="col-sm-2 ">
 			<h2>Amigos (${listFriends.size()})</h2>
 			<c:if test="${listFriends.size()!=0}">
 				<c:forEach var="i" begin="0" end="${listFriends.size()-1}">
 					<p>${listFriends.get(i).getUsername()}</p>
+					<button class="btn btn-primary">Invite</button>
 				</c:forEach>
 			</c:if>
 			<br>

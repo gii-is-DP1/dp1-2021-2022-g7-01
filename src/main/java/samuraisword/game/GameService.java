@@ -34,5 +34,10 @@ public Optional<Game> findById(int idGame) {
 	public void deleteGame(int idGame) {
 		gameRepository.deleteById(idGame);
 	}
+	
+	
+	
+	
+	
 
 }

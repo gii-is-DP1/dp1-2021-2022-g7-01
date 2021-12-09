@@ -7,17 +7,24 @@
 <!-- %@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %-->  
 
 <style>
-body { 
-  background: url(https://entretenimientodigital.net/wp-content/uploads/2020/11/samurai-sword.jpg)
-  no-repeat bottom fixed; 
-  background-size: 75%;
-  background-opacity: 50%;
+body {
+
 }
 
+
 button {
-  
-  align-content:flex-end;
-  
+ 
+}
+
+.container-fluid{
+  height: 100%; 
+  background-image: url(https://entretenimientodigital.net/wp-content/uploads/2020/11/samurai-sword.jpg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-opacity: 50%;
+  padding-top: 50px;
+  justify-content: center
 }
 [id^="welcome"] {
 	background: /resources/images/roles/ninja.png
@@ -32,24 +39,36 @@ button {
   
 
 </style>
-<petclinic:layout pageName="home">
-    <h2 align="center"><fmt:message key="welcome" /></h2>
-    <div class="row" >
-        <div class="col-md-12" align="center" id="welcome" style="width: 200px; height: 130px;">
-            <sec:authorize access="!isAuthenticated()">
-          
-            	<form method="post" action="/login">
- 					<button type="submit" class="btn btn-default" id = "Login">Login</button>
-				</form>
-				<form method="get" action="/users/new">
-					<button type="submit" class="btn btn-default" id = "Register">Register</button>
-				</form>
-				</sec:authorize>
-				<sec:authorize access="isAuthenticated()">
-					<form method="get" action="/logout" style="padding-top: 30px">
- 					<button type="submit" class="btn btn-default" id = "Logout">Logout</button>
-				</form>
-				</sec:authorize>
-        </div>
-    </div>
+<petclinic:layout pageName="home">	
+		
+	    <div class="row">
+	    	
+	       		<div class="col-md-4" ></div>
+				<div class="col-md-4" style="background-color: #c4aead; padding-top: 50px; border-radius: 10px; margin: 0 auto; height: 280px; border: solid black 1px">
+					<h2 align="center" >WELCOME</h2>
+					</br>
+					<div  align="center">
+						<sec:authorize access="!isAuthenticated()">
+		          
+		            	<form method="post" action="/login" >
+		 					<button type="submit" class="btn" style="width: 100px; border-radius: 10px; background-color: #1a1110; color:white" id = "Login">Login</button>
+						</form>
+						<form method="get" action="/users/new">
+							<button type="submit" class="btn" style="width: 100px; border-radius: 10px; background-color: #1a1110; color:white" id = "Register">Register</button>
+						</form>
+						</sec:authorize>
+						<sec:authorize access="isAuthenticated()">
+							<form method="get" action="/game/new">
+		 					<button type="submit" class="btn btn-default" id = "Logout">NEW GAME!</button>
+						</form>
+					</sec:authorize>
+					</div>
+		            
+				</div>
+				<div class="col-md-4"></div>
+	        	
+	       
+		</div>
+ 
 </petclinic:layout>
+

@@ -34,9 +34,11 @@ public class PlayerController {
 		this.playerService = playerService;
 	}
 	
-	@GetMapping(value = { "game/{id_game}/players/delete/{id_player}" })
-	public String deletePlayersForm(@PathVariable("id_player") int idPlayer, Map<String, Object> model) {
-		playerService.deletePlayer(idPlayer);
-		return "redirect:/game/{id_game}";
+	@GetMapping(value = { "/players" })
+	public String listAchievements(Map<String, Object> model) {
+		Collection<Player> listPlayers = playerService.findAll();
+		model.put("listPlayers", listPlayers);
+		
+		return "players/listPlayers";
 	}
 }

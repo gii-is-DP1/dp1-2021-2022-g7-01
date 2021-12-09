@@ -13,4 +13,5 @@ public interface CardRepository extends CrudRepository<Card, Integer> {
 	
 	@Query(value = "SELECT card FROM Cards WHERE name = :name" , nativeQuery = true)
 	Optional<Card> findByName(@Param("name") String name);
+	
 }
