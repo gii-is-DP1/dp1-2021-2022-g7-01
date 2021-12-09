@@ -10,10 +10,14 @@
 	<h2>
 		<div align="center">
 			<c:choose>
-				<c:when test="${gameDeck ==null}">
+				<c:when test="${gameDeck !=null}">
 					<div>
 						hay gamedeck
 					</div>
+					
+					<c:forEach var="i" begin="0" end="${gameDeck.getCardList().size()-1}">
+						<c:out value="${gameDeck.getCardList().get(i).getName()}"></c:out>
+					</c:forEach>
 				</c:when>
 				
 			</c:choose>

@@ -41,11 +41,13 @@ public class CardHand extends BaseEntity {
 
 	public static CardHand createDeck() {
 		CardHand res = new CardHand();
+		
 		return res;
 	}
 
 	public static CardHand Empty() {
 		return new CardHand();
+		
 	}
 
 	

@@ -92,19 +92,29 @@ public class GameController {
 	}
 	
 	@GetMapping(value = {"/game/start/{id_game}"})
-	public String initGame(@PathVariable("id_game") int gameId,  Map<String, Object> model, HttpServletResponse a) {
+	public String initGame(@PathVariable("id_game") int gameId,  Map<String, Object> model) {
 		
 		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		User user = userService.findUser(userDetails.getUsername()).get();
 		Game game=gameService.findById(gameId).get();
-		a.addHeader("Refresh", "1");
 		
+		//Crear y guardar deck
 		CardHand gameDeck = new CardHand();//funcion que crea el deck predeterminado y ordenado aleatoriamente		
 		cardHandService.save(gameDeck);
 		
+		//Crear y guardar las cartas del deck
 		RedCard bo = RedCard.of("bo", "attack/bo.png", 2, 1);
-		gameDeck.setCardList(List.of(bo));
+		RedCard bo1 = RedCard.of("bo", "attack/bo.png", 2, 1);
+		RedCard bo2 = RedCard.of("bo", "attack/bo.png", 2, 1);
+		RedCard bo3 = RedCard.of("bo", "attack/bo.png", 2, 1);
 		cardService.saveCard(bo);
+		cardService.saveCard(bo1);
+		cardService.saveCard(bo2);
+		cardService.saveCard(bo3);
+		
+		//Insertar las cartas en el deck
+		gameDeck.setCardList(List.of(bo, bo1, bo2, bo3));
+		
 		
 		
 		model.put("user", user.getUsername());
