@@ -45,6 +45,13 @@ public class Card extends BaseEntity{
 	  inverseJoinColumns = @JoinColumn(name = "card_hand_id"))
 	List<Card> cardListOf;
 
+	public static Card of(String name, String image) {
+		Card res = new Card();
+		res.setName(name);
+		res.setImage(image);
+		return res;
+	}
+
 	
 	
 	

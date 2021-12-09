@@ -1,6 +1,7 @@
 package samuraisword.game;
 
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +21,7 @@ import samuraisword.cardhand.CardHand;
 import samuraisword.cardhand.CardHandService;
 import samuraisword.player.Player;
 import samuraisword.player.PlayerService;
+import samuraisword.samples.petclinic.card.Card;
 import samuraisword.samples.petclinic.card.CardService;
 import samuraisword.samples.petclinic.card.RedCard;
 import samuraisword.samples.petclinic.user.User;
@@ -100,23 +102,26 @@ public class GameController {
 		
 		//Crear y guardar deck
 		CardHand gameDeck = new CardHand();//funcion que crea el deck predeterminado y ordenado aleatoriamente		
-		cardHandService.save(gameDeck);
-		
-		//Crear y guardar las cartas del deck
-		RedCard bo = RedCard.of("bo", "attack/bo.png", 2, 1);
-		RedCard bo1 = RedCard.of("bo", "attack/bo.png", 2, 1);
-		RedCard bo2 = RedCard.of("bo", "attack/bo.png", 2, 1);
-		RedCard bo3 = RedCard.of("bo", "attack/bo.png", 2, 1);
-		cardService.saveCard(bo);
-		cardService.saveCard(bo1);
-		cardService.saveCard(bo2);
-		cardService.saveCard(bo3);
-		
-		//Insertar las cartas en el deck
-		gameDeck.setCardList(List.of(bo, bo1, bo2, bo3));
-		
-		
-		
+		gameDeck.setCardList(new ArrayList<>());
+		for(Card card : cardService.findAll()) {
+			for(int i = 0; i < card.getCardsPerDeck(); i++) {
+				String name = card.getName();
+				switch(cardService.findColor(name).get()) {
+				case("Red"):
+					Integer rango= Integer.valueOf(cardService.findRange(name).get());
+					Integer damage= Integer.valueOf(cardService.findRange(name).get());
+					RedCard redCard = RedCard.of(name, card.getImage(), rango, damage);
+					gameDeck.getCardList().add(redCard);
+				case("Yellow"):
+					Card yellowCard = Card.of(name, card.getImage());
+					gameDeck.getCardList().add(yellowCard);
+				case("Blue"):
+					Card blueCard = Card.of(card.getName(), card.getImage());
+					gameDeck.getCardList().add(blueCard);
+				}
+				
+			}
+		}
 		model.put("user", user.getUsername());
 		model.put("listPlayer", game.getListPlayers());
 		model.put("gameId", gameId);

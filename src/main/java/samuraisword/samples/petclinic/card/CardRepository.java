@@ -13,5 +13,13 @@ public interface CardRepository extends CrudRepository<Card, Integer> {
 	
 	@Query(value = "SELECT card FROM Cards WHERE name = :name" , nativeQuery = true)
 	Optional<Card> findByName(@Param("name") String name);
+
+	@Query(value = "SELECT card_color FROM Cards WHERE name = :name" , nativeQuery = true)
+	Optional<String> findColor(@Param("name") String name);
 	
+	@Query(value = "SELECT range FROM Cards WHERE name = :name" , nativeQuery = true)
+	Optional<Integer> findRange(@Param("name") String name);
+	
+	@Query(value = "SELECT damage FROM Cards WHERE name = :name" , nativeQuery = true)
+	Optional<Integer> findDamage(@Param("name") String name);
 }
