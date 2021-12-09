@@ -5,6 +5,7 @@
 	uri="http://www.springframework.org/security/tags"%>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
 <!-- %@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %-->  
+
 <style>
 body {
 
@@ -25,10 +26,20 @@ button {
   padding-top: 50px;
   justify-content: center
 }
+[id^="welcome"] {
+	background: /resources/images/roles/ninja.png
+  no-repeat bottom fixed; 
+	text-align: center;
+	padding: 20px;
+	position: absolute;
+	left: 500px;
+	top: 50px;
+}
+  
+  
 
 </style>
-<petclinic:layout pageName="home">
-	
+<petclinic:layout pageName="home">	
 		
 	    <div class="row">
 	    	
@@ -60,3 +71,4 @@ button {
 		</div>
  
 </petclinic:layout>
+
