@@ -1,5 +1,6 @@
 package samuraisword.cardhand;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -38,16 +39,10 @@ public class CardHand extends BaseEntity {
 	@JoinColumn(name="player")
 	private Player player;
 
-
-	public static CardHand createDeck() {
+	public static CardHand empty() {
 		CardHand res = new CardHand();
-		
+		res.setCardList(new ArrayList<>());
 		return res;
-	}
-
-	public static CardHand Empty() {
-		return new CardHand();
-		
 	}
 
 	
