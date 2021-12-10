@@ -13,6 +13,7 @@ import samuraisword.achievements.RolType;
 public interface PlayerRepository extends CrudRepository<Player, Integer> {
 	
 	Collection<Player> findAll();
+	
 	@Query("SELECT rtype FROM RolType rtype ORDER BY rtype.name")
 	List<RolType> findRolTypes() throws DataAccessException;
 }

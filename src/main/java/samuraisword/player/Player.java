@@ -1,7 +1,7 @@
 package samuraisword.player;
 
 import java.util.List;
-
+import samuraisword.character.Character;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -13,9 +13,6 @@ import lombok.Getter;
 import lombok.Setter;
 import samuraisword.cardhand.CardHand;
 import samuraisword.game.Game;
-
-import samuraisword.achievements.RolType;
-
 import samuraisword.samples.petclinic.model.BaseEntity;
 import samuraisword.samples.petclinic.user.User;
 
@@ -48,6 +45,10 @@ public class Player extends BaseEntity{
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "player")
 	private List<CardHand> listCardHand;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "character")
+    private Character character;
 	
 	@Override
 	public String toString() {

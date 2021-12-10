@@ -9,11 +9,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import lombok.Getter;
 import lombok.Setter;
 import samuraisword.cardhand.CardHand;
+import samuraisword.player.Player;
 import samuraisword.samples.petclinic.model.BaseEntity;
 import samuraisword.samples.petclinic.user.User;
 
@@ -30,5 +32,9 @@ public class Character extends BaseEntity{
 	private String image;
 	
 	private String text;
+	
+	@OneToOne(mappedBy = "character")
+    private Player player;
+
 
 }
