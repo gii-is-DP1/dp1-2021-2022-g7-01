@@ -72,11 +72,13 @@ public class GameController {
 			UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			User user = userService.findUser(userDetails.getUsername()).get();
 			Player player = new Player();
+			player.setWonGame(false);
 			player.setUser(user);
 			player.setGame(game);
-			this.gameService.saveGame(game);
-			this.userService.saveUser(user);
-			this.playerService.savePlayer(player);
+			game.setListPlayers(List.of(player));
+			gameService.saveGame(game);
+			userService.saveUser(user);
+			playerService.savePlayer(player);
 			return "redirect:/game/" + game.getId();
 	}
 	
@@ -107,16 +109,26 @@ public class GameController {
 		User user = userService.findUser(userDetails.getUsername()).get();
 		Game game = gameService.findById(gameId).get();
 		
-		CardHand gameDeck = createDeck();
+		CardHand gameDeck = gameService.createDeck(cardService);
 		CardHand discardPile = CardHand.empty();
 		
-		asignCharacterAndHearts(game.getListPlayers());
+		List<Character> characters = (List<Character>) characterService.findAll();
 		
-		asignRolAndHonor(game.getListPlayers());
+		List<Player> players = game.getListPlayers();	
 		
-		asignOrder(game.getListPlayers());
+		gameService.asignCharacterAndHearts(players, characters);
 		
-		//asign cards to players
+		gameService.asignRolAndHonor(players);
+		
+		gameService.asignOrder(players);
+		
+		gameService.asignCards(players, gameDeck.getCardList());
+		
+		game.setListPlayers(players);
+		
+		for(Player player : game.getListPlayers()) {
+			playerService.savePlayer(player);
+		}
 		
 		model.put("user", user.getUsername());
 		model.put("listPlayer", game.getListPlayers());
@@ -127,114 +139,11 @@ public class GameController {
 		return "/game/gameboard";
 	}
 	
-	private void asignOrder(List<Player> listPlayers) {
-		// De el ultimo tratamiento a listPlayers (asignRolAndHonor) el 1o SHOGUN será siempre el indice 0.
-		// queremos hacer un ultimo shuffle a listPlayers para que no sea siempre el mismo orden de roles
-		//definidos en asignRolandHonor, pero queremos que SHOGUN siga ocupando el indice 0 ya que es importante 
-		//para el reparto de cartas ya que en funcion de los jugadores que hayan entre un jugador y el SHOGUN se le
-		//reparten mas o menos cartas.
-		
-		Player shogun = listPlayers.get(0);
-		listPlayers.remove(0);
-		Collections.shuffle(listPlayers);
-		listPlayers.add(0, shogun);
-		
-	}
+	
 
-	private void asignRolAndHonor(List<Player> listPlayers) {
-		
-		Collections.shuffle(listPlayers);
-		
-		switch(listPlayers.size()) {
-		case 4:
-			listPlayers.get(0).setRol(Rol.SHOGUN);
-			listPlayers.get(1).setRol(Rol.SAMURAI);
-			listPlayers.get(2).setRol(Rol.NINJA);
-			listPlayers.get(3).setRol(Rol.NINJA);
-			//setHonor
-			for(Player p : listPlayers) {
-				if(p.getRol().equals(Rol.SHOGUN)) p.setHonor(5);
-				else p.setHonor(3);
-			}
-		case 5:
-			listPlayers.get(0).setRol(Rol.SHOGUN);
-			listPlayers.get(1).setRol(Rol.SAMURAI);
-			listPlayers.get(2).setRol(Rol.NINJA);
-			listPlayers.get(3).setRol(Rol.NINJA);
-			listPlayers.get(4).setRol(Rol.RONIN);
-			
-			for(Player p : listPlayers) {
-				if(p.getRol().equals(Rol.SHOGUN)) p.setHonor(5);
-				else p.setHonor(3);
-			}
-		case 6:
-			listPlayers.get(0).setRol(Rol.SHOGUN);
-			listPlayers.get(1).setRol(Rol.SAMURAI);
-			listPlayers.get(2).setRol(Rol.NINJA);
-			listPlayers.get(3).setRol(Rol.NINJA);
-			listPlayers.get(4).setRol(Rol.NINJA);
-			listPlayers.get(5).setRol(Rol.RONIN);
-			
-			for(Player p : listPlayers) {
-				if(p.getRol().equals(Rol.SHOGUN)) p.setHonor(5);
-				else p.setHonor(4);
-			}
-		case 7:
-			listPlayers.get(0).setRol(Rol.SHOGUN);
-			listPlayers.get(1).setRol(Rol.SAMURAI);
-			listPlayers.get(2).setRol(Rol.NINJA);
-			listPlayers.get(3).setRol(Rol.NINJA);
-			listPlayers.get(4).setRol(Rol.NINJA);
-			listPlayers.get(5).setRol(Rol.RONIN);
-			listPlayers.get(6).setRol(Rol.SAMURAI);
-			
-			for(Player p : listPlayers) {
-				if(p.getRol().equals(Rol.SHOGUN)) p.setHonor(5);
-				else p.setHonor(4);
-			}
-		}
-	}
 
-	private void asignCharacterAndHearts(List<Player> players) {
-		List<Character> characters = (List<Character>) characterService.findAll();
-		
-		for(Player p : players) {
-			int randomNum = ThreadLocalRandom.current().nextInt(0, characters.size() + 1);
-			p.setCharacter(characters.get(randomNum));
-			
-			characters.remove(randomNum);
-			
-			p.setMaxHearts(p.getCharacter().getLife());
-			p.setCurrentHearts(p.getCharacter().getLife());
-		}
-	}
 
-	private CardHand createDeck() {
-		//Crear y guardar deck
-				CardHand gameDeck = new CardHand();//funcion que crea el deck predeterminado y ordenado aleatoriamente		
-				gameDeck.setCardList(new ArrayList<>());
-				for(Card card : cardService.findAll()) {
-					for(int i = 0; i < card.getCardsPerDeck(); i++) {
-						String name = card.getName();
-						switch(cardService.findColor(name).get()) {
-						case("Red"):
-							Integer rango= Integer.valueOf(cardService.findRange(name).get());
-							Integer damage= Integer.valueOf(cardService.findRange(name).get());
-							RedCard redCard = RedCard.of(name, card.getImage(), rango, damage);
-							gameDeck.getCardList().add(redCard);
-						case("Yellow"):
-							Card yellowCard = Card.of(name, card.getImage());
-							gameDeck.getCardList().add(yellowCard);
-						case("Blue"):
-							Card blueCard = Card.of(card.getName(), card.getImage());
-							gameDeck.getCardList().add(blueCard);
-						}	
-					}
-				}
-				Collections.shuffle(gameDeck.getCardList());
-				
-				return gameDeck;
-	}
+
 	
 	
 	

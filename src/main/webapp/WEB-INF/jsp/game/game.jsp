@@ -5,7 +5,8 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags"%>
 <petclinic:layout pageName="game">
-	<style>
+
+<style>
 img.estrella {
 	position: absolute;
 	bottom: 100px;
