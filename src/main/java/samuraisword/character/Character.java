@@ -24,7 +24,7 @@ import samuraisword.samples.petclinic.user.User;
 @Entity
 @Table(name = "characters")
 public class Character extends BaseEntity{
-
+	
 	private String name;
 	
 	private Integer life;

@@ -31,8 +31,6 @@ public class Player extends BaseEntity{
 	
 	private Integer honor;
 	
-	private Integer position;
-	
 	private Boolean wonGame;
 	
 	private Rol rol;
