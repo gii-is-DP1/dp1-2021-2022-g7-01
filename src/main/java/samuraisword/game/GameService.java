@@ -3,9 +3,12 @@ package samuraisword.game;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.IntStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -90,7 +93,7 @@ public List<Player> asignCharacterAndHearts(List<Player> players, List<Character
 public List<Player> asignRolAndHonor(List<Player> listPlayers) {
 	
 	Collections.shuffle(listPlayers);
-	
+	//Roles asignados segun reglas del juego
 	switch(listPlayers.size()) {
 	case 4:
 		listPlayers.get(0).setRol(Rol.SHOGUN);
@@ -161,10 +164,41 @@ public List<Player> asignOrder(List<Player> listPlayers) {
 	return listPlayers;
 }
 
-public List<Player> asignCards(List<Player> listPlayers, List<Card> list) {
-	
-	return null;
-	
+public Map<String, List<List<Card>>> mapPlayerCardHands(List<Player> players){
+	Map<String, List<List<Card>>> m = new HashMap<>();
+	for(Player p : players) {
+		if(! m.containsKey(p.getUser().getUsername())) {
+			List<Card> mano = new ArrayList<>();
+			List<Card> equipadas = new ArrayList<>();
+			m.put(p.getUser().getUsername(), List.of(mano, equipadas));
+		}
+	}
+	return m;
+}
+
+public void asignCards(Map<String, List<List<Card>>> map, CardHand gameDeck, List<Player> players) {
+	int cardsGiven = 4; 
+	for(int i = 0; i < players.size()-1; i++) { //player tiene 2 cardhands la 0 indica la mano, la 1 las equipadas
+		List<Card> hand = map.get(players.get(i).getUser().getUsername()).get(0);
+		//Normas del reparto de cartas:
+		//En la lista players el indice 0 corresponde al shogun ya que esta funcion es inmediatamente posterior a asignOrder.
+		/*
+		   0º Shogun: 4 cards
+		   1st and 2nd player: 5 cards
+           3rd and 4th player (if present): 6 cards
+           5th and 6th player (if present): 7 cards
+           
+           Al shogun con indice 0 se le repartiran 4 cartas, y cada vez que el indice coincida con ser impar, el n cartas
+           a repartir aumenta en 1. Excluimos el 0 también por preacución.
+           
+		 */
+		if(i%2==1) {cardsGiven = cardsGiven + 1;}
+		
+		for(int e = 0; e < cardsGiven; e++) {
+			hand.add(gameDeck.getCardList().get(e));
+			gameDeck.getCardList().remove(e);
+		}	
+	}
 }
 	
 	
