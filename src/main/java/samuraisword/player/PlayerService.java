@@ -18,7 +18,6 @@ import samuraisword.game.Game;
 
 @Service
 public class PlayerService {
-	
 	 
 	private PlayerRepository playerRepository;
 	
