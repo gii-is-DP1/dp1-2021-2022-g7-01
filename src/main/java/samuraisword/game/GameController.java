@@ -74,7 +74,7 @@ public class GameController {
 			Player player = new Player();
 			player.setWonGame(false);
 			player.setUser(user);
-			player.setGame(game);
+			player.setGame(game);			
 			game.setListPlayers(List.of(player));
 			gameService.saveGame(game);
 			userService.saveUser(user);
@@ -114,7 +114,28 @@ public class GameController {
 		
 		List<Character> characters = (List<Character>) characterService.findAll();
 		
-		List<Player> players = game.getListPlayers();	
+		List<Player> players = game.getListPlayers();
+		
+		//players de prueba
+		Player p1 = playerService.findById(1).get();
+	
+		Player p2 = playerService.findById(2).get();
+		
+		Player p3 = playerService.findById(3).get();
+	
+		Player p4 = playerService.findById(4).get();
+	
+		Player p5 = playerService.findById(5).get();
+		
+		Player p6 = playerService.findById(6).get();
+		
+		players.add(p1);
+		players.add(p2);
+		players.add(p3);
+		players.add(p4);
+		players.add(p5);
+		players.add(p6);
+		//players de prueba
 		
 		gameService.asignCharacterAndHearts(players, characters);
 		
@@ -122,15 +143,18 @@ public class GameController {
 		
 		gameService.asignOrder(players);
 		
-		gameService.asignCards(players, gameDeck.getCardList());
-		
 		game.setListPlayers(players);
 		
 		for(Player player : game.getListPlayers()) {
 			playerService.savePlayer(player);
 		}
 		
-		model.put("user", user.getUsername());
+		Map<String, List<List<Card>>> mapHands = gameService.mapPlayerCardHands(players);
+		
+		gameService.asignCards(mapHands, gameDeck, players);
+		
+		model.put("map", mapHands);
+		model.put("user", user);
 		model.put("listPlayer", game.getListPlayers());
 		model.put("gameId", gameId);
 		model.put("gameDeck", gameDeck);
@@ -138,15 +162,6 @@ public class GameController {
 		
 		return "/game/gameboard";
 	}
-	
-	
 
-
-
-
-	
-	
-	
-	
 
 }

@@ -13,6 +13,7 @@ import lombok.Getter;
 import lombok.Setter;
 import samuraisword.cardhand.CardHand;
 import samuraisword.game.Game;
+import samuraisword.samples.petclinic.card.Card;
 import samuraisword.samples.petclinic.model.BaseEntity;
 import samuraisword.samples.petclinic.user.User;
 

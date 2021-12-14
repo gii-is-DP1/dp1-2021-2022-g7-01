@@ -20,6 +20,9 @@ INSERT INTO authorities(id,username,authority) VALUES (8,'antquiher1','admin');
 INSERT INTO users(username,email,password,enabled) VALUES ('juanlo','juanlo@gmail.com','juanlo',TRUE);
 INSERT INTO authorities(id,username,authority) VALUES (9,'juanlo','admin');
 
+INSERT INTO users(username,email,password,enabled) VALUES ('prueba','prueba@gmail.com','prueba',TRUE);
+INSERT INTO authorities(id,username,authority) VALUES (10,'prueba','admin');
+
 INSERT INTO friends(id_user, id_user_friend) VALUES ('diecrequi', 'alefr99');
 INSERT INTO friends(id_user, id_user_friend) VALUES ('diecrequi', 'alfcadmor');
 INSERT INTO friends(id_user, id_user_friend) VALUES ('diecrequi', 'pedolirod');
@@ -114,12 +117,13 @@ INSERT INTO cards(name,image,cards_Per_Deck, CARD_COLOR, damage, range) VALUES (
 
 
 INSERT INTO games(id,end_date,start_date) VALUES (1, parsedatetime('24-11-2021 18:47:52', 'dd-MM-yyyy hh:mm:ss'),parsedatetime('24-11-2021 19:08:13', 'dd-MM-yyyy hh:mm:ss'));
-INSERT INTO players(id,current_hearts,honor,max_hearts,rol,won_game,game_id,username, es_inofensivo) VALUES (1,5,3,5,1,true,1,'diecrequi', false);
-INSERT INTO players(id,current_hearts,honor,max_hearts,rol,won_game,game_id,username, es_inofensivo) VALUES (2,4,5,4,1,true,1,'alefr99', false);
 
-INSERT INTO card_hands (id, player) VALUES (1, 1);
-INSERT INTO card_hands (id, player) VALUES (2, 1);
-INSERT INTO card_hands (id, player) VALUES (3, 2);
+INSERT INTO players(id,current_hearts,honor,max_hearts,rol,won_game,game_id,username, es_inofensivo) VALUES (1,0,0,0,1,false,1,'diecrequi', false);
+INSERT INTO players(id,current_hearts,honor,max_hearts,rol,won_game,game_id,username, es_inofensivo) VALUES (2,0,0,0,1,false,1,'alefr99', false);
+INSERT INTO players(id,current_hearts,honor,max_hearts,rol,won_game,game_id,username, es_inofensivo) VALUES (3,0,0,0,1,false,1,'admin1', false);
+INSERT INTO players(id,current_hearts,honor,max_hearts,rol,won_game,game_id,username, es_inofensivo) VALUES (4,0,0,0,1,false,1,'pedolirod', false);
+INSERT INTO players(id,current_hearts,honor,max_hearts,rol,won_game,game_id,username, es_inofensivo) VALUES (5,0,0,0,1,false,1,'antquiher1', false);
+INSERT INTO players(id,current_hearts,honor,max_hearts,rol,won_game,game_id,username, es_inofensivo) VALUES (6,0,0,0,1,false,1,'prueba', false);
 
 INSERT INTO cards_in_hands(card_id, card_hand_id) VALUES (5, 5);
 INSERT INTO cards_in_hands(card_id, card_hand_id) VALUES (7, 1);
