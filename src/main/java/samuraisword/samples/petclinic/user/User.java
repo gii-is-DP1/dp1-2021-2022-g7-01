@@ -50,12 +50,7 @@ public class User {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
 	List<Player> listPlayers;
 	
-	@ManyToOne
-	@JoinColumn(name = "avatar")
-	private SamuraraiCharacter avatar;
-	public SamuraraiCharacter getAvatar() {
-		return this.avatar;
-	}
+	private String avatar;
 	
 	boolean enabled;
 	

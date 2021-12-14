@@ -8,17 +8,13 @@
 
 <petclinic:layout pageName="avatar">
 	<h2>Edit ${user.username}</h2>
-	<form:form modelAttribute="user" class="form-horizontal"
-		action="/users/profile/changeAvatar" id="edit-user-form">
-		<div class="form-group has-feedback">
-			<form:hidden path="username" />
-			<form:hidden path="password" />
-			<div class="control-group">
-            <petclinic:selectField name="avatar" label="Avatar " names="${characters}" size="5"/>
-                </div>
+	<form:form enctype="multipart/form-data" class="form-horizontal"
+		action="/users/profile/changeAvatar" id="edit-avatar-form">
+		<div class="form-group">
+			<input type="file" name="avatar" />
 		</div>
 		<div class="form-group">
-			<button class="btn btn-default" type="submit">Update user</button>
+			<button class="btn btn-default" type="submit">Update avatar</button>
 		</div>
 	</form:form>
 </petclinic:layout>
