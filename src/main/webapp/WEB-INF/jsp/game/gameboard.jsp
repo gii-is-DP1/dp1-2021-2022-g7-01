@@ -71,8 +71,6 @@
 <!-- EN CASO DE QUE NO SEAN 4 JUGADORES REAJUSTAMOS EL ANGULO DE SEPARACION QUE SERA DADO POR 360/Nºjugadores -->
 
 <c:if test="${listPlayer.size()==5}">
-	<p>AGI</p>
-	
 	<script type="text/javascript">
 		var rootstyle = document.querySelector(":root").style;
 		rootstyle.setProperty('--angle', '72deg');
@@ -91,8 +89,6 @@
 	</script>
 </c:if>
 
-<p>${listPlayer.size()}</p>
-
 <div style="text-align:center;" >
 	
 	<div style="margin: auto; padding-top: 30px" >
@@ -105,7 +101,6 @@
 			    			<div style="transform: rotate(calc(360deg - var(--angle)* ${ loop.index })">${ player.getUser().getUsername()}</div>
 			    		</div>
 			    	</c:forEach>
-			    	
 			    </div>
 			    
     		</div> 

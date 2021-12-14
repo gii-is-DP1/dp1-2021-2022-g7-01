@@ -59,15 +59,18 @@ public CardHand createDeck(CardService cardService) {
 					switch(cardService.findColor(name).get()) {
 					case("Red"):
 						Integer rango= Integer.valueOf(cardService.findRange(name).get());
-						Integer damage= Integer.valueOf(cardService.findRange(name).get());
+						Integer damage= Integer.valueOf(cardService.findDamage(name).get());
 						RedCard redCard = RedCard.of(name, card.getImage(), rango, damage);
 						gameDeck.getCardList().add(redCard);
+						break;
 					case("Yellow"):
 						Card yellowCard = Card.of(name, card.getImage());
 						gameDeck.getCardList().add(yellowCard);
+						break;
 					case("Blue"):
 						Card blueCard = Card.of(card.getName(), card.getImage());
 						gameDeck.getCardList().add(blueCard);
+						break;
 					}	
 				}
 			}
@@ -105,6 +108,7 @@ public List<Player> asignRolAndHonor(List<Player> listPlayers) {
 			if(p.getRol().equals(Rol.SHOGUN)) p.setHonor(5);
 			else p.setHonor(3);
 		}
+		break;
 	case 5:
 		listPlayers.get(0).setRol(Rol.SHOGUN);
 		listPlayers.get(1).setRol(Rol.SAMURAI);
@@ -116,6 +120,7 @@ public List<Player> asignRolAndHonor(List<Player> listPlayers) {
 			if(p.getRol().equals(Rol.SHOGUN)) p.setHonor(5);
 			else p.setHonor(3);
 		}
+		break;
 	case 6:
 		listPlayers.get(0).setRol(Rol.SHOGUN);
 		listPlayers.get(1).setRol(Rol.SAMURAI);
@@ -128,6 +133,7 @@ public List<Player> asignRolAndHonor(List<Player> listPlayers) {
 			if(p.getRol().equals(Rol.SHOGUN)) p.setHonor(5);
 			else p.setHonor(4);
 		}
+		break;
 	case 7:
 		listPlayers.get(0).setRol(Rol.SHOGUN);
 		listPlayers.get(1).setRol(Rol.SAMURAI);
@@ -141,6 +147,7 @@ public List<Player> asignRolAndHonor(List<Player> listPlayers) {
 			if(p.getRol().equals(Rol.SHOGUN)) p.setHonor(5);
 			else p.setHonor(4);
 		}
+		break;
 	default:
 		listPlayers.get(0).setRol(Rol.SHOGUN);
 		listPlayers.get(0).setHonor(5);
@@ -178,7 +185,7 @@ public Map<String, List<List<Card>>> mapPlayerCardHands(List<Player> players){
 
 public void asignCards(Map<String, List<List<Card>>> map, CardHand gameDeck, List<Player> players) {
 	int cardsGiven = 4; 
-	for(int i = 0; i < players.size()-1; i++) { //player tiene 2 cardhands la 0 indica la mano, la 1 las equipadas
+	for(int i = 0; i < players.size(); i++) { //player tiene 2 cardhands la 0 indica la mano, la 1 las equipadas
 		List<Card> hand = map.get(players.get(i).getUser().getUsername()).get(0);
 		//Normas del reparto de cartas:
 		//En la lista players el indice 0 corresponde al shogun ya que esta funcion es inmediatamente posterior a asignOrder.
@@ -200,7 +207,5 @@ public void asignCards(Map<String, List<List<Card>>> map, CardHand gameDeck, Lis
 		}	
 	}
 }
-	
-	
 
 }
