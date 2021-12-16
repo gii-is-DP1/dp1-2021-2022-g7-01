@@ -66,6 +66,32 @@
 	-ms-transform: translateY(-50%); 
 	transform: translateY(-50%);
 }
+
+.btn{
+	width:100%;
+	height: 30%;
+	border-radius: 10px;
+	justify-content: center;
+	border: none;
+    color: white;
+     text-shadow: 2px 0 0 #000, -2px 0 0 #000, 0 2px 0 #000, 0 -2px 0 #000, 1px 1px #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
+}
+
+.btn:nth-child(1n){
+	background-color: blue;
+	margin-bottom: 3%;
+}
+.btn:nth-child(2n){
+	background-color: yellow;
+	margin-bottom: 3%;
+}
+
+.btn:nth-child(3n){
+	background-color: red;
+	margin-bottom: 3%;
+}
+
+
 </style>
 
 <!-- EN CASO DE QUE NO SEAN 4 JUGADORES REAJUSTAMOS EL ANGULO DE SEPARACION QUE SERA DADO POR 360/Nºjugadores -->
@@ -105,14 +131,35 @@
 			    
     		</div> 
     		<div style="display: inline-block; width: 28%; height: 50%">
-    			<div style="display: inline-block; width: 45%; height: 50%; text-align:center; vertical-align: top; margin-right:10px" id="border">
-				Aqui los botones
-				${ map }
+    			<div style="display: inline-block; width: 45%; height: 50%; text-align:center; vertical-align: top; margin-right:10px; ">
+    			
+					<button class="btn"> EQUIP CARD </button>
+					<button class="btn"> USE CARD </button>
+					<button class="btn"> ATTACK PLAYER </button>
+					
 				</div>
 				<div  style="display: inline-block; width: 45%; height: 50%; text-align:center; vertical-align: top" id="border">
-				Aqui foto personaje, honor, vida
-				
+					<c:forEach items="${ listPlayer }" var ="player" varStatus="loop">
+			    		<c:if test="${ player.getUser().getUsername().equals(user.getUsername()) }">
+			    			<div>
+			    				<img src="/resources/images/${ player.getCharacter().getImage() }" alt="character"
+			    				style="height: 80%; width:auto"
+			    				></img>
+			    			</div>
+			    			<div>
+			    				<div style="display: inline-block">
+			    					<img src="/resources/images/honorLive/live.png" alt="live" style="width: 10%; height: auto; display: inline-block;"></img>
+			    					<p style="display: inline-block;"> ${ player.getCurrentHearts() } </p>
+			    				</div>
+			    				<div style="display: inline-block">
+			    					<img src="/resources/images/honorLive/honor.png" alt="live" style="width: 10%; height: auto"></img>	
+			    					<p style="display: inline-block;"> ${ player.getHonor() } </p>	
+			    				</div>
+			    			</div>
+			    		</c:if>
+			    	</c:forEach>			
 				</div>
+				
 				<div id="border" style=" height: 60%; padding-top: 10px; margin-top: 10px">
 				Aqui tu mano
 				
