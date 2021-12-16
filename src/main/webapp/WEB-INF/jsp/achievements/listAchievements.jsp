@@ -73,22 +73,42 @@ th, td {
 
 				<table>
 					<tr>
-						<c:forEach items="${listAchievements}" var="achievement">
-							<c:if test="${Rol == achievement.types}">
+						<c:forEach items="${mapPersonal}" var="achievement">
+							<c:if test="${Rol == achievement.key.types}">
 								<c:set value="${vueltas+1}" var="vueltas" />
-								<th id="${achievement.type}"><spring:url
-										value="/resources/images/difficulty/${achievement.type}.png"
+								<c:if test="${achievement.value == 1}">
+									<th id="${achievement.key.type}"><spring:url
+										value="/resources/images/difficulty/${achievement.key.type}.png"
 										htmlEscape="true" var="difficulty" /> <img
-									style="float: left;" title="" src="${difficulty}"
-									id="difficulty" />
-									<h4 id="difum">${achievement.title}</h4>
-									<p id="description">${achievement.body}
+										style="float: left;" title="" src="${difficulty}"
+										id="difficulty" />
+										<h4 id="difum">${achievement.key.title}</h4>
+										<p id="description">${achievement.key.body}
 										<c:out value="${status.count}" />
-									</p></th>
-								<c:if test="${vueltas>3}">
+										</p>
+									</th>
+									<c:if test="${vueltas>3}">
 									</tr>
 									<c:set value="0" var="vueltas" />
 									<tr>
+									</c:if>
+								</c:if>
+								<c:if test="${achievement.value == 0}">
+									<th id="${achievement.key.type}" style ="opacity: 50%"><spring:url
+										value="/resources/images/difficulty/${achievement.key.type}.png"
+										htmlEscape="true" var="difficulty" /> <img
+										style="float: left;" title="" src="${difficulty}"
+										id="difficulty" />
+										<h4 id="difum">${achievement.key.title}</h4>
+										<p id="description">${achievement.key.body}
+										<c:out value="${status.count}" />
+										</p>
+									</th>
+									<c:if test="${vueltas>3}">
+									</tr>
+									<c:set value="0" var="vueltas" />
+									<tr>
+									</c:if>
 								</c:if>
 							</c:if>
 						</c:forEach>
