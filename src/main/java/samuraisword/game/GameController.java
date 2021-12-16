@@ -162,6 +162,4 @@ public class GameController {
 		
 		return "/game/gameboard";
 	}
-
-
 }
