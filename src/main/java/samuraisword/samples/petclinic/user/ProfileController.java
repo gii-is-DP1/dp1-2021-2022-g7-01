@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -13,19 +14,26 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import samuraisword.achievements.RolType;
 import samuraisword.game.Game;
 import samuraisword.player.Player;
 import samuraisword.player.Rol;
+import samuraisword.storage.StorageService;
 
 @Controller
 public class ProfileController {
 	
 	private UserService userService;
 	
-	public ProfileController(UserService userService) {
+	private StorageService storageService;
+	
+	public ProfileController(UserService userService, StorageService storageService) {
 		this.userService = userService;
+		this.storageService = storageService;
 	}
 	
 	@GetMapping(value = "users/myprofile")
@@ -126,13 +134,12 @@ public class ProfileController {
 	}
 
 	@PostMapping(value = "users/profile/changeAvatar")
-	public String saveChangeAvatar(@Valid User user, BindingResult result, Map<String, Object> model) {
-		if (result.hasErrors()) {
-			model.put("user", user);
-			return "users/changeAvatar";
-		} else {
-			userService.saveUser(user);
-			return "redirect:/users/profile/" + user.getUsername();
-		}
+	public String saveChangeAvatar(@RequestParam("avatar") MultipartFile avatar, HttpSession http) {
+		String fileName = storageService.store(avatar, "profile", http);
+		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		User user = userService.findUser(userDetails.getUsername()).get();
+		user.setAvatar(fileName);
+		userService.saveUser(user);
+		return "redirect:/users/myprofile";
 	}
 }

@@ -12,7 +12,7 @@
 	<div class="container">
 		<h2>Profile</h2>
 		<div class="row">
-			<div class="col-sm-4" style="display: flex; justify-content: center">
+			<div class="col-sm-4" style="display: flex; align-items: center; flex-direction: column">
 				
 			<c:choose>
 			    <c:when test="${userProfile.avatar == null}">
@@ -21,14 +21,14 @@
 			        <br />
 			    </c:when>    
 			    <c:otherwise>
-			        ${userProfile.username}
+			        <img src="/resources/images/profile/${userProfile.avatar}"
+					style="width: 150px;" />
 			        <br />
 			    </c:otherwise>
 			</c:choose>
-			
-			</div>
 			<a class="btn btn-default"
 			href="<c:url value="/users/profile/changeAvatar/${userProfile.username}" />">Change avatar</a>
+			</div>
 			<div class="col-sm-8">
 				<div class="row" style="margin: 0 0 20px 0">
 					<div class="col-sm-6">

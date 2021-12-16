@@ -6,6 +6,9 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -13,7 +16,9 @@ import org.ehcache.spi.service.OptionalServiceDependencies;
 
 import lombok.Getter;
 import lombok.Setter;
+import samuraisword.cardhand.CardHand;
 import samuraisword.player.Player;
+import samuraisword.samples.petclinic.card.Card;
 import samuraisword.samples.petclinic.model.BaseEntity;
 
 @Getter
@@ -29,15 +34,21 @@ public class Game extends BaseEntity{
 	
 	private LocalDateTime startDate;
 	
-	private LocalDateTime endDate;
-	
-	
-
+	private LocalDateTime endDate;	
+			
 	public Game() {
-		this.listPlayers=new ArrayList<>();
+		this.listPlayers = new ArrayList<>();
 	}
 	
 	public Integer getNumPlayers() {
 		return this.listPlayers.size();
 	}
+	
+	
+	
+	
+	
+	
+	
+	
 }

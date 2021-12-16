@@ -10,6 +10,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,25 +22,29 @@ import samuraisword.samples.petclinic.card.Card;
 import samuraisword.samples.petclinic.card.CardService;
 import samuraisword.samples.petclinic.user.UserService;
 
+@Controller
 public class CardHandController {
 	private static final String FORM_CARDHAND = "cardhands/formCardHand";
 	
 	private final PlayerService playerService;
 	private final CardHandService cardHandService;
 	private final CardService cardService;
+	private final UserService userService;
 	
 	@Autowired
-	public CardHandController(CardHandService cardHandService, PlayerService playerService, CardService cardService) {
+	public CardHandController(CardHandService cardHandService, PlayerService playerService, CardService cardService,
+			 					UserService userService) {
 		this.playerService = playerService;
 		this.cardHandService = cardHandService;
 		this.cardService = cardService;
+		this.userService = userService;
 	}
 	
 	@GetMapping(value = { "/cardHands" })
 	public String listCardHands(Map<String, Object> model) {
 		Collection<CardHand> listCardHands = cardHandService.findAll();
 		model.put("listCards", listCardHands);
-		return "comments/listCards";
+		return "cardHands/listCards";
 	}
 	
 	@GetMapping(value = { "cardHands/new"})
