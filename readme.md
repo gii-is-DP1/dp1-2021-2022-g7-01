@@ -4,7 +4,8 @@ Este repositorio almacena el proyecto de desarrollo del juego de mesa [Samurai S
 
 # IMPORTANTE 
 
-El proyecto se lanza en el puerto 9999.
+ - El proyecto se lanza en el puerto 9999.
+ - Se debe activar la opción "Refresh using native hooks or polling" en Window -> Preferences -> General -> Workspace. Esto se debe hacer para que detecte las nuevas fotos subidas a la aplicación.
 
 # Reglas básicas del juego
 

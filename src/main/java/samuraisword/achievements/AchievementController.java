@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import samuraisword.comment.Comment;
+import samuraisword.comment.CommentService;
 import samuraisword.samples.petclinic.user.User;
 import samuraisword.samples.petclinic.user.UserService;
 
@@ -36,8 +39,12 @@ public class AchievementController {
 	@GetMapping(value = { "/achievements" })
 	public String listAchievements(Map<String, Object> model) {
 		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		User user = userService.findUser(userDetails.getUsername()).get();
 		Collection<Achievement> listAchievements = achievementService.findAll();
+		achievementService.achivedCheck(user);
+		Map<Achievement, Integer>mapAchievement = achievementService.findAllPersonalAchievements(user);
 		model.put("listAchievements", listAchievements);
+		model.put("mapPersonal", mapAchievement);
 		model.put("username", userDetails.getUsername());
 		
 		return "achievements/listAchievements";
