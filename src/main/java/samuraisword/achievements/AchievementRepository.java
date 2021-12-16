@@ -7,6 +7,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
+
 public interface AchievementRepository extends CrudRepository<Achievement, Integer> {
 
 	Collection<Achievement> findAll();
@@ -16,4 +17,5 @@ public interface AchievementRepository extends CrudRepository<Achievement, Integ
 
 	@Query("SELECT rtype FROM RolType rtype ORDER BY rtype.name")
 	List<RolType> findRolTypes() throws DataAccessException;
+	
 }
