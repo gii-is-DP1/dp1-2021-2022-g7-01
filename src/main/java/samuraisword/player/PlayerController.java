@@ -41,4 +41,10 @@ public class PlayerController {
 		
 		return "players/listPlayers";
 	}
+	
+	@GetMapping(value = { "/game/{id_game}/players/delete/{id_player}" })
+	public String deletePlayersForm(@PathVariable("id_player") int idPlayer, Map<String, Object> model) {
+		playerService.deletePlayer(idPlayer);
+		return "redirect:/game/{id_game}";
+	}
 }

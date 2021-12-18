@@ -1,6 +1,7 @@
 <%@ page session="false" trimDirectiveWhitespaces="true"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags"%>
@@ -106,8 +107,12 @@ img.estrella {
 			<h2>Amigos (${listFriends.size()})</h2>
 			<c:if test="${listFriends.size()!=0}">
 				<c:forEach var="i" begin="0" end="${listFriends.size()-1}">
-					<p>${listFriends.get(i).getUsername()}</p>
-					<button class="btn btn-primary">Invite</button>
+					<p>${listFriends.get(i).getUsername()}</p>					
+							<form:form class="form-horizontal"
+							action="/game/${gameId}/invitation/${listFriends.get(i).getUsername()}"
+							id="edit-invitation-form">
+							<button class="btn btn-default" type="submit">Invitar</button>
+						</form:form>					
 				</c:forEach>
 			</c:if>
 			<br>
