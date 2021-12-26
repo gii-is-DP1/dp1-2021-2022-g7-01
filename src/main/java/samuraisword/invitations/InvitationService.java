@@ -74,9 +74,9 @@ public class InvitationService {
 		
 	}
 	
-	@Transactional(readOnly = true)
+	@Transactional
 	public void acceptInvitation(Invitation inv) throws DataAccessException {
-		
+		invitationRepository.delete(inv);
 		
 		Player player= new Player();
 		player.setUser(inv.getUserAddresse());
@@ -89,9 +89,9 @@ public class InvitationService {
 		
 	}
 	
-	@Transactional(readOnly= true)
+	@Transactional
 	public void declineInvitation(Invitation inv)throws DataAccessException {
-		invitationRepository.deleteById(inv.getId());
+		invitationRepository.delete(inv);
 	}
 	
 	

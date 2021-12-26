@@ -48,7 +48,7 @@ private GameService gameService;
 	
 	@PostMapping(value="/game/{gameId}/invitation/{userAddresse}")
 	public String processInvitationController(@PathVariable("gameId") Integer gameId,@PathVariable("userAddresse") String userAddresse) {
-		System.out.println("HOLA");
+		
 		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		//userAddresse destinatario invitacion
 		//recoger el gameId de la sala en la que nos encontramos
@@ -76,7 +76,7 @@ private GameService gameService;
 		Optional<Invitation> inv= invitationService.findById(invitationId);
 		invitationService.declineInvitation(inv.get());
 
-		return "/game/createGame";
+		return "redirect:/game/new";
 	}
 	
 	
