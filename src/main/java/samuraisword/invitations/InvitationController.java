@@ -1,6 +1,7 @@
 package samuraisword.invitations;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Optional;
 
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import antlr.collections.List;
 import samuraisword.game.GameService;
 import samuraisword.samples.petclinic.user.UserService;
 
@@ -50,6 +52,7 @@ private GameService gameService;
 	public String processInvitationController(@PathVariable("gameId") Integer gameId,@PathVariable("userAddresse") String userAddresse) {
 		
 		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		Collection<Invitation> listInvitations= invitationService.findAllByUser(userDetails.getUsername());
 		//userAddresse destinatario invitacion
 		//recoger el gameId de la sala en la que nos encontramos
 		Invitation inv=new Invitation();
