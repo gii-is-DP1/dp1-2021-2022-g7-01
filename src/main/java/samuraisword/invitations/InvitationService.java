@@ -6,6 +6,8 @@ import java.util.Optional;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataAccessResourceFailureException;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -76,7 +78,16 @@ public class InvitationService {
 	
 	@Transactional
 	public void acceptInvitation(Invitation inv) throws DataAccessException {
+		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		Collection<Invitation> listInvitations= findAllByUser(userDetails.getUsername());
+		
 		invitationRepository.delete(inv);
+		for(Invitation i: listInvitations) {
+			if(i.getGame().equals(inv.getGame())) {
+				invitationRepository.delete(i);
+			}
+		}
+		
 		
 		Player player= new Player();
 		player.setUser(inv.getUserAddresse());
@@ -92,6 +103,7 @@ public class InvitationService {
 	@Transactional
 	public void declineInvitation(Invitation inv)throws DataAccessException {
 		invitationRepository.delete(inv);
+		
 	}
 	
 	

@@ -7,6 +7,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
+import samuraisword.game.Game;
+import samuraisword.samples.petclinic.user.User;
+
 public interface InvitationRepository extends CrudRepository<Invitation, Integer>{
 	
 Collection<Invitation> findAll();
@@ -15,6 +18,8 @@ Collection<Invitation> findAll();
 	
 	@Query(value = "SELECT * FROM INVITATION WHERE USER_ADDRESSE=:username", nativeQuery=true)
 	Collection<Invitation> findAllByUser(String username);
+	
+	
 	
 	
 	
