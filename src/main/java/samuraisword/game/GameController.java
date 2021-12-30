@@ -64,8 +64,10 @@ public class GameController {
 	public String initCreationForm(Map<String, Object> model, HttpServletResponse a) {
 		Game game = new Game();
 		a.addHeader("Refresh", "1");
+
 		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		List<Invitation> li=(List<Invitation>)invitationService.findAllByUser(userDetails.getUsername());
+
 		model.put("game", game);
 		model.put("listInvitations", li);
 		return VIEWS_CREATE_GAME;
@@ -130,17 +132,17 @@ public class GameController {
 		Player p3 = playerService.findById(3).get();
 	
 		Player p4 = playerService.findById(4).get();
-	
-		Player p5 = playerService.findById(5).get();
-		
-		Player p6 = playerService.findById(6).get();
+//	
+//		Player p5 = playerService.findById(5).get();
+//		
+//		Player p6 = playerService.findById(6).get();
 		
 		players.add(p1);
 		players.add(p2);
 		players.add(p3);
 		players.add(p4);
-		players.add(p5);
-		players.add(p6);
+//		players.add(p5);
+//		players.add(p6);
 		//players de prueba
 		
 		gameService.asignCharacterAndHearts(players, characters);

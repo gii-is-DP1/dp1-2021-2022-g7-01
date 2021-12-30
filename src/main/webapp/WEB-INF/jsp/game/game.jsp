@@ -78,7 +78,7 @@ img.estrella {
 					<div align="center">
 						<br>
 
-						<c:if test="${listPlayer.size()>=1}">
+						<c:if test="${listPlayer.size()>=0}">
 							<spring:url value="start/{gameId}" var="startUrl">
 								<spring:param name="gameId" value="${gameId}" />
 							</spring:url>
