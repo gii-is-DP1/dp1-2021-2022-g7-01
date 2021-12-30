@@ -23,6 +23,8 @@ import samuraisword.character.Character;
 import samuraisword.cardhand.CardHand;
 import samuraisword.cardhand.CardHandService;
 import samuraisword.character.CharacterService;
+import samuraisword.invitations.Invitation;
+import samuraisword.invitations.InvitationService;
 import samuraisword.player.Player;
 import samuraisword.player.PlayerService;
 import samuraisword.player.Rol;
@@ -41,15 +43,17 @@ public class GameController {
 	private final UserService userService;
 	private final CardHandService cardHandService;
 	private final CardService cardService;
+	private final InvitationService invitationService;
 	private final CharacterService characterService;
  	
 	private static final String VIEWS_CREATE_GAME = "game/createGame";
 	
 	@Autowired
 	public GameController(GameService GameService, UserService userService, PlayerService playerService, CardHandService cardHandService,
-				CardService cardService, CharacterService characterService) {
+				CardService cardService, CharacterService characterService, InvitationService invitationService) {
 		this.gameService = GameService;
 		this.userService = userService;
+		this.invitationService = invitationService;
 		this.playerService = playerService;
 		this.cardHandService = cardHandService;
 		this.cardService = cardService;
@@ -60,8 +64,12 @@ public class GameController {
 	public String initCreationForm(Map<String, Object> model, HttpServletResponse a) {
 		Game game = new Game();
 		a.addHeader("Refresh", "1");
-		
+
+		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		List<Invitation> li=(List<Invitation>)invitationService.findAllByUser(userDetails.getUsername());
+
 		model.put("game", game);
+		model.put("listInvitations", li);
 		return VIEWS_CREATE_GAME;
 	}
 	
@@ -73,7 +81,6 @@ public class GameController {
 			UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			User user = userService.findUser(userDetails.getUsername()).get();
 			Player player = new Player();
-			player.setWonGame(false);
 			player.setUser(user);
 			player.setGame(game);			
 			game.setListPlayers(List.of(player));

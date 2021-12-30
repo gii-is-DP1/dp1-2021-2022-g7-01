@@ -9,6 +9,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import org.hibernate.validator.constraints.UniqueElements;
+
 import lombok.Getter;
 import lombok.Setter;
 import samuraisword.cardhand.CardHand;
@@ -37,6 +40,7 @@ public class Player extends BaseEntity{
 	private Rol rol;
 	
 	private boolean esInofensivo; 
+	
 	
 	@ManyToOne
 	@JoinColumn(name="username")
