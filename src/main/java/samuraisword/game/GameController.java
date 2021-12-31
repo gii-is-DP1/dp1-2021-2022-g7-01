@@ -155,6 +155,9 @@ public class GameController {
 		
 		for(Player player : game.getListPlayers()) {
 			playerService.savePlayer(player);
+			if(player.getUser().equals(user)) {
+				model.put("currentPlayer", player);
+			}
 		}
 		
 		gameService.asignCards(game.getDeck(), players);

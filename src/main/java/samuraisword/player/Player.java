@@ -50,6 +50,9 @@ public class Player extends BaseEntity{
 	@Transient
 	private List<Card> hand;
 	
+	@Transient
+	private List<Card> equipment;
+	
 	@OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "character")
     private Character character;
