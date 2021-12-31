@@ -117,8 +117,8 @@ public class GameController {
 		User user = userService.findUser(userDetails.getUsername()).get();
 		Game game = gameService.findById(gameId).get();
 		
-		CardHand gameDeck = gameService.createDeck(cardService);
-		CardHand discardPile = CardHand.empty();
+		game.setDeck(gameService.createDeck(cardService));
+		game.setDiscardPile(new ArrayList<>());
 		
 		List<Character> characters = (List<Character>) characterService.findAll();
 		
@@ -155,18 +155,14 @@ public class GameController {
 		
 		for(Player player : game.getListPlayers()) {
 			playerService.savePlayer(player);
+			if(player.getUser().equals(user)) {
+				model.put("currentPlayer", player);
+			}
 		}
 		
-		Map<String, List<List<Card>>> mapHands = gameService.mapPlayerCardHands(players);
+		gameService.asignCards(game.getDeck(), players);
 		
-		gameService.asignCards(mapHands, gameDeck, players);
-		
-		model.put("map", mapHands);
-		model.put("user", user);
-		model.put("listPlayer", game.getListPlayers());
-		model.put("gameId", gameId);
-		model.put("gameDeck", gameDeck);
-		model.put("discardPile", discardPile);
+		model.put("game", game);
 		
 		return "/game/gameboard";
 	}

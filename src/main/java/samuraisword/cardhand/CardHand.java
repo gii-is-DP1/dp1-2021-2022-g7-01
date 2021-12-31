@@ -34,10 +34,6 @@ public class CardHand extends BaseEntity {
 	  joinColumns = @JoinColumn(name = "card_hand_id"), 
 	  inverseJoinColumns = @JoinColumn(name = "card_id"))
 	List<Card> cardList;
-	
-	@ManyToOne
-	@JoinColumn(name="player")
-	private Player player;
 
 	public static CardHand empty() {
 		CardHand res = new CardHand();

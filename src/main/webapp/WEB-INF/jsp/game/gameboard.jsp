@@ -176,6 +176,10 @@ body{
 
 </style>
 
+<c:set value="${game.listPlayers}" var="listPlayer" />
+<c:set value="${game.deck}" var="deck" />
+<c:set value="${game.discardPile}" var="discardPile" />
+
 <!-- EN CASO DE QUE NO SEAN 4 JUGADORES REAJUSTAMOS EL ANGULO DE SEPARACION QUE SERA DADO POR 360/Nºjugadores -->
 
 <c:if test="${listPlayer.size()==5}">
@@ -203,12 +207,12 @@ body{
 	
 			<div style="display: inline-block; color: black; vertical-align:top; width: 10%; height: 60%;"> 
 				<div style="border-radius: 10px; background-color: #DFDADA">
-					<p> DECK (Nº CARTAS AQUI)</p>
-					<img src="/resources/images/roles/ninguno.png" alt="SHOGUN" style="width: 50%; height: auto"></img>
+					<p> DECK (${deck.size()})</p>
+					<img src="/resources/images/roles/ninguno.png" alt="SHOGUN" style="width: 50%; height: auto" />
 				</div>
 				<div style="border-radius: 10px; background-color: #DFDADA">
-					<p> DISCARD PILE (Nº CARTAS AQUI)</p>
-					<img src="/resources/images/roles/ninguno.png" alt="SHOGUN" style="width: 50%; height: auto"></img>
+					<p> DISCARD PILE (${discardPile.size()})</p>
+					<img src="/resources/images/roles/ninguno.png" alt="SHOGUN" style="width: 50%; height: auto" />
 				</div>
 			</div>
 		    <div style="display: inline-block; width: 55%; height: 100%; padding-top: 20px;text-align:center; vertical-align: top; margin-right: 50px " >
@@ -219,19 +223,19 @@ body{
 			    			<div style="transform: rotate(calc(360deg - var(--angle)* ${ loop.index })">
 			    			<div style="border-radius: 10px; background-color: #DFDADA">
 			    				<c:if test="${ player.getRol().toString().equals('SHOGUN') }">
-			    				 <img src="/resources/images/shogun.png" alt="SHOGUN" style="width: 25%; height: auto"></img>	
+			    				 <img src="/resources/images/shogun.png" alt="SHOGUN" style="width: 25%; height: auto" />	
 			    				</c:if>
 			    				<p>${player.getUser().getUsername()}</p>
 								<div>
 									<div style="display: inline-block;" class="img-wrap">
-			    						<img src="/resources/images/${ player.getCharacter().getImage() }" alt="character" style="height: 90%; max-height:100%; max-width:100%;"></img>
+			    						<img src="/resources/images/${ player.getCharacter().getImage() }" alt="character" style="height: 90%; max-height:100%; max-width:100%;" />
 			    						<p class="img-description"> ${ player.getCharacter().getText() } </p>
 			    					</div>
 					    			<div style="display: inline-block;">
-					    					<img src="/resources/images/honorLive/live.png" alt="live" style="width: 25%; height: auto; display: inline-block;"></img>
+					    					<img src="/resources/images/honorLive/live.png" alt="live" style="width: 25%; height: auto; display: inline-block;" />
 					    					<p style="display: inline-block;"> ${ player.getCurrentHearts() } </p>
 					    				
-					    					<img src="/resources/images/honorLive/honor.png" alt="live" style="width: 25%; height: auto"></img>	
+					    					<img src="/resources/images/honorLive/honor.png" alt="live" style="width: 25%; height: auto" />	
 					    					<p style="display: inline-block;"> ${ player.getHonor() } </p>	
 					    			</div>
 					    			<div class= "viewEquiped">
@@ -264,15 +268,15 @@ body{
 			    			<div style="display: inline-block; border-radius: 10px; background-color: #DFDADA">
 			    				<p> ${ player.getUser().getUsername() } (${player.getRol()})</p>
 			    				<div style="display: inline-block;" class="img-wrap">
-			    						<img src="/resources/images/${ player.getCharacter().getImage() }" alt="character" style="height: 100%; width:auto"></img>
+			    						<img src="/resources/images/${ player.getCharacter().getImage() }" alt="character" style="height: 100%; width:auto" />
 			    						<p class="img-description"> ${ player.getCharacter().getText() } </p>
 			    				</div>
 			    				<div style="display: inline-block;">
 			    				
-			    					<img src="/resources/images/honorLive/live.png" alt="live" style="width: 10%; height: auto; display: inline-block;"></img>
+			    					<img src="/resources/images/honorLive/live.png" alt="live" style="width: 10%; height: auto; display: inline-block;" />
 			    					<p style="display: inline-block;"> ${ player.getCurrentHearts() } </p>
 			    				
-			    					<img src="/resources/images/honorLive/honor.png" alt="live" style="width: 10%; height: auto"></img>	
+			    					<img src="/resources/images/honorLive/honor.png" alt="live" style="width: 10%; height: auto" />
 			    					<p style="display: inline-block;"> ${ player.getHonor() } </p>	
 			    			</div>
 			    			</div>
@@ -284,9 +288,10 @@ body{
 				<div  style=" height: 60%; padding-top: 10px; margin-top: 10px">
 				<p style="color: white">TU MANO</p>
 					<!-- Aqui iteramos por las cartas en mano del player POR HACER -->
-					<c:forEach items="${ listPlayer }" var ="player" varStatus="loop">
+					<c:forEach items="${ currentPlayer.hand }" var ="card" varStatus="loop">
 						<div style="display: inline-block;">
-			    			<img src="/resources/images/cards/LOQUESEA }" alt="card" style="height: 80%; width:14%">card</img>
+							<span>${card.name}</span>
+			    			<img src="/resources/images/cards/LOQUESEA }" alt="card" style="height: 80%; width:14%" />
 			    		</div>
 					</c:forEach>
 					
@@ -295,10 +300,11 @@ body{
 				<div  style=" height: 60%; padding-top: 10px; margin-top: 10px">
 				
 				<!-- Aqui iteramos por las cartas equipadas del player POR HACER -->
-					<c:forEach items="${ listPlayer }" var ="player" varStatus="loop">
+					<c:forEach items="${ currentPlayer.equipment }" var ="equipment" varStatus="loop">
 					
 						<div style="display: inline-block;">
-			    			<img src="/resources/images/cards/LOQUESEA }" alt="card" style="height: 80%; width:14%">card</img>
+							<span>${equipment.name}</span>
+			    			<img src="/resources/images/cards/LOQUESEA }" alt="card" style="height: 80%; width:14%" />
 			    		</div>
 					</c:forEach>
 					
