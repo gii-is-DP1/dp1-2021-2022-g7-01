@@ -36,6 +36,11 @@ public class PlayerService {
 		return playerRepository.findById(idPlayer);
 	}
 	
+//	@Transactional
+//	public Collection<Player> findByUser(String user) {
+//		return playerRepository.findByUser(user);
+//	}
+	
 	@Transactional
 	public int playerCount() {
 		return (int) this.playerRepository.count();

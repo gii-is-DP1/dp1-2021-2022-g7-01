@@ -5,6 +5,9 @@ INSERT INTO authorities(id,username,authority) VALUES (1,'admin1','admin');
 INSERT INTO users(username,email,password,enabled) VALUES ('alefr99','alefraile1@gmail.com','123123',TRUE);
 INSERT INTO authorities(id,username,authority) VALUES (4,'alefr99','admin');
 
+INSERT INTO users(username,email,password,enabled) VALUES ('DonShelby','golfoman@gmail.com','DonShelby',TRUE);
+INSERT INTO authorities(id,username,authority) VALUES (11,'DonShelby','admin');
+
 INSERT INTO users(username,email,password,enabled) VALUES ('diecrequi','diecrequi@gmail.com','diecrequi',TRUE);
 INSERT INTO authorities(id,username,authority) VALUES (5,'diecrequi','admin');
 
@@ -28,6 +31,8 @@ INSERT INTO friends(id_user, id_user_friend) VALUES ('diecrequi', 'alfcadmor');
 INSERT INTO friends(id_user, id_user_friend) VALUES ('diecrequi', 'pedolirod');
 INSERT INTO friends(id_user, id_user_friend) VALUES ('diecrequi', 'antquiher1');
 INSERT INTO friends(id_user, id_user_friend) VALUES ('diecrequi', 'juanlo');
+INSERT INTO friends(id_user, id_user_friend) VALUES ('DonShelby', 'alefr99');
+INSERT INTO friends(id_user, id_user_friend) VALUES ('DonShelby', 'alfcadmor');
 
 INSERT INTO friend_Requests(id_user, id_user_requested) VALUES ('diecrequi', 'alefr99');
 INSERT INTO friend_Requests(id_user, id_user_requested) VALUES ('diecrequi', 'admin1');
@@ -83,7 +88,9 @@ INSERT INTO types2 VALUES (3, 'Samurai');
 INSERT INTO types2 VALUES (4, 'Ronin');
 INSERT INTO types2 VALUES (5, 'Ninguno');
 
-INSERT INTO achievements (id, title, body, typeL, typeR, username) VALUES (1, 'Primer comentario', 'Realizar tu primer comentario', 1, 5, 'admin1');
+
+INSERT INTO achievements (id, title, body, typeL, typeR, username) VALUES (1, 'Primer comentario', 'Escribe 1 comentario', 1, 5, 'admin1');
+
 
 
 INSERT INTO cards(name,image,cards_Per_Deck, CARD_COLOR) VALUES ('puntuacion','puntuacion.png',1, 'Blue');

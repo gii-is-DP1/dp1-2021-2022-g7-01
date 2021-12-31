@@ -18,6 +18,7 @@ import org.ehcache.spi.service.OptionalServiceDependencies;
 import lombok.Getter;
 import lombok.Setter;
 import samuraisword.cardhand.CardHand;
+import samuraisword.invitations.Invitation;
 import samuraisword.player.Player;
 import samuraisword.samples.petclinic.card.Card;
 import samuraisword.samples.petclinic.model.BaseEntity;
