@@ -9,6 +9,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+
 import lombok.Getter;
 import lombok.Setter;
 import samuraisword.cardhand.CardHand;
@@ -41,9 +43,9 @@ public class Player extends BaseEntity{
 	@ManyToOne
 	@JoinColumn(name="username")
 	private User user;
-	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "player")
-	private List<CardHand> listCardHand;
+
+	@Transient
+	private List<Card> hand;
 	
 	@OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "character")

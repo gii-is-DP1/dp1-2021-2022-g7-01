@@ -11,6 +11,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.ehcache.spi.service.OptionalServiceDependencies;
 
@@ -31,6 +32,12 @@ public class Game extends BaseEntity{
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "game")
 	private List<Player> listPlayers;
+	
+	@Transient
+	private List<Card> deck;
+	
+	@Transient
+	private List<Card> discardPile;
 	
 	private LocalDateTime startDate;
 	
