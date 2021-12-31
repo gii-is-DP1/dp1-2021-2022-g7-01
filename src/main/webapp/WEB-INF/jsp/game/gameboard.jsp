@@ -176,6 +176,10 @@ body{
 
 </style>
 
+<c:set value="${game.listPlayers}" var="listPlayer" />
+<c:set value="${game.deck}" var="deck" />
+<c:set value="${game.discardPile}" var="discardPile" />
+
 <!-- EN CASO DE QUE NO SEAN 4 JUGADORES REAJUSTAMOS EL ANGULO DE SEPARACION QUE SERA DADO POR 360/Nºjugadores -->
 
 <c:if test="${listPlayer.size()==5}">
@@ -203,11 +207,11 @@ body{
 	
 			<div style="display: inline-block; color: black; vertical-align:top; width: 10%; height: 60%;"> 
 				<div style="border-radius: 10px; background-color: #DFDADA">
-					<p> DECK (Nº CARTAS AQUI)</p>
+					<p> DECK (${deck.size()})</p>
 					<img src="/resources/images/roles/ninguno.png" alt="SHOGUN" style="width: 50%; height: auto"></img>
 				</div>
 				<div style="border-radius: 10px; background-color: #DFDADA">
-					<p> DISCARD PILE (Nº CARTAS AQUI)</p>
+					<p> DISCARD PILE (${discardPile.size()})</p>
 					<img src="/resources/images/roles/ninguno.png" alt="SHOGUN" style="width: 50%; height: auto"></img>
 				</div>
 			</div>

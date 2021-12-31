@@ -40,9 +40,12 @@ public class Game extends BaseEntity{
 	@Transient
 	private List<Card> discardPile;
 	
+	@Transient
+	private GamePhase gamePhase;
+	
 	private LocalDateTime startDate;
 	
-	private LocalDateTime endDate;	
+	private LocalDateTime endDate;
 			
 	public Game() {
 		this.listPlayers = new ArrayList<>();
