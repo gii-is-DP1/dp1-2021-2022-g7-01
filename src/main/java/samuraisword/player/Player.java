@@ -9,6 +9,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.validator.constraints.UniqueElements;
 
@@ -45,9 +46,12 @@ public class Player extends BaseEntity{
 	@ManyToOne
 	@JoinColumn(name="username")
 	private User user;
+
+	@Transient
+	private List<Card> hand;
 	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "player")
-	private List<CardHand> listCardHand;
+	@Transient
+	private List<Card> equipment;
 	
 	@OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "character")
