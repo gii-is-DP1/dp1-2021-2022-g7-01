@@ -136,7 +136,7 @@ INSERT INTO cards_in_hands(card_id, card_hand_id) VALUES (5, 5);
 INSERT INTO cards_in_hands(card_id, card_hand_id) VALUES (7, 1);
 INSERT INTO cards_in_hands(card_id, card_hand_id) VALUES (1, 4);
 
-INSERT INTO characters(id,name,life,image,text) VALUES (1,'Benkei',5,'characters/benkei.png','All other players have +1 Difficulty when they attack you.');
+INSERT INTO characters(id,name,life,image,text, game_phase) VALUES (1,'Benkei',5,'characters/benkei.png','All other players have +1 Difficulty when they attack you.', 0);
 INSERT INTO characters(id,name,life,image,text) VALUES (2,'Chiyome',4,'characters/chiyome.png','You can only be wounded by Weapon cards. You are not affected by Jujutsu and Battle Cry cards. You are affected normally by other Action cards, such as Tea Ceremony.');
 INSERT INTO characters(id,name,life,image,text) VALUES (3,'Ginchiyo',4,'characters/ginchiyo.png','You take 1 wound less than normal when attacked by any Weapon, to a minimum of 1 wound. E.g., a Nodachi would only deal 2 wounds to you instead of 3, but a Shuriken still inflicts 1 wound.');
 INSERT INTO characters(id,name,life,image,text) VALUES (4,'Goemon',5,'characters/goemon.png','You may play 1 additional Weapon card during your turn. So, if you have 1 Focus in play, you may play up to 3 Weapon cards each turn.');
