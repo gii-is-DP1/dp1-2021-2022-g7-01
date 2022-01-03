@@ -42,6 +42,9 @@ public class Player extends BaseEntity{
 	
 	private boolean esInofensivo; 
 	
+	private Integer distanceBonus=0;
+	private Integer weaponBonus=0;
+	private Integer damageBonus=0;
 	
 	@ManyToOne
 	@JoinColumn(name="username")
