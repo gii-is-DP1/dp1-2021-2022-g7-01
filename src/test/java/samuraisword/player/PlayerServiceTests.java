@@ -36,7 +36,10 @@ public class PlayerServiceTests {
 		assertThat(player.getCurrentHearts()).isEqualTo(5);
 		assertThat(player.getHonor()).isEqualTo(3);
 		assertThat(player.getMaxHearts()).isEqualTo(5);
+<<<<<<< HEAD
 //		assertThat(player.getPosition()).isEqualTo(2);
+=======
+>>>>>>> master
 		assertThat(player.getRol()).isEqualTo(Rol.NINJA);
 		assertThat(player.getWonGame()).isEqualTo(true);
 	}
@@ -47,7 +50,10 @@ public class PlayerServiceTests {
 		assertThat(player.getCurrentHearts()).isEqualTo(4);
 		assertThat(player.getHonor()).isEqualTo(5);
 		assertThat(player.getMaxHearts()).isEqualTo(4);
+<<<<<<< HEAD
 //		assertThat(player.getPosition()).isEqualTo(3);
+=======
+>>>>>>> master
 		assertThat(player.getRol()).isEqualTo(Rol.NINJA);
 		assertThat(player.getWonGame()).isEqualTo(true);
 	}

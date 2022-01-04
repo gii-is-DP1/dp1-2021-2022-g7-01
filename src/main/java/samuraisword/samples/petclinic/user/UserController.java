@@ -132,7 +132,7 @@ public class UserController {
 		model.put("friendRequest", u);
 		return "users/friendRequest";
 	}
-
+		
 	@PostMapping(value = "friendRequest/SendRequest/{usernameProfile}")
 	public String procesSendController(@PathVariable("usernameProfile") String usernameProfile) {
 		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
