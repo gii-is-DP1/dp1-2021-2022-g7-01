@@ -40,7 +40,7 @@ public class Player extends BaseEntity{
 	
 	private Rol rol;
 	
-	private boolean esInofensivo; 
+	private boolean disabled; 
 	
 	private Integer distanceBonus=0;
 	private Integer weaponBonus=0;
