@@ -20,6 +20,9 @@ public interface UserRepository extends  CrudRepository<User, String>{
 	@Query(value = "SELECT ID_USER FROM FRIEND_REQUESTS WHERE ID_USER_REQUESTED=:userRequest", nativeQuery=true)
 	Collection<String> listRequestAll(String userRequest);
 	
+	@Query(value = "SELECT ID_USER FROM FRIEND_REQUESTS WHERE ID_USER=:userRequest", nativeQuery=true)
+	Collection<String> listSendRequestAll(String userRequest);
+	
 	@Modifying
 	@Query(
 	  value = 
