@@ -207,5 +207,16 @@ public class GameService {
 			}
 		}
 	}
-
+	public void statUp(Player player, String stat, Integer bonus) {
+		
+		if(stat.equals("distanceBonus")) player.setDistanceBonus(player.getDistanceBonus()+bonus);
+		if(stat.equals("weaponBonus")) player.setWeaponBonus(player.getWeaponBonus()+bonus);
+		if(stat.equals("damageBonus")) player.setDamageBonus(player.getDamageBonus()+bonus);
+	}
+public void statDown(Player player, String stat, Integer bonus) {
+		
+		if(stat.equals("distanceBonus")) player.setDistanceBonus(player.getDistanceBonus()-bonus);
+		if(stat.equals("weaponBonus")) player.setWeaponBonus(player.getWeaponBonus()-bonus);
+		if(stat.equals("damageBonus")) player.setDamageBonus(player.getDamageBonus()-bonus);
+	}
 }
