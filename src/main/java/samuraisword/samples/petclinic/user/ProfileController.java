@@ -1,5 +1,6 @@
 package samuraisword.samples.petclinic.user;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -50,7 +51,9 @@ public class ProfileController {
 		} else {
 			UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
 					.getPrincipal();
+			Collection<String>listFriend = userService.getAllFriendOf(usernameProfile);
 			model.put("userProfile", userOptional.get());
+			model.put("friends", listFriend);
 			model.put("username", userDetails.getUsername());
 			return "users/profile";
 		}

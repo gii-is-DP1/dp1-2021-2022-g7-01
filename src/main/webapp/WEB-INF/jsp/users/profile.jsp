@@ -6,6 +6,13 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags"%>
 
+<style>
+	table {
+		width: 25%;
+		float: right;
+	}
+</style>
+
 <petclinic:layout pageName="Profile">
 	<c:set var="ownProfile"
 		value="form-group ${status.error ? 'has-error' : '' }" />
@@ -59,5 +66,26 @@
 				</div>
 			</div>
 		</div>
+		<table id="friendsTable" class="table table-striped", style = "width: 25%; float: right;">
+			<thead>
+	        <tr>
+	            <th>Friends</th>
+	            
+	        </tr>
+	        </thead>
+        	<tbody>
+        	<c:forEach items="${friends}" var="friend">
+        		<tr>
+        		<td>
+        			<spring:url value="/users/profile/{username}" var="userUrl">
+                        <spring:param name="username" value="${friend}"/>
+                    </spring:url>
+                    <a href="${fn:escapeXml(userUrl)}"><c:out value="${friend}"/>
+        		</td>
+        		</tr>
+        	</c:forEach>
+        	</tbody>
+        	
+		</table>
 	</div>
 </petclinic:layout>
