@@ -36,8 +36,6 @@ button {
 	top: 50px;
 }
   
-  
-
 </style>
 <petclinic:layout pageName="home">	
 		
