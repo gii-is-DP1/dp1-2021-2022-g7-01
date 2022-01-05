@@ -264,7 +264,7 @@ body{
 				</div>
 				<div  style="display: inline-block; width: 45%; height: 50%; text-align:center; vertical-align: top">
 					<c:forEach items="${ listPlayer }" var ="player" varStatus="loop">
-			    		<c:if test="${ player.getUser().getUsername().equals(user.getUsername()) }">
+			    		<c:if test="${ player.getUser().getUsername().equals(currentUser.getUsername()) }">
 			    			<div style="display: inline-block; border-radius: 10px; background-color: #DFDADA">
 			    				<p> ${ player.getUser().getUsername() } (${player.getRol()})</p>
 			    				<div style="display: inline-block;" class="img-wrap">
@@ -284,30 +284,28 @@ body{
 			    		</c:if>
 			    	</c:forEach>			
 				</div>
-			
-				<div  style=" height: 60%; padding-top: 10px; margin-top: 10px">
-				<p style="color: white">TU MANO</p>
-					<!-- Aqui iteramos por las cartas en mano del player POR HACER -->
-					<c:forEach items="${ currentPlayer.hand }" var ="card" varStatus="loop">
-						<div style="display: inline-block;">
-							<span>${card.name}</span>
-			    			<img src="/resources/images/cards/LOQUESEA }" alt="card" style="height: 80%; width:14%" />
-			    		</div>
+				<br>
+				<p style="color: white; padding-top: 20px">TU MANO</p>
+				<div  style=" height: 60%; padding-top: 10px; margin-top: 10px; background-color: #DFDADA; border-radius:15px;">
+					<div style="display:inline-block; max-width:90%">
+					<c:forEach items="${ listPlayer }" var ="player" varStatus="loop">
+						<c:if test="${ player.getUser().getUsername().equals(currentUser.getUsername()) }">
+							<c:forEach items="${ player.hand }" var ="card" varStatus="loop">
+				    			<img style="height:auto; width:20%;" src="/resources/images/cards/${card.name}.png" alt="card"/>
+				  			</c:forEach>
+				  		</c:if>	
 					</c:forEach>
-					
+					</div>
 				</div>	
-				<p style="color: white">CARTAS EQUIPADAS</p>	
-				<div  style=" height: 60%; padding-top: 10px; margin-top: 10px">
-				
-				<!-- Aqui iteramos por las cartas equipadas del player POR HACER -->
-					<c:forEach items="${ currentPlayer.equipment }" var ="equipment" varStatus="loop">
-					
-						<div style="display: inline-block;">
-							<span>${equipment.name}</span>
-			    			<img src="/resources/images/cards/LOQUESEA }" alt="card" style="height: 80%; width:14%" />
-			    		</div>
-					</c:forEach>
-					
+				<p style="color: white">EQUIPADAS</p>
+				<div  style=" height: 60%; padding-top: 10px; margin-top: 10px; background-color: #DFDADA; border-radius:15px;">
+					<div style="display:inline-block; max-width:90%">
+						<c:forEach items="${ currentPlayer.equipment }" var ="equipment" varStatus="loop">
+							
+				    			<img style="height:auto; width:20%;" src="/resources/images/cards/${equipment.name}.png" alt="card"/>
+				    		
+						</c:forEach>
+					</div>
 				</div>		
     		</div>
 	</div>
