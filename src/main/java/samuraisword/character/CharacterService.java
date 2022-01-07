@@ -34,9 +34,10 @@ public class CharacterService {
 	public Boolean execute(Player player) {
 		Boolean res= false;
 		if (player.getCharacter().getName().equals("Benkei")) {
+			Integer distanceNow = player.getDistanceBonus();
 			if (player.getGame().getGamePhase().equals(player.getCharacter().getGamePhase())) {
 				gameService.statUp(player, "distanceBonus", 1);
-				res=player.getDistanceBonus().equals(1);
+				res=player.getDistanceBonus().equals(distanceNow+1);
 			}
 		}
 		if (player.getCharacter().getName().equals("Chiyome")) {
@@ -47,9 +48,10 @@ public class CharacterService {
 			res=player.isDisabled();
 		}
 		if (player.getCharacter().getName().equals("Goemon")) {
+			Integer weaponsNow= player.getWeaponBonus();
 			if (player.getGame().getGamePhase().equals(player.getCharacter().getGamePhase())) {
 				gameService.statUp(player, "weaponBonus", 1);
-				res=player.getWeaponBonus().equals(1);
+				res=player.getWeaponBonus().equals(weaponsNow+1);
 			}
 		}
 		if (player.getCharacter().getName().equals("Ieyasu")) {
@@ -57,9 +59,10 @@ public class CharacterService {
 					&&player.equals(player.getGame().getCurrentPlayer());
 		}
 		if (player.getCharacter().getName().equals("Musashi")) {
+			Integer damageNow= player.getDamageBonus();
 			if (player.getGame().getGamePhase().equals(player.getCharacter().getGamePhase())) {
 				gameService.statUp(player, "damageBonus", 1);
-				res=player.getDamageBonus().equals(1);
+				res=player.getDamageBonus().equals(damageNow+1);
 			}
 		}
 		return res;
