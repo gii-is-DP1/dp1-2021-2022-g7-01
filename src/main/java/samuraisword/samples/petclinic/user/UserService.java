@@ -44,6 +44,10 @@ public class UserService {
 		this.userRepository = userRepository;
 	}
 
+	public Collection<User> AllUsers() {
+		return userRepository.findAll();
+	}
+	
 	public void saveUser(User user) throws DataAccessException {
 		user.setEnabled(true);
 		userRepository.save(user);
