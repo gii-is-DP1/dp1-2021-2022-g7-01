@@ -2,6 +2,7 @@ package samuraisword.player;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -21,6 +22,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import samuraisword.achievements.Achievement;
 import samuraisword.achievements.AchievementService;
 import samuraisword.achievements.RolType;
+import samuraisword.game.Game;
+import samuraisword.game.GameService;
+import samuraisword.invitations.Invitation;
+import samuraisword.samples.petclinic.card.Card;
+import samuraisword.samples.petclinic.card.CardService;
 import samuraisword.samples.petclinic.user.User;
 import samuraisword.samples.petclinic.user.UserService;
 
@@ -28,10 +34,14 @@ import samuraisword.samples.petclinic.user.UserService;
 public class PlayerController {	
 	
 	private final PlayerService playerService;
+	private final CardService cardService;
+	private final GameService gameService;
 	
 	@Autowired
-	public PlayerController(PlayerService playerService) {
+	public PlayerController(PlayerService playerService, CardService cardService, GameService gameService) {
 		this.playerService = playerService;
+		this.cardService = cardService;
+		this.gameService = gameService;
 	}
 	
 	@GetMapping(value = { "/players" })
@@ -47,4 +57,6 @@ public class PlayerController {
 		playerService.deletePlayer(idPlayer);
 		return "redirect:/game/{id_game}";
 	}
+	
+	
 }
