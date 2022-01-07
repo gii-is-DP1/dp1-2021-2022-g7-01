@@ -1,13 +1,10 @@
 package samuraisword.game;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.ThreadLocalRandom;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -22,17 +19,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import samuraisword.character.Character;
-import samuraisword.cardhand.CardHand;
-import samuraisword.cardhand.CardHandService;
 import samuraisword.character.CharacterService;
 import samuraisword.invitations.Invitation;
 import samuraisword.invitations.InvitationService;
 import samuraisword.player.Player;
 import samuraisword.player.PlayerService;
-import samuraisword.player.Rol;
 import samuraisword.samples.petclinic.card.Card;
 import samuraisword.samples.petclinic.card.CardService;
-import samuraisword.samples.petclinic.card.RedCard;
 import samuraisword.samples.petclinic.user.User;
 import samuraisword.samples.petclinic.user.UserService;
 
@@ -42,7 +35,6 @@ public class GameController {
 	private final GameService gameService;
 	private final PlayerService playerService;
 	private final UserService userService;
-	private final CardHandService cardHandService;
 	private final CardService cardService;
 	private final InvitationService invitationService;
 	private final CharacterService characterService;
@@ -50,14 +42,12 @@ public class GameController {
 	private static final String VIEWS_CREATE_GAME = "game/createGame";
 
 	@Autowired
-	public GameController(GameService GameService, UserService userService, PlayerService playerService,
-			CardHandService cardHandService, CardService cardService, CharacterService characterService,
+	public GameController(GameService GameService, UserService userService, PlayerService playerService, CardService cardService, CharacterService characterService,
 			InvitationService invitationService) {
 		this.gameService = GameService;
 		this.userService = userService;
 		this.invitationService = invitationService;
 		this.playerService = playerService;
-		this.cardHandService = cardHandService;
 		this.cardService = cardService;
 		this.characterService = characterService;
 	}
@@ -111,6 +101,8 @@ public class GameController {
 		gameService.deleteGame(gameId);
 		return "redirect:/game/new";
 	}
+	
+	
 
 	@GetMapping(value = { "/game/start/{id_game}" })
 	public String initGame(@PathVariable("id_game") int gameId, Map<String, Object> model) {
@@ -178,5 +170,22 @@ public class GameController {
 		game.setCurrentPlayer(game.getListPlayers().get(nextPlayerIndex));
 		model.put("game", game);
 		return "/game/gameboard";
+	}
+
+	@PostMapping(value = "/game/{gameId}/select/card/{cardId}")
+	public String acceptController(@PathVariable("gameId") Integer gameId, @PathVariable("cardId") Integer cardId) {
+		Optional<Card> card= cardService.findById(cardId);
+		Game game=gameService.findById(gameId).get();
+		Player p=game.getCurrentPlayer();
+		if(card.get().getName().contains("armadura")) {
+			gameService.statUp(p, "distanceBonus", 1);
+		}else if(card.get().getName().contains("concretacion")){
+			gameService.statUp(p, "damageBonus", 1);
+		}else if(card.get().getName().contains("desenvainado")){
+			gameService.statUp(p, "weaponBonus", 1);
+		}
+		p.getEquipment().add(card.get());
+		
+		return "redirect:/game/"+gameId;
 	}
 }
