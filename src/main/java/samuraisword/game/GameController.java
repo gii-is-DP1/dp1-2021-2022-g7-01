@@ -15,6 +15,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+
 import samuraisword.character.Character;
 import samuraisword.character.CharacterService;
 import samuraisword.invitations.Invitation;
@@ -144,19 +147,31 @@ public class GameController {
 		gameService.asignOrder(players);
 
 		game.setListPlayers(players);
-
+		game.setCurrentPlayer(players.get(0));
+		
 		for (Player player : game.getListPlayers()) {
 			playerService.savePlayer(player);
 		}
 
 		gameService.asignCards(game.getDeck(), players);
 
-		model.put("currentUser", user);
+		GameSingleton.getInstance().getMapGames().put(game.getId(), game);
+		
 		model.put("game", game);
 
 		return "/game/gameboard";
 	}
 	
+	@PostMapping(value = { "/game/end-turn" })
+	public String endTurn(@RequestParam("gameId") Integer gameId, @RequestParam("currentPlayerId") Integer currentPlayerId, Map<String, Object> model) {
+		Game game = GameSingleton.getInstance().getMapGames().get(gameId);
+		Integer numPlayers = game.getListPlayers().size();
+		Integer nextPlayerIndex = (game.getListPlayers().indexOf(game.getCurrentPlayer()) + 1) % numPlayers;
+		game.setCurrentPlayer(game.getListPlayers().get(nextPlayerIndex));
+		model.put("game", game);
+		return "/game/gameboard";
+	}
+
 	@PostMapping(value = "/game/{gameId}/select/card/{cardId}")
 	public String acceptController(@PathVariable("gameId") Integer gameId, @PathVariable("cardId") Integer cardId) {
 		Optional<Card> card= cardService.findById(cardId);
