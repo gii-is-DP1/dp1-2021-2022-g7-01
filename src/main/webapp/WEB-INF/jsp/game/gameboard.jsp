@@ -317,16 +317,18 @@ body{
 							<c:forEach items="${ player.hand }" var ="card" varStatus="loop">
 				    			<img style="height:auto; width:20%;" src="/resources/images/cards/${card.name}.png" alt="card"/>	
 				    			
-				    			<c:if test="${card.name=='armadura'}">
-											<spring:url value="/game/{gameId}/select/card/{cardId}"
-												var="editUrl">
-												<spring:param name="gameId" value="${game.id}" />
-												<spring:param name="cardId" value="${card.name}" />
-												
-											</spring:url>
-											<a href="${fn:escapeXml(editUrl)}" class="btn btn-default">EQUIP CARD</a>
+				    			<c:if test="${card.name=='armadura' || card.name=='concentracion' || card.name=='desenvainado rapido'}">
+				    			
+				    			
+				    			<form:form action="/game/select">
+				    			<input type="hidden" name="gameId" value="${game.id}"></input>
+								<input type="hidden" name="cardName" value="${card.name}"></input>
+								<button id="btn-equip-card2" class="button"> EQUIP CARD </button>
+								</form:form>
+											
 										</c:if>			    			
 				  			</c:forEach>
+				  			
 				  		</c:if>	
 					</c:forEach>
 					</div>
@@ -334,12 +336,13 @@ body{
 				<p style="color: white">EQUIPADAS</p>
 				<div  style=" height: 60%; padding-top: 10px; margin-top: 10px; background-color: #DFDADA; border-radius:15px;">
 					<div style="display:inline-block; max-width:90%">
-						<c:forEach items="${ currentPlayer.equipment }" var ="equipment" varStatus="loop">
+						<c:forEach items="${game.currentPlayer.equipment}" var ="equipment" varStatus="loop">
 							
 				    			<img style="height:auto; width:20%;" src="/resources/images/cards/${equipment.name}.png" alt="card"/>
 				    		
 						</c:forEach>
 					</div>
+					
 				</div>		
     		</div>
 	</div>

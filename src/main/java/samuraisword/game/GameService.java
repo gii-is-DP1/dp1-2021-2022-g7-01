@@ -86,6 +86,9 @@ public class GameService {
 
 			p.setMaxHearts(p.getCharacter().getLife());
 			p.setCurrentHearts(p.getCharacter().getLife());
+			p.setDamageBonus(0);
+			p.setDistanceBonus(0);
+			p.setWeaponBonus(0);
 		}
 		return players;
 	}
@@ -203,6 +206,7 @@ public class GameService {
 			}
 			
 			player.setHand(new ArrayList<>());
+			player.setEquipment(new ArrayList<Card>());
 			for (int e = 0; e < cardsGiven; e++) {
 				player.getHand().add(gameDeck.get(e));
 				gameDeck.remove(e);
