@@ -50,7 +50,7 @@ body{
     transform: translateX(350px);
     position: absolute;
 }
-/*desplazamos el resto de jugadores; cada cual m·s lejos con respecto al primero*/
+/*desplazamos el resto de jugadores; cada cual m√°s lejos con respecto al primero*/
 .circle:nth-child(2n) {
     transform: rotate(calc(var(--angle))) translateX(350px);
     position: absolute;
@@ -110,6 +110,11 @@ body{
 
 .button:nth-child(3n){
 	background-color: red;
+	margin-bottom: 3%;
+}
+
+#btn-end-turn{
+	background-color: gray;
 	margin-bottom: 3%;
 }
 
@@ -179,8 +184,9 @@ body{
 <c:set value="${game.listPlayers}" var="listPlayer" />
 <c:set value="${game.deck}" var="deck" />
 <c:set value="${game.discardPile}" var="discardPile" />
+<c:set value="${game.currentPlayer.user}" var="currentUser" />
 
-<!-- EN CASO DE QUE NO SEAN 4 JUGADORES REAJUSTAMOS EL ANGULO DE SEPARACION QUE SERA DADO POR 360/N∫jugadores -->
+<!-- EN CASO DE QUE NO SEAN 4 JUGADORES REAJUSTAMOS EL ANGULO DE SEPARACION QUE SERA DADO POR 360/N¬∫jugadores -->
 
 <c:if test="${listPlayer.size()==5}">
 	<script type="text/javascript">
@@ -225,6 +231,9 @@ body{
 			    				<c:if test="${ player.getRol().toString().equals('SHOGUN') }">
 			    				 <img src="/resources/images/shogun.png" alt="SHOGUN" style="width: 25%; height: auto" />	
 			    				</c:if>
+			    				<c:if test="${ game.currentPlayer.equals(player) }">
+									<span>Current player</span>
+								</c:if>
 			    				<p>${player.getUser().getUsername()}</p>
 								<div>
 									<div style="display: inline-block;" class="img-wrap">
@@ -266,6 +275,14 @@ body{
 					<a href="${fn:escapeXml(attackUrl)}" class="button">
 					<button class="button"> ATTACK </button>
 					</a>
+
+					<button class="button"> ATTACK PLAYER </button>
+					<form:form action="/game/end-turn">
+						<input type="hidden" name="gameId" value="${ game.id }"></input>
+						<input type="hidden" name="currentPlayerId" value="${ currentPlayer.id }"></input>
+						<button id="btn-end-turn" class="button"> END TURN </button>
+					</form:form>
+
 					
 				</div>
 				<div  style="display: inline-block; width: 45%; height: 50%; text-align:center; vertical-align: top">
@@ -297,7 +314,7 @@ body{
 					<c:forEach items="${ listPlayer }" var ="player" varStatus="loop">
 						<c:if test="${ player.getUser().getUsername().equals(currentUser.getUsername()) }">
 							<c:forEach items="${ player.hand }" var ="card" varStatus="loop">
-				    			<img style="height:auto; width:20%;" src="/resources/images/cards/${card.name}.png" alt="card"/>
+				    			<img style="height:auto; width:20%;" src="/resources/images/cards/${card.name}.png" alt="card"/>				    			
 				  			</c:forEach>
 				  		</c:if>	
 					</c:forEach>

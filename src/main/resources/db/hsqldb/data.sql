@@ -89,8 +89,9 @@ INSERT INTO types2 VALUES (4, 'Ronin');
 INSERT INTO types2 VALUES (5, 'Ninguno');
 
 
-INSERT INTO achievements (id, title, body, typeL, typeR, username) VALUES (1, 'Primer comentario', 'Escribe 1 comentario', 1, 5, 'admin1');
-
+INSERT INTO achievements (id, title, body, typeL, typeR, username) VALUES (1, 'Hello world', 'Write 1 comment', 1, 5, 'admin1');
+INSERT INTO achievements (id, title, body, typeL, typeR, username) VALUES (2, 'Stalker', 'Send 5 friend requests', 2, 5, 'admin1');
+INSERT INTO achievements (id, title, body, typeL, typeR, username) VALUES (3, 'Friends with benefits', 'Be friend with 3 users', 3, 5, 'admin1');
 
 
 INSERT INTO cards(name,image,cards_Per_Deck, CARD_COLOR) VALUES ('puntuacion','puntuacion.png',1, 'Blue');

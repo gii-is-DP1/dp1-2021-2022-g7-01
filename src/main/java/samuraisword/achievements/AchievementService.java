@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import samuraisword.comment.CommentRepository;
 import samuraisword.comment.CommentService;
 import samuraisword.samples.petclinic.user.User;
+import samuraisword.samples.petclinic.user.UserRepository;
 
 
 @Service
@@ -23,12 +24,15 @@ public class AchievementService {
 	private AchievementRepository achievementRepository;
 	private PersonalAchievementRepository personalAchievementRepository;
 	private CommentRepository commentRepository;
+	private UserRepository userRepository;
 
 	@Autowired
-	public AchievementService(AchievementRepository achievementRepository, CommentRepository commentRepository, PersonalAchievementRepository personalAchievementRepository) {
+	public AchievementService(AchievementRepository achievementRepository, CommentRepository commentRepository,
+			PersonalAchievementRepository personalAchievementRepository, UserRepository userRepository) {
 		this.achievementRepository = achievementRepository;
 		this.commentRepository = commentRepository;
 		this.personalAchievementRepository = personalAchievementRepository;
+		this.userRepository = userRepository;
 	}
 	
 	@Transactional(readOnly = true)
@@ -67,10 +71,23 @@ public class AchievementService {
 		for(Achievement a : ListAchievevement) {
 			if(!personal.contains(a.getId())) {
 				String[] body = a.getBody().split(" ");
-				if(body[0].equals("Escribe")) {
+				if(body[0].equals("Write")) {
 					Integer n = commentRepository.findByUser(user).size();
 					if(n>=Integer.valueOf(body[1])) {
-						
+						personalAchievementRepository.achieved(a.getId(), user.getUsername());
+					}
+				}
+				if(body[0].equals("Send")) {
+					Integer n = userRepository.listSendRequestAll(user.getUsername()).size();
+					n += userRepository.listFriendAll2(user.getUsername()).size();
+					if(n>=Integer.valueOf(body[1])) {
+						personalAchievementRepository.achieved(a.getId(), user.getUsername());
+					}
+				}
+				if(body[0].equals("Be")) {
+					Integer n = userRepository.listFriendAll1(user.getUsername()).size();
+					n += userRepository.listFriendAll1(user.getUsername()).size();
+					if(n>=Integer.valueOf(body[3])) {
 						personalAchievementRepository.achieved(a.getId(), user.getUsername());
 					}
 				}
