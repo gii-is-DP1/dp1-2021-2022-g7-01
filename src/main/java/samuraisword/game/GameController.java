@@ -42,6 +42,7 @@ public class GameController {
 	private static final String VIEWS_CREATE_GAME = "game/createGame";
 
 	@Autowired
+
 	public GameController(GameService GameService, UserService userService, PlayerService playerService, CardService cardService, CharacterService characterService,
 			InvitationService invitationService) {
 		this.gameService = GameService;
@@ -139,7 +140,6 @@ public class GameController {
 //		players.add(p6);
 		// players de prueba
 
-		game.setGamePhase(GamePhase.ASSIGN);
 		gameService.asignCharacterAndHearts(players, characters);
 
 		gameService.asignRolAndHonor(players);
@@ -162,6 +162,19 @@ public class GameController {
 		return "/game/gameboard";
 	}
 	
+
+	@GetMapping(value = { "/game/start/attack/{id_game}" })
+	public String handleAttack(@PathVariable ("id_game") int gameId, Map<String, Object> model) {
+		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		User user = userService.findUser(userDetails.getUsername()).get();
+		Game game = gameService.findById(gameId).get();
+		List<Player> ls = game.getListPlayers();
+		model.put("game", game);
+		model.put("currentUser", user);
+		
+		return "/game/gameboard";
+	}
+
 	@PostMapping(value = { "/game/end-turn" })
 	public String endTurn(@RequestParam("gameId") Integer gameId, @RequestParam("currentPlayerId") Integer currentPlayerId, Map<String, Object> model) {
 		Game game = GameSingleton.getInstance().getMapGames().get(gameId);
@@ -188,4 +201,5 @@ public class GameController {
 		
 		return "redirect:/game/"+gameId;
 	}
+
 }

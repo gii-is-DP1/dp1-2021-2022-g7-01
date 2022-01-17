@@ -50,7 +50,7 @@ body{
     transform: translateX(350px);
     position: absolute;
 }
-/*desplazamos el resto de jugadores; cada cual m·s lejos con respecto al primero*/
+/*desplazamos el resto de jugadores; cada cual m√°s lejos con respecto al primero*/
 .circle:nth-child(2n) {
     transform: rotate(calc(var(--angle))) translateX(350px);
     position: absolute;
@@ -186,7 +186,7 @@ body{
 <c:set value="${game.discardPile}" var="discardPile" />
 <c:set value="${game.currentPlayer.user}" var="currentUser" />
 
-<!-- EN CASO DE QUE NO SEAN 4 JUGADORES REAJUSTAMOS EL ANGULO DE SEPARACION QUE SERA DADO POR 360/N∫jugadores -->
+<!-- EN CASO DE QUE NO SEAN 4 JUGADORES REAJUSTAMOS EL ANGULO DE SEPARACION QUE SERA DADO POR 360/N¬∫jugadores -->
 
 <c:if test="${listPlayer.size()==5}">
 	<script type="text/javascript">
@@ -268,12 +268,21 @@ body{
     			
 					<button class="button"> EQUIP CARD </button>
 					<button class="button"> USE CARD </button>
+					
+					<spring:url value="attack/{attackerId}" var="attackUrl">
+						<spring:param name="attackerId" value="${game.getId()}" />
+					</spring:url>
+					<a href="${fn:escapeXml(attackUrl)}" class="button">
+					<button class="button"> ATTACK </button>
+					</a>
+
 					<button class="button"> ATTACK PLAYER </button>
 					<form:form action="/game/end-turn">
 						<input type="hidden" name="gameId" value="${ game.id }"></input>
 						<input type="hidden" name="currentPlayerId" value="${ currentPlayer.id }"></input>
 						<button id="btn-end-turn" class="button"> END TURN </button>
 					</form:form>
+
 					
 				</div>
 				<div  style="display: inline-block; width: 45%; height: 50%; text-align:center; vertical-align: top">
