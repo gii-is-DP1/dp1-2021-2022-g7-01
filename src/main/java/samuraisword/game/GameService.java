@@ -162,7 +162,7 @@ public class GameService {
 	}
 
 	public List<Player> asignOrder(List<Player> listPlayers) {
-		// De el ultimo tratamiento a listPlayers (asignRolAndHonor) el 1o SHOGUN será
+		// De el ultimo tratamiento a listPlayers (asignRolAndHonor) el SHOGUN será
 		// siempre el indice 0.
 		// queremos hacer un ultimo shuffle a listPlayers para que no sea siempre el
 		// mismo orden de roles
@@ -187,12 +187,14 @@ public class GameService {
 			// En la lista players el indice 0 corresponde al shogun ya que esta funcion es
 			// inmediatamente posterior a asignOrder.
 			/*
-			 * 0º Shogun: 4 cards 1st and 2nd player: 5 cards 3rd and 4th player (if
-			 * present): 6 cards 5th and 6th player (if present): 7 cards
+			 * 0º Shogun: 4 cards 
+			 * 1st and 2nd player: 5 cards; 
+			 * 3rd and 4th player (if present): 6 cards
+			 * 5th and 6th player (if present): 7 cards
 			 * 
 			 * Al shogun con indice 0 se le repartiran 4 cartas, y cada vez que el indice
-			 * coincida con ser impar, el n cartas a repartir aumenta en 1. Excluimos el 0
-			 * también por preacución.
+			 * coincida con ser impar, el n cartas a repartir aumenta en 1.
+			 * 
 			 * 
 			 */
 			Player player = players.get(i);
@@ -213,10 +215,20 @@ public class GameService {
 		if(stat.equals("weaponBonus")) player.setWeaponBonus(player.getWeaponBonus()+bonus);
 		if(stat.equals("damageBonus")) player.setDamageBonus(player.getDamageBonus()+bonus);
 	}
-public void statDown(Player player, String stat, Integer bonus) {
+	public void statDown(Player player, String stat, Integer bonus) {
+			
+			if(stat.equals("distanceBonus")) player.setDistanceBonus(player.getDistanceBonus()-bonus);
+			if(stat.equals("weaponBonus")) player.setWeaponBonus(player.getWeaponBonus()-bonus);
+			if(stat.equals("damageBonus")) player.setDamageBonus(player.getDamageBonus()-bonus);
+		}
+
+	public void attackPlayer (Player attacker, Player defender, List<Player> jugadoresPartida, RedCard weapon) {
 		
-		if(stat.equals("distanceBonus")) player.setDistanceBonus(player.getDistanceBonus()-bonus);
-		if(stat.equals("weaponBonus")) player.setWeaponBonus(player.getWeaponBonus()-bonus);
-		if(stat.equals("damageBonus")) player.setDamageBonus(player.getDamageBonus()-bonus);
 	}
+
+
+
+
+
+
 }

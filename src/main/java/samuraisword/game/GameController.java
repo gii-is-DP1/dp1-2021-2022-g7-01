@@ -39,7 +39,6 @@ public class GameController {
 	private final GameService gameService;
 	private final PlayerService playerService;
 	private final UserService userService;
-	private final CardHandService cardHandService;
 	private final CardService cardService;
 	private final InvitationService invitationService;
 	private final CharacterService characterService;
@@ -48,13 +47,12 @@ public class GameController {
 
 	@Autowired
 	public GameController(GameService GameService, UserService userService, PlayerService playerService,
-			CardHandService cardHandService, CardService cardService, CharacterService characterService,
+			CardService cardService, CharacterService characterService,
 			InvitationService invitationService) {
 		this.gameService = GameService;
 		this.userService = userService;
 		this.invitationService = invitationService;
 		this.playerService = playerService;
-		this.cardHandService = cardHandService;
 		this.cardService = cardService;
 		this.characterService = characterService;
 	}
@@ -144,7 +142,6 @@ public class GameController {
 //		players.add(p6);
 		// players de prueba
 
-		game.setGamePhase(GamePhase.ASSIGN);
 		gameService.asignCharacterAndHearts(players, characters);
 
 		gameService.asignRolAndHonor(players);
@@ -164,4 +161,21 @@ public class GameController {
 
 		return "/game/gameboard";
 	}
+	
+	@GetMapping(value = { "/game/start/attack/{id_game}" })
+	public String handleAttack(@PathVariable ("id_game") int gameId, Map<String, Object> model) {
+		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		User user = userService.findUser(userDetails.getUsername()).get();
+		Game game = gameService.findById(gameId).get();
+		List<Player> ls = game.getListPlayers();
+		model.put("game", game);
+		model.put("currentUser", user);
+		
+		return "/game/gameboard";
+	}
+	
+	
+	
+	
+	
 }

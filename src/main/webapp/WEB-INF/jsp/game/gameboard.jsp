@@ -259,7 +259,13 @@ body{
     			
 					<button class="button"> EQUIP CARD </button>
 					<button class="button"> USE CARD </button>
-					<button class="button"> ATTACK PLAYER </button>
+					
+					<spring:url value="attack/{attackerId}" var="attackUrl">
+						<spring:param name="attackerId" value="${game.getId()}" />
+					</spring:url>
+					<a href="${fn:escapeXml(attackUrl)}" class="button">
+					<button class="button"> ATTACK </button>
+					</a>
 					
 				</div>
 				<div  style="display: inline-block; width: 45%; height: 50%; text-align:center; vertical-align: top">
