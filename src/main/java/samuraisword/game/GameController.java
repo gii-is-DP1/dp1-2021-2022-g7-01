@@ -186,8 +186,8 @@ public class GameController {
 	}
 
 	@PostMapping(value = "/game/{gameId}/select/card/{cardId}")
-	public String acceptController(@PathVariable("gameId") Integer gameId, @PathVariable("cardId") Integer cardId) {
-		Optional<Card> card= cardService.findById(cardId);
+	public String acceptController(@PathVariable("gameId") Integer gameId, @PathVariable("cardId") String cardId) {
+		Optional<Card> card= cardService.findByName(cardId);
 		Game game=gameService.findById(gameId).get();
 		Player p=game.getCurrentPlayer();
 		if(card.get().getName().contains("armadura")) {

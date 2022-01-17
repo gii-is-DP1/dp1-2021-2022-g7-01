@@ -267,6 +267,7 @@ body{
     			<div style="display: inline-block; width: 45%; height: 50%; text-align:center; vertical-align: top; margin-right:10px; ">
     			
 					<button class="button"> EQUIP CARD </button>
+					
 					<button class="button"> USE CARD </button>
 					
 					<spring:url value="attack/{attackerId}" var="attackUrl">
@@ -314,7 +315,17 @@ body{
 					<c:forEach items="${ listPlayer }" var ="player" varStatus="loop">
 						<c:if test="${ player.getUser().getUsername().equals(currentUser.getUsername()) }">
 							<c:forEach items="${ player.hand }" var ="card" varStatus="loop">
-				    			<img style="height:auto; width:20%;" src="/resources/images/cards/${card.name}.png" alt="card"/>				    			
+				    			<img style="height:auto; width:20%;" src="/resources/images/cards/${card.name}.png" alt="card"/>	
+				    			
+				    			<c:if test="${card.name=='armadura'}">
+											<spring:url value="/game/{gameId}/select/card/{cardId}"
+												var="editUrl">
+												<spring:param name="gameId" value="${game.id}" />
+												<spring:param name="cardId" value="${card.name}" />
+												
+											</spring:url>
+											<a href="${fn:escapeXml(editUrl)}" class="btn btn-default">EQUIP CARD</a>
+										</c:if>			    			
 				  			</c:forEach>
 				  		</c:if>	
 					</c:forEach>
