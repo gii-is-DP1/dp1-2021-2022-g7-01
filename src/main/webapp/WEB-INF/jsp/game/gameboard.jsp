@@ -267,6 +267,7 @@ body{
     			<div style="display: inline-block; width: 45%; height: 50%; text-align:center; vertical-align: top; margin-right:10px; ">
     			
 					<button class="button"> EQUIP CARD </button>
+					
 					<button class="button"> USE CARD </button>
 					
 					<spring:url value="attack/{attackerId}" var="attackUrl">
@@ -314,8 +315,20 @@ body{
 					<c:forEach items="${ listPlayer }" var ="player" varStatus="loop">
 						<c:if test="${ player.getUser().getUsername().equals(currentUser.getUsername()) }">
 							<c:forEach items="${ player.hand }" var ="card" varStatus="loop">
-				    			<img style="height:auto; width:20%;" src="/resources/images/cards/${card.name}.png" alt="card"/>				    			
+				    			<img style="height:auto; width:20%;" src="/resources/images/cards/${card.name}.png" alt="card"/>	
+				    			
+				    			<c:if test="${card.name=='armadura' || card.name=='concentracion' || card.name=='desenvainado rapido'}">
+				    			
+				    			
+				    			<form:form action="/game/select">
+				    			<input type="hidden" name="gameId" value="${game.id}"></input>
+								<input type="hidden" name="cardName" value="${card.name}"></input>
+								<button id="btn-equip-card2" class="button"> EQUIP CARD </button>
+								</form:form>
+											
+										</c:if>			    			
 				  			</c:forEach>
+				  			
 				  		</c:if>	
 					</c:forEach>
 					</div>
@@ -323,12 +336,13 @@ body{
 				<p style="color: white">EQUIPADAS</p>
 				<div  style=" height: 60%; padding-top: 10px; margin-top: 10px; background-color: #DFDADA; border-radius:15px;">
 					<div style="display:inline-block; max-width:90%">
-						<c:forEach items="${ currentPlayer.equipment }" var ="equipment" varStatus="loop">
+						<c:forEach items="${game.currentPlayer.equipment}" var ="equipment" varStatus="loop">
 							
 				    			<img style="height:auto; width:20%;" src="/resources/images/cards/${equipment.name}.png" alt="card"/>
 				    		
 						</c:forEach>
 					</div>
+					
 				</div>		
     		</div>
 	</div>
