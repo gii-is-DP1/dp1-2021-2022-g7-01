@@ -1,6 +1,7 @@
 package samuraisword.game;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -31,6 +32,10 @@ public class GameService {
 	@Autowired
 	public GameService(GameRepository gameRepository) {
 		this.gameRepository = gameRepository;
+	}
+	
+	public Collection<Game> findAll() {
+		return gameRepository.findAll();
 	}
 
 	public Optional<Game> findById(int idGame) {
@@ -215,9 +220,9 @@ public class GameService {
 	}
 	public void statUp(Player player, String stat, Integer bonus) {
 		
-		if(stat.equals("distanceBonus")) player.setDistanceBonus(player.getDistanceBonus()+bonus);
-		if(stat.equals("weaponBonus")) player.setWeaponBonus(player.getWeaponBonus()+bonus);
-		if(stat.equals("damageBonus")) player.setDamageBonus(player.getDamageBonus()+bonus);
+		if(stat.contains("distanceBonus")) player.setDistanceBonus(player.getDistanceBonus()+bonus);
+		if(stat.contains("weaponBonus")) player.setWeaponBonus(player.getWeaponBonus()+bonus);
+		if(stat.contains("damageBonus")) player.setDamageBonus(player.getDamageBonus()+bonus);
 	}
 	public void statDown(Player player, String stat, Integer bonus) {
 			
