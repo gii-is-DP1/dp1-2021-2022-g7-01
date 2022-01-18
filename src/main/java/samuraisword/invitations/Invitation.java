@@ -15,7 +15,7 @@ import samuraisword.samples.petclinic.user.User;
 
 @Getter
 @Setter
-@Table
+@Table(name="invitation")
 @Entity
 public class Invitation extends BaseEntity{
 	
@@ -30,6 +30,7 @@ public class Invitation extends BaseEntity{
 	
 	
 	@OneToOne
+	@JoinColumn(name="game_id")
 	private Game game;
 	
 	
