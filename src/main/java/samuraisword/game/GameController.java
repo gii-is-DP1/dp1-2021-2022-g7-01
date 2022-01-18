@@ -172,15 +172,10 @@ public class GameController {
 		game.setGamePhase(GamePhase.ATTACK);
 		RedCard attackWeapon = cardService.findRedCardByName(cardName).get();
 
-		List<Player> inRange = new ArrayList<>();
-
-		for (Player p : game.getListPlayers()) {
-			// calcular distancia--> Integer distance = gameService.calcDistance(Player p1,
-			// Player p2, List<Player> game.getListPlayer())
-			if (1 <= attackWeapon.getRange()) {
-				inRange.add(p);
-			}
-		}
+		Player attacker = game.getCurrentPlayer();
+		
+		List<Player> inRange = gameService.playersInRangeOfAttack(game, attackWeapon, attacker);
+		
 		model.put("attackWeapon", attackWeapon);
 		model.put("inRange", inRange);
 		model.put("game", game);
