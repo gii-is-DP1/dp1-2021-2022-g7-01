@@ -1,11 +1,7 @@
 package samuraisword.game;
 
 import java.util.ArrayList;
-<<<<<<< HEAD
-
-=======
 import java.util.Collection;
->>>>>>> c1e19ac207169f3a787c32d53f25114e4b979f60
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -245,16 +241,4 @@ public class GameService {
 	public void attackPlayer (Player attacker, Player defender, List<Player> jugadoresPartida, RedCard weapon) {
 		
 	}
-<<<<<<< HEAD
-	
-	
-	
-=======
-
-
-
-
-
-
->>>>>>> c1e19ac207169f3a787c32d53f25114e4b979f60
 }
