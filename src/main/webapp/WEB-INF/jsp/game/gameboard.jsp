@@ -273,7 +273,7 @@ body{
 					    			
 								</div>
 			    			</div>
-							<c:if test="${game.gamePhase.toString().equals('ATTACK')}">
+							<c:if test="${inRange.contains(player)}">
 								<form:form action="/game/attack/playerselected">
 					    						<input type="hidden" name="gameId" value="${ game.id }"></input>
 					    						<input type="hidden" name="objectivePlayer" value="${ player }"></input>

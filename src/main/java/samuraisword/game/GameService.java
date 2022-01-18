@@ -3,6 +3,7 @@ package samuraisword.game;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -236,14 +237,25 @@ public class GameService {
 			if(stat.equals("weaponBonus")) player.setWeaponBonus(player.getWeaponBonus()-bonus);
 			if(stat.equals("damageBonus")) player.setDamageBonus(player.getDamageBonus()-bonus);
 		}
-
-	public void attackPlayer (Player attacker, Player defender, List<Player> jugadoresPartida, RedCard weapon) {
+	public List<Player> playersInRangeOfAttack(Game game, RedCard attackWeapon, Player attacker) {
+		List<Player> playerList = game.getListPlayers();
+		List<Player> inRange = new ArrayList<>();
 		
+		for(Player p : playerList) {
+			Integer distancia1= calcDistance(attacker, p, playerList);
+			Integer distancia2= calcDistance(p, attacker, playerList);
+			Integer distMin = List.of(distancia1, distancia2).stream().min(Comparator.naturalOrder()).get();
+			if(distMin <= attackWeapon.getRange()) {
+				inRange.add(p);
+			}
+		}
+		return inRange;
 	}
 
-
-
-
-
+	private Integer calcDistance(Player p1, Player p2, List<Player> playerList) {
+		Integer playersBetween = playerList.indexOf(p1)-playerList.indexOf(p2);
+		if(playersBetween < 0) playersBetween += playerList.size();
+		return playersBetween;
+	}
 
 }
