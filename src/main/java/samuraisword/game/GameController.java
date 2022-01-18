@@ -202,14 +202,18 @@ public class GameController {
 		Player objective = game.getListPlayers().stream().filter(x -> x.getUser().getUsername().equals(objectiveName))
 				.findFirst().get();
 		Player attacker = game.getCurrentPlayer();
-
-		// Falta hacer la parada por aqui
-
-		// quitamos vida
-		objective.setCurrentHearts(objective.getCurrentHearts() - attackWeapon.getDamage());
-		// descartamos carta
-		attacker.getHand().removeIf(x -> x.equals(attackWeapon));
-
+		
+		//Falta hacer la parada por aqui
+		
+		//quitamos vida
+		objective.setCurrentHearts(objective.getCurrentHearts()-attackWeapon.getDamage());
+		//descartamos la 1era carta que coincida con el nombre
+		attacker.getHand().stream()
+						  .filter(x-> x.getName().equals(attackWeapon.getName()))
+						  .distinct()
+						  .forEach(y-> attacker.getHand()
+								  .remove(attacker.getHand().indexOf(y)));
+		
 		model.put("game", game);
 		model.put("POVplayer", user);
 		return "/game/gameboard";

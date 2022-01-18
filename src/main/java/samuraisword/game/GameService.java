@@ -249,8 +249,10 @@ public class GameService {
 			Integer numPlayers = game.getListPlayers().size();
 			Integer nextPlayerIndex = (game.getListPlayers().indexOf(game.getCurrentPlayer()) + 1) % numPlayers;
 			game.setCurrentPlayer(game.getListPlayers().get(nextPlayerIndex));
+			game.setGamePhase(GamePhase.RECOVERY);
+		} else {
+			game.setGamePhase(GamePhase.DISCARD);
 		}
-		game.setGamePhase(GamePhase.DISCARD);
 	}
 
 }
