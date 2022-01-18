@@ -68,9 +68,8 @@ public class PlayerService {
 	}	
 
 
-		@Transactional(readOnly = true)
+	@Transactional(readOnly = true)
 	public Collection<RolType> findRolTypes() throws DataAccessException {
 		return playerRepository.findRolTypes();
 	}
-
 }

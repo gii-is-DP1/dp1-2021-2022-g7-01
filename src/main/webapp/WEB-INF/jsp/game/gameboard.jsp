@@ -5,6 +5,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags"%>
+<%@ page import="samuraisword.game.GamePhase" %>
 
 <style>
 
@@ -301,7 +302,6 @@ body{
 
 					<form:form action="/game/end-turn">
 						<input type="hidden" name="gameId" value="${ game.id }"></input>
-						<input type="hidden" name="currentPlayerId" value="${ currentPlayer.id }"></input>
 						<button id="btn-end-turn" class="button"> END TURN </button>
 					</form:form>
 
@@ -338,6 +338,7 @@ body{
 							<c:forEach items="${ player.hand }" var ="card" varStatus="loop">
 				    			<div style="display: inline-block; height:auto; width:20%">
 				    				<img style="height:auto; width:100%" src="/resources/images/cards/${card.name}.png" alt="card"/>	
+					    			<c:if test="${currentUser.username.equals(POVplayer.username)}">
 					    			<c:if test="${ card.color.equals('Red') }">
 					    					<div>
 					    						<form:form action="/game/attack/selectplayer">
@@ -355,6 +356,17 @@ body{
 											<button id="btn-equip-card2" class="btn btn-default"> EQUIP </button>
 										</form:form>
 									</c:if>	
+									<c:if test="${game.gamePhase == GamePhase.DISCARD}">
+				    			
+				    			
+				    			<form:form action="/game/discard-card">
+				    			<input type="hidden" name="gameId" value="${game.id}"></input>
+								<input type="hidden" name="cardName" value="${card.name}"></input>
+								<button id="btn-discard-card" class="btn btn-default"> DISCARD CARD </button>
+								</form:form>
+											
+										</c:if>	
+										</c:if>
 				    			</div>
 				    					    			
 				  			</c:forEach>
