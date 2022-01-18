@@ -349,7 +349,7 @@ body{
 						    					</form:form>
 					    					</div>
 					    			</c:if>
-					    			<c:if test="${(card.name=='armadura' || card.name=='concentracion' || card.name=='desenvainado rapido')}">
+					    			<c:if test="${game.gamePhase == GamePhase.MAIN && (card.name=='armadura' || card.name=='concentracion' || card.name=='desenvainado rapido')}">
 					    			    <form:form action="/game/select">
 						    				<input type="hidden" name="gameId" value="${game.id}"></input>
 											<input type="hidden" name="cardName" value="${card.name}"></input>
