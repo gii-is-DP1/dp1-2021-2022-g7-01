@@ -5,6 +5,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags"%>
+<%@ page import="samuraisword.game.GamePhase" %>
 
 <style>
 
@@ -321,7 +322,6 @@ body{
 
 					<form:form action="/game/end-turn">
 						<input type="hidden" name="gameId" value="${ game.id }"></input>
-						<input type="hidden" name="currentPlayerId" value="${ currentPlayer.id }"></input>
 						<button id="btn-end-turn" class="button"> END TURN </button>
 					</form:form>
 
@@ -367,7 +367,18 @@ body{
 								<button id="btn-equip-card2" class="button"> EQUIP CARD </button>
 								</form:form>
 											
-										</c:if>			    			
+										</c:if>		
+										<c:if test="${game.gamePhase == GamePhase.DISCARD}">
+				    			
+				    			
+				    			<form:form action="/game/discard-card">
+				    			<input type="hidden" name="gameId" value="${game.id}"></input>
+								<input type="hidden" name="cardName" value="${card.name}"></input>
+								<button id="btn-equip-card2" class="button"> DISCARD CARD </button>
+								</form:form>
+											
+										</c:if>		
+											    			
 				  			</c:forEach>
 				  			
 				  		</c:if>	
