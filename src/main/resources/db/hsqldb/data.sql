@@ -113,18 +113,18 @@ INSERT INTO cards(name,image,cards_Per_Deck,color,CARD_COLOR) VALUES ('parada','
 INSERT INTO cards(name,image,cards_Per_Deck,color,CARD_COLOR) VALUES ('respiracion','action/respiracion.png',3,'Yellow','Yellow');
 
 INSERT INTO cards(name,image,cards_Per_Deck,color,CARD_COLOR, damage, range) VALUES ('bo','attack/bo.png',5,'Red','Red',1, 1);
-INSERT INTO cards(name,image,cards_Per_Deck,color,CARD_COLOR, damage, range) VALUES ('bokken','attack/bokken.png',6,'Red','Red',1, 1);
-INSERT INTO cards(name,image,cards_Per_Deck,color,CARD_COLOR, damage, range) VALUES ('daiku','attack/daiku.png',1,'Red','Red',1, 1);
-INSERT INTO cards(name,image,cards_Per_Deck,color,CARD_COLOR, damage, range) VALUES ('kanabo','attack/kanabo.png',1,'Red','Red',1, 1);
-INSERT INTO cards(name,image,cards_Per_Deck,color,CARD_COLOR, damage, range) VALUES ('katana','attack/katana.png',1,'Red','Red',1, 1);
-INSERT INTO cards(name,image,cards_Per_Deck,color,CARD_COLOR, damage, range) VALUES ('kiseru','attack/kiseru.png',5,'Red','Red',1, 1);
-INSERT INTO cards(name,image,cards_Per_Deck,color,CARD_COLOR, damage, range) VALUES ('kusarigama','attack/kusarigama.png',4,'Red','Red',1, 1);
-INSERT INTO cards(name,image,cards_Per_Deck,color,CARD_COLOR, damage, range) VALUES ('nagayari','attack/nagayari.png',1,'Red','Red',1, 1);
-INSERT INTO cards(name,image,cards_Per_Deck,color,CARD_COLOR, damage, range) VALUES ('naginata','attack/naginata.png',2,'Red','Red',1, 1);
-INSERT INTO cards(name,image,cards_Per_Deck,color,CARD_COLOR, damage, range) VALUES ('nodachi','attack/nodachi.png',1,'Red','Red',1, 1);
-INSERT INTO cards(name,image,cards_Per_Deck,color,CARD_COLOR, damage, range) VALUES ('shuriken','attack/shuriken.png',3,'Red','Red',1, 1);
-INSERT INTO cards(name,image,cards_Per_Deck,color,CARD_COLOR, damage, range) VALUES ('tanegashima','attack/tanegashima.png',1,'Red','Red',1, 1);
-INSERT INTO cards(name,image,cards_Per_Deck,color,CARD_COLOR, damage, range) VALUES ('wakizashi','attack/wakizashi.png',1,'Red','Red',1, 1);
+INSERT INTO cards(name,image,cards_Per_Deck,color,CARD_COLOR, damage, range) VALUES ('bokken','attack/bokken.png',6,'Red','Red',1, 2);
+INSERT INTO cards(name,image,cards_Per_Deck,color,CARD_COLOR, damage, range) VALUES ('daiku','attack/daiku.png',1,'Red','Red',2, 5);
+INSERT INTO cards(name,image,cards_Per_Deck,color,CARD_COLOR, damage, range) VALUES ('kanabo','attack/kanabo.png',1,'Red','Red',2, 3);
+INSERT INTO cards(name,image,cards_Per_Deck,color,CARD_COLOR, damage, range) VALUES ('katana','attack/katana.png',1,'Red','Red',3, 2);
+INSERT INTO cards(name,image,cards_Per_Deck,color,CARD_COLOR, damage, range) VALUES ('kiseru','attack/kiseru.png',5,'Red','Red',2, 1);
+INSERT INTO cards(name,image,cards_Per_Deck,color,CARD_COLOR, damage, range) VALUES ('kusarigama','attack/kusarigama.png',4,'Red','Red',2, 2);
+INSERT INTO cards(name,image,cards_Per_Deck,color,CARD_COLOR, damage, range) VALUES ('nagayari','attack/nagayari.png',1,'Red','Red',2, 4);
+INSERT INTO cards(name,image,cards_Per_Deck,color,CARD_COLOR, damage, range) VALUES ('naginata','attack/naginata.png',2,'Red','Red',1, 4);
+INSERT INTO cards(name,image,cards_Per_Deck,color,CARD_COLOR, damage, range) VALUES ('nodachi','attack/nodachi.png',1,'Red','Red',3, 3);
+INSERT INTO cards(name,image,cards_Per_Deck,color,CARD_COLOR, damage, range) VALUES ('shuriken','attack/shuriken.png',3,'Red','Red',1, 3);
+INSERT INTO cards(name,image,cards_Per_Deck,color,CARD_COLOR, damage, range) VALUES ('tanegashima','attack/tanegashima.png',1,'Red','Red',1, 5);
+INSERT INTO cards(name,image,cards_Per_Deck,color,CARD_COLOR, damage, range) VALUES ('wakizashi','attack/wakizashi.png',1,'Red','Red',3, 1);
 
 
 INSERT INTO games(id,end_date,start_date) VALUES (1, parsedatetime('24-11-2021 18:47:52', 'dd-MM-yyyy hh:mm:ss'),parsedatetime('24-11-2021 19:08:13', 'dd-MM-yyyy hh:mm:ss'));
