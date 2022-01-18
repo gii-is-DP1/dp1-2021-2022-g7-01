@@ -205,8 +205,12 @@ public class GameController {
 		
 		//quitamos vida
 		objective.setCurrentHearts(objective.getCurrentHearts()-attackWeapon.getDamage());
-		//descartamos carta
-		attacker.getHand().removeIf(x-> x.equals(attackWeapon));
+		//descartamos la 1era carta que coincida con el nombre
+		attacker.getHand().stream()
+						  .filter(x-> x.getName().equals(attackWeapon.getName()))
+						  .distinct()
+						  .forEach(y-> attacker.getHand()
+								  .remove(attacker.getHand().indexOf(y)));
 		
 		model.put("game", game);
 		model.put("POVplayer", user);
@@ -228,18 +232,19 @@ public class GameController {
 
 	@PostMapping(value = {"/game/select"})
 	public String acceptController(@RequestParam("gameId") Integer gameId, @RequestParam("cardName") String cardName, Map<String, Object> model) {
-		Optional<Card> card= cardService.findByName(cardName);
+		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		User user = userService.findUser(userDetails.getUsername()).get();
+		Card card= cardService.findByName(cardName).get();
 		Game game=GameSingleton.getInstance().getMapGames().get(gameId);
-		Player p=game.getCurrentPlayer();
-		
-		if(card.get().getName().contains("armadura")) {
+		Player p = game.getCurrentPlayer();
+		if(card.getName().contains("armadura")) {
 			gameService.statUp(p, "distanceBonus", 1);
-		}else if(card.get().getName().contains("concentracion")){
+		}else if(card.getName().contains("concentracion")){
 			gameService.statUp(p, "damageBonus", 1);
-		}else if(card.get().getName().contains("desenvainado")){
+		}else if(card.getName().contains("desenvainado")){
 			gameService.statUp(p, "weaponBonus", 1);
 		}
-		p.getEquipment().add(card.get());
+		p.getEquipment().add(card);
 		List<Card> hand= p.getHand();
 		
 		for(int i=0;i<hand.size();i++) {
@@ -248,6 +253,7 @@ public class GameController {
 				break;
 			}
 		}
+		model.put("POVplayer", user);
 		model.put("game", game);
 		return "/game/gameboard";
 	}
