@@ -26,6 +26,7 @@ import samuraisword.player.Player;
 import samuraisword.player.PlayerService;
 import samuraisword.samples.petclinic.card.Card;
 import samuraisword.samples.petclinic.card.CardService;
+import samuraisword.samples.petclinic.card.RedCard;
 import samuraisword.samples.petclinic.user.User;
 import samuraisword.samples.petclinic.user.UserService;
 
@@ -42,6 +43,7 @@ public class GameController {
 	private static final String VIEWS_CREATE_GAME = "game/createGame";
 
 	@Autowired
+
 	public GameController(GameService GameService, UserService userService, PlayerService playerService, CardService cardService, CharacterService characterService,
 			InvitationService invitationService) {
 		this.gameService = GameService;
@@ -139,7 +141,6 @@ public class GameController {
 //		players.add(p6);
 		// players de prueba
 
-		game.setGamePhase(GamePhase.ASSIGN);
 		gameService.asignCharacterAndHearts(players, characters);
 
 		gameService.asignRolAndHonor(players);
@@ -157,35 +158,98 @@ public class GameController {
 
 		GameSingleton.getInstance().getMapGames().put(game.getId(), game);
 		
+		model.put("POVplayer", user);
 		model.put("game", game);
 
 		return "/game/gameboard";
 	}
 	
+
+	@PostMapping(value = { "/game/attack/selectplayer" })
+	public String handleAttack(@RequestParam("gameId") Integer gameId, @RequestParam("cardName") String cardName, Map<String, Object> model) {
+		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		User user = userService.findUser(userDetails.getUsername()).get();
+		Game game = GameSingleton.getInstance().getMapGames().get(gameId);
+		game.setGamePhase(GamePhase.ATTACK);
+		RedCard attackWeapon = cardService.findRedCardByName(cardName).get();
+		
+		List<Player> inRange = new ArrayList<>();
+		
+		for(Player p : game.getListPlayers()) {
+			//calcular distancia--> Integer distance = gameService.calcDistance(Player p1, Player p2, List<Player> game.getListPlayer())
+			if(1 <= attackWeapon.getRange()) {
+				inRange.add(p);
+			}
+		}
+		model.put("attackWeapon", attackWeapon);
+		model.put("inRange", inRange);
+		model.put("game", game);
+		model.put("POVplayer", user);
+		
+		return "/game/gameboard";
+	}
+	
+	@PostMapping(value = {"/game/attack/playerselected"})
+	public String performAttack(@RequestParam("gameId") Integer gameId, @RequestParam("objectivePlayer") String objectiveName,
+						@RequestParam("cardName") String cardName, Map<String, Object> model) {
+		
+		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		User user = userService.findUser(userDetails.getUsername()).get();
+		Game game = GameSingleton.getInstance().getMapGames().get(gameId);
+		RedCard attackWeapon = cardService.findRedCardByName(cardName).get();
+		
+		Player objective = game.getListPlayers().stream().filter(x -> x.getUser().getUsername().equals(objectiveName)).findFirst().get();
+		Player attacker = game.getCurrentPlayer();
+		
+		//Falta hacer la parada por aqui
+		
+		//quitamos vida
+		objective.setCurrentHearts(objective.getCurrentHearts()-attackWeapon.getDamage());
+		//descartamos carta
+		attacker.getHand().removeIf(x-> x.equals(attackWeapon));
+		
+		model.put("game", game);
+		model.put("POVplayer", user);
+		return "/game/gameboard";
+	}
+
 	@PostMapping(value = { "/game/end-turn" })
 	public String endTurn(@RequestParam("gameId") Integer gameId, @RequestParam("currentPlayerId") Integer currentPlayerId, Map<String, Object> model) {
+		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		User user = userService.findUser(userDetails.getUsername()).get();
 		Game game = GameSingleton.getInstance().getMapGames().get(gameId);
 		Integer numPlayers = game.getListPlayers().size();
 		Integer nextPlayerIndex = (game.getListPlayers().indexOf(game.getCurrentPlayer()) + 1) % numPlayers;
 		game.setCurrentPlayer(game.getListPlayers().get(nextPlayerIndex));
 		model.put("game", game);
+		model.put("POVplayer", user);
 		return "/game/gameboard";
 	}
 
-	@PostMapping(value = "/game/{gameId}/select/card/{cardId}")
-	public String acceptController(@PathVariable("gameId") Integer gameId, @PathVariable("cardId") Integer cardId) {
-		Optional<Card> card= cardService.findById(cardId);
-		Game game=gameService.findById(gameId).get();
+	@PostMapping(value = {"/game/select"})
+	public String acceptController(@RequestParam("gameId") Integer gameId, @RequestParam("cardName") String cardName, Map<String, Object> model) {
+		Optional<Card> card= cardService.findByName(cardName);
+		Game game=GameSingleton.getInstance().getMapGames().get(gameId);
 		Player p=game.getCurrentPlayer();
+		
 		if(card.get().getName().contains("armadura")) {
 			gameService.statUp(p, "distanceBonus", 1);
-		}else if(card.get().getName().contains("concretacion")){
+		}else if(card.get().getName().contains("concentracion")){
 			gameService.statUp(p, "damageBonus", 1);
 		}else if(card.get().getName().contains("desenvainado")){
 			gameService.statUp(p, "weaponBonus", 1);
 		}
 		p.getEquipment().add(card.get());
+		List<Card> hand= p.getHand();
 		
-		return "redirect:/game/"+gameId;
+		for(int i=0;i<hand.size();i++) {
+			if(hand.get(i).getName().equals(cardName)) {
+				hand.remove(i);
+				break;
+			}
+		}
+		model.put("game", game);
+		return "/game/gameboard";
 	}
+
 }
