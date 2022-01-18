@@ -62,15 +62,15 @@ public class GameService {
 				case ("Red"):
 					Integer rango = Integer.valueOf(cardService.findRange(name).get());
 					Integer damage = Integer.valueOf(cardService.findDamage(name).get());
-					RedCard redCard = RedCard.of(name, card.getImage(), rango, damage);
+					RedCard redCard = RedCard.of(name, card.getImage(), rango, damage, "Red");
 					gameDeck.add(redCard);
 					break;
 				case ("Yellow"):
-					Card yellowCard = Card.of(name, card.getImage());
+					Card yellowCard = Card.of(name, card.getImage(), "Yellow");
 					gameDeck.add(yellowCard);
 					break;
 				case ("Blue"):
-					Card blueCard = Card.of(card.getName(), card.getImage());
+					Card blueCard = Card.of(card.getName(), card.getImage(), "Blue");
 					gameDeck.add(blueCard);
 					break;
 				}
@@ -218,6 +218,12 @@ public class GameService {
 			}
 		}
 	}
+	
+	
+	
+	
+	
+	
 	public void statUp(Player player, String stat, Integer bonus) {
 		
 		if(stat.contains("distanceBonus")) player.setDistanceBonus(player.getDistanceBonus()+bonus);

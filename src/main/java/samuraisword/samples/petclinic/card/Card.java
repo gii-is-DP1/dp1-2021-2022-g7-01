@@ -32,8 +32,10 @@ public class Card extends BaseEntity{
 	
 	private String image;
 	
+	private String color;
+	
 	private Integer cardsPerDeck;
-
+	
 	@ManyToOne
 	@JoinColumn(name="username")
 	private User user;
@@ -45,10 +47,11 @@ public class Card extends BaseEntity{
 	  inverseJoinColumns = @JoinColumn(name = "card_hand_id"))
 	List<Card> cardListOf;
 
-	public static Card of(String name, String image) {
+	public static Card of(String name, String image, String color) {
 		Card res = new Card();
 		res.setName(name);
 		res.setImage(image);
+		res.setColor(color);
 		return res;
 	}
 
