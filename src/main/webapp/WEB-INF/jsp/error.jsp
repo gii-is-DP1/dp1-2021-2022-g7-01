@@ -9,6 +9,7 @@
 
     <h2>Something happened...</h2>
 
-    <p>${exception.message}</p>
+    <p>${exception}</p>
+    <p>${errorCode}</p>
 
 </petclinic:layout>

@@ -1,11 +1,14 @@
 package samuraisword.character;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import samuraisword.game.Game;
 import samuraisword.game.GameService;
 import samuraisword.player.Player;
 
@@ -62,6 +65,16 @@ public class CharacterService {
 				res=player.getDamageBonus().equals(1);
 			}
 		}
+		return res;
+	}
+	
+	public List<Player> checkCharacters(Game game){
+		List<Player> res = new ArrayList<Player>();
+		for(Player p:game.getListPlayers()) {
+			if(this.execute(p)) res.add(p);
+		}
+		
+		
 		return res;
 	}
 	

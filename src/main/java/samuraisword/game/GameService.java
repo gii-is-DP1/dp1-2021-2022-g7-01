@@ -1,6 +1,7 @@
 package samuraisword.game;
 
 import java.util.ArrayList;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import samuraisword.cardhand.CardHand;
 import samuraisword.character.Character;
+import samuraisword.character.CharacterService;
 import samuraisword.comment.Comment;
 import samuraisword.player.Player;
 import samuraisword.player.Rol;
@@ -219,4 +221,7 @@ public void statDown(Player player, String stat, Integer bonus) {
 		if(stat.equals("weaponBonus")) player.setWeaponBonus(player.getWeaponBonus()-bonus);
 		if(stat.equals("damageBonus")) player.setDamageBonus(player.getDamageBonus()-bonus);
 	}
+	
+	
+	
 }
