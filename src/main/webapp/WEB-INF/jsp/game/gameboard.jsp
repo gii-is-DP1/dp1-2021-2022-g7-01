@@ -337,7 +337,7 @@ body{
 						<c:if test="${ player.getUser().getUsername().equals(POVplayer.getUsername()) }">
 							<c:forEach items="${ player.hand }" var ="card" varStatus="loop">
 				    			<div style="display: inline-block; height:auto; width:20%">
-				    				<img style="height:auto; width:100%" src="/resources/images/cards/${card.name}.png" alt="card"/>	
+				    				<img style="height:auto; width:100%" src="/resources/images/cards/${card.name}.png" alt="${card.name}"/>	
 					    			<c:if test="${currentUser.username.equals(POVplayer.username)}">
 					    			<c:if test="${ card.color.equals('Red') }">
 					    					<div>

@@ -31,6 +31,7 @@ public class GameService {
 	private GameRepository gameRepository;
 
 	private final Integer MAX_CARDS_HAND = 7;
+	private final Integer NUM_CARD_DRAWN = 2;
 
 	@Autowired
 	public GameService(GameRepository gameRepository) {
@@ -249,10 +250,11 @@ public class GameService {
 		Integer playersBetween = playerList.indexOf(p1)-playerList.indexOf(p2);
 		if(playersBetween < 0) playersBetween += playerList.size();
 		return playersBetween;
+	}
 
-	public void endTurn(Game game) {
-		Boolean exceedMaxCardHand = game.getCurrentPlayer().getHand().size() > this.MAX_CARDS_HAND;
-		if (!exceedMaxCardHand) {
+	public Boolean endTurn(Game game) {
+		Boolean correctMaxCardHand = game.getCurrentPlayer().getHand().size() <= MAX_CARDS_HAND;
+		if (correctMaxCardHand) {
 			Integer numPlayers = game.getListPlayers().size();
 			Integer nextPlayerIndex = (game.getListPlayers().indexOf(game.getCurrentPlayer()) + 1) % numPlayers;
 			game.setCurrentPlayer(game.getListPlayers().get(nextPlayerIndex));
@@ -260,6 +262,26 @@ public class GameService {
 		} else {
 			game.setGamePhase(GamePhase.DISCARD);
 		}
+		return correctMaxCardHand;
+	}
+	
+	public void processRecoveryPhase(Game game) {
+		Player player = game.getCurrentPlayer();
+		if(player.isDisabled() && player.getCurrentHearts() <= 0) {
+			player.setCurrentHearts(player.getCharacter().getLife());
+			player.setDisabled(false);
+		}
+		game.setGamePhase(GamePhase.DRAW);
+	}
+	
+	public void processDrawPhase(Game game) {
+		Player player = game.getCurrentPlayer();
+		for(int i = 0; i < NUM_CARD_DRAWN; i++) {
+			Card card = game.getDeck().get(0);
+			player.getHand().add(card);
+			game.getDeck().remove(0);
+		}
+		game.setGamePhase(GamePhase.MAIN);
 	}
 
 }
