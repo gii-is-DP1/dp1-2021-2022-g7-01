@@ -226,21 +226,30 @@ public class GameController {
 		return "/game/gameboard";
 	}
 
-	@PostMapping(value = "/game/{gameId}/select/card/{cardId}")
-	public String acceptController(@PathVariable("gameId") Integer gameId, @PathVariable("cardId") Integer cardId) {
-		Optional<Card> card= cardService.findById(cardId);
-		Game game=gameService.findById(gameId).get();
+	@PostMapping(value = {"/game/select"})
+	public String acceptController(@RequestParam("gameId") Integer gameId, @RequestParam("cardName") String cardName, Map<String, Object> model) {
+		Optional<Card> card= cardService.findByName(cardName);
+		Game game=GameSingleton.getInstance().getMapGames().get(gameId);
 		Player p=game.getCurrentPlayer();
+		
 		if(card.get().getName().contains("armadura")) {
 			gameService.statUp(p, "distanceBonus", 1);
-		}else if(card.get().getName().contains("concretacion")){
+		}else if(card.get().getName().contains("concentracion")){
 			gameService.statUp(p, "damageBonus", 1);
 		}else if(card.get().getName().contains("desenvainado")){
 			gameService.statUp(p, "weaponBonus", 1);
 		}
 		p.getEquipment().add(card.get());
+		List<Card> hand= p.getHand();
 		
-		return "redirect:/game/"+gameId;
+		for(int i=0;i<hand.size();i++) {
+			if(hand.get(i).getName().equals(cardName)) {
+				hand.remove(i);
+				break;
+			}
+		}
+		model.put("game", game);
+		return "/game/gameboard";
 	}
 
 }

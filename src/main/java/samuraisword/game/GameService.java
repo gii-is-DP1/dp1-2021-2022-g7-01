@@ -1,6 +1,7 @@
 package samuraisword.game;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -31,6 +32,10 @@ public class GameService {
 	@Autowired
 	public GameService(GameRepository gameRepository) {
 		this.gameRepository = gameRepository;
+	}
+	
+	public Collection<Game> findAll() {
+		return gameRepository.findAll();
 	}
 
 	public Optional<Game> findById(int idGame) {
@@ -86,6 +91,9 @@ public class GameService {
 
 			p.setMaxHearts(p.getCharacter().getLife());
 			p.setCurrentHearts(p.getCharacter().getLife());
+			p.setDamageBonus(0);
+			p.setDistanceBonus(0);
+			p.setWeaponBonus(0);
 		}
 		return players;
 	}
@@ -203,6 +211,7 @@ public class GameService {
 			}
 			
 			player.setHand(new ArrayList<>());
+			player.setEquipment(new ArrayList<Card>());
 			for (int e = 0; e < cardsGiven; e++) {
 				player.getHand().add(gameDeck.get(e));
 				gameDeck.remove(e);
@@ -217,9 +226,9 @@ public class GameService {
 	
 	public void statUp(Player player, String stat, Integer bonus) {
 		
-		if(stat.equals("distanceBonus")) player.setDistanceBonus(player.getDistanceBonus()+bonus);
-		if(stat.equals("weaponBonus")) player.setWeaponBonus(player.getWeaponBonus()+bonus);
-		if(stat.equals("damageBonus")) player.setDamageBonus(player.getDamageBonus()+bonus);
+		if(stat.contains("distanceBonus")) player.setDistanceBonus(player.getDistanceBonus()+bonus);
+		if(stat.contains("weaponBonus")) player.setWeaponBonus(player.getWeaponBonus()+bonus);
+		if(stat.contains("damageBonus")) player.setDamageBonus(player.getDamageBonus()+bonus);
 	}
 	public void statDown(Player player, String stat, Integer bonus) {
 			

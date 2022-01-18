@@ -34,6 +34,9 @@ INSERT INTO friends(id_user, id_user_friend) VALUES ('diecrequi', 'juanlo');
 INSERT INTO friends(id_user, id_user_friend) VALUES ('DonShelby', 'alefr99');
 INSERT INTO friends(id_user, id_user_friend) VALUES ('DonShelby', 'alfcadmor');
 
+
+
+
 INSERT INTO friend_Requests(id_user, id_user_requested) VALUES ('diecrequi', 'alefr99');
 INSERT INTO friend_Requests(id_user, id_user_requested) VALUES ('diecrequi', 'admin1');
 INSERT INTO friend_Requests(id_user, id_user_requested) VALUES ('juanlo', 'diecrequi');
@@ -125,6 +128,7 @@ INSERT INTO cards(name,image,cards_Per_Deck,color,CARD_COLOR, damage, range) VAL
 
 
 INSERT INTO games(id,end_date,start_date) VALUES (1, parsedatetime('24-11-2021 18:47:52', 'dd-MM-yyyy hh:mm:ss'),parsedatetime('24-11-2021 19:08:13', 'dd-MM-yyyy hh:mm:ss'));
+INSERT INTO games(id,end_date,start_date) VALUES (2, parsedatetime('27-11-2021 18:47:52', 'dd-MM-yyyy hh:mm:ss'),parsedatetime('27-11-2021 16:08:13', 'dd-MM-yyyy hh:mm:ss'));
 
 INSERT INTO players(id,current_hearts,honor,max_hearts,rol,won_game,game_id,username, disabled) VALUES (1,0,0,0,1,false,1,'diecrequi', false);
 INSERT INTO players(id,current_hearts,honor,max_hearts,rol,won_game,game_id,username, disabled) VALUES (2,0,0,0,1,false,1,'alefr99', false);
@@ -150,6 +154,7 @@ INSERT INTO characters(id,name,life,image,text) VALUES (10,'Nobunaga',5,'charact
 INSERT INTO characters(id,name,life,image,text) VALUES (11,'Tomoe',5,'characters/tomoe.png','Each time you successfully attack another character with a Weapon card, you draw 1 card from the deck. You only draw 1 card, even if your Weapon does more than 1 wound.');
 INSERT INTO characters(id,name,life,image,text) VALUES (12,'Ushiwaka',4,'characters/ushiwaka.png','Each time you suffer a wound from a Weapon card, you draw 1 card from the deck (so 3 wounds = 3 cards).');
 
-
+INSERT INTO invitation(user_sender, user_addresse, game_id) VALUES ('alefr99', 'alfcadmor', 1);
+INSERT INTO invitation(user_sender, user_addresse, game_id) VALUES ('alefr99', 'DonShelby', 1);
 --Hay que comentarlo porque la entidad player no funciona bien todavia
 --INSERT INTO players (id, game, photo, max_hearts, current_hearts, honor, position, rol, username) VALUES (1, 'jugador1', 'foto', 5, 5, 1, 1, 5, 'admin1');

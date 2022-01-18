@@ -12,7 +12,7 @@ public interface CardRepository extends CrudRepository<Card, Integer> {
 
 	Collection<Card> findAll();
 	
-	@Query(value = "SELECT card FROM Cards WHERE name = :name" , nativeQuery = true)
+	@Query(value = "SELECT * FROM Cards WHERE name = :name" , nativeQuery = true)
 	Optional<Card> findByName(@Param("name") String name);
 	
 	@Query(value = "SELECT * FROM Cards WHERE name = :name", nativeQuery = true)
