@@ -37,6 +37,10 @@ public class CardService {
 		return cardRepository.findByName(name);
 	}
 	
+	public Optional<RedCard> findRedCardByName(String name){
+		return cardRepository.findRedCardByName(name);
+	}
+	
 	@Transactional
 	public void saveCard(Card card) {
 		cardRepository.save(card);

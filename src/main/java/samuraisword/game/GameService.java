@@ -1,7 +1,11 @@
 package samuraisword.game;
 
 import java.util.ArrayList;
+<<<<<<< HEAD
 
+=======
+import java.util.Collection;
+>>>>>>> c1e19ac207169f3a787c32d53f25114e4b979f60
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -34,6 +38,10 @@ public class GameService {
 	public GameService(GameRepository gameRepository) {
 		this.gameRepository = gameRepository;
 	}
+	
+	public Collection<Game> findAll() {
+		return gameRepository.findAll();
+	}
 
 	public Optional<Game> findById(int idGame) {
 		return gameRepository.findById(idGame);
@@ -59,15 +67,15 @@ public class GameService {
 				case ("Red"):
 					Integer rango = Integer.valueOf(cardService.findRange(name).get());
 					Integer damage = Integer.valueOf(cardService.findDamage(name).get());
-					RedCard redCard = RedCard.of(name, card.getImage(), rango, damage);
+					RedCard redCard = RedCard.of(name, card.getImage(), rango, damage, "Red");
 					gameDeck.add(redCard);
 					break;
 				case ("Yellow"):
-					Card yellowCard = Card.of(name, card.getImage());
+					Card yellowCard = Card.of(name, card.getImage(), "Yellow");
 					gameDeck.add(yellowCard);
 					break;
 				case ("Blue"):
-					Card blueCard = Card.of(card.getName(), card.getImage());
+					Card blueCard = Card.of(card.getName(), card.getImage(), "Blue");
 					gameDeck.add(blueCard);
 					break;
 				}
@@ -88,6 +96,9 @@ public class GameService {
 
 			p.setMaxHearts(p.getCharacter().getLife());
 			p.setCurrentHearts(p.getCharacter().getLife());
+			p.setDamageBonus(0);
+			p.setDistanceBonus(0);
+			p.setWeaponBonus(0);
 		}
 		return players;
 	}
@@ -164,7 +175,7 @@ public class GameService {
 	}
 
 	public List<Player> asignOrder(List<Player> listPlayers) {
-		// De el ultimo tratamiento a listPlayers (asignRolAndHonor) el 1o SHOGUN será
+		// De el ultimo tratamiento a listPlayers (asignRolAndHonor) el SHOGUN será
 		// siempre el indice 0.
 		// queremos hacer un ultimo shuffle a listPlayers para que no sea siempre el
 		// mismo orden de roles
@@ -189,12 +200,14 @@ public class GameService {
 			// En la lista players el indice 0 corresponde al shogun ya que esta funcion es
 			// inmediatamente posterior a asignOrder.
 			/*
-			 * 0º Shogun: 4 cards 1st and 2nd player: 5 cards 3rd and 4th player (if
-			 * present): 6 cards 5th and 6th player (if present): 7 cards
+			 * 0º Shogun: 4 cards 
+			 * 1st and 2nd player: 5 cards; 
+			 * 3rd and 4th player (if present): 6 cards
+			 * 5th and 6th player (if present): 7 cards
 			 * 
 			 * Al shogun con indice 0 se le repartiran 4 cartas, y cada vez que el indice
-			 * coincida con ser impar, el n cartas a repartir aumenta en 1. Excluimos el 0
-			 * también por preacución.
+			 * coincida con ser impar, el n cartas a repartir aumenta en 1.
+			 * 
 			 * 
 			 */
 			Player player = players.get(i);
@@ -203,25 +216,45 @@ public class GameService {
 			}
 			
 			player.setHand(new ArrayList<>());
+			player.setEquipment(new ArrayList<Card>());
 			for (int e = 0; e < cardsGiven; e++) {
 				player.getHand().add(gameDeck.get(e));
 				gameDeck.remove(e);
 			}
 		}
 	}
+	
+	
+	
+	
+	
+	
 	public void statUp(Player player, String stat, Integer bonus) {
 		
-		if(stat.equals("distanceBonus")) player.setDistanceBonus(player.getDistanceBonus()+bonus);
-		if(stat.equals("weaponBonus")) player.setWeaponBonus(player.getWeaponBonus()+bonus);
-		if(stat.equals("damageBonus")) player.setDamageBonus(player.getDamageBonus()+bonus);
+		if(stat.contains("distanceBonus")) player.setDistanceBonus(player.getDistanceBonus()+bonus);
+		if(stat.contains("weaponBonus")) player.setWeaponBonus(player.getWeaponBonus()+bonus);
+		if(stat.contains("damageBonus")) player.setDamageBonus(player.getDamageBonus()+bonus);
 	}
-public void statDown(Player player, String stat, Integer bonus) {
+	public void statDown(Player player, String stat, Integer bonus) {
+			
+			if(stat.equals("distanceBonus")) player.setDistanceBonus(player.getDistanceBonus()-bonus);
+			if(stat.equals("weaponBonus")) player.setWeaponBonus(player.getWeaponBonus()-bonus);
+			if(stat.equals("damageBonus")) player.setDamageBonus(player.getDamageBonus()-bonus);
+		}
+
+	public void attackPlayer (Player attacker, Player defender, List<Player> jugadoresPartida, RedCard weapon) {
 		
-		if(stat.equals("distanceBonus")) player.setDistanceBonus(player.getDistanceBonus()-bonus);
-		if(stat.equals("weaponBonus")) player.setWeaponBonus(player.getWeaponBonus()-bonus);
-		if(stat.equals("damageBonus")) player.setDamageBonus(player.getDamageBonus()-bonus);
 	}
+<<<<<<< HEAD
 	
 	
 	
+=======
+
+
+
+
+
+
+>>>>>>> c1e19ac207169f3a787c32d53f25114e4b979f60
 }
