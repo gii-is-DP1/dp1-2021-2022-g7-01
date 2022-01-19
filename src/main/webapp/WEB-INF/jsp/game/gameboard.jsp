@@ -337,7 +337,7 @@ body{
 						<c:if test="${ player.getUser().getUsername().equals(POVplayer.getUsername()) }">
 							<c:forEach items="${ player.hand }" var ="card" varStatus="loop">
 				    			<div style="display: inline-block; height:auto; width:20%">
-				    				<img style="height:auto; width:100%" src="/resources/images/cards/${card.name}.png" alt="card"/>	
+				    				<img style="height:auto; width:100%" src="/resources/images/cards/${card.name}.png" alt="${card.name}"/>	
 					    			<c:if test="${currentUser.username.equals(POVplayer.username)}">
 					    			<c:if test="${ card.color.equals('Red') }">
 					    					<div>
@@ -349,7 +349,7 @@ body{
 						    					</form:form>
 					    					</div>
 					    			</c:if>
-					    			<c:if test="${(card.name=='armadura' || card.name=='concentracion' || card.name=='desenvainado rapido')}">
+					    			<c:if test="${game.gamePhase == GamePhase.MAIN && (card.name=='armadura' || card.name=='concentracion' || card.name=='desenvainado rapido')}">
 					    			    <form:form action="/game/select">
 						    				<input type="hidden" name="gameId" value="${game.id}"></input>
 											<input type="hidden" name="cardName" value="${card.name}"></input>

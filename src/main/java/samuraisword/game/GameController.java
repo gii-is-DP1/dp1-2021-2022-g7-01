@@ -219,7 +219,11 @@ public class GameController {
 		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		User user = userService.findUser(userDetails.getUsername()).get();
 		Game game = GameSingleton.getInstance().getMapGames().get(gameId);
-		gameService.endTurn(game);
+		Boolean hasAdvancedPhase = gameService.endTurn(game);
+		if(hasAdvancedPhase) {
+			gameService.processRecoveryPhase(game);
+			gameService.processDrawPhase(game);
+		}
 		model.put("game", game);
 		model.put("POVplayer", user);
 		return "/game/gameboard";
@@ -231,7 +235,11 @@ public class GameController {
 		User user = userService.findUser(userDetails.getUsername()).get();
 		Game game = GameSingleton.getInstance().getMapGames().get(gameId);
 		cardService.removeCardByName(cardName, game.getCurrentPlayer().getHand());
-		gameService.endTurn(game);
+		Boolean hasAdvancedPhase = gameService.endTurn(game);
+		if(hasAdvancedPhase) {
+			gameService.processRecoveryPhase(game);
+			gameService.processDrawPhase(game);
+		}
 		model.put("game", game);
 		model.put("POVplayer", user);
 		return "/game/gameboard";
