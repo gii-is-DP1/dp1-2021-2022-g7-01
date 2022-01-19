@@ -226,6 +226,13 @@ body{
 
 <div style="text-align:center;" >
 	<div style="margin: auto;" >
+			<c:if test="${ game.gamePhase.equals(GamePhase.ATTACK) }">
+				<div style="border-radius: 10px; border: solid black; background-color: #DFDADA; height: auto; width:auto; min-width: 50px; min-height:100px">
+					<p> WEAPON SELECTED </p>
+					<img style="height:120px; width:auto;" src="/resources/images/cards/${attackWeapon.name}.png" alt="card"/>	
+					<h2>SELECT OBJECTIVE:</h2>			    			
+				</div>
+			</c:if>
 			<div style="display: inline-block; color: black; vertical-align:top; width: 10%; height: 60%;"> 
 				<div style="border-radius: 10px; background-color: #DFDADA">
 					<p> DECK (${deck.size()})</p>
@@ -274,7 +281,7 @@ body{
 					    			
 								</div>
 			    			</div>
-							<c:if test="${inRange.contains(player)}">
+							<c:if test="${inRange.contains(player) && !game.currentPlayer.equals(player) && !player.isDisabled()}">
 								<form:form action="/game/attack/playerselected">
 					    						<input type="hidden" name="gameId" value="${ game.id }"></input>
 					    						<input type="hidden" name="objectivePlayer" value="${ player }"></input>
@@ -289,25 +296,15 @@ body{
     		</div> 
     		
     		<div style="display: inline-block; width: 25%; height: 50%">
-    			<div style="display: inline-block; width: 45%; height: 50%; text-align:center; vertical-align: top; margin-right:10px; ">
-    			
-					<button class="button"> EQUIP CARD </button>
-					
-					<button class="button"> USE CARD </button>
-					
-					
-					
-					<button class="button"> ATTACK </button>
-					
-
-					<form:form action="/game/end-turn">
-						<input type="hidden" name="gameId" value="${ game.id }"></input>
-						<button id="btn-end-turn" class="button"> END TURN </button>
-					</form:form>
-
-					
-				</div>
-				<div  style="display: inline-block; width: 45%; height: 50%; text-align:center; vertical-align: top">
+	    				<c:if test="${currentUser.username.equals(POVplayer.username)}">
+			    			<div style="display: inline-block; width: 45%; height: 50%; text-align:center; vertical-align: top; margin-right:10px; ">
+								<form:form action="/game/end-turn">
+									<input type="hidden" name="gameId" value="${ game.id }"></input>
+									<button id="btn-end-turn" class="button"> END TURN </button>
+								</form:form>
+							</div>
+						</c:if>	
+					<div  style="display: inline-block; width: 45%; height: 50%; text-align:center; vertical-align: top">
 					<c:forEach items="${ listPlayer }" var ="player" varStatus="loop">
 			    		<c:if test="${ player.getUser().getUsername().equals(POVplayer.getUsername()) }">
 			    			<div style="display: inline-block; border-radius: 10px; background-color: #DFDADA">
@@ -327,7 +324,7 @@ body{
 			    			</div>
 			    			
 			    		</c:if>
-			    	</c:forEach>			
+			    </c:forEach>			
 				</div>
 				<br>
 				<p style="color: white; padding-top: 20px">TU MANO</p>
@@ -339,34 +336,31 @@ body{
 				    			<div style="display: inline-block; height:auto; width:20%">
 				    				<img style="height:auto; width:100%" src="/resources/images/cards/${card.name}.png" alt="${card.name}"/>	
 					    			<c:if test="${currentUser.username.equals(POVplayer.username)}">
-					    			<c:if test="${ card.color.equals('Red') }">
-					    					<div>
-					    						<form:form action="/game/attack/selectplayer">
-						    						<input type="hidden" name="gameId" value="${ game.id }"></input>
-						    						<input type="hidden" name="cardName" value="${ card.name }"></input>
-						    						<input type="hidden" name="attackerPlayer" value="${ game.currentPlayer }"></input>
-						    						<button class="btn btn-default" type="submit">Select</button>
-						    					</form:form>
-					    					</div>
-					    			</c:if>
-					    			<c:if test="${game.gamePhase == GamePhase.MAIN && (card.name=='armadura' || card.name=='concentracion' || card.name=='desenvainado rapido')}">
-					    			    <form:form action="/game/select">
-						    				<input type="hidden" name="gameId" value="${game.id}"></input>
-											<input type="hidden" name="cardName" value="${card.name}"></input>
-											<button id="btn-equip-card2" class="btn btn-default"> EQUIP </button>
-										</form:form>
-									</c:if>	
-									<c:if test="${game.gamePhase == GamePhase.DISCARD}">
-				    			
-				    			
-				    			<form:form action="/game/discard-card">
-				    			<input type="hidden" name="gameId" value="${game.id}"></input>
-								<input type="hidden" name="cardName" value="${card.name}"></input>
-								<button id="btn-discard-card" class="btn btn-default"> DISCARD CARD </button>
-								</form:form>
-											
+						    			<c:if test="${ card.color.equals('Red') && !game.gamePhase.equals(GamePhase.ATTACK) }">
+						    					<div>
+						    						<form:form action="/game/attack/selectplayer">
+							    						<input type="hidden" name="gameId" value="${ game.id }"></input>
+							    						<input type="hidden" name="cardName" value="${ card.name }"></input>
+							    						<input type="hidden" name="attackerPlayer" value="${ game.currentPlayer }"></input>
+							    						<button class="btn btn-default" type="submit">Select</button>
+							    					</form:form>
+						    					</div>
+						    			</c:if>
+						    			<c:if test="${game.gamePhase == GamePhase.MAIN && (card.name=='armadura' || card.name=='concentracion' || card.name=='desenvainado rapido')}">
+						    			    <form:form action="/game/select">
+							    				<input type="hidden" name="gameId" value="${game.id}"></input>
+												<input type="hidden" name="cardName" value="${card.name}"></input>
+												<button id="btn-equip-card2" class="btn btn-default"> EQUIP </button>
+											</form:form>
 										</c:if>	
-										</c:if>
+										<c:if test="${game.gamePhase == GamePhase.DISCARD}">
+							    			<form:form action="/game/discard-card">
+							    			<input type="hidden" name="gameId" value="${game.id}"></input>
+											<input type="hidden" name="cardName" value="${card.name}"></input>
+											<button id="btn-discard-card" class="btn btn-default"> DISCARD CARD </button>
+											</form:form>
+										</c:if>	
+									</c:if>
 				    			</div>
 				    					    			
 				  			</c:forEach>

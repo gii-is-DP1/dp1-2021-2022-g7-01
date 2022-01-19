@@ -96,8 +96,6 @@ INSERT INTO achievements (id, title, body, typeL, typeR, username) VALUES (1, 'H
 INSERT INTO achievements (id, title, body, typeL, typeR, username) VALUES (2, 'Stalker', 'Send 5 friend requests', 2, 5, 'admin1');
 INSERT INTO achievements (id, title, body, typeL, typeR, username) VALUES (3, 'Friends with benefits', 'Be friend with 3 users', 3, 5, 'admin1');
 
-
-INSERT INTO cards(name,image,cards_Per_Deck,color,CARD_COLOR) VALUES ('puntuacion','puntuacion.png',1,'Blue','Blue');
 INSERT INTO cards(name,image,cards_Per_Deck,color,CARD_COLOR) VALUES ('armadura','property/armadura.png',4,'Blue','Blue');
 INSERT INTO cards(name,image,cards_Per_Deck,color,CARD_COLOR) VALUES ('bushido','property/bushido.png',3,'Blue','Blue');
 INSERT INTO cards(name,image,cards_Per_Deck,color,CARD_COLOR) VALUES ('concentracion','property/concentracion.png',6,'Blue','Blue');
@@ -112,8 +110,8 @@ INSERT INTO cards(name,image,cards_Per_Deck,color,CARD_COLOR) VALUES ('jiu-jitsu
 INSERT INTO cards(name,image,cards_Per_Deck,color,CARD_COLOR) VALUES ('parada','action/parada.png',15,'Yellow','Yellow');
 INSERT INTO cards(name,image,cards_Per_Deck,color,CARD_COLOR) VALUES ('respiracion','action/respiracion.png',3,'Yellow','Yellow');
 
-INSERT INTO cards(name,image,cards_Per_Deck,color,CARD_COLOR, damage, range) VALUES ('bo','attack/bo.png',5,'Red','Red',1, 1);
-INSERT INTO cards(name,image,cards_Per_Deck,color,CARD_COLOR, damage, range) VALUES ('bokken','attack/bokken.png',6,'Red','Red',1, 2);
+INSERT INTO cards(name,image,cards_Per_Deck,color,CARD_COLOR, damage, range) VALUES ('bo','attack/bo.png',5,'Red','Red',1, 2);
+INSERT INTO cards(name,image,cards_Per_Deck,color,CARD_COLOR, damage, range) VALUES ('bokken','attack/bokken.png',6,'Red','Red',1, 1);
 INSERT INTO cards(name,image,cards_Per_Deck,color,CARD_COLOR, damage, range) VALUES ('daiku','attack/daiku.png',1,'Red','Red',2, 5);
 INSERT INTO cards(name,image,cards_Per_Deck,color,CARD_COLOR, damage, range) VALUES ('kanabo','attack/kanabo.png',1,'Red','Red',2, 3);
 INSERT INTO cards(name,image,cards_Per_Deck,color,CARD_COLOR, damage, range) VALUES ('katana','attack/katana.png',1,'Red','Red',3, 2);
