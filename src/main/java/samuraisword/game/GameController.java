@@ -194,21 +194,22 @@ public class GameController {
 		Game game = GameSingleton.getInstance().getMapGames().get(gameId);
 		RedCard attackWeapon = cardService.findRedCardByName(cardName).get();
 
-		Player objective = game.getListPlayers().stream().filter(x -> x.getUser().getUsername().equals(objectiveName))
-				.findFirst().get();
+		Player objective = gameService.findPlayerInGameByName(game, objectiveName); //
 		Player attacker = game.getCurrentPlayer();
 		
 		//Falta hacer la parada por aqui
 		
 		//quitamos vida
-		objective.setCurrentHearts(objective.getCurrentHearts()-attackWeapon.getDamage());
-		//descartamos la 1era carta que coincida con el nombre
-		attacker.getHand().stream()
-						  .filter(x-> x.getName().equals(attackWeapon.getName()))
-						  .distinct()
-						  .forEach(y-> attacker.getHand()
-								  .remove(attacker.getHand().indexOf(y)));
+		gameService.substractHearts(objective, attackWeapon);
 		
+		//descartamos la 1era carta que coincida con el nombre
+		cardService.removeCardByName(cardName, game.getCurrentPlayer().getHand());
+		
+		Boolean hasAdvancedPhase = gameService.endTurn(game);
+		if(hasAdvancedPhase) {
+			gameService.processRecoveryPhase(game);
+			gameService.processDrawPhase(game);
+		}
 		model.put("game", game);
 		model.put("POVplayer", user);
 		return "/game/gameboard";
