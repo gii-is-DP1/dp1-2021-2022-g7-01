@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 @ControllerAdvice
 public class ExceptionHandlerConfiguration 
-{
+{/*
 	@Autowired
 	private BasicErrorController errorController;
     // add any exceptions/validations/binding problems
@@ -29,4 +29,5 @@ public class ExceptionHandlerConfiguration
         request.setAttribute("exeption", ex);
         return "exception";
     }
+    */
 }

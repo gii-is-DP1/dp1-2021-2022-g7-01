@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import samuraisword.achievements.RolType;
 import samuraisword.game.Game;
+import samuraisword.samples.petclinic.user.User;
 
 
 
@@ -36,10 +37,10 @@ public class PlayerService {
 		return playerRepository.findById(idPlayer);
 	}
 	
-//	@Transactional
-//	public Collection<Player> findByUser(String user) {
-//		return playerRepository.findByUser(user);
-//	}
+	@Transactional
+	public Optional<Player> findByUser(User user) {
+		return playerRepository.findByUser(user);
+	}
 	
 	@Transactional
 	public Player findByUser(String user) {
