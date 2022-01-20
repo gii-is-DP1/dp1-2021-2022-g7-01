@@ -46,6 +46,9 @@ public class Game extends BaseEntity{
 	@Transient
 	private Player currentPlayer;
 	
+	@Transient
+	private GameStatus status;
+	
 	private LocalDateTime startDate;
 	
 	private LocalDateTime endDate;

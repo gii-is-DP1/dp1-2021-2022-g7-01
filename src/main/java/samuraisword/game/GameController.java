@@ -1,10 +1,12 @@
 package samuraisword.game;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Random;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -16,7 +18,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 
 import samuraisword.character.Character;
 import samuraisword.character.CharacterService;
@@ -132,8 +133,8 @@ public class GameController {
 //		
 //		Player p6 = playerService.findById(6).get();
 
-		players.add(p1);
-		players.add(p2);
+    	players.add(p1);
+    	players.add(p2);
 		players.add(p3);
 		players.add(p4);
 //		players.add(p5);
@@ -199,11 +200,21 @@ public class GameController {
 		
 		//Falta hacer la parada por aqui
 		
+		characterService.changeStatus(game, GameStatus.ATTACK);
+		characterService.execute(objective);
+		int n = objective.getCurrentHearts();
 		//quitamos vida
+<<<<<<< HEAD
+		if(objective.getCurrentHearts()==n) objective.setCurrentHearts(objective.getCurrentHearts() -1);
+		objective.setCurrentHearts(objective.getCurrentHearts()-attackWeapon.getDamage());
+		//descartamos carta
+		attacker.getHand().removeIf(x-> x.equals(attackWeapon));
+=======
 		gameService.substractHearts(objective, attackWeapon);
 		
 		//descartamos la 1era carta que coincida con el nombre
 		cardService.removeCardByName(cardName, game.getCurrentPlayer().getHand());
+>>>>>>> master
 		
 		Boolean hasAdvancedPhase = gameService.endTurn(game);
 		if(hasAdvancedPhase) {
@@ -264,6 +275,48 @@ public class GameController {
 		}
 		p.getEquipment().add(card.get());
 		cardService.removeCardByName(cardName, p.getHand());		
+		model.put("game", game);
+		model.put("POVplayer", user);
+		return "/game/gameboard";
+	}
+	
+	@PostMapping(value = { "/game/steal" })
+	public String stealCard(@RequestParam("gameId") Integer gameId,
+			Map<String, Object> model) {
+		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		User user = userService.findUser(userDetails.getUsername()).get();
+		Game game = GameSingleton.getInstance().getMapGames().get(gameId);
+		Player p = game.getCurrentPlayer();		
+		
+		Random r = new Random();
+		int valorDado = r.nextInt(game.getDeck().size());
+		
+		p.getHand().add(game.getDeck().get(valorDado));
+		game.getDeck().remove(valorDado);
+				
+		model.put("game", game);
+		model.put("POVplayer", user);
+		return "/game/gameboard";
+	}
+	
+	@PostMapping(value = { "/game/stealPlayer" })
+	public String stealCardPlayer(@RequestParam("gameId") Integer gameId, @RequestParam("playerName") String playerName,
+			Map<String, Object> model) {
+		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		User user = userService.findUser(userDetails.getUsername()).get();
+		Game game = GameSingleton.getInstance().getMapGames().get(gameId);
+		Player p = game.getCurrentPlayer();	
+		Player p2 = gameService.findPlayerInGameByName(game, playerName);
+		
+		
+		Random r = new Random();
+		int valorDado = r.nextInt(p2.getHand().size());
+		
+	//	System.out.println(p2.getHand().size()+"////////////////////////////////////////////////////////////");
+		
+		p.getHand().add(game.getDeck().get(valorDado));
+		p2.getHand().remove(valorDado);
+				
 		model.put("game", game);
 		model.put("POVplayer", user);
 		return "/game/gameboard";

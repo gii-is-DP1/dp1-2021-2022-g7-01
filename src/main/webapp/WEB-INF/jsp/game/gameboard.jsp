@@ -237,6 +237,10 @@ body{
 				<div style="border-radius: 10px; background-color: #DFDADA">
 					<p> DECK (${deck.size()})</p>
 					<img src="/resources/images/roles/ninguno.png" alt="SHOGUN" style="width: 50%; height: auto" />
+					<form:form action="/game/steal">
+					    						<input type="hidden" name="gameId" value="${ game.id }"></input>
+					    						<button class="btn btn-default" type="submit">Select</button>
+					    		</form:form>
 				</div>
 				<div style="border-radius: 10px; background-color: #DFDADA">
 					<p> DISCARD PILE (${discardPile.size()})</p>
@@ -268,6 +272,11 @@ body{
 					    				
 					    					<img src="/resources/images/honorLive/honor.png" alt="live" style="width: 25%; height: auto" />	
 					    					<p style="display: inline-block;"> ${ player.getHonor() } </p>	
+					    					<form:form action="/game/stealPlayer">
+					    						<input type="hidden" name="gameId" value="${ game.id }"></input>
+					    						<input type="hidden" name="playerName" value="${ player.getUser().getUsername() }"></input>
+					    						<button class="btn btn-default" type="submit">Robar</button>
+					    		</form:form>
 					    			</div>
 					    			<div class= "viewEquiped">
 					    				View equipped cards

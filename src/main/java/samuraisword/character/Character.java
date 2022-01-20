@@ -17,6 +17,7 @@ import lombok.Getter;
 import lombok.Setter;
 import samuraisword.cardhand.CardHand;
 import samuraisword.game.GamePhase;
+import samuraisword.game.GameStatus;
 import samuraisword.player.Player;
 import samuraisword.samples.petclinic.model.BaseEntity;
 import samuraisword.samples.petclinic.user.User;
@@ -36,6 +37,8 @@ public class Character extends BaseEntity{
 	private String text;
 	
 	private GamePhase gamePhase;
+	
+	private GameStatus status;
 	
 	
 }
