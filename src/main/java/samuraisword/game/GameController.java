@@ -128,19 +128,18 @@ public class GameController {
 		Player p3 = playerService.findById(3).get();
 
 		Player p4 = playerService.findById(4).get();
-//	
-//		Player p5 = playerService.findById(5).get();
-//		
-//		Player p6 = playerService.findById(6).get();
+	
+		Player p5 = playerService.findById(5).get();
+		
+		Player p6 = playerService.findById(6).get();
 
 		players.add(p1);
 		players.add(p2);
 		players.add(p3);
 		players.add(p4);
-//		players.add(p5);
-//		players.add(p6);
-		// players de prueba
-
+		players.add(p5);
+		players.add(p6);
+		//
 		gameService.asignCharacterAndHearts(players, characters);
 		for (Player p : players) {
 			characterService.execute(p);
@@ -188,7 +187,7 @@ public class GameController {
 		return "/game/gameboard";
 	}
 
-	@PostMapping(value = { "/game/attack/playerselected" })
+	@PostMapping(value = {"/game/attack/playerselected"})
 	public String performAttack(@RequestParam("gameId") Integer gameId,
 			@RequestParam("objectivePlayer") String objectiveName, @RequestParam("cardName") String cardName,
 			Map<String, Object> model) {
@@ -200,6 +199,7 @@ public class GameController {
 
 		Player objective = gameService.findPlayerInGameByName(game, objectiveName); //
 		Player attacker = game.getCurrentPlayer();
+
 
 		// Falta hacer la parada por aqui
 
@@ -217,6 +217,18 @@ public class GameController {
 		// descartamos la 1era carta que coincida con el nombre
 		cardService.removeCardByName(cardName, game.getCurrentPlayer().getHand());
 
+
+		
+
+		
+		gameService.handleAttack(game, attacker, objective, attackWeapon);
+		//descartamos una carta de parada del objetivo. En handle attack si tiene una parada no se resta pts de vida
+		//al objetivo por lo tanto, la asumimos como utilizada y ahora hay que descartarla.
+		cardService.discard("parada", attacker.getHand(), game.getDiscardPile());
+		//descartamos la 1era carta que coincida con el nombre del arma usada
+		cardService.discard(cardName, attacker.getHand(), game.getDiscardPile());
+		
+
 		Boolean hasAdvancedPhase = gameService.endTurn(game);
 		if (hasAdvancedPhase) {
 			//gameService.processRecoveryPhase(game);
@@ -229,17 +241,31 @@ public class GameController {
 
 	@PostMapping(value = { "/game/end-turn" })
 	public String endTurn(@RequestParam("gameId") Integer gameId, Map<String, Object> model) {
+		String view = "/game/gameboard";
 		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		User user = userService.findUser(userDetails.getUsername()).get();
 		Game game = GameSingleton.getInstance().getMapGames().get(gameId);
 		Boolean hasAdvancedPhase = gameService.endTurn(game);
+
 		if (hasAdvancedPhase) {
 			// gameService.processRecoveryPhase(game);
 			gameService.processDrawPhase(game);
+
+		if(gameService.checkAllPlayersHavePositiveHonor(game)) {
+			if(hasAdvancedPhase) {
+				gameService.processRecoveryPhase(game);
+				gameService.processDrawPhase(game);
+			}
+		}else {//fin de la partida cuando algun jugador no le quedan puntos de honor (honor<=0)
+			view = "/game/endgame";
+			
+			List<Player> winners = gameService.calcWinners(game);
+
 		}
+		
 		model.put("game", game);
 		model.put("POVplayer", user);
-		return "/game/gameboard";
+		return view;
 	}
 
 	@PostMapping(value = { "/game/discard-card" })
@@ -248,7 +274,9 @@ public class GameController {
 		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		User user = userService.findUser(userDetails.getUsername()).get();
 		Game game = GameSingleton.getInstance().getMapGames().get(gameId);
-		cardService.removeCardByName(cardName, game.getCurrentPlayer().getHand());
+		
+		cardService.discard(cardName, game.getCurrentPlayer().getHand(), game.getDiscardPile());
+		
 		Boolean hasAdvancedPhase = gameService.endTurn(game);
 		if (hasAdvancedPhase) {
 			gameService.processRecoveryPhase(game);
@@ -276,7 +304,13 @@ public class GameController {
 			characterService.statUp(p, "weaponBonus", 1);
 		}
 		p.getEquipment().add(card.get());
+
 		cardService.removeCardByName(cardName, p.getHand());
+
+		
+		cardService.discard(cardName,  p.getHand(), game.getDiscardPile());
+			
+
 		model.put("game", game);
 		model.put("POVplayer", user);
 		return "/game/gameboard";
@@ -312,7 +346,9 @@ public class GameController {
 		Random r = new Random();
 		int valorDado = r.nextInt(p2.getHand().size());
 
+
 		// System.out.println(p2.getHand().size()+"////////////////////////////////////////////////////////////");
+
 
 		p.getHand().add(game.getDeck().get(valorDado));
 		p2.getHand().remove(valorDado);

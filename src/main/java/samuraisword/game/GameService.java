@@ -248,6 +248,7 @@ public class GameService {
 
 	public Boolean endTurn(Game game) {
 		Boolean correctMaxCardHand = game.getCurrentPlayer().getHand().size() <= MAX_CARDS_HAND;
+		
 		if (correctMaxCardHand) {
 			Integer numPlayers = game.getListPlayers().size();
 			Integer nextPlayerIndex = (game.getListPlayers().indexOf(game.getCurrentPlayer()) + 1) % numPlayers;
@@ -295,6 +296,19 @@ public class GameService {
 	public Player findPlayerInGameByName(Game game, String objectiveName) {
 		return game.getListPlayers().stream().filter(x -> x.getUser().getUsername().equals(objectiveName)).findFirst()
 				.get();
+	}
+	public void handleAttack(Game game, Player attacker, Player objective, RedCard attackWeapon) {
+		if( !objective.getHand().stream().anyMatch(x-> x.getName().equals("parada")) ) {
+			substractHearts(objective, attackWeapon);
+		}
+	}
+
+	public boolean checkAllPlayersHavePositiveHonor(Game game) {
+		return game.getListPlayers().stream().allMatch(x-> x.getHonor() > 0);
+	}
+
+	public List<Player> calcWinners(Game game) {
+		return null;
 	}
 
 }
