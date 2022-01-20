@@ -225,18 +225,18 @@ body{
 
 
 <div style="text-align:center;" >
-	<div style="margin: auto;" >
-			<c:if test="${ game.gamePhase.equals(GamePhase.ATTACK) }">
-				<div style="border-radius: 10px; border: solid black; background-color: #DFDADA; height: auto; width:auto; min-width: 50px; min-height:100px">
+	<c:if test="${ game.gamePhase.equals(GamePhase.ATTACK) }">
+				<div style="border-radius: 10px; border: solid black; background-color: #DFDADA; height: auto; width:auto; max-width: 40%;">
 					<p> WEAPON SELECTED </p>
 					<img style="height:120px; width:auto;" src="/resources/images/cards/${attackWeapon.name}.png" alt="card"/>	
 					<h2>SELECT OBJECTIVE:</h2>			    			
 				</div>
-			</c:if>
+	</c:if>
+	<div style="margin: auto;" >
 			<div style="display: inline-block; color: black; vertical-align:top; width: 10%; height: 60%;"> 
 				<div style="border-radius: 10px; background-color: #DFDADA">
 					<p> DECK (${deck.size()})</p>
-					<img src="/resources/images/roles/ninguno.png" alt="SHOGUN" style="width: 50%; height: auto" />
+					<img src="/resources/images/roles/ninguno.png" alt="SHOGUN" style="width: 40%; height: auto" />
 					<form:form action="/game/steal">
 					    						<input type="hidden" name="gameId" value="${ game.id }"></input>
 					    						<button class="btn btn-default" type="submit">Select</button>
@@ -244,10 +244,10 @@ body{
 				</div>
 				<div style="border-radius: 10px; background-color: #DFDADA">
 					<p> DISCARD PILE (${discardPile.size()})</p>
-					<img src="/resources/images/roles/ninguno.png" alt="SHOGUN" style="width: 50%; height: auto" />
+					<img src="/resources/images/roles/ninguno.png" alt="SHOGUN" style="width: 40%; height: auto" />
 				</div>
 			</div>
-		    <div style="display: inline-block; width: 55%; height: 100%; padding-top: 20px;text-align:center; vertical-align: top; margin-right: 50px " >
+		    <div style="display: inline-block; width: 60%; padding-top: 90px;text-align:center; vertical-align: top; margin-right: 50px " >
 			    <div id="main">
 			    	<c:forEach items="${ listPlayer }" var ="player" varStatus="loop">
 			    		<div class="circle"> 
@@ -263,14 +263,14 @@ body{
 			    				<p>${player.getUser().getUsername()}</p>
 								<div>
 									<div style="display: inline-block;" class="img-wrap">
-			    						<img src="/resources/images/${ player.getCharacter().getImage() }" alt="character" style="height: 90%; max-height:100%; max-width:100%;" />
+			    						<img src="/resources/images/${ player.getCharacter().getImage() }" alt="character" style="height: 80%; max-height:100%; max-width:100%;" />
 			    						<p class="img-description"> ${ player.getCharacter().getText() } </p>
 			    					</div>
 					    			<div style="display: inline-block;">
-					    					<img src="/resources/images/honorLive/live.png" alt="live" style="width: 25%; height: auto; display: inline-block;" />
+					    					<img src="/resources/images/honorLive/live.png" alt="live" style="width: 20%; height: auto; display: inline-block;" />
 					    					<p style="display: inline-block;"> ${ player.getCurrentHearts() } </p>
 					    				
-					    					<img src="/resources/images/honorLive/honor.png" alt="live" style="width: 25%; height: auto" />	
+					    					<img src="/resources/images/honorLive/honor.png" alt="live" style="width: 20%; height: auto" />	
 					    					<p style="display: inline-block;"> ${ player.getHonor() } </p>	
 					    					<form:form action="/game/stealPlayer">
 					    						<input type="hidden" name="gameId" value="${ game.id }"></input>
@@ -304,7 +304,7 @@ body{
 			    </div>
     		</div> 
     		
-    		<div style="display: inline-block; width: 25%; height: 50%">
+    		<div style="display: inline-block; width: 20%; height: 50%">
 	    				<c:if test="${currentUser.username.equals(POVplayer.username)}">
 			    			<div style="display: inline-block; width: 45%; height: 50%; text-align:center; vertical-align: top; margin-right:10px; ">
 								<form:form action="/game/end-turn">
@@ -335,7 +335,11 @@ body{
 			    		</c:if>
 			    </c:forEach>			
 				</div>
-				<br>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
 				<p style="color: white; padding-top: 20px">TU MANO</p>
 				<div  style=" height: 60%; padding-top: 10px; margin-top: 10px; background-color: #DFDADA; border-radius:15px;">
 					<div style="max-width:90%">
