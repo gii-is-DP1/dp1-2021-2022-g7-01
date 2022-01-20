@@ -40,6 +40,7 @@ public class AchievementController {
 	public String listAchievements(Map<String, Object> model) {
 		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		User user = userService.findUser(userDetails.getUsername()).get();
+		System.out.println("juan "+user.getUsername());
 		Collection<Achievement> listAchievements = achievementService.findAll();
 		achievementService.achivedCheck(user);
 		Map<Achievement, Integer>mapAchievement = achievementService.findAllPersonalAchievements(user);
