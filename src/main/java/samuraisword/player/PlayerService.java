@@ -1,7 +1,7 @@
 package samuraisword.player;
 
 import java.util.Collection;
-
+import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -42,6 +42,11 @@ public class PlayerService {
 //	}
 	
 	@Transactional
+	public Player findByUser(String user) {
+		return playerRepository.findByUser(user);
+	}
+	
+	@Transactional
 	public int playerCount() {
 		return (int) this.playerRepository.count();
 	}
@@ -68,9 +73,8 @@ public class PlayerService {
 	}	
 
 
-		@Transactional(readOnly = true)
+	@Transactional(readOnly = true)
 	public Collection<RolType> findRolTypes() throws DataAccessException {
 		return playerRepository.findRolTypes();
 	}
-
 }

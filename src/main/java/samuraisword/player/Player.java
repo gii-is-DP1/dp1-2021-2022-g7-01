@@ -13,6 +13,7 @@ import javax.persistence.Transient;
 
 import org.hibernate.validator.constraints.UniqueElements;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import samuraisword.cardhand.CardHand;
@@ -64,5 +65,4 @@ public class Player extends BaseEntity{
 	public String toString() {
 		return "" + user.getUsername();
 	}
-	
 }

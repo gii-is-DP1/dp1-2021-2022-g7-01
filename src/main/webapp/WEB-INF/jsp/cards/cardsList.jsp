@@ -28,7 +28,7 @@
                     <c:out value="${card.name}"/>
                 </td>
                 <td>
-                <spring:url value="/resources/images/cards/${card.image}" htmlEscape="true" var="cards"/>
+                <spring:url value="/resources/images/cards/${card.name}.png" htmlEscape="true" var="cards"/>
 										<img title="" src="${cards}" id="card" width="50%" height="50%"/>
                 </td>
                 <td>
