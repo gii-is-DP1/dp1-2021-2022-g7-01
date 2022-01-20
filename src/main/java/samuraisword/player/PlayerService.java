@@ -1,7 +1,7 @@
 package samuraisword.player;
 
 import java.util.Collection;
-
+import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -40,6 +40,11 @@ public class PlayerService {
 //	public Collection<Player> findByUser(String user) {
 //		return playerRepository.findByUser(user);
 //	}
+	
+	@Transactional
+	public Player findByUser(String user) {
+		return playerRepository.findByUser(user);
+	}
 	
 	@Transactional
 	public int playerCount() {
