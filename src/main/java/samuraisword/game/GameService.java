@@ -248,13 +248,6 @@ public class GameService {
 		}
 		return inRange;
 	}
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-	
-	
-	
-=======
 
 	private Integer calcDistance(Player p1, Player p2, List<Player> playerList) {
 		Integer playersBetween = playerList.indexOf(p1)-playerList.indexOf(p2);
@@ -264,6 +257,7 @@ public class GameService {
 
 	public Boolean endTurn(Game game) {
 		Boolean correctMaxCardHand = game.getCurrentPlayer().getHand().size() <= MAX_CARDS_HAND;
+		
 		if (correctMaxCardHand) {
 			Integer numPlayers = game.getListPlayers().size();
 			Integer nextPlayerIndex = (game.getListPlayers().indexOf(game.getCurrentPlayer()) + 1) % numPlayers;
@@ -309,6 +303,18 @@ public class GameService {
 		return game.getListPlayers().stream().filter(x -> x.getUser().getUsername().equals(objectiveName)).findFirst().get();
 	}
 
->>>>>>> c1e19ac207169f3a787c32d53f25114e4b979f60
->>>>>>> master
+	public void handleAttack(Game game, Player attacker, Player objective, RedCard attackWeapon) {
+		if( !objective.getHand().stream().anyMatch(x-> x.getName().equals("parada")) ) {
+			substractHearts(objective, attackWeapon);
+		}
+	}
+
+	public boolean checkAllPlayersHavePositiveHonor(Game game) {
+		return game.getListPlayers().stream().allMatch(x-> x.getHonor() > 0);
+	}
+
+	public List<Player> calcWinners(Game game) {
+		return null;
+	}
+
 }

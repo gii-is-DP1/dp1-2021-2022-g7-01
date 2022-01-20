@@ -92,4 +92,21 @@ public class CardService {
 			}
 		}
 	}
+	
+	public void addCardByName(String cardName, List<Card> from, List<Card> to) {
+		for (int i = 0; i < from.size(); i++) {
+			if (from.get(i).getName().equals(cardName)) {
+				to.add(from.get(i));
+				break;
+			}
+		}
+	}
+
+	public void discard(String cardName, List<Card> from, List<Card> to) {
+		addCardByName(cardName, from, to);
+		removeCardByName(cardName, from);
+	}
+	
+	
+	
 }
