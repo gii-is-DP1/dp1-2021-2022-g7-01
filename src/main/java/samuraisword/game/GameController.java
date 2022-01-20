@@ -204,17 +204,17 @@ public class GameController {
 		characterService.execute(objective);
 		int n = objective.getCurrentHearts();
 		//quitamos vida
-<<<<<<< HEAD
+
 		if(objective.getCurrentHearts()==n) objective.setCurrentHearts(objective.getCurrentHearts() -1);
 		objective.setCurrentHearts(objective.getCurrentHearts()-attackWeapon.getDamage());
 		//descartamos carta
 		attacker.getHand().removeIf(x-> x.equals(attackWeapon));
-=======
+
 		gameService.substractHearts(objective, attackWeapon);
 		
 		//descartamos la 1era carta que coincida con el nombre
 		cardService.removeCardByName(cardName, game.getCurrentPlayer().getHand());
->>>>>>> master
+
 		
 		Boolean hasAdvancedPhase = gameService.endTurn(game);
 		if(hasAdvancedPhase) {

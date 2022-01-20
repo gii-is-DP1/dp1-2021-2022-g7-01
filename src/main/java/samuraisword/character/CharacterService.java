@@ -78,6 +78,19 @@ public class CharacterService {
 			}
 
 		}
+		
+		if (player.getCharacter().getName().equals("Hideyoshi")) {
+			if (player.getGame().getGamePhase().equals(player.getCharacter().getGamePhase())
+					&& player.getGame().getStatus().equals(player.getCharacter().getStatus())
+					&& player.getGame().getCurrentPlayer().equals(player)) {
+				int n = player.getHand().size();
+				Card c = player.getGame().getDeck().get(0);
+				player.getHand().add(c);
+				res = player.getHand().size()== n+1;
+			}
+			
+		}
+		
 		if (player.getCharacter().getName().equals("Goemon")) {
 			Integer weaponsNow = player.getWeaponBonus();
 			if (player.getGame().getGamePhase().equals(player.getCharacter().getGamePhase())) {
@@ -102,6 +115,34 @@ public class CharacterService {
 			if (player.getGame().getGamePhase().equals(player.getCharacter().getGamePhase())) {
 				gameService.statUp(player, "damageBonus", 1);
 				res = player.getDamageBonus().equals(damageNow + 1);
+			}
+		}
+		
+		if (player.getCharacter().getName().equals("Nobunaga")) {
+			if (player.getGame().getGamePhase().equals(player.getCharacter().getGamePhase())
+					&& player.equals(player.getGame().getCurrentPlayer())) {
+				res = player.getCurrentHearts()>1;
+			}
+		}
+		
+		if (player.getCharacter().getName().equals("Tomoe")) {
+			if (player.getGame().getGamePhase().equals(player.getCharacter().getGamePhase())
+					&& player.getGame().getStatus().equals(player.getCharacter().getStatus())
+					&& player.equals(player.getGame().getCurrentPlayer())) {
+				int n = player.getHand().size();
+				Card c = player.getGame().getDeck().get(0);
+				player.getHand().add(c);
+				res = player.getHand().size()== n+1;
+			}
+		}
+		
+		if (player.getCharacter().getName().equals("Ushiwaka")) {
+			if (player.getGame().getGamePhase().equals(player.getCharacter().getGamePhase())
+					&& player.getGame().getStatus().equals(player.getCharacter().getStatus())) {
+				int n = player.getHand().size();
+				Card c = player.getGame().getDeck().get(0);
+				player.getHand().add(c);
+				res = player.getHand().size()== n+1;
 			}
 		}
 		return res;

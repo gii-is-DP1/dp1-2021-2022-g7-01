@@ -248,13 +248,7 @@ public class GameService {
 		}
 		return inRange;
 	}
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-	
-	
-	
-=======
+
 
 	private Integer calcDistance(Player p1, Player p2, List<Player> playerList) {
 		Integer playersBetween = playerList.indexOf(p1)-playerList.indexOf(p2);
@@ -309,6 +303,4 @@ public class GameService {
 		return game.getListPlayers().stream().filter(x -> x.getUser().getUsername().equals(objectiveName)).findFirst().get();
 	}
 
->>>>>>> c1e19ac207169f3a787c32d53f25114e4b979f60
->>>>>>> master
 }
