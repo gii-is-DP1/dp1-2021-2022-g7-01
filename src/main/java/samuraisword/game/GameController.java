@@ -200,8 +200,7 @@ public class GameController {
 		
 		//Falta hacer la parada por aqui
 		
-		characterService.changeStatus(game, GameStatus.ATTACK);
-		characterService.execute(objective);
+		
 		int n = objective.getCurrentHearts();
 		//quitamos vida
 
