@@ -1,6 +1,7 @@
 package samuraisword.samples.petclinic.card;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,10 @@ public class CardService {
 	
 	public Optional<Card> findByName(String name){
 		return cardRepository.findByName(name);
+	}
+	
+	public Optional<RedCard> findRedCardByName(String name){
+		return cardRepository.findRedCardByName(name);
 	}
 	
 	@Transactional
@@ -76,8 +81,15 @@ public class CardService {
 			res=bonus+1==player.getDamageBonus();
 			
 		}
-		
-		
 		return res;
+	}
+	
+	public void removeCardByName(String cardName, List<Card> listCard) {
+		for (int i = 0; i < listCard.size(); i++) {
+			if (listCard.get(i).getName().equals(cardName)) {
+				listCard.remove(i);
+				break;
+			}
+		}
 	}
 }

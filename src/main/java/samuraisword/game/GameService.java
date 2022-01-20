@@ -1,7 +1,9 @@
 package samuraisword.game;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import samuraisword.cardhand.CardHand;
 import samuraisword.character.Character;
+import samuraisword.character.CharacterService;
 import samuraisword.comment.Comment;
 import samuraisword.player.Player;
 import samuraisword.player.Rol;
@@ -28,9 +31,16 @@ public class GameService {
 
 	private GameRepository gameRepository;
 
+	private final Integer MAX_CARDS_HAND = 7;
+	private final Integer NUM_CARD_DRAWN = 2;
+
 	@Autowired
 	public GameService(GameRepository gameRepository) {
 		this.gameRepository = gameRepository;
+	}
+
+	public Collection<Game> findAll() {
+		return gameRepository.findAll();
 	}
 
 	public Optional<Game> findById(int idGame) {
@@ -57,15 +67,15 @@ public class GameService {
 				case ("Red"):
 					Integer rango = Integer.valueOf(cardService.findRange(name).get());
 					Integer damage = Integer.valueOf(cardService.findDamage(name).get());
-					RedCard redCard = RedCard.of(name, card.getImage(), rango, damage);
+					RedCard redCard = RedCard.of(name, card.getImage(), rango, damage, "Red");
 					gameDeck.add(redCard);
 					break;
 				case ("Yellow"):
-					Card yellowCard = Card.of(name, card.getImage());
+					Card yellowCard = Card.of(name, card.getImage(), "Yellow");
 					gameDeck.add(yellowCard);
 					break;
 				case ("Blue"):
-					Card blueCard = Card.of(card.getName(), card.getImage());
+					Card blueCard = Card.of(card.getName(), card.getImage(), "Blue");
 					gameDeck.add(blueCard);
 					break;
 				}
@@ -86,6 +96,9 @@ public class GameService {
 
 			p.setMaxHearts(p.getCharacter().getLife());
 			p.setCurrentHearts(p.getCharacter().getLife());
+			p.setDamageBonus(0);
+			p.setDistanceBonus(0);
+			p.setWeaponBonus(0);
 		}
 		return players;
 	}
@@ -162,7 +175,7 @@ public class GameService {
 	}
 
 	public List<Player> asignOrder(List<Player> listPlayers) {
-		// De el ultimo tratamiento a listPlayers (asignRolAndHonor) el 1o SHOGUN será
+		// De el ultimo tratamiento a listPlayers (asignRolAndHonor) el SHOGUN será
 		// siempre el indice 0.
 		// queremos hacer un ultimo shuffle a listPlayers para que no sea siempre el
 		// mismo orden de roles
@@ -187,36 +200,107 @@ public class GameService {
 			// En la lista players el indice 0 corresponde al shogun ya que esta funcion es
 			// inmediatamente posterior a asignOrder.
 			/*
-			 * 0º Shogun: 4 cards 1st and 2nd player: 5 cards 3rd and 4th player (if
-			 * present): 6 cards 5th and 6th player (if present): 7 cards
+			 * 0º Shogun: 4 cards 
+			 * 1st and 2nd player: 5 cards; 
+			 * 3rd and 4th player (if present): 6 cards 
+			 * 5th and 6th player (if present): 7 cards
 			 * 
 			 * Al shogun con indice 0 se le repartiran 4 cartas, y cada vez que el indice
-			 * coincida con ser impar, el n cartas a repartir aumenta en 1. Excluimos el 0
-			 * también por preacución.
-			 * 
+			 * coincida con ser impar, el n cartas a repartir aumenta en 1.
 			 */
 			Player player = players.get(i);
 			if (i % 2 == 1) {
 				cardsGiven = cardsGiven + 1;
 			}
-			
+
 			player.setHand(new ArrayList<>());
+			player.setEquipment(new ArrayList<Card>());
 			for (int e = 0; e < cardsGiven; e++) {
 				player.getHand().add(gameDeck.get(e));
 				gameDeck.remove(e);
 			}
 		}
 	}
-	public void statUp(Player player, String stat, Integer bonus) {
-		
-		if(stat.equals("distanceBonus")) player.setDistanceBonus(player.getDistanceBonus()+bonus);
-		if(stat.equals("weaponBonus")) player.setWeaponBonus(player.getWeaponBonus()+bonus);
-		if(stat.equals("damageBonus")) player.setDamageBonus(player.getDamageBonus()+bonus);
+
+	public void statUp(Player player, String stat, Integer bonus) {	
+		if(stat.contains("distanceBonus")) player.setDistanceBonus(player.getDistanceBonus()+bonus);
+		if(stat.contains("weaponBonus")) player.setWeaponBonus(player.getWeaponBonus()+bonus);
+		if(stat.contains("damageBonus")) player.setDamageBonus(player.getDamageBonus()+bonus);
 	}
-public void statDown(Player player, String stat, Integer bonus) {
-		
-		if(stat.equals("distanceBonus")) player.setDistanceBonus(player.getDistanceBonus()-bonus);
-		if(stat.equals("weaponBonus")) player.setWeaponBonus(player.getWeaponBonus()-bonus);
-		if(stat.equals("damageBonus")) player.setDamageBonus(player.getDamageBonus()-bonus);
+	public void statDown(Player player, String stat, Integer bonus) {
+			if(stat.equals("distanceBonus")) player.setDistanceBonus(player.getDistanceBonus()-bonus);
+			if(stat.equals("weaponBonus")) player.setWeaponBonus(player.getWeaponBonus()-bonus);
+			if(stat.equals("damageBonus")) player.setDamageBonus(player.getDamageBonus()-bonus);
 	}
+	public List<Player> playersInRangeOfAttack(Game game, RedCard attackWeapon, Player attacker) {
+		List<Player> playerList = game.getListPlayers();
+		List<Player> inRange = new ArrayList<>();
+		//Omitimos los jugadores inofensivos (disabled) para el calculo del rango
+		playerList.stream().filter(x-> x.isDisabled()).forEach(y-> playerList.remove(y));
+		//calculamos la distancia minima desde cada jugador al atacante
+		for(Player p : playerList) {
+			Integer distancia1= calcDistance(attacker, p, playerList);
+			Integer distancia2= calcDistance(p, attacker, playerList);
+			Integer distMin = List.of(distancia1, distancia2).stream().min(Comparator.naturalOrder()).get();
+			if(distMin <= attackWeapon.getRange()) {
+				inRange.add(p);
+			}
+		}
+		return inRange;
+	}
+
+
+	private Integer calcDistance(Player p1, Player p2, List<Player> playerList) {
+		Integer playersBetween = playerList.indexOf(p1)-playerList.indexOf(p2);
+		if(playersBetween < 0) playersBetween += playerList.size();
+		return playersBetween;
+	}
+
+	public Boolean endTurn(Game game) {
+		Boolean correctMaxCardHand = game.getCurrentPlayer().getHand().size() <= MAX_CARDS_HAND;
+		if (correctMaxCardHand) {
+			Integer numPlayers = game.getListPlayers().size();
+			Integer nextPlayerIndex = (game.getListPlayers().indexOf(game.getCurrentPlayer()) + 1) % numPlayers;
+			game.setCurrentPlayer(game.getListPlayers().get(nextPlayerIndex));
+			game.setGamePhase(GamePhase.RECOVERY);
+		} else {
+			game.setGamePhase(GamePhase.DISCARD);
+		}
+		return correctMaxCardHand;
+	}
+	
+	public void processRecoveryPhase(Game game) {
+		Player player = game.getCurrentPlayer();
+		if(player.isDisabled() && player.getCurrentHearts() <= 0) {
+			player.setCurrentHearts(player.getCharacter().getLife());
+			player.setDisabled(false);
+		}
+		game.setGamePhase(GamePhase.DRAW);
+	}
+	
+	public void processDrawPhase(Game game) {
+		Player player = game.getCurrentPlayer();
+		for(int i = 0; i < NUM_CARD_DRAWN; i++) {
+			Card card = game.getDeck().get(0);
+			player.getHand().add(card);
+			game.getDeck().remove(0);
+		}
+		game.setGamePhase(GamePhase.MAIN);
+	}
+
+	public void substractHearts(Player objective, RedCard attackWeapon) {
+		objective.setCurrentHearts(objective.getCurrentHearts()-attackWeapon.getDamage());
+		if(objective.getCurrentHearts() <= 0) {
+			objective.setHonor(objective.getHonor() - 1);
+			objective.setDisabled(true);
+			objective.setCurrentHearts(0);
+		}
+		
+		
+	}
+
+	public Player findPlayerInGameByName(Game game, String objectiveName) {
+		return game.getListPlayers().stream().filter(x -> x.getUser().getUsername().equals(objectiveName)).findFirst().get();
+	}
+
 }
