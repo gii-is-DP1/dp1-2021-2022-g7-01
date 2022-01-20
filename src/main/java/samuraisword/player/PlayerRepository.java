@@ -10,6 +10,7 @@ import org.springframework.data.repository.CrudRepository;
 
 import samuraisword.achievements.RolType;
 import samuraisword.invitations.Invitation;
+import samuraisword.samples.petclinic.user.User;
 
 
 public interface PlayerRepository extends CrudRepository<Player, Integer> {
@@ -19,6 +20,6 @@ public interface PlayerRepository extends CrudRepository<Player, Integer> {
 	@Query("SELECT rtype FROM RolType rtype ORDER BY rtype.name")
 	List<RolType> findRolTypes() throws DataAccessException;
 	
-//	@Query("SELECT * FROM PLAYERS WHERE USERNAME=:username")
-//	Collection<Player> findByUser(String username);
+	@Query(value= "SELECT * FROM PLAYERS WHERE USERNAME=:username", nativeQuery=true)
+	Optional<Player> findByUser(User username);
 }

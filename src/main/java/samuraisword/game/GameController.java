@@ -203,7 +203,11 @@ public class GameController {
 		
 		//Falta hacer la parada por aqui
 		
+		characterService.changeStatus(game, GameStatus.ATTACK);
+		characterService.execute(objective);
+		int n = objective.getCurrentHearts();
 		//quitamos vida
+		if(objective.getCurrentHearts()==n) objective.setCurrentHearts(objective.getCurrentHearts() -1);
 		objective.setCurrentHearts(objective.getCurrentHearts()-attackWeapon.getDamage());
 		//descartamos carta
 		attacker.getHand().removeIf(x-> x.equals(attackWeapon));
