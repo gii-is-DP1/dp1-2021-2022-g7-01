@@ -3,6 +3,7 @@ package samuraisword.game;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,11 +31,14 @@ public class GameService {
 
 	private GameRepository gameRepository;
 
+	private final Integer MAX_CARDS_HAND = 7;
+	private final Integer NUM_CARD_DRAWN = 2;
+
 	@Autowired
 	public GameService(GameRepository gameRepository) {
 		this.gameRepository = gameRepository;
 	}
-	
+
 	public Collection<Game> findAll() {
 		return gameRepository.findAll();
 	}
@@ -198,19 +202,17 @@ public class GameService {
 			/*
 			 * 0º Shogun: 4 cards 
 			 * 1st and 2nd player: 5 cards; 
-			 * 3rd and 4th player (if present): 6 cards
+			 * 3rd and 4th player (if present): 6 cards 
 			 * 5th and 6th player (if present): 7 cards
 			 * 
 			 * Al shogun con indice 0 se le repartiran 4 cartas, y cada vez que el indice
 			 * coincida con ser impar, el n cartas a repartir aumenta en 1.
-			 * 
-			 * 
 			 */
 			Player player = players.get(i);
 			if (i % 2 == 1) {
 				cardsGiven = cardsGiven + 1;
 			}
-			
+
 			player.setHand(new ArrayList<>());
 			player.setEquipment(new ArrayList<Card>());
 			for (int e = 0; e < cardsGiven; e++) {
@@ -219,26 +221,94 @@ public class GameService {
 			}
 		}
 	}
-	
-	
-	
-	
-	
-	
-	public void statUp(Player player, String stat, Integer bonus) {
-		
+
+	public void statUp(Player player, String stat, Integer bonus) {	
 		if(stat.contains("distanceBonus")) player.setDistanceBonus(player.getDistanceBonus()+bonus);
 		if(stat.contains("weaponBonus")) player.setWeaponBonus(player.getWeaponBonus()+bonus);
 		if(stat.contains("damageBonus")) player.setDamageBonus(player.getDamageBonus()+bonus);
 	}
 	public void statDown(Player player, String stat, Integer bonus) {
-			
 			if(stat.equals("distanceBonus")) player.setDistanceBonus(player.getDistanceBonus()-bonus);
 			if(stat.equals("weaponBonus")) player.setWeaponBonus(player.getWeaponBonus()-bonus);
 			if(stat.equals("damageBonus")) player.setDamageBonus(player.getDamageBonus()-bonus);
+	}
+	public List<Player> playersInRangeOfAttack(Game game, RedCard attackWeapon, Player attacker) {
+		List<Player> playerList = game.getListPlayers();
+		List<Player> inRange = new ArrayList<>();
+		//Omitimos los jugadores inofensivos (disabled) para el calculo del rango
+		playerList.stream().filter(x-> x.isDisabled()).forEach(y-> playerList.remove(y));
+		//calculamos la distancia minima desde cada jugador al atacante
+		for(Player p : playerList) {
+			Integer distancia1= calcDistance(attacker, p, playerList);
+			Integer distancia2= calcDistance(p, attacker, playerList);
+			Integer distMin = List.of(distancia1, distancia2).stream().min(Comparator.naturalOrder()).get();
+			if(distMin <= attackWeapon.getRange()) {
+				inRange.add(p);
+			}
 		}
+		return inRange;
+	}
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+	
+	
+	
+=======
 
-	public void attackPlayer (Player attacker, Player defender, List<Player> jugadoresPartida, RedCard weapon) {
+	private Integer calcDistance(Player p1, Player p2, List<Player> playerList) {
+		Integer playersBetween = playerList.indexOf(p1)-playerList.indexOf(p2);
+		if(playersBetween < 0) playersBetween += playerList.size();
+		return playersBetween;
+	}
+
+	public Boolean endTurn(Game game) {
+		Boolean correctMaxCardHand = game.getCurrentPlayer().getHand().size() <= MAX_CARDS_HAND;
+		if (correctMaxCardHand) {
+			Integer numPlayers = game.getListPlayers().size();
+			Integer nextPlayerIndex = (game.getListPlayers().indexOf(game.getCurrentPlayer()) + 1) % numPlayers;
+			game.setCurrentPlayer(game.getListPlayers().get(nextPlayerIndex));
+			game.setGamePhase(GamePhase.RECOVERY);
+		} else {
+			game.setGamePhase(GamePhase.DISCARD);
+		}
+		return correctMaxCardHand;
+	}
+	
+	public void processRecoveryPhase(Game game) {
+		Player player = game.getCurrentPlayer();
+		if(player.isDisabled() && player.getCurrentHearts() <= 0) {
+			player.setCurrentHearts(player.getCharacter().getLife());
+			player.setDisabled(false);
+		}
+		game.setGamePhase(GamePhase.DRAW);
+	}
+	
+	public void processDrawPhase(Game game) {
+		Player player = game.getCurrentPlayer();
+		for(int i = 0; i < NUM_CARD_DRAWN; i++) {
+			Card card = game.getDeck().get(0);
+			player.getHand().add(card);
+			game.getDeck().remove(0);
+		}
+		game.setGamePhase(GamePhase.MAIN);
+	}
+
+	public void substractHearts(Player objective, RedCard attackWeapon) {
+		objective.setCurrentHearts(objective.getCurrentHearts()-attackWeapon.getDamage());
+		if(objective.getCurrentHearts() <= 0) {
+			objective.setHonor(objective.getHonor() - 1);
+			objective.setDisabled(true);
+			objective.setCurrentHearts(0);
+		}
+		
 		
 	}
+
+	public Player findPlayerInGameByName(Game game, String objectiveName) {
+		return game.getListPlayers().stream().filter(x -> x.getUser().getUsername().equals(objectiveName)).findFirst().get();
+	}
+
+>>>>>>> c1e19ac207169f3a787c32d53f25114e4b979f60
+>>>>>>> master
 }
