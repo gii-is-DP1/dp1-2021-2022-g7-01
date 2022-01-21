@@ -237,17 +237,28 @@ public class GameController {
 
 	@PostMapping(value = { "/game/end-turn" })
 	public String endTurn(@RequestParam("gameId") Integer gameId, Map<String, Object> model) {
+		String view = "/game/gameboard";
 		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		User user = userService.findUser(userDetails.getUsername()).get();
 		Game game = GameSingleton.getInstance().getMapGames().get(gameId);
 		Boolean hasAdvancedPhase = gameService.endTurn(game);
-		if(hasAdvancedPhase) {
-			gameService.processRecoveryPhase(game);
-			gameService.processDrawPhase(game);
+		
+		if(gameService.checkAllPlayersHavePositiveHonor(game)) {
+			if(hasAdvancedPhase) {
+				gameService.processRecoveryPhase(game);
+				gameService.processDrawPhase(game);
+			}
+		}else {//fin de la partida cuando algun jugador no le quedan puntos de honor (honor<=0)
+			view = "/game/endgame";
+			
+			Rol winnerRol = gameService.calcWinners(game);
+			model.put("winnerRol", winnerRol);
+			
 		}
+		
 		model.put("game", game);
 		model.put("POVplayer", user);
-		return "/game/gameboard";
+		return view;
 	}
 
 	@PostMapping(value = { "/game/discard-card" })
