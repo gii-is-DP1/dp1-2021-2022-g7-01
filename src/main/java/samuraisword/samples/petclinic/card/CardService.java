@@ -67,21 +67,32 @@ public class CardService {
 		Boolean res= false;
 		if (player.getHand().get(i).getName().equals("Armadura")){
 			Integer bonus=player.getDistanceBonus();
-				gameService.statUp(player, "distanceBonus", 1);
+				this.statUp(player, "distanceBonus", 1);
 				res=bonus+1==player.getDistanceBonus();
 			
 		}else if (player.getHand().get(i).getName().equals("Concentracion")){
 			Integer bonus=player.getWeaponBonus();
-			gameService.statUp(player, "weaponBonus", 1);
+			this.statUp(player, "weaponBonus", 1);
 			res=bonus+1==player.getWeaponBonus();
 			
 		}else if (player.getHand().get(i).getName().equals("Desenvainado")){
 			Integer bonus=player.getDamageBonus();
-			gameService.statUp(player, "damageBonus", 1);
+			this.statUp(player, "damageBonus", 1);
 			res=bonus+1==player.getDamageBonus();
 			
 		}
 		return res;
+	}
+	
+	public void statUp(Player player, String stat, Integer bonus) {	
+		if(stat.contains("distanceBonus")) player.setDistanceBonus(player.getDistanceBonus()+bonus);
+		if(stat.contains("weaponBonus")) player.setWeaponBonus(player.getWeaponBonus()+bonus);
+		if(stat.contains("damageBonus")) player.setDamageBonus(player.getDamageBonus()+bonus);
+	}
+	public void statDown(Player player, String stat, Integer bonus) {
+			if(stat.equals("distanceBonus")) player.setDistanceBonus(player.getDistanceBonus()-bonus);
+			if(stat.equals("weaponBonus")) player.setWeaponBonus(player.getWeaponBonus()-bonus);
+			if(stat.equals("damageBonus")) player.setDamageBonus(player.getDamageBonus()-bonus);
 	}
 	
 	public void removeCardByName(String cardName, List<Card> listCard) {
@@ -92,4 +103,21 @@ public class CardService {
 			}
 		}
 	}
+	
+	public void addCardByName(String cardName, List<Card> from, List<Card> to) {
+		for (int i = 0; i < from.size(); i++) {
+			if (from.get(i).getName().equals(cardName)) {
+				to.add(from.get(i));
+				break;
+			}
+		}
+	}
+
+	public void discard(String cardName, List<Card> from, List<Card> to) {
+		addCardByName(cardName, from, to);
+		removeCardByName(cardName, from);
+	}
+	
+	
+	
 }

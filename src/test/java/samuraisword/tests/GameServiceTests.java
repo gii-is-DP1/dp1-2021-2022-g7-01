@@ -51,25 +51,6 @@ import samuraisword.samples.petclinic.user.UserService;
 			
 		}
 		
-		@Test
-		@Transactional
-		void shouldStatUp() {
-		Player p=new Player();
-		Integer iPrev=p.getDamageBonus();
-		this.gService.statUp(p, "damageBonus", 1);
-		Integer iPos=p.getDamageBonus();
-		assertThat(iPos>iPrev);
-		}
-		
-		@Test
-		@Transactional
-		void shouldStatDown() {
-		Player p=new Player();
-		p.setWeaponBonus(1);
-		Integer iPrev=p.getWeaponBonus();
-		this.gService.statUp(p, "weaponBonus", 1);
-		Integer iPos=p.getWeaponBonus();
-		assertThat(iPos<iPrev);
-		}
+		//Pedro: he movido los tests de statup y statdown a CharacterServiceTests
 
 }

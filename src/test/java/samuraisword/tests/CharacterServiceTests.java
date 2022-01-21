@@ -2,6 +2,7 @@ package samuraisword.tests;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
@@ -20,7 +21,7 @@ import samuraisword.achievements.RolType;
 import samuraisword.character.CharacterService;
 import samuraisword.game.Game;
 import samuraisword.game.GamePhase;
-import samuraisword.game.GameStatus;
+import samuraisword.game.GameService;
 import samuraisword.character.Character;
 import samuraisword.player.Player;
 import samuraisword.samples.petclinic.card.Card;
@@ -33,6 +34,8 @@ public class CharacterServiceTests {
 	protected CharacterService characterService;
 	@Autowired
 	protected CardService cardService;
+	@Autowired
+	protected GameService gameService;
 	
 	@Test
 	void benkeiTest() {
@@ -78,7 +81,6 @@ public class CharacterServiceTests {
 		Player p1 = new Player();
 		Game g = new Game();
 		g.setGamePhase(GamePhase.ATTACK);
-		g.setStatus(GameStatus.ATTACK);
 		p1.setGame(g);
 		Character c = characterService.findByName("Ginchiyo");
 		p1.setCharacter(c);
@@ -89,23 +91,23 @@ public class CharacterServiceTests {
 		assertThat(characterService.execute(p1)).isTrue();		
 	}
 	
+	
 	@Test
-	void hanzoTest() {
+	void hideyoshiTest() {
 		Player p1 = new Player();
 		Game g = new Game();
-		g.setGamePhase(GamePhase.ATTACK);
-		g.setStatus(GameStatus.ATTACK);
+		g.setDeck(gameService.createDeck(cardService));
+		g.setCurrentPlayer(p1);
+		g.setGamePhase(GamePhase.DRAW);
 		p1.setGame(g);
-		Character c = characterService.findByName("Hanzo");
-		Optional<Card> card = cardService.findByName("parada");
+		p1.setCurrentHearts(4);
+		Character c = characterService.findByName("Hideyoshi");
 		p1.setHand(new ArrayList<Card>());
-		p1.getHand().add(card.get());
 		p1.setCharacter(c);
 		g.setListPlayers(new ArrayList<Player>());
 		g.getListPlayers().add(p1);
-		
-		
-		assertThat(characterService.execute(p1)).isTrue();		
+
+		assertThat(characterService.execute(p1)).isTrue();
 	}
 	
 	@Test
@@ -122,35 +124,6 @@ public class CharacterServiceTests {
 	}
 	
 	@Test
-	void ieyasuTest() {
-		Player p1 = new Player();
-		Game g = new Game();
-		g.setCurrentPlayer(p1);
-		g.setGamePhase(GamePhase.DRAW);
-		p1.setGame(g);
-		Character c = characterService.findByName("Ieyasu");
-		p1.setCharacter(c);
-
-		assertThat(characterService.execute(p1)).isTrue();
-		
-	}
-	
-	@Test
-	void ieyasuTestNotMyTurn() {
-		Player p1 = new Player();
-		Player p2 = new Player();
-		Game g = new Game();
-		g.setCurrentPlayer(p2);
-		g.setGamePhase(GamePhase.DRAW);
-		p1.setGame(g);
-		Character c = characterService.findByName("Ieyasu");
-		p1.setCharacter(c);
-
-		assertThat(characterService.execute(p1)).isFalse();
-		
-	}
-	
-	@Test
 	void kojiroTest() {
 		Player p1 = new Player();
 		Game g = new Game();
@@ -163,7 +136,7 @@ public class CharacterServiceTests {
 		g.setListPlayers(new ArrayList<Player>());
 		g.getListPlayers().add(p1);
 
-		assertThat(characterService.changeStatus(g, GameStatus.ATTACK).contains(p1)).isTrue();
+		assertThat(characterService.execute(p1)).isTrue();
 		
 	}
 	
@@ -180,5 +153,58 @@ public class CharacterServiceTests {
 		
 	}
 	
+	@Test
+	void tomoeTest() {
+		Player p1 = new Player();
+		Game g = new Game();
+		g.setDeck(gameService.createDeck(cardService));
+		g.setCurrentPlayer(p1);
+		g.setGamePhase(GamePhase.ATTACK);
+		p1.setGame(g);
+		Character c = characterService.findByName("Tomoe");
+		p1.setHand(new ArrayList<Card>());
+		p1.setCharacter(c);
+		g.setListPlayers(new ArrayList<Player>());
+		g.getListPlayers().add(p1);
+
+		assertThat(characterService.execute(p1)).isTrue();
+	}
 	
+	@Test
+	void ushiwakaTest() {
+		Player p1 = new Player();
+		Game g = new Game();
+		g.setDeck(gameService.createDeck(cardService));
+		g.setCurrentPlayer(p1);
+		g.setGamePhase(GamePhase.ATTACK);
+		p1.setGame(g);
+		Character c = characterService.findByName("Ushiwaka");
+		p1.setHand(new ArrayList<Card>());
+		p1.setCharacter(c);
+		g.setListPlayers(new ArrayList<Player>());
+		g.getListPlayers().add(p1);
+
+		assertThat(characterService.execute(p1)).isTrue();
+	}
+	
+	@Test
+	@Transactional
+	void shouldStatUp() {
+	Player p=new Player();
+	Integer iPrev=p.getDamageBonus();
+	characterService.statUp(p, "damageBonus", 1);
+	Integer iPos=p.getDamageBonus();
+	assertThat(iPos>iPrev);
+	}
+	
+	@Test
+	@Transactional
+	void shouldStatDown() {
+	Player p=new Player();
+	p.setWeaponBonus(1);
+	Integer iPrev=p.getWeaponBonus();
+	characterService.statUp(p, "weaponBonus", 1);
+	Integer iPos=p.getWeaponBonus();
+	assertThat(iPos<iPrev);
+	}
 }

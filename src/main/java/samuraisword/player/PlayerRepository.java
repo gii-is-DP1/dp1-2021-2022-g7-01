@@ -23,9 +23,11 @@ public interface PlayerRepository extends CrudRepository<Player, Integer> {
 
 	@Query(value= "SELECT * FROM PLAYERS WHERE USERNAME=:username", nativeQuery=true)
 	Optional<Player> findByUser(User username);
+
 //	@Query("SELECT * FROM PLAYERS WHERE USERNAME=:username")
 //	Collection<Player> findByUser(String username);
 	
 	@Query(value="SELECT * FROM PLAYERS WHERE USERNAME=:username", nativeQuery = true)
 	Player findByUser(String username);
+
 }
