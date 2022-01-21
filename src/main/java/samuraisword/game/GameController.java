@@ -340,16 +340,24 @@ public class GameController {
 		User user = userService.findUser(userDetails.getUsername()).get();
 		Player p = game.getCurrentPlayer();
 		Player p2 = gameService.findPlayerInGameByName(game, playerName);
-
 		Random r = new Random();
 		int valorDado = r.nextInt(p2.getHand().size());
-
-
+		
+		
 		// System.out.println(p2.getHand().size()+"////////////////////////////////////////////////////////////");
-
+		
 
 		p.getHand().add(p2.getHand().get(valorDado));
 		p2.getHand().remove(valorDado);
+		
+		for(Card i: p.getHand()) {
+			if(i.getName().equals("distraccion")) {
+				p.getHand().remove(i);
+				break;
+			}			
+		}
+		
+		
 
 		model.put("game", game);
 		model.put("POVplayer", user);
@@ -376,5 +384,8 @@ public class GameController {
 		model.put("POVplayer", user);
 		return "/game/gameboard";
 	}
+	
+	
+	
 
 }
