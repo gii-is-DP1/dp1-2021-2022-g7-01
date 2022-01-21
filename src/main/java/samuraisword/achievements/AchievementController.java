@@ -38,6 +38,7 @@ public class AchievementController {
 
 	@GetMapping(value = { "/achievements" })
 	public String listAchievements(Map<String, Object> model) {
+		System.out.println("juan ");
 		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		User user = userService.findUser(userDetails.getUsername()).get();
 		Collection<Achievement> listAchievements = achievementService.findAll();
@@ -94,6 +95,7 @@ public class AchievementController {
 	
 	@GetMapping(value = { "/achievements/edit/{id_achievement}" })
 	public String editAchievementForm(@PathVariable("id_achievement") int idAchievement, Map<String, Object> model) {
+		
 		Achievement achievement = achievementService.findById(idAchievement).get();
 		model.put("achievement", achievement);
 		return FORM_LOGRO;

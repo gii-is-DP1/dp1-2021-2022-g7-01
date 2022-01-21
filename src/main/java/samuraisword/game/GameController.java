@@ -167,7 +167,7 @@ public class GameController {
 		for (Player p : players) {
 		p.getGame().setGamePhase(game.getGamePhase());
 		//characterService.execute(p);
-		}
+    }
 
 		GameSingleton.getInstance().getMapGames().put(game.getId(), game);
 
@@ -211,7 +211,6 @@ public class GameController {
 		Player objective = gameService.findPlayerInGameByName(game, objectiveName); //
 		Player attacker = game.getCurrentPlayer();
 
-		
 		gameService.handleAttack(objective, attackWeapon);
 		//descartamos una carta de parada del objetivo. En handle attack si tiene una parada no se resta pts de vida
 		//al objetivo por lo tanto, la asumimos como utilizada y ahora hay que descartarla.
@@ -237,20 +236,20 @@ public class GameController {
 		User user = userService.findUser(userDetails.getUsername()).get();
 		Game game = GameSingleton.getInstance().getMapGames().get(gameId);
 		Boolean hasAdvancedPhase = gameService.endTurn(game);
-			
+
 		if(gameService.checkAllPlayersHavePositiveHonor(game)) {
 			if(hasAdvancedPhase) {
 				gameService.processRecoveryPhase(game);
 				gameService.processDrawPhase(game);
-			}
-		}else {
+			}else {//fin de la partida cuando algun jugador no le quedan puntos de honor (honor<=0)
 			view = "/game/endgame";
 			Rol winnerRol = gameService.calcWinners(game);
 			model.put("winnerRol", winnerRol);
 		}
+		
 		model.put("game", game);
 		model.put("POVplayer", user);
-		return "/game/gameboard";
+		return view;
 	}
 
 	@PostMapping(value = { "/game/discard-card" })
@@ -328,12 +327,21 @@ public class GameController {
 		User user = userService.findUser(userDetails.getUsername()).get();
 		Player p = game.getCurrentPlayer();
 		Player p2 = gameService.findPlayerInGameByName(game, playerName);
-
 		Random r = new Random();
 		int valorDado = r.nextInt(p2.getHand().size());
 
 		p.getHand().add(p2.getHand().get(valorDado));
 		p2.getHand().remove(valorDado);
+		
+		for(Card i: p.getHand()) {
+			if(i.getName().equals("distraccion")) {
+				game.getDiscardPile().add(i);
+				p.getHand().remove(i);
+				break;
+			}			
+		}
+		
+		
 
 		model.put("game", game);
 		model.put("POVplayer", user);
@@ -359,5 +367,8 @@ public class GameController {
 		model.put("POVplayer", user);
 		return "/game/gameboard";
 	}
+	
+	
+	
 
 }

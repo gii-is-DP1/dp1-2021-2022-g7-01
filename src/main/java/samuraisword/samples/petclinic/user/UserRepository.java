@@ -7,12 +7,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
+import samuraisword.achievements.Achievement;
+
 
 
 
 public interface UserRepository extends  CrudRepository<User, String>{
 	
-	
+	Collection<User> findAll();
 	
 	@Query("SELECT DISTINCT user FROM User user WHERE user.username LIKE :username%")
 	public Collection<User> findByUsername(@Param("username") String username);

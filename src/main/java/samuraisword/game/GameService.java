@@ -298,6 +298,7 @@ public class GameService {
 		return game.getListPlayers().stream().allMatch(x-> x.getHonor() > 0);
 	}
 
+
 	public Rol calcWinners(Game game) {
 		Double bonusNinja = 1.5;
 		Double bonusSamurai = 0.;
