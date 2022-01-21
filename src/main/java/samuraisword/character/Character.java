@@ -40,5 +40,4 @@ public class Character extends BaseEntity{
 	
 	private GameStatus status;
 	
-	
 }

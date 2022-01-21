@@ -167,7 +167,7 @@ public class GameController {
 		for (Player p : players) {
 		p.getGame().setGamePhase(game.getGamePhase());
 		//characterService.execute(p);
-	}
+    }
 
 		GameSingleton.getInstance().getMapGames().put(game.getId(), game);
 
@@ -211,13 +211,7 @@ public class GameController {
 		Player objective = gameService.findPlayerInGameByName(game, objectiveName); //
 		Player attacker = game.getCurrentPlayer();
 
-
-		gameService.substractHearts(objective, attackWeapon);
-
-		// descartamos la 1era carta que coincida con el nombre
-		cardService.removeCardByName(cardName, game.getCurrentPlayer().getHand());
-		
-		gameService.handleAttack(game, attacker, objective, attackWeapon);
+		gameService.handleAttack(objective, attackWeapon);
 		//descartamos una carta de parada del objetivo. En handle attack si tiene una parada no se resta pts de vida
 		//al objetivo por lo tanto, la asumimos como utilizada y ahora hay que descartarla.
 		cardService.discard("parada", attacker.getHand(), game.getDiscardPile());
@@ -242,18 +236,15 @@ public class GameController {
 		User user = userService.findUser(userDetails.getUsername()).get();
 		Game game = GameSingleton.getInstance().getMapGames().get(gameId);
 		Boolean hasAdvancedPhase = gameService.endTurn(game);
-		
+
 		if(gameService.checkAllPlayersHavePositiveHonor(game)) {
 			if(hasAdvancedPhase) {
 				gameService.processRecoveryPhase(game);
 				gameService.processDrawPhase(game);
-			}
-		}else {//fin de la partida cuando algun jugador no le quedan puntos de honor (honor<=0)
+			}else {//fin de la partida cuando algun jugador no le quedan puntos de honor (honor<=0)
 			view = "/game/endgame";
-			
 			Rol winnerRol = gameService.calcWinners(game);
 			model.put("winnerRol", winnerRol);
-			
 		}
 		
 		model.put("game", game);
@@ -338,10 +329,6 @@ public class GameController {
 		Player p2 = gameService.findPlayerInGameByName(game, playerName);
 		Random r = new Random();
 		int valorDado = r.nextInt(p2.getHand().size());
-		
-		
-		// System.out.println(p2.getHand().size()+"////////////////////////////////////////////////////////////");
-		
 
 		p.getHand().add(p2.getHand().get(valorDado));
 		p2.getHand().remove(valorDado);
@@ -372,7 +359,6 @@ public class GameController {
 		Player p = game.getCurrentPlayer();	
 		Player p2 = gameService.findPlayerInGameByName(game, playerName);
 		Optional<Card> card=cardService.findByName(cardName);
-		
 		
 		p.getEquipment().add(card.get());
 		p2.getEquipment().remove(card.get());
