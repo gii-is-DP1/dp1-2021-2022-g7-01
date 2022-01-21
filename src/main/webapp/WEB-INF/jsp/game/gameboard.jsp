@@ -269,20 +269,33 @@ body{
 					    			<div style="display: inline-block;">
 					    					<img src="/resources/images/honorLive/live.png" alt="live" style="width: 20%; height: auto; display: inline-block;" />
 					    					<p style="display: inline-block;"> ${ player.getCurrentHearts() } </p>
-					    				
+					    			
 					    					<img src="/resources/images/honorLive/honor.png" alt="live" style="width: 20%; height: auto" />	
 					    					<p style="display: inline-block;"> ${ player.getHonor() } </p>	
+					    					<c:if test="${game.currentPlayer==POVplayer.username}">
 					    					<form:form action="/game/stealPlayer">
 					    						<input type="hidden" name="gameId" value="${ game.id }"></input>
 					    						<input type="hidden" name="playerName" value="${ player.getUser().getUsername() }"></input>
+					    						<c:if test="${!game.currentPlayer.equals(player) }">
 					    						<button class="btn btn-default" type="submit">Robar</button>
+					    						</c:if>
 					    		</form:form>
+					    	</c:if>
 					    			</div>
 					    			<div class= "viewEquiped">
 					    				View equipped cards
 					    				<div class="foeHand" style="border-radius: 10px; border: solid black; background-color: #DFDADA; height: auto; width:auto; min-width: 50px; min-height:100px">
 					    					<c:forEach items="${ player.equipment }" var ="card" varStatus="loop">
-				    							<img style="height:120px; width:auto;" src="/resources/images/cards/${card.name}.png" alt="card"/>				    			
+				    							<img style="height:120px; width:auto;" src="/resources/images/cards/${card.name}.png" alt="card"/>	
+				    							
+				    							<c:if test="${game.currentPlayer.equals(player) && !player.isDisabled()}">
+				    							<form:form action="/game/stealEquipment">
+					    						<input type="hidden" name="gameId" value="${ game.id }"></input>
+					    						<input type="hidden" name="playerName" value="${ player.getUser().getUsername() }"></input>
+					    						<input type="hidden" name="cardName" value="${ card.name }"></input>
+					    						<button class="btn btn-default" type="submit">Robar Equipamiento</button>
+					    		</form:form>		
+					    		</c:if>	    						    			
 				  							</c:forEach>
 				  							<c:if test="${ player.equipment.size()==0 }"> NONE EQUIPPED </c:if>
 					    				</div>
@@ -389,7 +402,9 @@ body{
 						<c:forEach items="${ listPlayer }" var ="player" varStatus="loop">
 						<c:if test="${ player.getUser().getUsername().equals(POVplayer.getUsername()) }">
 							<c:forEach items="${ player.equipment }" var ="card" varStatus="loop">
-				    			<img style="height:auto; width:20%;" src="/resources/images/cards/${card.name}.png" alt="card"/>				    			
+				    			<img style="height:auto; width:20%;" src="/resources/images/cards/${card.name}.png" alt="card"/>	
+				    			
+				    			
 				  			</c:forEach>
 				  		</c:if>	
 					</c:forEach>
