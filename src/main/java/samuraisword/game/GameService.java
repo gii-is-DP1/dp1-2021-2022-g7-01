@@ -4,24 +4,17 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import samuraisword.cardhand.CardHand;
 import samuraisword.character.Character;
-import samuraisword.character.CharacterService;
-import samuraisword.comment.Comment;
 import samuraisword.player.Player;
 import samuraisword.player.Rol;
 import samuraisword.samples.petclinic.card.Card;
@@ -32,7 +25,6 @@ import samuraisword.samples.petclinic.card.RedCard;
 public class GameService {
 
 	private GameRepository gameRepository;
-	private CharacterService characterService;
 
 	private final Integer MAX_CARDS_HAND = 7;
 	private final Integer NUM_CARD_DRAWN = 2;
@@ -88,7 +80,8 @@ public class GameService {
 
 		return gameDeck;
 	}
-
+	
+	
 	public List<Player> asignCharacterAndHearts(List<Player> players, List<Character> characters) {
 
 		for (Player p : players) {
@@ -295,7 +288,7 @@ public class GameService {
 		return game.getListPlayers().stream().filter(x -> x.getUser().getUsername().equals(objectiveName)).findFirst()
 				.get();
 	}
-	public void handleAttack(Game game, Player attacker, Player objective, RedCard attackWeapon) {
+	public void handleAttack(Player objective, RedCard attackWeapon) {
 		if( !objective.getHand().stream().anyMatch(x-> x.getName().equals("parada")) ) {
 			substractHearts(objective, attackWeapon);
 		}
