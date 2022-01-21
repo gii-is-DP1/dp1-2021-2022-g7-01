@@ -211,26 +211,6 @@ public class GameController {
 		Player objective = gameService.findPlayerInGameByName(game, objectiveName); //
 		Player attacker = game.getCurrentPlayer();
 
-
-		// Falta hacer la parada por aqui
-
-		int n = objective.getCurrentHearts();
-		// quitamos vida
-
-		if (objective.getCurrentHearts() == n)
-			objective.setCurrentHearts(objective.getCurrentHearts() - 1);
-		objective.setCurrentHearts(objective.getCurrentHearts() - attackWeapon.getDamage());
-		// descartamos carta
-		attacker.getHand().removeIf(x -> x.equals(attackWeapon));
-
-		gameService.substractHearts(objective, attackWeapon);
-
-		// descartamos la 1era carta que coincida con el nombre
-		cardService.removeCardByName(cardName, game.getCurrentPlayer().getHand());
-
-
-		
-
 		
 		gameService.handleAttack(game, attacker, objective, attackWeapon);
 		//descartamos una carta de parada del objetivo. En handle attack si tiene una parada no se resta pts de vida
@@ -243,8 +223,7 @@ public class GameController {
 		Boolean hasAdvancedPhase = gameService.endTurn(game);
 		if (hasAdvancedPhase) {
 			//gameService.processRecoveryPhase(game);
-			gameService.processDrawPhase(game);
-		}
+			gameService.processDrawPhase(game
 		model.put("game", game);
 		model.put("POVplayer", user);
 		return "/game/gameboard";
