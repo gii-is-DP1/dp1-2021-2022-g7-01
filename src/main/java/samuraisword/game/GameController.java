@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
+import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -25,6 +26,7 @@ import samuraisword.invitations.Invitation;
 import samuraisword.invitations.InvitationService;
 import samuraisword.player.Player;
 import samuraisword.player.PlayerService;
+import samuraisword.player.Rol;
 import samuraisword.samples.petclinic.card.Card;
 import samuraisword.samples.petclinic.card.CardService;
 import samuraisword.samples.petclinic.card.RedCard;
@@ -224,6 +226,7 @@ public class GameController {
 		User user = userService.findUser(userDetails.getUsername()).get();
 		Game game = GameSingleton.getInstance().getMapGames().get(gameId);
 		Boolean hasAdvancedPhase = gameService.endTurn(game);
+		
 		if(gameService.checkAllPlayersHavePositiveHonor(game)) {
 			if(hasAdvancedPhase) {
 				gameService.processRecoveryPhase(game);
@@ -232,7 +235,8 @@ public class GameController {
 		}else {//fin de la partida cuando algun jugador no le quedan puntos de honor (honor<=0)
 			view = "/game/endgame";
 			
-			List<Player> winners = gameService.calcWinners(game);
+			Rol winnerRol = gameService.calcWinners(game);
+			model.put("winnerRol", winnerRol);
 			
 		}
 		
