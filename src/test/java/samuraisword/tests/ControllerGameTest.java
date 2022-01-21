@@ -60,4 +60,15 @@ public class ControllerGameTest {
 		mockMvc.perform(get("/game/delete/{id_game}", TEST_GAME_ID))
 		.andExpect(view().name("redirect:/game/new"));
 	}
+    
+    @WithMockUser(value = "spring")
+    @Test
+	void testCreateGame() throws Exception {
+    	
+		mockMvc.perform(get("/game/new"))
+		.andExpect(status().isOk())		
+		.andExpect(view().name("game/createGame"));
+	}
+    
+    
 }
