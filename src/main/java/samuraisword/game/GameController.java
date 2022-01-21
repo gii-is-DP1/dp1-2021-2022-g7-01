@@ -348,6 +348,7 @@ public class GameController {
 		
 		for(Card i: p.getHand()) {
 			if(i.getName().equals("distraccion")) {
+				game.getDiscardPile().add(i);
 				p.getHand().remove(i);
 				break;
 			}			
