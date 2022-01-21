@@ -48,7 +48,7 @@ public class ControllerCardHandTest {
     @Autowired
 	private MockMvc mockMvc;
 
-    @WithMockUser(value = "spring")
+    @WithMockUser(username = "spring", roles = {"USER","ADMIN"})
     @Test
 	void testCardHand() throws Exception {
 		mockMvc.perform(get("/cardHands"))
@@ -56,20 +56,20 @@ public class ControllerCardHandTest {
 		.andExpect(view().name("cardHands/listCards"));
 	}
     
-    @WithMockUser(value = "spring")
+    @WithMockUser(username = "spring", roles = {"USER","ADMIN"})
     @Test
 	void testCardHandNew() throws Exception {
 		mockMvc.perform(get("/cardHands/new"))
 		.andExpect(status().isOk());
 	}
     
-//    @WithMockUser(value = "spring")
-//    @Test
-//	void testCardHandNewPost() throws Exception {
-//		mockMvc.perform(post("/cardHands/new")
-//				.with(csrf())
-//				.param("card_hand_id", "0"))
-//		.andExpect(status().isOk());
-//	}
+    @WithMockUser(username = "spring", roles = {"USER","ADMIN"})
+    @Test
+	void testCardHandNewPost() throws Exception {
+		mockMvc.perform(post("/cardHands/new")
+				.with(csrf())
+				.param("card_hand_id", "0"))
+		.andExpect(status().isOk());
+	}
     
 }

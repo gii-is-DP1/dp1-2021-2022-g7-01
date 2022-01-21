@@ -43,11 +43,10 @@ public class ControllerProfileTest {
     @Autowired
 	private MockMvc mockMvc;
 
-//    @WithMockUser(value = "spring")
+//    @WithMockUser(username = "admin1", roles = {"USER","ADMIN"})
 //    @Test
-//	void testCardHand() throws Exception {
-//    	String u = "admin1";
-//		mockMvc.perform(get("users/statistics/{usernameProfile}", u))
+//	 void testCardHand() throws Exception {
+//		mockMvc.perform(get("users/statistics/{usernameProfile}", "admin1"))
 //		.andExpect(status().isOk())
 //		.andExpect(view().name("users/statistics"));
 //	}
