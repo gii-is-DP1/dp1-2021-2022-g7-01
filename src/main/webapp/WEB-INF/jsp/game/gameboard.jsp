@@ -239,7 +239,9 @@ body{
 					<img src="/resources/images/roles/ninguno.png" alt="SHOGUN" style="width: 40%; height: auto" />
 					<form:form action="/game/steal">
 					    						<input type="hidden" name="gameId" value="${ game.id }"></input>
+					    						<c:if test="${game.currentPlayer==POVplayer.username}">
 					    						<button class="btn btn-default" type="submit">Select</button>
+					    						</c:if>
 					    		</form:form>
 				</div>
 				<div style="border-radius: 10px; background-color: #DFDADA">
