@@ -1,7 +1,7 @@
 package samuraisword.tests;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
@@ -20,24 +20,15 @@ import samuraisword.cardhand.CardHandController;
 import samuraisword.cardhand.CardHandRepository;
 import samuraisword.cardhand.CardHandService;
 import samuraisword.player.PlayerService;
-import samuraisword.samples.petclinic.card.Card;
+import samuraisword.samples.petclinic.card.CardController;
 import samuraisword.samples.petclinic.card.CardService;
 import samuraisword.samples.petclinic.configuration.SecurityConfiguration;
 import samuraisword.samples.petclinic.user.UserService;
 
-@WebMvcTest(value = CardHandController.class,
+@WebMvcTest(value = CardController.class,
 		excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class),
 		excludeAutoConfiguration= SecurityConfiguration.class)
-public class ControllerCardHandTest {
-	
-	@MockBean
-	private final CardHandRepository cardHandRepository = null;
-	
-	@MockBean
-	private final PlayerService playerService = null;
-	
-	@MockBean
-	private final CardHandService cardHandService = null;
+public class ControllerCardTest {
 	
 	@MockBean
 	private final CardService cardService = null;
@@ -50,26 +41,51 @@ public class ControllerCardHandTest {
 
     @WithMockUser(value = "spring")
     @Test
-	void testCardHand() throws Exception {
-		mockMvc.perform(get("/cardHands"))
+	void testListCard() throws Exception {
+    	
+		mockMvc.perform(get("/cards"))
 		.andExpect(status().isOk())
-		.andExpect(view().name("cardHands/listCards"));
+		.andExpect(view().name("cards/cardsList"));
 	}
     
     @WithMockUser(value = "spring")
     @Test
-	void testCardHandNew() throws Exception {
-		mockMvc.perform(get("/cardHands/new"))
-		.andExpect(status().isOk());
+	void testCardNewView() throws Exception {
+    	
+		mockMvc.perform(get("/cards/new"))
+		.andExpect(status().isOk())
+		.andExpect(view().name("cards/formCard"));
 	}
     
 //    @WithMockUser(value = "spring")
 //    @Test
-//	void testCardHandNewPost() throws Exception {
-//		mockMvc.perform(post("/cardHands/new")
-//				.with(csrf())
-//				.param("card_hand_id", "0"))
-//		.andExpect(status().isOk());
+//	void testCardNew() throws Exception {
+//    	
+//    	mockMvc.perform(post("/cards/new").with(csrf())
+//    			.param("name", "Tessen")
+//    			.param("image", "attack/Tessen")
+//    			.param("color", "Red")
+//    			.param("cardsPerDeck", "6"))
+//    	.andExpect(status().is3xxRedirection())
+//    	.andExpect(view().name("redirect:/cards"));
 //	}
     
+//    @WithMockUser(value = "spring")
+//    @Test
+//	void testCardEditView() throws Exception {
+//    	
+//		mockMvc.perform(get("/cards/edit/{id_card}", 1))
+//		.andExpect(status().isOk())
+//		.andExpect(view().name("cards/formCard"));
+//	}
+    
+    @WithMockUser(value = "spring")
+    @Test
+	void testCardDeleteView() throws Exception {
+  	
+		mockMvc.perform(get("/cards/delete/{id_card}", 1))
+		.andExpect(status().is3xxRedirection())
+		.andExpect(view().name("redirect:/cards"));
+	}
+ 
 }

@@ -1,5 +1,6 @@
 package samuraisword.tests;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
@@ -14,35 +15,47 @@ import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
-import samuraisword.achievements.AchievementController;
-import samuraisword.achievements.AchievementRepository;
-import samuraisword.achievements.AchievementService;
+import samuraisword.cardhand.CardHandController;
+import samuraisword.cardhand.CardHandRepository;
+import samuraisword.cardhand.CardHandService;
+import samuraisword.comment.CommentController;
+import samuraisword.comment.CommentService;
+import samuraisword.player.PlayerService;
+import samuraisword.samples.petclinic.card.CardService;
 import samuraisword.samples.petclinic.configuration.SecurityConfiguration;
 import samuraisword.samples.petclinic.user.UserService;
 
-@WebMvcTest(value = AchievementController.class,
+@WebMvcTest(value = CommentController.class,
 		excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class),
 		excludeAutoConfiguration= SecurityConfiguration.class)
-public class ControllerAchievementTest {
+public class ControllerCommentTest {
 	
 	@MockBean
-	private final AchievementRepository achievementRepository = null;
+	private final CommentService commentService = null;
 	
 	@MockBean
-    private final AchievementService achievementService = null;
-    
-	@MockBean
-    private final UserService userService = null;
-    
+	private final UserService userService = null;
+	
+	
     @Autowired
 	private MockMvc mockMvc;
-	
+
     @WithMockUser(value = "spring")
     @Test
-	void testCreationAchievement() throws Exception {
-		mockMvc.perform(get("/achievements/new"))
+	void testInitCreationForm() throws Exception {
+    	
+		mockMvc.perform(get("/comments/new"))
 		.andExpect(status().isOk())
-		.andExpect(view().name("achievements/formAchievement"));
+		.andExpect(view().name("comments/formComment"));
+	}
+    
+    @WithMockUser(value = "admin1")
+    @Test
+	void testDeleteComment() throws Exception {
+    	
+		mockMvc.perform(get("/comments/delete/{id_comment}", 1))
+		.andExpect(status().is3xxRedirection())		//el is3xxRedirection es para si modificas la bd
+		.andExpect(view().name("redirect:/comments"));
 	}
     
 }
