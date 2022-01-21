@@ -1,6 +1,7 @@
 package samuraisword.achievements;
 
 import java.text.ParseException;
+
 import java.util.Collection;
 import java.util.Locale;
 
@@ -17,7 +18,7 @@ public class AchievementTypeFormatter implements Formatter<AchievementType> {
 	public AchievementTypeFormatter(AchievementService petService) {
 		this.peService = petService;
 	}
-
+	
 	@Override
 	public String print(AchievementType petType, Locale locale) {
 		return petType.getName();
