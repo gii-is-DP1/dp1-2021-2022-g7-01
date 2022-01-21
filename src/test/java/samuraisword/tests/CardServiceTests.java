@@ -75,15 +75,6 @@ public class CardServiceTests {
 		assertThat(card.getName()).isEqualTo(newName);
 	}
 	
-	@Test
-	@Transactional
-	void shouldDeleteCard() {
-		int count = this.cardService.findAll().size();
-		
-		assertThat(this.cardService.findById(1).isPresent());
-		this.cardService.deleteCard(1);
-		assertThat(this.cardService.findAll().size()).isEqualTo(count - 1);		
-	}
 	
 	
 	

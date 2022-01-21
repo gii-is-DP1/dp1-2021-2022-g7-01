@@ -44,8 +44,13 @@ public class Player extends BaseEntity{
 	private boolean disabled; 
 	
 	private Integer distanceBonus=0;
-	private Integer weaponBonus=0;
-	private Integer damageBonus=0;
+    private Integer antidistanceBonus=0;
+    private Integer drawCardBonus=0;
+    private Integer antiDamageBonus=0;
+    private Integer weaponBonus=1;
+    private Integer damageBonus=0;
+    
+    private Integer weaponUse=0;
 	
 	@ManyToOne
 	@JoinColumn(name="username")
