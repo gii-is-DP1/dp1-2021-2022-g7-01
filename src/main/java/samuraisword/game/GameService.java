@@ -7,8 +7,10 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -307,8 +309,41 @@ public class GameService {
 		return game.getListPlayers().stream().allMatch(x-> x.getHonor() > 0);
 	}
 
-	public List<Player> calcWinners(Game game) {
-		return null;
+	public Rol calcWinners(Game game) {
+		Double bonusNinja = 1.5;
+		Double bonusSamurai = 0.;
+		Double bonusRonin = 0.;
+		switch (game.getListPlayers().size()) {
+		case 4:
+			bonusSamurai = 2.;
+			break;
+		case 5:
+			bonusSamurai = 1.;
+			bonusRonin = 2.;
+			break;
+		case 6:
+			bonusSamurai = 2.;
+			bonusRonin = 3.;
+			break;
+		case 7:
+			bonusSamurai = 1.;
+			bonusRonin = 3.;
+			break;
+		}
+		
+		Map<Rol, Double> pointsPerRole = calcPointsPerRole(game);
+		//Sumamos puntos por equipos aplicando bonus
+	    pointsPerRole.put(Rol.SAMURAI, pointsPerRole.get(Rol.SHOGUN) + pointsPerRole.get(Rol.SAMURAI)*bonusSamurai);
+		pointsPerRole.put(Rol.NINJA, pointsPerRole.get(Rol.NINJA)*bonusNinja);
+		pointsPerRole.put(Rol.RONIN, pointsPerRole.get(Rol.RONIN)*bonusRonin);
+		
+		Entry<Rol, Double> winnerRol = pointsPerRole.entrySet().stream().max(Map.Entry.comparingByValue()).get();
+		
+		return winnerRol.getKey();
 	}
 
+	private Map<Rol, Double> calcPointsPerRole(Game game) {
+		return game.getListPlayers().stream().collect(Collectors.groupingBy(Player::getRol, Collectors.summingDouble(x->x.getHonor())));
+	}
+	
 }
