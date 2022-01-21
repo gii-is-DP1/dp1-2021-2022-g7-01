@@ -278,15 +278,11 @@ public class GameService {
 			player.getHand().add(card);
 			game.getDeck().remove(0);
 		}
-		characterService.execute(player);
 		game.setGamePhase(GamePhase.MAIN);
-		characterService.execute(player);
 	}
 
 	public void substractHearts(Player objective, RedCard attackWeapon) {
-		characterService.execute(objective);
 		objective.setCurrentHearts(objective.getCurrentHearts() - attackWeapon.getDamage());
-		characterService.execute(objective.getGame().getCurrentPlayer());
 		if (objective.getCurrentHearts() <= 0) {
 			objective.setHonor(objective.getHonor() - 1);
 			objective.setDisabled(true);
