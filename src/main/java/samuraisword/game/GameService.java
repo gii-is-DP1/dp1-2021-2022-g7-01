@@ -226,7 +226,7 @@ public class GameService {
 			if(p.getCharacter().getName().equals("Chiyome"));
 			Integer distancia1 = calcDistance(attacker, p, playerList);
 			Integer distancia2 = calcDistance(p, attacker, playerList);
-			Integer distMin = List.of(distancia1, distancia2).stream().min(Comparator.naturalOrder()).get();
+			Integer distMin = List.of(distancia1, distancia2).stream().min(Comparator.naturalOrder()).get() + p.getDistanceBonus();
 			if (distMin <= attackWeapon.getRange() || attacker.getCharacter().getName().equals("Kojiro")) {
 				inRange.add(p);
 			}
@@ -274,8 +274,8 @@ public class GameService {
 		game.setGamePhase(GamePhase.MAIN);
 	}
 
-	public void substractHearts(Player objective, RedCard attackWeapon) {
-		objective.setCurrentHearts(objective.getCurrentHearts() - attackWeapon.getDamage());
+	public void substractHearts(Player attacker, Player objective, RedCard attackWeapon) {
+		objective.setCurrentHearts(objective.getCurrentHearts() - attackWeapon.getDamage() - attacker.getDamageBonus());
 		if (objective.getCurrentHearts() <= 0) {
 			objective.setHonor(objective.getHonor() - 1);
 			objective.setDisabled(true);
@@ -288,9 +288,9 @@ public class GameService {
 		return game.getListPlayers().stream().filter(x -> x.getUser().getUsername().equals(objectiveName)).findFirst()
 				.get();
 	}
-	public void handleAttack(Player objective, RedCard attackWeapon) {
+	public void handleAttack(Player attacker, Player objective, RedCard attackWeapon) {
 		if( !objective.getHand().stream().anyMatch(x-> x.getName().equals("parada")) ) {
-			substractHearts(objective, attackWeapon);
+			substractHearts(attacker, objective, attackWeapon);
 		}
 	}
 

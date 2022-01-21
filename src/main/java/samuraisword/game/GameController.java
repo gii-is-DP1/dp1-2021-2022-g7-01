@@ -211,7 +211,7 @@ public class GameController {
 		Player objective = gameService.findPlayerInGameByName(game, objectiveName); //
 		Player attacker = game.getCurrentPlayer();
 
-		gameService.handleAttack(objective, attackWeapon);
+		gameService.handleAttack(attacker, objective, attackWeapon);
 		//descartamos una carta de parada del objetivo. En handle attack si tiene una parada no se resta pts de vida
 		//al objetivo por lo tanto, la asumimos como utilizada y ahora hay que descartarla.
 		cardService.discard("parada", attacker.getHand(), game.getDiscardPile());
@@ -245,6 +245,7 @@ public class GameController {
 			view = "/game/endgame";
 			Rol winnerRol = gameService.calcWinners(game);
 			model.put("winnerRol", winnerRol);
+			}
 		}
 		
 		model.put("game", game);
@@ -252,7 +253,7 @@ public class GameController {
 		return view;
 	}
 
-	@PostMapping(value = { "/game/discard-card" })
+	@PostMapping(value = "/game/discard-card" )
 	public String discardCard(@RequestParam("gameId") Integer gameId, @RequestParam("cardName") String cardName,
 			Map<String, Object> model) {
 		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
