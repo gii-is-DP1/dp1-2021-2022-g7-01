@@ -84,16 +84,17 @@ import samuraisword.samples.petclinic.user.UserService;
 		void substractHeartsTest() {
 			RedCard attackWeapon = cardService.findRedCardByName("bo").get();//bo tiene 1 de ataque
 			Player p1 = new Player();
+			Player p2 = new Player();
 			p1.setCurrentHearts(2);
 			p1.setHonor(3);
-			gService.substractHearts(p1, attackWeapon);
+			gService.substractHearts(p2, p1, attackWeapon);
 			assertThat(p1.getCurrentHearts()==2-attackWeapon.getDamage());
 			assertThat(p1.getHonor()==3);//no deberia cambiar ya que currentHearts > 0
 			
-			Player p2 = new Player();
+			
 			p2.setCurrentHearts(1);
 			p2.setHonor(1);
-			gService.substractHearts(p2, attackWeapon);
+			gService.substractHearts(p1, p2, attackWeapon);
 			assertThat(p2.getCurrentHearts()==0 && p2.getHonor()==0 && p2.isDisabled());
 		}
 		
@@ -107,8 +108,8 @@ import samuraisword.samples.petclinic.user.UserService;
 			Player p1 = new Player();
 			p1.setHand(List.of(c1));
 			p1.setCurrentHearts(1);
-			
-			gService.handleAttack(p1, attackWeapon);
+			Player p2 = new Player();
+			gService.handleAttack(p2, p1, attackWeapon);
 			assertThat(p1.getCurrentHearts()==1);//no se le hace daño ya que tiene una carta de parada
 
 		}
