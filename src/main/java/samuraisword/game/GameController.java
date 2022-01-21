@@ -166,7 +166,7 @@ public class GameController {
 		gameService.asignCards(game.getDeck(), players);
 		for (Player p : players) {
 		p.getGame().setGamePhase(game.getGamePhase());
-		characterService.execute(p);
+		//characterService.execute(p);
 	}
 
 		GameSingleton.getInstance().getMapGames().put(game.getId(), game);
@@ -211,6 +211,11 @@ public class GameController {
 		Player objective = gameService.findPlayerInGameByName(game, objectiveName); //
 		Player attacker = game.getCurrentPlayer();
 
+
+		gameService.substractHearts(objective, attackWeapon);
+
+		// descartamos la 1era carta que coincida con el nombre
+		cardService.removeCardByName(cardName, game.getCurrentPlayer().getHand());
 		
 		gameService.handleAttack(game, attacker, objective, attackWeapon);
 		//descartamos una carta de parada del objetivo. En handle attack si tiene una parada no se resta pts de vida
@@ -223,7 +228,8 @@ public class GameController {
 		Boolean hasAdvancedPhase = gameService.endTurn(game);
 		if (hasAdvancedPhase) {
 			//gameService.processRecoveryPhase(game);
-			gameService.processDrawPhase(game
+			gameService.processDrawPhase(game);
+		}
 		model.put("game", game);
 		model.put("POVplayer", user);
 		return "/game/gameboard";

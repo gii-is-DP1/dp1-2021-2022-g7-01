@@ -50,6 +50,10 @@ public class AchievementService {
 		return achievementRepository.findAll();
 	}
 	
+	public Collection<PersonalAchievement> findAllPersonalAchievements() {
+		return personalAchievementRepository.findAll();
+	}
+	
 	@Transactional
 	public void saveAchievements(Achievement achievement) {
 		achievementRepository.save(achievement);

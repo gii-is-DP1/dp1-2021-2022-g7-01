@@ -35,17 +35,6 @@ INSERT INTO friends(id_user, id_user_friend) VALUES ('DonShelby', 'alefr99');
 INSERT INTO friends(id_user, id_user_friend) VALUES ('DonShelby', 'alfcadmor');
 
 
-
-
-INSERT INTO friend_Requests(id_user, id_user_requested) VALUES ('diecrequi', 'alefr99');
-INSERT INTO friend_Requests(id_user, id_user_requested) VALUES ('diecrequi', 'admin1');
-INSERT INTO friend_Requests(id_user, id_user_requested) VALUES ('juanlo', 'diecrequi');
-INSERT INTO friend_Requests(id_user, id_user_requested) VALUES ('diecrequi', 'admin1');
-INSERT INTO friend_Requests(id_user, id_user_requested) VALUES ('juanlo', 'admin1');
-INSERT INTO friend_Requests(id_user, id_user_requested) VALUES ('antquiher1', 'admin1');
-INSERT INTO friend_Requests(id_user, id_user_requested) VALUES ('pedolirod', 'admin1');
-
-
 INSERT INTO friends(id_user, id_user_friend) VALUES ('alefr99', 'alfcadmor');
 INSERT INTO friends(id_user, id_user_friend) VALUES ('alefr99', 'pedolirod');
 INSERT INTO friends(id_user, id_user_friend) VALUES ('alefr99', 'juanlo');
@@ -53,6 +42,9 @@ INSERT INTO friends(id_user, id_user_friend) VALUES ('alfcadmor', 'antquiher1');
 INSERT INTO friends(id_user, id_user_friend) VALUES ('alfcadmor', 'juanlo');
 INSERT INTO friends(id_user, id_user_friend) VALUES ('juanlo', 'antquiher1');
 INSERT INTO friends(id_user, id_user_friend) VALUES ('pedolirod', 'antquiher1');
+INSERT INTO friends(id_user, id_user_friend) VALUES ('diecrequi', 'admin1');
+INSERT INTO friends(id_user, id_user_friend) VALUES ('alefr99', 'admin1');
+INSERT INTO friends(id_user, id_user_friend) VALUES ('pedolirod', 'admin1');
 
 INSERT INTO vets VALUES (1, 'James', 'Carter');
 INSERT INTO vets VALUES (2, 'Helen', 'Leary');
@@ -139,6 +131,7 @@ INSERT INTO cards_in_hands(card_id, card_hand_id) VALUES (5, 5);
 INSERT INTO cards_in_hands(card_id, card_hand_id) VALUES (7, 1);
 INSERT INTO cards_in_hands(card_id, card_hand_id) VALUES (1, 4);
 
+
 INSERT INTO characters(id,name,life,image,text, game_phase) VALUES (1,'Benkei',5,'characters/benkei.png','All other players have +1 Difficulty when they attack you.', 0);
 INSERT INTO characters(id,name,life,image,text, game_phase) VALUES (2,'Chiyome',4,'characters/chiyome.png','You can only be wounded by Weapon cards. You are not affected by Jujutsu and Battle Cry cards. You are affected normally by other Action cards, such as Tea Ceremony.',3);
 INSERT INTO characters(id,name,life,image,text, game_phase) VALUES (3,'Ginchiyo',4,'characters/ginchiyo.png','You take 1 wound less than normal when attacked by any Weapon, to a minimum of 1 wound. E.g., a Nodachi would only deal 2 wounds to you instead of 3, but a Shuriken still inflicts 1 wound.', 4);
@@ -148,6 +141,7 @@ INSERT INTO characters(id,name,life,image,text, game_phase) VALUES (6,'Kojiro',5
 INSERT INTO characters(id,name,life,image,text, game_phase) VALUES (7,'Musashi',5,'characters/musashi.png','If you successfully attack another character with a Weapon card, you inflict 1 additional wound. This does not apply to cards that are not Weapons, like Jujutsu.',0);
 INSERT INTO characters(id,name,life,image,text, game_phase) VALUES (8,'Tomoe',5,'characters/tomoe.png','Each time you successfully attack another character with a Weapon card, you draw 1 card from the deck. You only draw 1 card, even if your Weapon does more than 1 wound.',4);
 INSERT INTO characters(id,name,life,image,text, game_phase) VALUES (9,'Ushiwaka',4,'characters/ushiwaka.png','Each time you suffer a wound from a Weapon card, you draw 1 card from the deck (so 3 wounds = 3 cards).',4);
+
 
 INSERT INTO invitation(user_sender, user_addresse, game_id) VALUES ('alefr99', 'alfcadmor', 1);
 INSERT INTO invitation(user_sender, user_addresse, game_id) VALUES ('alefr99', 'DonShelby', 1);

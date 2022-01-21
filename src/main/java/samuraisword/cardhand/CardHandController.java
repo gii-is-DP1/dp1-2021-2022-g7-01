@@ -59,7 +59,7 @@ public class CardHandController {
 		if(result.hasErrors()) {
 			model.put("cardHand", cardHand);
 			return FORM_CARDHAND;
-		} 
+		}
 		else {
 			Collection<Card> allCards = cardService.findAll();
 			List<Card> deck = new ArrayList<>();

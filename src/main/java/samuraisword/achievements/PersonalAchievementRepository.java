@@ -17,7 +17,7 @@ import samuraisword.samples.petclinic.user.User;
 
 public interface PersonalAchievementRepository extends CrudRepository<PersonalAchievement, Integer> {
 
-	//Collection<PersonalAchievement> findAll();
+	Collection<PersonalAchievement> findAll();
 	
 	@Query(value = "SELECT TITLE FROM PERSONAL_ACHIEVEMENTS WHERE USERNAME =:user", nativeQuery=true)
 	Collection<Integer> findAll(User user);
