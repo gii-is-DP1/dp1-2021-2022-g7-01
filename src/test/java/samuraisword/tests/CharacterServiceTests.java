@@ -41,7 +41,6 @@ public class CharacterServiceTests {
 	void benkeiTest() {
 		Player p1 = new Player();
 		Game g = new Game();
-		g.setGamePhase(GamePhase.ASSIGN);
 		p1.setGame(g);
 		Character c = characterService.findByName("Benkei");
 		p1.setCharacter(c);
@@ -54,7 +53,6 @@ public class CharacterServiceTests {
 	void chiyomeTest() {
 		Player p1 = new Player();
 		Game g = new Game();
-		g.setGamePhase(GamePhase.MAIN);
 		p1.setGame(g);
 		Character c = characterService.findByName("Chiyome");
 		p1.setCharacter(c);
@@ -64,30 +62,13 @@ public class CharacterServiceTests {
 	}
 	
 	@Test
-	void chiyomeTestAttackPhase() {
-		Player p1 = new Player();
-		Game g = new Game();
-		g.setGamePhase(GamePhase.ATTACK);
-		p1.setGame(g);
-		Character c = characterService.findByName("Chiyome");
-		p1.setCharacter(c);
-
-		assertThat(characterService.execute(p1)).isFalse();
-		
-	}
-	
-	@Test
 	void ginchiyoTest() {
 		Player p1 = new Player();
 		Game g = new Game();
-		g.setGamePhase(GamePhase.ATTACK);
 		p1.setGame(g);
 		Character c = characterService.findByName("Ginchiyo");
 		p1.setCharacter(c);
-		p1.setCurrentHearts(c.getLife());
-		g.setListPlayers(new ArrayList<Player>());
-		g.getListPlayers().add(p1);
-		
+
 		assertThat(characterService.execute(p1)).isTrue();		
 	}
 	
@@ -96,16 +77,10 @@ public class CharacterServiceTests {
 	void hideyoshiTest() {
 		Player p1 = new Player();
 		Game g = new Game();
-		g.setDeck(gameService.createDeck(cardService));
-		g.setCurrentPlayer(p1);
-		g.setGamePhase(GamePhase.DRAW);
 		p1.setGame(g);
-		p1.setCurrentHearts(4);
 		Character c = characterService.findByName("Hideyoshi");
-		p1.setHand(new ArrayList<Card>());
 		p1.setCharacter(c);
-		g.setListPlayers(new ArrayList<Player>());
-		g.getListPlayers().add(p1);
+		p1.setHonor(3);
 
 		assertThat(characterService.execute(p1)).isTrue();
 	}
@@ -114,7 +89,6 @@ public class CharacterServiceTests {
 	void goemonTest() {
 		Player p1 = new Player();
 		Game g = new Game();
-		g.setGamePhase(GamePhase.ASSIGN);
 		p1.setGame(g);
 		Character c = characterService.findByName("Goemon");
 		p1.setCharacter(c);
@@ -124,27 +98,9 @@ public class CharacterServiceTests {
 	}
 	
 	@Test
-	void kojiroTest() {
-		Player p1 = new Player();
-		Game g = new Game();
-		g.setCurrentPlayer(p1);
-		g.setGamePhase(GamePhase.ATTACK);
-		p1.setGame(g);
-		Character c = characterService.findByName("Kojiro");
-		p1.setHand(new ArrayList<Card>());
-		p1.setCharacter(c);
-		g.setListPlayers(new ArrayList<Player>());
-		g.getListPlayers().add(p1);
-
-		assertThat(characterService.execute(p1)).isTrue();
-		
-	}
-	
-	@Test
 	void musashiTest() {
 		Player p1 = new Player();
 		Game g = new Game();
-		g.setGamePhase(GamePhase.ASSIGN);
 		p1.setGame(g);
 		Character c = characterService.findByName("Musashi");
 		p1.setCharacter(c);
@@ -157,35 +113,13 @@ public class CharacterServiceTests {
 	void tomoeTest() {
 		Player p1 = new Player();
 		Game g = new Game();
-		g.setDeck(gameService.createDeck(cardService));
-		g.setCurrentPlayer(p1);
-		g.setGamePhase(GamePhase.ATTACK);
 		p1.setGame(g);
 		Character c = characterService.findByName("Tomoe");
-		p1.setHand(new ArrayList<Card>());
 		p1.setCharacter(c);
-		g.setListPlayers(new ArrayList<Player>());
-		g.getListPlayers().add(p1);
 
 		assertThat(characterService.execute(p1)).isTrue();
 	}
 	
-	@Test
-	void ushiwakaTest() {
-		Player p1 = new Player();
-		Game g = new Game();
-		g.setDeck(gameService.createDeck(cardService));
-		g.setCurrentPlayer(p1);
-		g.setGamePhase(GamePhase.ATTACK);
-		p1.setGame(g);
-		Character c = characterService.findByName("Ushiwaka");
-		p1.setHand(new ArrayList<Card>());
-		p1.setCharacter(c);
-		g.setListPlayers(new ArrayList<Player>());
-		g.getListPlayers().add(p1);
-
-		assertThat(characterService.execute(p1)).isTrue();
-	}
 	
 	@Test
 	@Transactional
