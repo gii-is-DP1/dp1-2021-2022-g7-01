@@ -304,9 +304,9 @@ body{
 					    						<input type="hidden" name="gameId" value="${ game.id }"></input>
 					    						<input type="hidden" name="playerName" value="${ player.getUser().getUsername() }"></input>
 					    						<input type="hidden" name="cardName" value="${ card.name }"></input>
-					    						
+					    						<c:if test="${game.currentPlayer==POVplayer.username}">
 					    						<button class="btn btn-default" type="submit">Robar Equipamiento</button>
-					    						
+					    						</c:if>
 					    		</form:form>	</c:if>	
 					    		</c:forEach>
 				  							<c:if test="${ player.equipment.size()==0 }"> NONE EQUIPPED </c:if>
