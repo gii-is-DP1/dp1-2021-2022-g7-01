@@ -57,7 +57,6 @@ public class ControllerCardTest {
 		.andExpect(view().name("cards/formCard"));
 	}
     
-//    @WithMockUser(value = "spring")
 //    @Test
 //	void testCardNew() throws Exception {
 //    	
@@ -69,7 +68,7 @@ public class ControllerCardTest {
 //    	.andExpect(status().is3xxRedirection())
 //    	.andExpect(view().name("redirect:/cards"));
 //	}
-    
+//   
 //    @WithMockUser(value = "spring")
 //    @Test
 //	void testCardEditView() throws Exception {
