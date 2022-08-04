@@ -13,7 +13,7 @@ body{
 	background-image: url("/resources/images/wood2.jpg");
 	background-position: center;
 	background-size: cover;
- 	background-opacity: 50%;
+ 	background-opacity: 50%; 
   	padding-top: 50px;
   	justify-content: center;
   	background-height: 100%;
