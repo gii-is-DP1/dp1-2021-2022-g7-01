@@ -45,7 +45,7 @@ body{
     transform: translateX(80px);
     position: absolute;
 }
-/*desplazamos el resto de jugadores; cada cual m·s lejos con respecto al primero*/
+/*desplazamos el resto de jugadores; cada cual m√°s lejos con respecto al primero*/
 .circle:nth-child(2n) {
     transform: rotate(calc(var(--angle))) translateX(80px);
     position: absolute;
@@ -114,7 +114,22 @@ table {
 	left: 250px;
 	position: absolute;
 }
-
+        
+#equipment{
+background-color: silver;
+position: relative;
+bottom: 20px;
+left: 350px;
+align-content: center;
+padding-left: 300px;
+outline-style: solid;
+outline-color: black;
+outline-width: 10px;
+padding: 20px; 
+width: 380px;
+height: 120px;
+overflow: auto;
+}
 </style>
 
 
@@ -124,7 +139,7 @@ table {
 <c:set value="${game.currentPlayer.user}" var="currentUser" />
 
 
-<!-- EN CASO DE QUE NO SEAN 4 JUGADORES REAJUSTAMOS EL ANGULO DE SEPARACION QUE SERA DADO POR 360/N∫jugadores -->
+<!-- EN CASO DE QUE NO SEAN 4 JUGADORES REAJUSTAMOS EL ANGULO DE SEPARACION QUE SERA DADO POR 360/N¬∫jugadores -->
 
 <c:if test="${listPlayer.size()==5}">
 	<script type="text/javascript">
@@ -254,6 +269,11 @@ table {
 		</table>
 	</div>
 </c:forEach>
+                                        <div  id="equipment">
+							<c:forEach items="${ game.currentPlayer.equipment }" var ="card" varStatus="loop">
+				    							<img style="height:120px; width:auto;" src="/resources/images/cards/${card.name}.png" alt="card"/>
+				    								</c:forEach>
+							</div>
 							<div style="display: inline-block; width: 45%; height: 50%; text-align:center; vertical-align: top; margin-right:10px; ">
 								<form:form action="/game/end-turn">
 									<input type="hidden" name="gameId" value="${ game.id }"></input>
