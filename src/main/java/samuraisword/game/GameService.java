@@ -15,6 +15,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import samuraisword.character.Character;
+import samuraisword.character.CharacterService;
 import samuraisword.player.Player;
 import samuraisword.player.Rol;
 import samuraisword.samples.petclinic.card.Card;
@@ -25,13 +26,15 @@ import samuraisword.samples.petclinic.card.RedCard;
 public class GameService {
 
 	private GameRepository gameRepository;
+	private final CharacterService characterService;
 
 	private final Integer MAX_CARDS_HAND = 7;
 	private final Integer NUM_CARD_DRAWN = 2;
 
 	@Autowired
-	public GameService(GameRepository gameRepository) {
+	public GameService(GameRepository gameRepository, CharacterService characterService) {
 		this.gameRepository = gameRepository;
+		this.characterService = characterService;
 	}
 
 	public Collection<Game> findAll() {
@@ -44,7 +47,6 @@ public class GameService {
 
 	@Transactional
 	public void saveGame(Game game) throws DataAccessException {
-		// creating game
 		gameRepository.save(game);
 	}
 
@@ -52,44 +54,12 @@ public class GameService {
 		gameRepository.deleteById(idGame);
 	}
 
-	public List<Card> createDeck(CardService cardService) {
-		// Crear y guardar deck
-		List<Card> gameDeck = new ArrayList<>();// funcion que crea el deck predeterminado y ordenado aleatoriamente
-		for (Card card : cardService.findAll()) {
-			for (int i = 0; i < card.getCardsPerDeck(); i++) {
-				String name = card.getName();
-				switch (cardService.findColor(name).get()) {
-				case ("Red"):
-					Integer rango = Integer.valueOf(cardService.findRange(name).get());
-					Integer damage = Integer.valueOf(cardService.findDamage(name).get());
-					RedCard redCard = RedCard.of(name, card.getImage(), rango, damage, "Red");
-					gameDeck.add(redCard);
-					break;
-				case ("Yellow"):
-					Card yellowCard = Card.of(name, card.getImage(), "Yellow");
-					gameDeck.add(yellowCard);
-					break;
-				case ("Blue"):
-					Card blueCard = Card.of(card.getName(), card.getImage(), "Blue");
-					gameDeck.add(blueCard);
-					break;
-				}
-			}
-		}
-		Collections.shuffle(gameDeck);
-
-		return gameDeck;
-	}
-	
-	
-	public List<Player> asignCharacterAndHearts(List<Player> players, List<Character> characters) {
-
+	public List<Player> asignCharacterAndHearts(List<Player> players) {
+		List<Character> characters = (List<Character>) characterService.findAll();
 		for (Player p : players) {
 			int randomNum = ThreadLocalRandom.current().nextInt(0, characters.size());
 			p.setCharacter(characters.get(randomNum));
-
 			characters.remove(randomNum);
-
 			p.setMaxHearts(p.getCharacter().getLife());
 			p.setCurrentHearts(p.getCharacter().getLife());
 			p.setDamageBonus(0);
@@ -223,10 +193,12 @@ public class GameService {
 		playerList.stream().filter(x -> x.isDisabled()).forEach(y -> playerList.remove(y));
 		// calculamos la distancia minima desde cada jugador al atacante
 		for (Player p : playerList) {
-			if(p.getCharacter().getName().equals("Chiyome"));
+			if (p.getCharacter().getName().equals("Chiyome"))
+				;
 			Integer distancia1 = calcDistance(attacker, p, playerList);
 			Integer distancia2 = calcDistance(p, attacker, playerList);
-			Integer distMin = List.of(distancia1, distancia2).stream().min(Comparator.naturalOrder()).get() + p.getDistanceBonus();
+			Integer distMin = List.of(distancia1, distancia2).stream().min(Comparator.naturalOrder()).get()
+					+ p.getDistanceBonus();
 			if (distMin <= attackWeapon.getRange() || attacker.getCharacter().getName().equals("Kojiro")) {
 				inRange.add(p);
 			}
@@ -243,7 +215,7 @@ public class GameService {
 
 	public Boolean endTurn(Game game) {
 		Boolean correctMaxCardHand = game.getCurrentPlayer().getHand().size() <= MAX_CARDS_HAND;
-		
+
 		if (correctMaxCardHand) {
 			Integer numPlayers = game.getListPlayers().size();
 			Integer nextPlayerIndex = (game.getListPlayers().indexOf(game.getCurrentPlayer()) + 1) % numPlayers;
@@ -288,16 +260,16 @@ public class GameService {
 		return game.getListPlayers().stream().filter(x -> x.getUser().getUsername().equals(objectiveName)).findFirst()
 				.get();
 	}
+
 	public void handleAttack(Player attacker, Player objective, RedCard attackWeapon) {
-		if( !objective.getHand().stream().anyMatch(x-> x.getName().equals("parada")) ) {
+		if (!objective.getHand().stream().anyMatch(x -> x.getName().equals("parada"))) {
 			substractHearts(attacker, objective, attackWeapon);
 		}
 	}
 
 	public boolean checkAllPlayersHavePositiveHonor(Game game) {
-		return game.getListPlayers().stream().allMatch(x-> x.getHonor() > 0);
+		return game.getListPlayers().stream().allMatch(x -> x.getHonor() > 0);
 	}
-
 
 	public Rol calcWinners(Game game) {
 		Double bonusNinja = 1.5;
@@ -320,20 +292,21 @@ public class GameService {
 			bonusRonin = 3.;
 			break;
 		}
-		
+
 		Map<Rol, Double> pointsPerRole = calcPointsPerRole(game);
-		//Sumamos puntos por equipos aplicando bonus
-	    pointsPerRole.put(Rol.SAMURAI, pointsPerRole.get(Rol.SHOGUN) + pointsPerRole.get(Rol.SAMURAI)*bonusSamurai);
-		pointsPerRole.put(Rol.NINJA, pointsPerRole.get(Rol.NINJA)*bonusNinja);
-		pointsPerRole.put(Rol.RONIN, pointsPerRole.get(Rol.RONIN)*bonusRonin);
-		
+		// Sumamos puntos por equipos aplicando bonus
+		pointsPerRole.put(Rol.SAMURAI, pointsPerRole.get(Rol.SHOGUN) + pointsPerRole.get(Rol.SAMURAI) * bonusSamurai);
+		pointsPerRole.put(Rol.NINJA, pointsPerRole.get(Rol.NINJA) * bonusNinja);
+		pointsPerRole.put(Rol.RONIN, pointsPerRole.get(Rol.RONIN) * bonusRonin);
+
 		Entry<Rol, Double> winnerRol = pointsPerRole.entrySet().stream().max(Map.Entry.comparingByValue()).get();
-		
+
 		return winnerRol.getKey();
 	}
 
 	private Map<Rol, Double> calcPointsPerRole(Game game) {
-		return game.getListPlayers().stream().collect(Collectors.groupingBy(Player::getRol, Collectors.summingDouble(x->x.getHonor())));
+		return game.getListPlayers().stream()
+				.collect(Collectors.groupingBy(Player::getRol, Collectors.summingDouble(x -> x.getHonor())));
 	}
-	
+
 }
