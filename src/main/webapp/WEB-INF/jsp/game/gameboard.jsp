@@ -10,13 +10,20 @@
 <style>
 body{
 	background-image: url("/resources/images/wood2.jpg");
-	background-position: center;
+	background-position: center;  
 	background-size: cover;
- 	background-opacity: 50%;
-  	justify-content: center;
-  	background-height: 100%;
+ 	background-opacity: 50%;  
+  padding-top: 50px;
+  justify-content: center;
+  background-height: 100%;
 	
 }
+
+#border{
+	 border: 2px dotted blue;
+}
+
+#div1, #div2 {margin: 20px; float: right;}
 
 /*tenemos un div central (main) circular alrededor del cual estaran posicionados los divs que renderizen la vista de cada usuario*/
 #main {
@@ -168,25 +175,42 @@ overflow: auto;
 
 <!-- EN CASO DE QUE NO SEAN 4 JUGADORES REAJUSTAMOS EL ANGULO DE SEPARACION QUE SERA DADO POR 360/Nºjugadores -->
 
-<c:if test="${listPlayer.size()==5}">
-	<script type="text/javascript">
-		var rootstyle = document.querySelector(":root").style;
-		rootstyle.setProperty('--angle', '72deg');
-	</script>
-</c:if>
-<c:if test="${listPlayer.size()==6}">
-	<script type="text/javascript">
-		var rootstyle = document.querySelector(":root").style;
-		rootstyle.setProperty('--angle', '60deg');
-	</script>
-</c:if>
-<c:if test="${listPlayer.size()==7}">
-	<script type="text/javascript">
-		var rootstyle = document.querySelector(":root").style;
-		rootstyle.setProperty('--angle', '51deg');
-	</script>
-</c:if>
-
+<div style="text-align:center;" >
+	
+	<div style="margin: auto;" >
+			<div style="display: inline-block; color: black; vertical-align:top; width: 10%; height: 60%;"> 
+				
+				
+			</div>
+		   
+    		
+    		
+	    				
+					<div align="right" style="display: inline-block; width: 45%; height: 50%; text-align:center">
+					<c:forEach items="${ listPlayer }" var ="player" varStatus="loop">
+			    		<c:if test="${ player.getUser().getUsername().equals(POVplayer.getUsername()) }">
+			    		<div>
+			    		
+			    				
+			    				<div id="div2" style="display: inline-block; border-radius: 20px; background-color: #DFDADA" class="img-wrap">
+			    				<h2>Tu PERSONAJE</h2>
+			    						<img src="/resources/images/${ player.getCharacter().getImage() }" alt="character" style="height: 20%; width:auto" />
+			    						<p>${player.getCharacter().getName()}</p>
+			    				</div>
+			    				
+			    				<div id="div1" style="display: inline-block; border-radius: 10px; background-color: #DFDADA">
+			    			<h2>Tu ROL</h2>
+			    			<img src="/resources/images/roles/${player.getRol()}.png" alt="charactere" style="height: 50%; width:auto" />
+			    				<p> ${player.getRol()}</p>
+			    				</div>
+			    				</div>
+			    				
+			    			
+			    			
+			    		</c:if>
+			    </c:forEach>			
+				</div>
+				
 	<div  style="background-color: #DFDADA; border-radius:15px; width:60%; height: auto">
 					<div style="max-width:98%; display:inline">
 					<c:forEach items="${ listPlayer }" var ="player" varStatus="loop">
