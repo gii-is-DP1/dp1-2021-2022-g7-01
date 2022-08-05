@@ -1,33 +1,22 @@
 package samuraisword.character;
 
-import java.util.ArrayList;
-
 import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import samuraisword.game.Game;
-import samuraisword.game.GameService;
 import samuraisword.player.Player;
-import samuraisword.player.PlayerService;
-import samuraisword.samples.petclinic.card.Card;
 import samuraisword.samples.petclinic.card.CardService;
 
 @Service
 public class CharacterService {
 
     private CharacterRepository characterRepository;
-    private CardService cardService;
 
     @Autowired
-    public CharacterService(CharacterRepository characterRepository,
-            CardService cardService) {
+    public CharacterService(CharacterRepository characterRepository) {
         this.characterRepository = characterRepository;
-        this.cardService = cardService;
     }
 
     @Transactional
