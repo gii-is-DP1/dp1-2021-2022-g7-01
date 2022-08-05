@@ -66,18 +66,8 @@ import samuraisword.samples.petclinic.user.UserService;
 			Player p3 = new Player();
 			Player p4 = new Player();
 			List<Player> players = List.of(p1,p2,p3,p4);
-			List<Character> characters = (List<Character>) cService.findAll();
-			Integer characterSizeBefore = characters.size();
-			gService.asignCharacterAndHearts(players, characters);
-			Integer characterSizeAfter = characters.size();
+			gService.asignCharacterAndHearts(players);
 			assertThat(players.stream().allMatch(x -> !x.getCharacter().equals(null)));
-			assertThat(characterSizeAfter.equals(characterSizeBefore-players.size()));
-		}
-		
-		@Test
-		void createDeckTest() {
-			List<Card> ls = gService.createDeck(cardService);
-			assertThat(ls.size()==90);
 		}
 		
 		@Test
