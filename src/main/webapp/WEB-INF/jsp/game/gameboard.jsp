@@ -322,7 +322,7 @@ table {
 			    				<div id="div1" style="display: inline-block; border-radius: 50px">
 			    			<h2>TU ROL</h2>
 			    			<img src="/resources/images/roles/${player.getRol()}.png" alt="charactere" style="height: 40%; width:auto" />
-			    				<p> ${player.getRol()}</p>
+			    				<p> ${player.getRol()}</p> 
 			    				</div>
 			    				</div>
 			    				
