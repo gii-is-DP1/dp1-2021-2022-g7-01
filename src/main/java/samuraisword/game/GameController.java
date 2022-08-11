@@ -162,7 +162,10 @@ public class GameController {
 
 		GameSingleton.getInstance().getMapGames().put(game.getId(), game);
 
-		model.put("POVplayer", user);
+		Player POVplayer = game.getListPlayers().stream()
+				.filter(p -> p.getUser().getUsername().equals(user.getUsername()))
+				.findFirst().get();
+		model.put("POVplayer", POVplayer);
 		model.put("game", game);
 
 		return "/game/gameboard";
@@ -184,7 +187,11 @@ public class GameController {
 		model.put("attackWeapon", attackWeapon);
 		model.put("inRange", inRange);
 		model.put("game", game);
-		model.put("POVplayer", user);
+		
+		Player POVplayer = game.getListPlayers().stream()
+				.filter(p -> p.getUser().getUsername().equals(user.getUsername()))
+				.findFirst().get();
+		model.put("POVplayer", POVplayer);
 
 		return "/game/gameboard";
 	}
@@ -217,7 +224,11 @@ public class GameController {
 			gameService.processDrawPhase(game);
 		}
 		model.put("game", game);
-		model.put("POVplayer", user);
+		
+		Player POVplayer = game.getListPlayers().stream()
+				.filter(p -> p.getUser().getUsername().equals(user.getUsername()))
+				.findFirst().get();
+		model.put("POVplayer", POVplayer);
 		return "/game/gameboard";
 	}
 
@@ -242,7 +253,11 @@ public class GameController {
 		}
 
 		model.put("game", game);
-		model.put("POVplayer", user);
+		
+		Player POVplayer = game.getListPlayers().stream()
+				.filter(p -> p.getUser().getUsername().equals(user.getUsername()))
+				.findFirst().get();
+		model.put("POVplayer", POVplayer);
 		return view;
 	}
 
@@ -261,7 +276,10 @@ public class GameController {
 			gameService.processDrawPhase(game);
 		}
 		model.put("game", game);
-		model.put("POVplayer", user);
+		Player POVplayer = game.getListPlayers().stream()
+				.filter(p -> p.getUser().getUsername().equals(user.getUsername()))
+				.findFirst().get();
+		model.put("POVplayer", POVplayer);
 		return "/game/gameboard";
 	}
 
@@ -288,7 +306,10 @@ public class GameController {
 		cardService.discard(cardName, p.getHand(), game.getDiscardPile());
 
 		model.put("game", game);
-		model.put("POVplayer", user);
+		Player POVplayer = game.getListPlayers().stream()
+				.filter(pl -> pl.getUser().getUsername().equals(user.getUsername()))
+				.findFirst().get();
+		model.put("POVplayer", POVplayer);
 		return "/game/gameboard";
 	}
 
