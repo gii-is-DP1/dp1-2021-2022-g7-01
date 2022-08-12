@@ -46,7 +46,6 @@ public class GameController {
 	private static final String VIEWS_CREATE_GAME = "game/createGame";
 
 	@Autowired
-
 	public GameController(GameService GameService, UserService userService, PlayerService playerService,
 			CardService cardService, CharacterService characterService, InvitationService invitationService) {
 		this.gameService = GameService;
@@ -91,7 +90,7 @@ public class GameController {
 	public String showGame(@PathVariable("gameId") int gameId, Map<String, Object> model, HttpServletResponse a) {
 		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		User user = userService.findUser(userDetails.getUsername()).get();
-		if(!(GameSingleton.getInstance().getMapGames().containsKey(gameId))) {
+		if (!(GameSingleton.getInstance().getMapGames().containsKey(gameId))) {
 			a.addHeader("Refresh", "1");
 			Game game = gameService.findById(gameId).get();
 			model.put("now", new Date());
@@ -100,7 +99,7 @@ public class GameController {
 			model.put("listPlayer", game.getListPlayers());
 			model.put("gameId", gameId);
 			return "game/game";
-		}else {
+		} else {
 			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
 			model.put("game", game);
 			model.put("POVplayer", user);
@@ -122,10 +121,8 @@ public class GameController {
 		Game game = gameService.findById(gameId).get();
 
 		game.setGamePhase(GamePhase.MAIN);
-		game.setDeck(gameService.createDeck(cardService));
+		game.setDeck(cardService.createDeck());
 		game.setDiscardPile(new ArrayList<>());
-
-		List<Character> characters = (List<Character>) characterService.findAll();
 
 		List<Player> players = game.getListPlayers();
 
@@ -137,9 +134,9 @@ public class GameController {
 		Player p3 = playerService.findById(3).get();
 
 		Player p4 = playerService.findById(4).get();
-	
+
 		Player p5 = playerService.findById(5).get();
-		
+
 		Player p6 = playerService.findById(6).get();
 
 		players.add(p1);
@@ -148,30 +145,27 @@ public class GameController {
 		players.add(p4);
 		players.add(p5);
 		players.add(p6);
-		//
-		gameService.asignCharacterAndHearts(players, characters);
 
-
+		gameService.asignCharacterAndHearts(players);
 		gameService.asignRolAndHonor(players);
-
 		gameService.asignOrder(players);
 
 		game.setListPlayers(players);
 		game.setCurrentPlayer(players.get(0));
 
 		for (Player player : game.getListPlayers()) {
+			player.setGame(game);
 			playerService.savePlayer(player);
 		}
 
 		gameService.asignCards(game.getDeck(), players);
-		for (Player p : players) {
-		p.getGame().setGamePhase(game.getGamePhase());
-		//characterService.execute(p);
-    }
 
 		GameSingleton.getInstance().getMapGames().put(game.getId(), game);
 
-		model.put("POVplayer", user);
+		Player POVplayer = game.getListPlayers().stream()
+				.filter(p -> p.getUser().getUsername().equals(user.getUsername()))
+				.findFirst().get();
+		model.put("POVplayer", POVplayer);
 		model.put("game", game);
 
 		return "/game/gameboard";
@@ -193,12 +187,16 @@ public class GameController {
 		model.put("attackWeapon", attackWeapon);
 		model.put("inRange", inRange);
 		model.put("game", game);
-		model.put("POVplayer", user);
+		
+		Player POVplayer = game.getListPlayers().stream()
+				.filter(p -> p.getUser().getUsername().equals(user.getUsername()))
+				.findFirst().get();
+		model.put("POVplayer", POVplayer);
 
 		return "/game/gameboard";
 	}
 
-	@PostMapping(value = {"/game/attack/playerselected"})
+	@PostMapping(value = { "/game/attack/playerselected" })
 	public String performAttack(@RequestParam("gameId") Integer gameId,
 			@RequestParam("objectivePlayer") String objectiveName, @RequestParam("cardName") String cardName,
 			Map<String, Object> model) {
@@ -212,20 +210,25 @@ public class GameController {
 		Player attacker = game.getCurrentPlayer();
 
 		gameService.handleAttack(attacker, objective, attackWeapon);
-		//descartamos una carta de parada del objetivo. En handle attack si tiene una parada no se resta pts de vida
-		//al objetivo por lo tanto, la asumimos como utilizada y ahora hay que descartarla.
+		// descartamos una carta de parada del objetivo. En handle attack si tiene una
+		// parada no se resta pts de vida
+		// al objetivo por lo tanto, la asumimos como utilizada y ahora hay que
+		// descartarla.
 		cardService.discard("parada", attacker.getHand(), game.getDiscardPile());
-		//descartamos la 1era carta que coincida con el nombre del arma usada
+		// descartamos la 1era carta que coincida con el nombre del arma usada
 		cardService.discard(cardName, attacker.getHand(), game.getDiscardPile());
-		
 
 		Boolean hasAdvancedPhase = gameService.endTurn(game);
 		if (hasAdvancedPhase) {
-			//gameService.processRecoveryPhase(game);
+			// gameService.processRecoveryPhase(game);
 			gameService.processDrawPhase(game);
 		}
 		model.put("game", game);
-		model.put("POVplayer", user);
+		
+		Player POVplayer = game.getListPlayers().stream()
+				.filter(p -> p.getUser().getUsername().equals(user.getUsername()))
+				.findFirst().get();
+		model.put("POVplayer", POVplayer);
 		return "/game/gameboard";
 	}
 
@@ -237,38 +240,46 @@ public class GameController {
 		Game game = GameSingleton.getInstance().getMapGames().get(gameId);
 		Boolean hasAdvancedPhase = gameService.endTurn(game);
 
-		if(gameService.checkAllPlayersHavePositiveHonor(game)) {
-			if(hasAdvancedPhase) {
+		if (gameService.checkAllPlayersHavePositiveHonor(game)) {
+			if (hasAdvancedPhase) {
 				gameService.processRecoveryPhase(game);
 				gameService.processDrawPhase(game);
-			}else {//fin de la partida cuando algun jugador no le quedan puntos de honor (honor<=0)
-			view = "/game/endgame";
-			Rol winnerRol = gameService.calcWinners(game);
-			model.put("winnerRol", winnerRol);
+			} else {// fin de la partida cuando algun jugador no le quedan puntos de honor
+					// (honor<=0)
+				view = "/game/endgame";
+				Rol winnerRol = gameService.calcWinners(game);
+				model.put("winnerRol", winnerRol);
 			}
 		}
-		
+
 		model.put("game", game);
-		model.put("POVplayer", user);
+		
+		Player POVplayer = game.getListPlayers().stream()
+				.filter(p -> p.getUser().getUsername().equals(user.getUsername()))
+				.findFirst().get();
+		model.put("POVplayer", POVplayer);
 		return view;
 	}
 
-	@PostMapping(value = "/game/discard-card" )
+	@PostMapping(value = "/game/discard-card")
 	public String discardCard(@RequestParam("gameId") Integer gameId, @RequestParam("cardName") String cardName,
 			Map<String, Object> model) {
 		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		User user = userService.findUser(userDetails.getUsername()).get();
 		Game game = GameSingleton.getInstance().getMapGames().get(gameId);
-		
+
 		cardService.discard(cardName, game.getCurrentPlayer().getHand(), game.getDiscardPile());
-		
+
 		Boolean hasAdvancedPhase = gameService.endTurn(game);
 		if (hasAdvancedPhase) {
 			gameService.processRecoveryPhase(game);
 			gameService.processDrawPhase(game);
 		}
 		model.put("game", game);
-		model.put("POVplayer", user);
+		Player POVplayer = game.getListPlayers().stream()
+				.filter(p -> p.getUser().getUsername().equals(user.getUsername()))
+				.findFirst().get();
+		model.put("POVplayer", POVplayer);
 		return "/game/gameboard";
 	}
 
@@ -292,12 +303,13 @@ public class GameController {
 
 		cardService.removeCardByName(cardName, p.getHand());
 
-		
-		cardService.discard(cardName,  p.getHand(), game.getDiscardPile());
-			
+		cardService.discard(cardName, p.getHand(), game.getDiscardPile());
 
 		model.put("game", game);
-		model.put("POVplayer", user);
+		Player POVplayer = game.getListPlayers().stream()
+				.filter(pl -> pl.getUser().getUsername().equals(user.getUsername()))
+				.findFirst().get();
+		model.put("POVplayer", POVplayer);
 		return "/game/gameboard";
 	}
 
@@ -323,7 +335,7 @@ public class GameController {
 	public String stealCardPlayer(@RequestParam("gameId") Integer gameId, @RequestParam("playerName") String playerName,
 			Map<String, Object> model) {
 		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		
+
 		Game game = GameSingleton.getInstance().getMapGames().get(gameId);
 		User user = userService.findUser(userDetails.getUsername()).get();
 		Player p = game.getCurrentPlayer();
@@ -333,43 +345,36 @@ public class GameController {
 
 		p.getHand().add(p2.getHand().get(valorDado));
 		p2.getHand().remove(valorDado);
-		
-		for(Card i: p.getHand()) {
-			if(i.getName().equals("distraccion")) {
+
+		for (Card i : p.getHand()) {
+			if (i.getName().equals("distraccion")) {
 				game.getDiscardPile().add(i);
 				p.getHand().remove(i);
 				break;
-			}			
+			}
 		}
-		
-		
 
 		model.put("game", game);
 		model.put("POVplayer", user);
 		return "/game/gameboard";
 	}
-	
-	
+
 	@PostMapping(value = { "/game/stealEquipment" })
-	public String stealCard(@RequestParam("gameId") Integer gameId, @RequestParam("playerName") String playerName, 
-			@RequestParam("cardName") String cardName,
-			Map<String, Object> model) {
+	public String stealCard(@RequestParam("gameId") Integer gameId, @RequestParam("playerName") String playerName,
+			@RequestParam("cardName") String cardName, Map<String, Object> model) {
 		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		User user = userService.findUser(userDetails.getUsername()).get();
 		Game game = GameSingleton.getInstance().getMapGames().get(gameId);
-		Player p = game.getCurrentPlayer();	
+		Player p = game.getCurrentPlayer();
 		Player p2 = gameService.findPlayerInGameByName(game, playerName);
-		Optional<Card> card=cardService.findByName(cardName);
-		
+		Optional<Card> card = cardService.findByName(cardName);
+
 		p.getEquipment().add(card.get());
 		p2.getEquipment().remove(card.get());
-				
+
 		model.put("game", game);
 		model.put("POVplayer", user);
 		return "/game/gameboard";
 	}
-	
-	
-	
 
 }

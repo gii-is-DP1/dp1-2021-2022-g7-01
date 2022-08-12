@@ -54,22 +54,4 @@ public class Card extends BaseEntity{
 		res.setColor(color);
 		return res;
 	}
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
 }
