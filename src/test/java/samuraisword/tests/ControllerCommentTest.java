@@ -49,6 +49,8 @@ public class ControllerCommentTest {
 		.andExpect(view().name("comments/formComment"));
 	}
     
+    
+    
     @WithMockUser(value = "admin1")
     @Test
 	void testDeleteComment() throws Exception {
@@ -57,5 +59,7 @@ public class ControllerCommentTest {
 		.andExpect(status().is3xxRedirection())		//el is3xxRedirection es para si modificas la bd
 		.andExpect(view().name("redirect:/comments"));
 	}
+    
+    
     
 }

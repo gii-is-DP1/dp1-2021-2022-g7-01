@@ -58,6 +58,8 @@ public class ControllerPlayerTest {
 		.andExpect(view().name("players/listPlayers"));
 	}
     
+   
+    
     @WithMockUser(value = "admin1")
     @Test
 	void testDeleteComment() throws Exception {
