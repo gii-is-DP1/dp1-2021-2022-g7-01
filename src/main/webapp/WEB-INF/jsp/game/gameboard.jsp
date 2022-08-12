@@ -1,4 +1,3 @@
-
 <%@ page session="false" trimDirectiveWhitespaces="true"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
@@ -336,9 +335,9 @@ table {
 	<!-- BUTTONS -->
 	<div class="buttons container">
 		<form:form action="/game/end-turn">
-                                    <input type="hidden" name="gameId" value="${ game.id }"></input>
-                                    <button id="btn-end-turn" class="button"> END TURN </button>
-                                </form:form>
+            <input type="hidden" name="gameId" value="${ game.id }"></input>
+            <button id="btn-end-turn" class="button"> END TURN </button>
+        </form:form>
 	</div>
 
 </div>
@@ -468,15 +467,16 @@ table {
                     <div style="max-width:98%; display:inline">
                     <c:forEach items="${ listPlayer }" var ="player" varStatus="loop">
                         <c:if test="${ player.getUser().getUsername().equals(POVplayer.getUser().getUsername()) }">
-                            <form action="ACTION AQUI">
-                                <c:forEach items="${ player.hand }" var ="card" varStatus="loop">
+							<form:form action="/game/use-card">
+								<input type="hidden" name="gameId" value="${ game.id }"></input>
+								<c:forEach items="${ player.hand }" var ="card" varStatus="loop">
                                     <div style="display: inline-block; height:auto; width:12%">
                                         <img style="height:auto; width:100%" src="/resources/images/cards/${card.name}.png" alt="${card.name}"/>
-                                        <input type="radio" value="${card.name}" name="selectedCard" />
+                                        <input type="radio" value="${card.name}" name="cardName" />
                                     </div>
-                                  </c:forEach>
-                                  <button type="submit" class="button" style="max-width: 10%; max-height:10%; ">USAR CARTA</button>
-                              </form>
+								</c:forEach>
+								<button id="btn-end-turn" class="button"> USAR CARTA </button>
+							</form:form>
                           </c:if>
                     </c:forEach>
                     </div>

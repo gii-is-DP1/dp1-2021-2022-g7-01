@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -377,4 +379,236 @@ public class GameController {
 		return "/game/gameboard";
 	}
 
+	//--------------------------------------------------------------------------------------------------------------------------
+		@GetMapping(value = {"/game/continue/{id_game}"})
+		public String continueGame(@PathVariable("id_game") int gameId, Map<String, Object> model) {
+			String view = "/game/gameboard";
+			UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			User user = userService.findUser(userDetails.getUsername()).get();
+			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
+
+			model.put("game", game);
+			
+			Player POVplayer = game.getListPlayers().stream()
+					.filter(p -> p.getUser().getUsername().equals(user.getUsername()))
+					.findFirst().get();
+			model.put("POVplayer", POVplayer);
+			return view;
+		}
+	//--------------------------------------------------------------------------------------------------------------------------
+		
+		@PostMapping(value = {"/game/use-card"})
+		public String useCard(@RequestParam("gameId") Integer gameId, @RequestParam("cardName") String cardName, 
+				Map<String, Object> model) {
+			String view = "redirect:/game/"+cardName+"/"+gameId;
+			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
+			cardService.discard(cardName, game.getCurrentPlayer().getHand(), game.getDiscardPile());
+			
+			return view;
+		}
+		
+		//-------------------------------------------------------------------------------------------------------------Rojo
+		@GetMapping(value = {"/game/bo/{id_game}"})
+		public String boCard(@PathVariable("id_game") int gameId, Map<String, Object> model) {
+			String view = "redirect:/game/continue/"+gameId;
+			//----------Aqui va el método
+			
+			return view;
+		}
+		
+		@GetMapping(value = {"/game/bokken/{id_game}"})
+		public String bokkenCard(@PathVariable("id_game") int gameId, Map<String, Object> model) {
+			String view = "redirect:/game/continue/"+gameId;
+			//----------Aqui va el método
+			
+			return view;
+		}
+		
+		@GetMapping(value = {"/game/daiku/{id_game}"})
+		public String daikuCard(@PathVariable("id_game") int gameId, Map<String, Object> model) {
+			String view = "redirect:/game/continue/"+gameId;
+			//----------Aqui va el método
+			
+			return view;
+		}
+		
+		@GetMapping(value = {"/game/kanabo/{id_game}"})
+		public String kanaboCard(@PathVariable("id_game") int gameId, Map<String, Object> model) {
+			String view = "redirect:/game/continue/"+gameId;
+			//----------Aqui va el método
+			
+			return view;
+		}
+		
+		@GetMapping(value = {"/game/katana/{id_game}"})
+		public String katanaCard(@PathVariable("id_game") int gameId, Map<String, Object> model) {
+			String view = "redirect:/game/continue/"+gameId;
+			//----------Aqui va el método
+			
+			return view;
+		}
+		
+		@GetMapping(value = {"/game/kiseru/{id_game}"})
+		public String kiseruCard(@PathVariable("id_game") int gameId, Map<String, Object> model) {
+			String view = "redirect:/game/continue/"+gameId;
+			//----------Aqui va el método
+			
+			return view;
+		}
+		
+		@GetMapping(value = {"/game/kusarigama/{id_game}"})
+		public String kusarigamaCard(@PathVariable("id_game") int gameId, Map<String, Object> model) {
+			String view = "redirect:/game/continue/"+gameId;
+			//----------Aqui va el método
+			
+			return view;
+		}
+		
+		@GetMapping(value = {"/game/nagayari/{id_game}"})
+		public String nagayariCard(@PathVariable("id_game") int gameId, Map<String, Object> model) {
+			String view = "redirect:/game/continue/"+gameId;
+			//----------Aqui va el método
+			
+			return view;
+		}
+		
+		@GetMapping(value = {"/game/naginata/{id_game}"})
+		public String naginataCard(@PathVariable("id_game") int gameId, Map<String, Object> model) {
+			String view = "redirect:/game/continue/"+gameId;
+			//----------Aqui va el método
+			
+			return view;
+		}
+		
+		@GetMapping(value = {"/game/nodachi/{id_game}"})
+		public String nodachiCard(@PathVariable("id_game") int gameId, Map<String, Object> model) {
+			String view = "redirect:/game/continue/"+gameId;
+			//----------Aqui va el método
+			
+			return view;
+		}
+		
+		@GetMapping(value = {"/game/shuriken/{id_game}"})
+		public String shurikenCard(@PathVariable("id_game") int gameId, Map<String, Object> model) {
+			String view = "redirect:/game/continue/"+gameId;
+			//----------Aqui va el método
+			
+			return view;
+		}
+		
+		@GetMapping(value = {"/game/tanegashima/{id_game}"})
+		public String tanegashimaCard(@PathVariable("id_game") int gameId, Map<String, Object> model) {
+			String view = "redirect:/game/continue/"+gameId;
+			//----------Aqui va el método
+			
+			return view;
+		}
+		
+		@GetMapping(value = {"/game/wakizashi/{id_game}"})
+		public String wakizashiCard(@PathVariable("id_game") int gameId, Map<String, Object> model) {
+			String view = "redirect:/game/continue/"+gameId;
+			//----------Aqui va el método
+			
+			return view;
+		}
+		
+		//--------------------------------------------------------------------------------------------------------Amarillo
+		
+		@GetMapping(value = {"/game/ceremonia del te/{id_game}"})
+		public String ceremoniaDelTeCard(@PathVariable("id_game") int gameId, Map<String, Object> model) {
+			String view = "redirect:/game/continue/"+gameId;
+			//----------Aqui va el método
+			
+			return view;
+		}
+		
+		@GetMapping(value = {"/game/daimio/{id_game}"})
+		public String daimioCard(@PathVariable("id_game") int gameId, Map<String, Object> model) {
+			String view = "redirect:/game/continue/"+gameId;
+			//----------Aqui va el método
+			
+			return view;
+		}
+		
+		@GetMapping(value = {"/game/distraccion/{id_game}"})
+		public String distraccionCard(@PathVariable("id_game") int gameId, Map<String, Object> model) {
+			String view = "redirect:/game/continue/"+gameId;
+			//----------Aqui va el método
+			
+			return view;
+		}
+		
+		@GetMapping(value = {"/game/geisha/{id_game}"})
+		public String geishaCard(@PathVariable("id_game") int gameId, Map<String, Object> model) {
+			String view = "redirect:/game/continue/"+gameId;
+			//----------Aqui va el método
+			
+			return view;
+		}
+		
+		@GetMapping(value = {"/game/grito de batalla/{id_game}"})
+		public String gritoDeBatallaCard(@PathVariable("id_game") int gameId, Map<String, Object> model) {
+			String view = "redirect:/game/continue/"+gameId;
+			//----------Aqui va el método
+			
+			return view;
+		}
+		
+		@GetMapping(value = {"/game/jiu-jitsu/{id_game}"})
+		public String jiuJitsuCard(@PathVariable("id_game") int gameId, Map<String, Object> model) {
+			String view = "redirect:/game/continue/"+gameId;
+			//----------Aqui va el método
+			
+			return view;
+		}
+		
+		@GetMapping(value = {"/game/parada/{id_game}"})
+		public String paradaCard(@PathVariable("id_game") int gameId, Map<String, Object> model) {
+			String view = "redirect:/game/continue/"+gameId;
+			//----------Aqui va el método
+			
+			return view;
+		}
+		
+		@GetMapping(value = {"/game/respiracion/{id_game}"})
+		public String respiracionCard(@PathVariable("id_game") int gameId, Map<String, Object> model) {
+			String view = "redirect:/game/continue/"+gameId;
+			//----------Aqui va el método
+			
+			return view;
+		}
+		
+		//--------------------------------------------------------------------------------------------------------Azul
+		@GetMapping(value = {"/game/armadura/{id_game}"})
+		public String armaduraCard(@PathVariable("id_game") int gameId, Map<String, Object> model) {
+			String view = "redirect:/game/continue/"+gameId;
+			//----------Aqui va el método
+			
+			return view;
+		}
+		
+		@GetMapping(value = {"/game/bushido/{id_game}"})
+		public String bushidoCard(@PathVariable("id_game") int gameId, Map<String, Object> model) {
+			String view = "redirect:/game/continue/"+gameId;
+			//----------Aqui va el método
+			
+			return view;
+		}
+		
+		@GetMapping(value = {"/game/concentracion/{id_game}"})
+		public String concentracionCard(@PathVariable("id_game") int gameId, Map<String, Object> model) {
+			String view = "redirect:/game/continue/"+gameId;
+			//----------Aqui va el método
+			
+			return view;
+		}
+		
+		@GetMapping(value = {"/game/desenvainado rapido/{id_game}"})
+		public String desenvainadoRapidoCard(@PathVariable("id_game") int gameId, Map<String, Object> model) {
+			String view = "redirect:/game/continue/"+gameId;
+			//----------Aqui va el método
+			
+			return view;
+		}
+		
 }
