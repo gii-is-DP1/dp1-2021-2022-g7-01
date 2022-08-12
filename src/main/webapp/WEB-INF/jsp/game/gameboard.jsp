@@ -40,7 +40,7 @@ body {
     position: absolute;
 }
 
-/*desplazamos el resto de jugadores; cada cual más lejos con respecto al primero*/
+/*desplazamos el resto de jugadores; cada cual mï¿½s lejos con respecto al primero*/
 .innerCircle:nth-child(2n) {
     transform: rotate(calc(var(--angle))) translateX(80px);
     left:100px;
@@ -179,15 +179,26 @@ table {
 }
 
 #div1, #div2 {margin: 20px}
-</style>
 
+.viewAttackCards{
+	visibility: hidden;
+  	opacity: 0;
+  	transition: opacity .2s, visibility .2s;
+}
+
+.button:nth-child(3n):focus .viewAttackCards{
+  visibility: visible;
+  opacity: 1;
+}
+
+</style>
 
 <c:set value="${game.listPlayers}" var="listPlayer" />
 <c:set value="${game.deck}" var="deck" />
 <c:set value="${game.discardPile}" var="discardPile" />
 <c:set value="${game.currentPlayer.user}" var="currentUser" />
 
-<!-- EN CASO DE QUE NO SEAN 4 JUGADORES REAJUSTAMOS EL ANGULO DE SEPARACION QUE SERA DADO POR 360/Nºjugadores -->
+<!-- EN CASO DE QUE NO SEAN 4 JUGADORES REAJUSTAMOS EL ANGULO DE SEPARACION QUE SERA DADO POR 360/Nï¿½jugadores -->
 
 <c:if test="${listPlayer.size()==5}">
 	<script type="text/javascript">
@@ -344,7 +355,7 @@ table {
 
                     <form:form action="/game/steal">
                                                 <input type="hidden" name="gameId" value="${ game.id }"></input>
-                                                <!--  BOTÓN PARA ROBAR
+                                                <!--  BOTï¿½N PARA ROBAR
                                                 <c:if test="${game.currentPlayer==POVplayer.getUser().username}">
                                                 <button class="btn btn-default" type="submit" style="padding:5px 25px">Select</button>
                                                 </c:if>
