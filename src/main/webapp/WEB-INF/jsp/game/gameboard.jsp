@@ -1,4 +1,3 @@
-
 <%@ page session="false" trimDirectiveWhitespaces="true"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
@@ -31,7 +30,6 @@ body {
 :root {
 	--angle : 90deg;
 }
-
 /*el primero no lo desplazamos*/
 .innerCircle:nth-child(1n) {
     transform: translateX(80px);
@@ -40,7 +38,7 @@ body {
     position: absolute;
 }
 
-/*desplazamos el resto de jugadores; cada cual m�s lejos con respecto al primero*/
+/*desplazamos el resto de jugadores; cada cual mï¿½s lejos con respecto al primero*/
 .innerCircle:nth-child(2n) {
     transform: rotate(calc(var(--angle))) translateX(80px);
     left:100px;
@@ -145,6 +143,7 @@ body {
     outline-width: 10px;
     border-radius: 20px;
 }
+*/
 
 .hand {
 	width: 100%;
@@ -186,19 +185,19 @@ table {
   	transition: opacity .2s, visibility .2s;
 }
 
-.button:nth-child(3n):focus .viewAttackCards{
-  visibility: visible;
-  opacity: 1;
+.division{
+	display: none;
 }
 
 </style>
+
 
 <c:set value="${game.listPlayers}" var="listPlayer" />
 <c:set value="${game.deck}" var="deck" />
 <c:set value="${game.discardPile}" var="discardPile" />
 <c:set value="${game.currentPlayer.user}" var="currentUser" />
 
-<!-- EN CASO DE QUE NO SEAN 4 JUGADORES REAJUSTAMOS EL ANGULO DE SEPARACION QUE SERA DADO POR 360/N�jugadores -->
+<!-- EN CASO DE QUE NO SEAN 4 JUGADORES REAJUSTAMOS EL ANGULO DE SEPARACION QUE SERA DADO POR 360/Nï¿½jugadores -->
 
 <c:if test="${listPlayer.size()==5}">
 	<script type="text/javascript">
@@ -305,6 +304,7 @@ table {
 						</c:when>
 						<c:otherwise>
 							<p><img style="float: left; width: 80px;" title="" src="${equipment3}" id="equipment3" /> x${ player.getWeaponBonus() } </p>
+
 						</c:otherwise>
 					</c:choose>
 					
@@ -312,6 +312,7 @@ table {
 				<td>
 					<spring:url value="/resources/images/${ player.getCharacter().getImage() }" htmlEscape="true" var="character" /> 
 					<img style="float: left; width: 80px;" title="" src="${character}" id="character" />
+
 				</td>
 				<td>
 					<c:choose>
@@ -334,9 +335,9 @@ table {
 	<!-- BUTTONS -->
 	<div class="buttons container">
 		<form:form action="/game/end-turn">
-                                    <input type="hidden" name="gameId" value="${ game.id }"></input>
-                                    <button id="btn-end-turn" class="button"> END TURN </button>
-                                </form:form>
+            <input type="hidden" name="gameId" value="${ game.id }"></input>
+            <button id="btn-end-turn" class="button"> END TURN </button>
+        </form:form>
 	</div>
 
 </div>
@@ -355,7 +356,7 @@ table {
 
                     <form:form action="/game/steal">
                                                 <input type="hidden" name="gameId" value="${ game.id }"></input>
-                                                <!--  BOT�N PARA ROBAR
+                                                <!--  BOTï¿½N PARA ROBAR
                                                 <c:if test="${game.currentPlayer==POVplayer.getUser().username}">
                                                 <button class="btn btn-default" type="submit" style="padding:5px 25px">Select</button>
                                                 </c:if>
@@ -466,15 +467,16 @@ table {
                     <div style="max-width:98%; display:inline">
                     <c:forEach items="${ listPlayer }" var ="player" varStatus="loop">
                         <c:if test="${ player.getUser().getUsername().equals(POVplayer.getUser().getUsername()) }">
-                            <form action="ACTION AQUI">
-                                <c:forEach items="${ player.hand }" var ="card" varStatus="loop">
+							<form:form action="/game/use-card">
+								<input type="hidden" name="gameId" value="${ game.id }"></input>
+								<c:forEach items="${ player.hand }" var ="card" varStatus="loop">
                                     <div style="display: inline-block; height:auto; width:12%">
                                         <img style="height:auto; width:100%" src="/resources/images/cards/${card.name}.png" alt="${card.name}"/>
-                                        <input type="radio" value="${card.name}" name="selectedCard" />
+                                        <input type="radio" value="${card.name}" name="cardName" />
                                     </div>
-                                  </c:forEach>
-                                  <button type="submit" class="button" style="max-width: 10%; max-height:10%; ">USAR CARTA</button>
-                              </form>
+								</c:forEach>
+								<button id="btn-end-turn" class="button"> USAR CARTA </button>
+							</form:form>
                           </c:if>
                     </c:forEach>
                     </div>
