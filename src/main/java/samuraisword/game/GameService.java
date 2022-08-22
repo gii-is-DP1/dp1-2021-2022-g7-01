@@ -159,7 +159,7 @@ public class GameService {
 	}
 
 	public void asignCards(List<Card> gameDeck, List<Player> players) {
-		int cardsGiven = 4;
+		int cardsGiven = 8;
 		for (int i = 0; i < players.size(); i++) { // player tiene 2 cardhands la 0 indica la mano, la 1 las equipadas
 			// Normas del reparto de cartas:
 			// En la lista players el indice 0 corresponde al shogun ya que esta funcion es
@@ -212,18 +212,19 @@ public class GameService {
 		return playersBetween;
 	}
 
+
 	public Boolean endTurn(Game game) {
 		Boolean correctMaxCardHand = game.getCurrentPlayer().getHand().size() < MAX_CARDS_HAND;
+
 
 		if (correctMaxCardHand) {
 			Integer numPlayers = game.getListPlayers().size();
 			Integer nextPlayerIndex = (game.getListPlayers().indexOf(game.getCurrentPlayer()) + 1) % numPlayers;
 			game.setCurrentPlayer(game.getListPlayers().get(nextPlayerIndex));
-			game.setGamePhase(GamePhase.RECOVERY);
+			game.setGamePhase(GamePhase.MAIN);
 		} else {
 			game.setGamePhase(GamePhase.DISCARD);
 		}
-		return correctMaxCardHand;
 	}
 
 	public void processRecoveryPhase(Game game) {
