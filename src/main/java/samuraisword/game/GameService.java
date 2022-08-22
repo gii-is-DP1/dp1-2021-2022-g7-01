@@ -19,7 +19,6 @@ import samuraisword.character.CharacterService;
 import samuraisword.player.Player;
 import samuraisword.player.Rol;
 import samuraisword.samples.petclinic.card.Card;
-import samuraisword.samples.petclinic.card.CardService;
 import samuraisword.samples.petclinic.card.RedCard;
 
 @Service
@@ -214,7 +213,7 @@ public class GameService {
 	}
 
 	public Boolean endTurn(Game game) {
-		Boolean correctMaxCardHand = game.getCurrentPlayer().getHand().size() <= MAX_CARDS_HAND;
+		Boolean correctMaxCardHand = game.getCurrentPlayer().getHand().size() < MAX_CARDS_HAND;
 
 		if (correctMaxCardHand) {
 			Integer numPlayers = game.getListPlayers().size();
