@@ -375,7 +375,52 @@ table {
     </div>
 
 	<!-- BLANK SPACE -->
-	<div class="blank-space container"></div>
+	<div class="blank-space container">
+	
+	
+	
+	
+	    <c:if test="${ game.currentPlayer.getUser().getUsername().equals(POVplayer.getUser().getUsername()) }">
+                  <c:if test="${game.getGamePhase().equals(GamePhase.DISCARDPLAYER) }">
+                        <div id="card">
+    <p>DISCARD CARD</p>
+         <img src="/resources/images/cards/${game.getUseCard().getName()}.png" alt="card" style="height: 70%; width:auto" />
+
+    </div></c:if>
+                               
+
+                                <c:forEach items="${ game.listPlayers }" var ="player" varStatus="loop">
+
+            <div id="select" >
+                 <c:if test="${game.getGamePhase().equals(GamePhase.DISCARDPLAYER) }">
+
+
+                        <p>${player.getUser().getUsername()}</p>
+
+               </c:if>
+
+                   <form:form class="form-horizontal"
+                            action="/game/discard/${game.id}/${player.getUser().getUsername()}"
+                            id="edit-user-form">
+                              <c:if test="${game.getGamePhase().equals(GamePhase.DISCARDPLAYER) }">
+
+                            <button class="btn btn-default" type="submit">SELECT</button></c:if>
+                            </form:form> 
+              </div>
+                                </c:forEach>
+                                </c:if>
+
+                              
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	</div>
 
 	<!-- YOUR PLAYER INFO -->
 	<div class="your-player container">
