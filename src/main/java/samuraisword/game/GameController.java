@@ -61,7 +61,7 @@ public class GameController {
 	@GetMapping(value = "/game/new")
 	public String initCreationForm(Map<String, Object> model, HttpServletResponse a) {
 		Game game = new Game();
-		a.addHeader("Refresh", "1");
+		a.addHeader("Refresh", "3");
 
 		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		List<Invitation> li = (List<Invitation>) invitationService.findAllByUser(userDetails.getUsername());
@@ -93,16 +93,28 @@ public class GameController {
 		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		User user = userService.findUser(userDetails.getUsername()).get();
 		if (!(GameSingleton.getInstance().getMapGames().containsKey(gameId))) {
-			a.addHeader("Refresh", "1");
+			a.addHeader("Refresh", "3");
 			Game game = gameService.findById(gameId).get();
+			game.setGamePhase(GamePhase.LOBBY);
 			model.put("now", new Date());
 			model.put("listFriends", user.getListAllFriends());
 			model.put("user", user.getUsername());
 			model.put("listPlayer", game.getListPlayers());
 			model.put("gameId", gameId);
+			GameSingleton.getInstance().getMapGames().put(gameId, game);
 			return "game/game";
 		} else {
 			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
+			if (game.getGamePhase().equals(GamePhase.LOBBY)) {
+				a.addHeader("Refresh", "3");
+				model.put("now", new Date());
+				model.put("listFriends", user.getListAllFriends());
+				model.put("user", user.getUsername());
+				model.put("listPlayer", game.getListPlayers());
+				model.put("gameId", gameId);
+				GameSingleton.getInstance().getMapGames().put(gameId, game);
+				return "game/game";
+			}
 			model.put("game", game);
 			model.put("POVplayer", user);
 			return "game/gameboard";
@@ -120,7 +132,7 @@ public class GameController {
 
 		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		User user = userService.findUser(userDetails.getUsername()).get();
-		Game game = gameService.findById(gameId).get();
+		Game game = GameSingleton.getInstance().getMapGames().get(gameId);
 
 		game.setGamePhase(GamePhase.MAIN);
 		game.setDeck(cardService.createDeck());
@@ -162,39 +174,42 @@ public class GameController {
 
 		gameService.asignCards(game.getDeck(), players);
 
-		GameSingleton.getInstance().getMapGames().put(game.getId(), game);
-
 		Player POVplayer = game.getListPlayers().stream()
-				.filter(p -> p.getUser().getUsername().equals(user.getUsername()))
-				.findFirst().get();
+				.filter(p -> p.getUser().getUsername().equals(user.getUsername())).findFirst().get();
 		model.put("POVplayer", POVplayer);
 		game.setGamePhase(GamePhase.MAIN);
 		model.put("game", game);
-		
+		Player POVplayer = game.getListPlayers().stream()
+				.filter(p -> p.getUser().getUsername().equals(user.getUsername())).findFirst().get();
+		model.put("POVplayer", POVplayer);
 		model.put("gameStatus", game.getGamePhase().toString());
 
 		return "/game/gameboard";
 	}
 
-
-
 	@PostMapping(value = { "/game/end-turn" })
 	public String endTurn(@RequestParam("gameId") Integer gameId, Map<String, Object> model) {
 		String view = "redirect:/game/continue/"+gameId;
 		Game game = GameSingleton.getInstance().getMapGames().get(gameId);
-		gameService.endTurn(game);
-		Game g = game;
-//		if (gameService.checkAllPlayersHavePositiveHonor(game)) {
-//			if (hasAdvancedPhase) {
-//				gameService.processRecoveryPhase(game);
-//				gameService.processDrawPhase(game);
-//			} else {// fin de la partida cuando algun jugador no le quedan puntos de honor
-//					// (honor<=0)
-//				view = "/game/endgame";
-//				Rol winnerRol = gameService.calcWinners(game);
-//				model.put("winnerRol", winnerRol);
-//			}
-//		}
+		Boolean hasAdvancedPhase = gameService.endTurn(game);
+
+		if (gameService.checkAllPlayersHavePositiveHonor(game)) {
+			if (hasAdvancedPhase) {
+				gameService.processRecoveryPhase(game);
+				gameService.processDrawPhase(game);
+			}
+		} else {// fin de la partida cuando algun jugador no le quedan puntos de honor
+				// (honor<=0)
+			view = "/game/endgame";
+			Rol winnerRol = gameService.calcWinners(game);
+			model.put("winnerRol", winnerRol);
+		}
+
+		model.put("game", game);
+
+		Player POVplayer = game.getListPlayers().stream()
+				.filter(p -> p.getUser().getUsername().equals(user.getUsername())).findFirst().get();
+		model.put("POVplayer", POVplayer);
 		return view;
 	}
 
@@ -216,6 +231,8 @@ public class GameController {
 			model.put("gameStatus", game.getGamePhase().toString());
 			return view;
 		}
+
+	
 	//--------------------------------------------------------------------------------------------------------------------------
 		
 		@PostMapping(value = {"/game/use-card"})
