@@ -179,9 +179,6 @@ public class GameController {
 		model.put("POVplayer", POVplayer);
 		game.setGamePhase(GamePhase.MAIN);
 		model.put("game", game);
-		Player POVplayer = game.getListPlayers().stream()
-				.filter(p -> p.getUser().getUsername().equals(user.getUsername())).findFirst().get();
-		model.put("POVplayer", POVplayer);
 		model.put("gameStatus", game.getGamePhase().toString());
 
 		return "/game/gameboard";
@@ -189,6 +186,8 @@ public class GameController {
 
 	@PostMapping(value = { "/game/end-turn" })
 	public String endTurn(@RequestParam("gameId") Integer gameId, Map<String, Object> model) {
+		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		User user = userService.findUser(userDetails.getUsername()).get();
 		String view = "redirect:/game/continue/"+gameId;
 		Game game = GameSingleton.getInstance().getMapGames().get(gameId);
 		Boolean hasAdvancedPhase = gameService.endTurn(game);
@@ -240,7 +239,15 @@ public class GameController {
 				Map<String, Object> model) {
 			String view = "redirect:/game/"+cardName+"/"+gameId;
 			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
-			cardService.discard(cardName, game.getCurrentPlayer().getHand(), game.getDiscardPile());
+			Optional<Card> card= cardService.findByName(cardName);
+			if(card.get().getColor().equals("Blue")) {
+				cardService.discard(cardName, game.getCurrentPlayer().getHand(), game.getCurrentPlayer().getEquipment());
+				
+			}else {
+				cardService.discard(cardName, game.getCurrentPlayer().getHand(), game.getDiscardPile());
+			}
+			
+			
 			
 			return view;
 		}
@@ -422,7 +429,9 @@ public class GameController {
 		public String armaduraCard(@PathVariable("id_game") int gameId, Map<String, Object> model) {
 			String view = "redirect:/game/continue/"+gameId;
 			//----------Aqui va el método
-			
+			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
+			Player p = game.getCurrentPlayer();
+			p.setDistanceBonus(p.getDistanceBonus()+1);
 			return view;
 		}
 		
@@ -438,7 +447,9 @@ public class GameController {
 		public String concentracionCard(@PathVariable("id_game") int gameId, Map<String, Object> model) {
 			String view = "redirect:/game/continue/"+gameId;
 			//----------Aqui va el método
-			
+			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
+			Player p = game.getCurrentPlayer();
+			p.setWeaponBonus(p.getWeaponBonus()+1);
 			return view;
 		}
 		
@@ -446,7 +457,9 @@ public class GameController {
 		public String desenvainadoRapidoCard(@PathVariable("id_game") int gameId, Map<String, Object> model) {
 			String view = "redirect:/game/continue/"+gameId;
 			//----------Aqui va el método
-			
+			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
+			Player p = game.getCurrentPlayer();
+			p.setDamageBonus(p.getDamageBonus()+1);
 			return view;
 		}
 		
