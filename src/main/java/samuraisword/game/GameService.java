@@ -225,6 +225,7 @@ public class GameService {
 		} else {
 			game.setGamePhase(GamePhase.DISCARD);
 		}
+		return correctMaxCardHand;
 	}
 
 	public void processRecoveryPhase(Game game) {
