@@ -179,11 +179,14 @@ public class GameController {
 		model.put("POVplayer", POVplayer);
 		game.setGamePhase(GamePhase.MAIN);
 		model.put("game", game);
+		model.put("gameStatus", game.getGamePhase().toString());
 		return "/game/gameboard";
 	}
 
 	@PostMapping(value = { "/game/end-turn" })
 	public String endTurn(@RequestParam("gameId") Integer gameId, Map<String, Object> model) {
+		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		User user = userService.findUser(userDetails.getUsername()).get();
 		String view = "redirect:/game/continue/"+gameId;
 		Game game = GameSingleton.getInstance().getMapGames().get(gameId);
 		Boolean hasAdvancedPhase = gameService.endTurn(game);
@@ -230,14 +233,15 @@ public class GameController {
 				Map<String, Object> model) {
 			String view = "redirect:/game/"+cardName+"/"+gameId;
 			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
-			cardService.discard(cardName, game.getCurrentPlayer().getHand(), game.getDiscardPile());
+
 			Optional<Card> card= cardService.findByName(cardName);
 			if(card.get().getColor().equals("Blue")) {
 				cardService.discard(cardName, game.getCurrentPlayer().getHand(), game.getCurrentPlayer().getEquipment());
-
+				
 			}else {
 				cardService.discard(cardName, game.getCurrentPlayer().getHand(), game.getDiscardPile());
 			}
+			
 			return view;
 		}
 		
