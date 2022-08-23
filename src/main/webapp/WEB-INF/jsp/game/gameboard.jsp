@@ -381,43 +381,34 @@ table {
 	
 	
 	    <c:if test="${ game.currentPlayer.getUser().getUsername().equals(POVplayer.getUser().getUsername()) }">
-                  <c:if test="${game.getGamePhase().equals(GamePhase.DISCARDPLAYER) }">
-                        <div id="card">
-    <p>DISCARD CARD</p>
-         <img src="/resources/images/cards/${game.getUseCard().getName()}.png" alt="card" style="height: 70%; width:auto" />
-
-    </div></c:if>
-                               
-
-                                <c:forEach items="${ game.listPlayers }" var ="player" varStatus="loop">
-
-            <div id="select" >
-                 <c:if test="${game.getGamePhase().equals(GamePhase.DISCARDPLAYER) }">
-
+        <c:if test="${game.getGamePhase().equals(GamePhase.DISCARDPLAYER) }">
+    	<div id="card">
+    		<p>DISCARD SOME PLAYER</p>
+         	<!--  <img src="/resources/images/cards/distraccion.png" alt="card" style="height: 70%; width:auto" /> -->
+		</div>
+    	
+   		                      
+        <div id="select" >
+                
+					<c:forEach items="${ game.listPlayers }" var ="player" varStatus="loop">
 
                         <p>${player.getUser().getUsername()}</p>
 
-               </c:if>
 
                    <form:form class="form-horizontal"
-                            action="/game/discard/${game.id}/${player.getUser().getUsername()}"
+                            action="/game/distraccion/${game.id}/${player.getUser().getUsername()}"
                             id="edit-user-form">
-                              <c:if test="${game.getGamePhase().equals(GamePhase.DISCARDPLAYER) }">
-
-                            <button class="btn btn-default" type="submit">SELECT</button></c:if>
-                            </form:form> 
-              </div>
-                                </c:forEach>
-                                </c:if>
-
                               
-	
-	
-	
-	
-	
-	
-	
+
+                            <button class="btn btn-default" type="submit">SELECT</button>
+                            </form:form> 
+                    </c:forEach>
+                            
+        </div>
+                               
+		</c:if>
+        </c:if>
+                              
 	
 	
 	</div>

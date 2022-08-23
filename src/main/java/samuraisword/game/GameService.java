@@ -245,6 +245,19 @@ public class GameService {
 		}
 		game.setGamePhase(GamePhase.MAIN);
 	}
+	
+	public void proceesDrawPhasePlayer(Game game,Player player,Integer cards) {
+		for(int i=0;i<cards;i++) {
+			Card card=game.getDeck().get(0);
+			player.getHand().add(card);
+			game.getDeck().remove(0);
+			
+		}
+		game.setGamePhase(GamePhase.MAIN);
+		
+	}
+	
+	
 
 	public void substractHearts(Player attacker, Player objective, RedCard attackWeapon) {
 		objective.setCurrentHearts(objective.getCurrentHearts() - attackWeapon.getDamage() - attacker.getDamageBonus());

@@ -534,23 +534,14 @@ public class GameController {
 			model.put("game",game);
 			Player myPlayer= game.getCurrentPlayer();
 			
-			for(int i=0;i<3;i++) {
-			Random r = new Random();
-			int valorDado = r.nextInt(game.getDeck().size());
-			myPlayer.getHand().add(game.getDeck().get(valorDado));
-			game.getDeck().remove(valorDado);
-			}
+			gameService.proceesDrawPhasePlayer(game, myPlayer, 3);
 			
 			
-			List<Player> allOpponents= game.getListPlayers();
+			List<Player> allOpponents= new ArrayList<>(game.getListPlayers());
 			allOpponents.remove(myPlayer);
 			
 			for(Player pl:allOpponents) {
-				Random r = new Random();
-				int valorDado = r.nextInt(game.getDeck().size());
-				pl.getHand().add(game.getDeck().get(valorDado));
-				game.getDeck().remove(valorDado);
-				
+				gameService.proceesDrawPhasePlayer(game, pl, 1);				
 			}
 			
 			return view;
@@ -565,21 +556,28 @@ public class GameController {
 			model.put("game",game);
 			Player myPlayer= game.getCurrentPlayer();
 			
-			
-			Random r = new Random();
-			int valorDado1 = r.nextInt(game.getDeck().size());
-			myPlayer.getHand().add(game.getDeck().get(valorDado1));
-			game.getDeck().remove(valorDado1);
-			
-			int valorDado2 = r.nextInt(game.getDeck().size());
-			myPlayer.getHand().add(game.getDeck().get(valorDado2));
-			game.getDeck().remove(valorDado2);
+			gameService.proceesDrawPhasePlayer(game, myPlayer, 2);
 			
 			return view;
 		}
 		
 		@GetMapping(value = {"/game/distraccion/{id_game}"})
-		public String distraccionCard(@PathVariable("id_game") int gameId, @RequestParam("playerName") String playerName,
+		public String distraccionCard(@PathVariable("id_game") int gameId, 
+				Map<String, Object> model) {
+			String view = "redirect:/game/continue/"+gameId;
+			//----------Aqui va el método
+			Game game= GameSingleton.getInstance().getMapGames().get(gameId);
+			game.setGamePhase(GamePhase.DISCARDPLAYER);
+			
+			
+			
+			
+			
+			return view;
+		}
+		
+		@PostMapping(value = {"/game/distraccion/{id_game}/{playerName}"})
+		public String distraccionCard(@PathVariable("id_game") int gameId, @PathVariable("playerName") String playerName,
 				Map<String, Object> model) {
 			String view = "redirect:/game/continue/"+gameId;
 			//----------Aqui va el método
@@ -590,7 +588,7 @@ public class GameController {
 			Player opponent= gameService.findPlayerInGameByName(game, playerName);
 			
 			Random r = new Random();
-			int valorDado = r.nextInt(game.getDeck().size());
+			int valorDado = r.nextInt(myPlayer.getHand().size());
 			List<Card> handOpponent= opponent.getHand();
 			myPlayer.getHand().add(handOpponent.get(valorDado));
 			handOpponent.remove(valorDado);
@@ -601,6 +599,7 @@ public class GameController {
 			
 			return view;
 		}
+		
 		
 		@GetMapping(value = {"/game/geisha/{id_game}"})
 		public String geishaCard(@PathVariable("id_game") int gameId, Map<String, Object> model) {
