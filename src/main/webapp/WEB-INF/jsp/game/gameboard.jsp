@@ -333,29 +333,21 @@ table {
 	</div>
 
 	<!-- BUTTONS -->
-	<c:choose>
-		<c:when test="${gameStatus=='MAIN'}">
-			<div class="buttons container">
-				<form:form action="/game/end-turn">
-		            <input type="hidden" name="gameId" value="${ game.id }"></input>
-		            <button id="btn-end-turn" class="button"> END TURN </button>
-		        </form:form>
-			</div>
-		</c:when>
-		<c:when test="${gameStatus=='DISCARDOTHER'}">
-			<div class="buttons container">
-			<button id="btn-end-turn" class="button" form="discardForm"> DESCARTAR CARTA </button>
-			</div>
-		</c:when>
-		<c:otherwise>
-			<div class="buttons container">
-				<form:form action="/game/end-turn">
-		            <input type="hidden" name="gameId" value="${ game.id }"></input>
-		            <button id="btn-end-turn" class="button"> END TURN </button>
-		        </form:form>
-			</div>
-		</c:otherwise>
-	</c:choose>
+	<div class="buttons container">
+	<c:if test="${POVplayer.equals(game.currentPlayer)}">
+		<c:choose>
+			<c:when test="${gameStatus=='MAIN'}">
+					<form:form action="/game/end-turn">
+			            <input type="hidden" name="gameId" value="${ game.id }"></input>
+			            <button id="btn-end-turn" class="button"> END TURN </button>
+			        </form:form>
+			</c:when>
+			<c:when test="${gameStatus=='DISCARDOTHER'}">
+				<button id="btn-end-turn" class="button" form="discardForm"> DESCARTAR CARTA </button>
+			</c:when>
+		</c:choose>
+	</c:if>
+	</div>
 
 </div>
 
@@ -393,31 +385,33 @@ table {
 
 	<!-- BLANK SPACE -->
 	<div class="blank-space container">
-		<c:if test="${gameStatus=='DISCARDOTHER'}">
-			<form:form action="/game/discard-other-card" id = "discardForm">
-				<table>
-					<tr>
-						<input type="hidden" name="gameId" value="${ game.id }"></input>
-						<c:forEach items="${listPlayer}" var ="player" varStatus="loop">
-							<c:if test="${!player.getUser().getUsername().equals(POVplayer.getUser().getUsername())}">
-							<input type="radio" value="${ player.getUser().getUsername() }" name="player" />
-							<label for="${ player.getUser().getUsername() }">${player.getUser().getUsername()}</label>
-							</c:if>
-						</c:forEach>
-					</tr>
-					<br>
-					<tr>
-						<input type="radio" value="hand" name="cardName"/>
-						<label for="hand">hand</label>
-						<input type="radio" value="armadura" name="cardName"/>
-						<label for="armadura">armadura</label>
-						<input type="radio" value="concentracion" name="cardName"/>
-						<label for="concentracion">concentracion</label>
-						<input type="radio" value="desenvainado rapido" name="cardName"/>
-						<label for="desenvainado rapido">desenvainado rapido</label>
-					</tr>
-				</table>
-			</form:form>
+		<c:if test="${POVplayer.equals(game.currentPlayer)}">
+			<c:if test="${gameStatus=='DISCARDOTHER'}">
+				<form:form action="/game/discard-other-card" id = "discardForm">
+					<table>
+						<tr>
+							<input type="hidden" name="gameId" value="${ game.id }"></input>
+							<c:forEach items="${listPlayer}" var ="player" varStatus="loop">
+								<c:if test="${!player.getUser().getUsername().equals(POVplayer.getUser().getUsername())}">
+								<input type="radio" value="${ player.getUser().getUsername() }" name="player" />
+								<label for="${ player.getUser().getUsername() }">${player.getUser().getUsername()}</label>
+								</c:if>
+							</c:forEach>
+						</tr>
+						<br>
+						<tr>
+							<input type="radio" value="hand" name="cardName"/>
+							<label for="hand">hand</label>
+							<input type="radio" value="armadura" name="cardName"/>
+							<label for="armadura">armadura</label>
+							<input type="radio" value="concentracion" name="cardName"/>
+							<label for="concentracion">concentracion</label>
+							<input type="radio" value="desenvainado rapido" name="cardName"/>
+							<label for="desenvainado rapido">desenvainado rapido</label>
+						</tr>
+					</table>
+				</form:form>
+			</c:if>
 		</c:if>
 	</div>
 
@@ -510,7 +504,7 @@ table {
 	<div  style="background-color: #DFDADA; border-radius:15px; justify-self:end;">
 		<div style="max-width:98%; display:inline">
         	<c:forEach items="${ listPlayer }" var ="player" varStatus="loop">
-            	<c:if test="${ player.getUser().getUsername().equals(POVplayer.getUser().getUsername()) }">
+            	<c:if test="${ player.getUser().getUsername().equals(POVplayer.getUser().getUsername())}">
             		<c:choose>
 						<c:when test="${gameStatus=='DISCARD'}">
 							<form:form action="/game/discard-hand-card">
@@ -521,8 +515,9 @@ table {
                                         <input type="radio" value="${card.name}" name="cardName" />
                                     </div>
 								</c:forEach>
-								
+								<!--<c:if test="${POVplayer.equals(game.currentPlayer)}">-->
 								<button id="btn-end-turn" class="button"> DESCARTAR CARTA </button>
+								<!--</c:if>-->
 							</form:form>
 						</c:when>
 						<c:when test="${gameStatus=='MAIN'}">
@@ -534,8 +529,9 @@ table {
                                         <input type="radio" value="${card.name}" name="cardName" />
                                     </div>
 								</c:forEach>
-								
+								<c:if test="${POVplayer.equals(game.currentPlayer)}">
 								<button id="btn-end-turn" class="button"> USAR CARTA </button>
+								</c:if>
 							</form:form>
 						</c:when>
 						<c:otherwise>
