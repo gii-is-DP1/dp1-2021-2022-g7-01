@@ -1,5 +1,7 @@
 package samuraisword.game;
 
 public enum GamePhase {
-	ASSIGN, RECOVERY, DRAW, MAIN, ATTACK, DISCARD, DISCARDOTHER
+
+	LOBBY, RECOVERY, DRAW, MAIN, ATTACK, DISCARD, DISCARDOTHER
+
 }

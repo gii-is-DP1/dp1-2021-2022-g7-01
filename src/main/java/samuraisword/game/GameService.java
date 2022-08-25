@@ -19,7 +19,6 @@ import samuraisword.character.CharacterService;
 import samuraisword.player.Player;
 import samuraisword.player.Rol;
 import samuraisword.samples.petclinic.card.Card;
-import samuraisword.samples.petclinic.card.CardService;
 import samuraisword.samples.petclinic.card.RedCard;
 
 @Service
@@ -160,7 +159,7 @@ public class GameService {
 	}
 
 	public void asignCards(List<Card> gameDeck, List<Player> players) {
-		int cardsGiven = 8;
+		int cardsGiven = 4;
 		for (int i = 0; i < players.size(); i++) { // player tiene 2 cardhands la 0 indica la mano, la 1 las equipadas
 			// Normas del reparto de cartas:
 			// En la lista players el indice 0 corresponde al shogun ya que esta funcion es
@@ -213,8 +212,10 @@ public class GameService {
 		return playersBetween;
 	}
 
-	public void endTurn(Game game) {
+
+	public Boolean endTurn(Game game) {
 		Boolean correctMaxCardHand = game.getCurrentPlayer().getHand().size() <= MAX_CARDS_HAND;
+
 
 		if (correctMaxCardHand) {
 			Integer numPlayers = game.getListPlayers().size();
@@ -224,6 +225,7 @@ public class GameService {
 		} else {
 			game.setGamePhase(GamePhase.DISCARD);
 		}
+		return correctMaxCardHand;
 	}
 
 	public void processRecoveryPhase(Game game) {
@@ -308,4 +310,14 @@ public class GameService {
 				.collect(Collectors.groupingBy(Player::getRol, Collectors.summingDouble(x -> x.getHonor())));
 	}
 
+	public void proceesDrawPhasePlayer(Game game,Player player,Integer cards) {
+        for(int i=0;i<cards;i++) {
+            Card card=game.getDeck().get(0);
+            player.getHand().add(card);
+            game.getDeck().remove(0);
+
+        }
+        game.setGamePhase(GamePhase.MAIN);
+
+    }
 }

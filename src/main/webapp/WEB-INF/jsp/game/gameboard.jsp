@@ -258,87 +258,6 @@ table {
 	<div class="selected-player container">
 	<c:forEach items="${listPlayer}" var ="player" varStatus="loop">
 	<div id="${player.getUser().getUsername()}" class="division" style="display: none">
-	<c:choose>
-		<c:when test="${gameStatus=='DISCARDOTHER'}">
-			<form:form action="/game/discard-other-card" id = "discardForm">
-				<input type="hidden" name="gameId" value="${ game.id }"></input>
-				<input type="hidden" name="player" value="${ player.getUser().getUsername() }"></input>
-				<table>
-					<tr>
-						<th>
-							<h2 style ="color:#f2f2f2" >Vida: ${ player.getCurrentHearts() }</h2>
-						</th>
-						<th>
-							<h2 style ="color:#f2f2f2" >Honor: ${ player.getHonor() }</h2>
-						</th>
-						<th>
-							<h2 style ="color:#f2f2f2" >Cartas: ${ player.getHand().size() }</h2>
-							<input type="radio" value="hand" name="discardValue" />
-						</th>
-					</tr>
-					<tr>
-						<td>
-							<spring:url value="/resources/images/cards/armadura.png" htmlEscape="true" var="equipment1" /> 
-							<c:choose>
-								<c:when test="${ player.getDistanceBonus()==0 }">
-									<p><img style="float: left; width: 80px; opacity: 0.5;" title="" src="${equipment1}" id="equipment1" /> x${ player.getDistanceBonus() }</p>
-								</c:when>
-								<c:otherwise>
-									<p><img style="float: left; width: 80px;" title="" src="${equipment1}" id="equipment1" /> x${ player.getDistanceBonus() }</p>
-									<input type="radio" value="armadura" name="discardValue" />
-								</c:otherwise>
-							</c:choose>
-							
-							
-						</td>
-						<td>
-							<spring:url value="/resources/images/cards/desenvainado rapido.png" htmlEscape="true" var="equipment2" />
-							<c:choose>
-								<c:when test="${ player.getDamageBonus()==0 }">
-									<p><img style="float: left; width: 80px; opacity: 0.5;" title="" src="${equipment2}" id="equipment2" /> x${ player.getDamageBonus() } </p>
-								</c:when>
-								<c:otherwise>
-									<p><img style="float: left; width: 80px;" title="" src="${equipment2}" id="equipment2" /> x${ player.getDamageBonus() } </p>
-									<input type="radio" value="desenvainadoRapido" name="discardValue" />
-								</c:otherwise>
-							</c:choose> 
-							
-						</td>
-						<td>
-							<spring:url value="/resources/images/cards/concentracion.png" htmlEscape="true" var="equipment3" /> 
-							<c:choose>
-								<c:when test="${ player.getWeaponBonus()==0 }">
-									<p><img style="float: left; width: 80px; opacity: 0.5;" title="" src="${equipment3}" id="equipment3" /> x${ player.getWeaponBonus() } </p>
-								</c:when>
-								<c:otherwise>
-									<p><img style="float: left; width: 80px;" title="" src="${equipment3}" id="equipment3" /> x${ player.getWeaponBonus() } </p>
-									<input type="radio" value="concentracion" name="discardValue" />
-								</c:otherwise>
-							</c:choose>
-							
-						</td>
-						<td>
-							<spring:url value="/resources/images/${ player.getCharacter().getImage() }" htmlEscape="true" var="character" /> 
-							<img style="float: left; width: 80px;" title="" src="${character}" id="character" />
-		
-						</td>
-						<td>
-							<c:choose>
-								<c:when test="${ player.getRol().toString().equals('SHOGUN') }">
-									<spring:url value="/resources/images/roles/${ player.getRol() }.png" htmlEscape="true" var="Rol" /> 
-									<img style="float: left; width: 80px;" title="" src="${Rol}" id="Rol" />
-								</c:when>
-								<c:otherwise>
-									<spring:url value="/resources/images/roles/ninguno.png" htmlEscape="true" var="Rol" /> 
-									<img style="float: left; width: 80px;" title="" src="${Rol}" id="Rol"/>
-								</c:otherwise>
-							</c:choose>
-						</td>
-					</tr>
-				</table>
-			</form:form>
-		</c:when>
-		<c:otherwise>
 			<table>
 				<tr>
 					<th>
@@ -409,30 +328,26 @@ table {
 					</td>
 				</tr>
 			</table>
-		</c:otherwise>
-	</c:choose>
-		
 	</div>
 </c:forEach>
 	</div>
 
 	<!-- BUTTONS -->
-	<c:choose>
-		<c:when test="${gameStatus=='MAIN'}">
-			<div class="buttons container">
-				<form:form action="/game/end-turn">
-		            <input type="hidden" name="gameId" value="${ game.id }"></input>
-		            <button id="btn-end-turn" class="button"> END TURN </button>
-		        </form:form>
-			</div>
-		</c:when>
-		<c:when test="${gameStatus=='DISCARDOTHER'}">
-			<button id="btn-end-turn" class="button" form="discardForm"> DESCARTAR CARTA </button>
-		</c:when>
-		<c:otherwise>
-			<button disabled id="btn-end-turn" class="button" form="discardForm" > END TURN </button>
-		</c:otherwise>
-	</c:choose>
+	<div class="buttons container">
+	<c:if test="${POVplayer.equals(game.currentPlayer)}">
+		<c:choose>
+			<c:when test="${gameStatus=='MAIN'}">
+					<form:form action="/game/end-turn">
+			            <input type="hidden" name="gameId" value="${ game.id }"></input>
+			            <button id="btn-end-turn" class="button"> END TURN </button>
+			        </form:form>
+			</c:when>
+			<c:when test="${gameStatus=='DISCARDOTHER'}">
+				<button id="btn-end-turn" class="button" form="discardForm"> DESCARTAR CARTA </button>
+			</c:when>
+		</c:choose>
+	</c:if>
+	</div>
 
 </div>
 
@@ -470,6 +385,34 @@ table {
 
 	<!-- BLANK SPACE -->
 	<div class="blank-space container">
+		<c:if test="${POVplayer.equals(game.currentPlayer)}">
+			<c:if test="${gameStatus=='DISCARDOTHER'}">
+				<form:form action="/game/discard-other-card" id = "discardForm">
+					<table>
+						<tr>
+							<input type="hidden" name="gameId" value="${ game.id }"></input>
+							<c:forEach items="${listPlayer}" var ="player" varStatus="loop">
+								<c:if test="${!player.getUser().getUsername().equals(POVplayer.getUser().getUsername())}">
+								<input type="radio" value="${ player.getUser().getUsername() }" name="player" />
+								<label for="${ player.getUser().getUsername() }">${player.getUser().getUsername()}</label>
+								</c:if>
+							</c:forEach>
+						</tr>
+						<br>
+						<tr>
+							<input type="radio" value="hand" name="cardName"/>
+							<label for="hand">hand</label>
+							<input type="radio" value="armadura" name="cardName"/>
+							<label for="armadura">armadura</label>
+							<input type="radio" value="concentracion" name="cardName"/>
+							<label for="concentracion">concentracion</label>
+							<input type="radio" value="desenvainado rapido" name="cardName"/>
+							<label for="desenvainado rapido">desenvainado rapido</label>
+						</tr>
+					</table>
+				</form:form>
+			</c:if>
+		</c:if>
 	</div>
 
 	<!-- YOUR PLAYER INFO -->
@@ -561,7 +504,7 @@ table {
 	<div  style="background-color: #DFDADA; border-radius:15px; justify-self:end;">
 		<div style="max-width:98%; display:inline">
         	<c:forEach items="${ listPlayer }" var ="player" varStatus="loop">
-            	<c:if test="${ player.getUser().getUsername().equals(POVplayer.getUser().getUsername()) }">
+            	<c:if test="${ player.getUser().getUsername().equals(POVplayer.getUser().getUsername())}">
             		<c:choose>
 						<c:when test="${gameStatus=='DISCARD'}">
 							<form:form action="/game/discard-hand-card">
@@ -572,8 +515,9 @@ table {
                                         <input type="radio" value="${card.name}" name="cardName" />
                                     </div>
 								</c:forEach>
-								
+								<!--<c:if test="${POVplayer.equals(game.currentPlayer)}">-->
 								<button id="btn-end-turn" class="button"> DESCARTAR CARTA </button>
+								<!--</c:if>-->
 							</form:form>
 						</c:when>
 						<c:when test="${gameStatus=='MAIN'}">
@@ -585,8 +529,9 @@ table {
                                         <input type="radio" value="${card.name}" name="cardName" />
                                     </div>
 								</c:forEach>
-								
+								<c:if test="${POVplayer.equals(game.currentPlayer)}">
 								<button id="btn-end-turn" class="button"> USAR CARTA </button>
+								</c:if>
 							</form:form>
 						</c:when>
 						<c:otherwise>
