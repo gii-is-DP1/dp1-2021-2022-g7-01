@@ -254,8 +254,6 @@ public class GameController {
 							view = "redirect:/game/continue/"+gameId;
 						}
 					}
-					cardService.discard(cardName, game.getCurrentPlayer().getHand(), game.getCurrentPlayer().getEquipment());
-					
 				}else {
 					cardService.discard(cardName, game.getCurrentPlayer().getHand(), game.getDiscardPile());
 				}
