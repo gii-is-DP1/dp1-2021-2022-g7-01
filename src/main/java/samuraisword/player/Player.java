@@ -60,7 +60,13 @@ public class Player extends BaseEntity{
 	private List<Card> hand;
 	
 	@Transient
+	private Boolean haveParada;
+	
+	@Transient
 	private List<Card> equipment;
+	
+	@Transient
+	private Boolean haveRedCard;
 	
 	@OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "character")

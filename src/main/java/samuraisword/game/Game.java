@@ -53,6 +53,21 @@ public class Game extends BaseEntity{
 	
 	private LocalDateTime endDate;
 	
+	@Transient
+	private List<Player> playersInRange;
+	
+	@Transient
+	private Card useCard;
+	
+	@Transient
+	private Player attackerPlayer;
+	
+	@Transient
+	private List<Player> waitingForPlayer;
+	
+	@Transient
+	private List<Card> listJiuJitsu;
+	
 	
 			
 	public Game() {

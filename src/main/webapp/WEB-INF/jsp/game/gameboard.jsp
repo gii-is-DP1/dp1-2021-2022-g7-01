@@ -178,6 +178,8 @@ table {
 }
 
 #div1, #div2 {margin: 20px}
+#card {margin: 8px; height:200px; width:27%; float:left}
+#select {float: right; margin: 5px}
 
 .viewAttackCards{
 	visibility: hidden;
@@ -375,7 +377,136 @@ table {
     </div>
 
 	<!-- BLANK SPACE -->
-	<div class="blank-space container"></div>
+	<div class="blank-space container">
+	
+	
+                        <c:if test="${ game.currentPlayer.getUser().getUsername().equals(POVplayer.getUser().getUsername()) }">
+                  <c:if test="${game.getGamePhase().equals(GamePhase.ATTACK) }">
+                        <div id="card">
+	<p>ATTACK CARD</p>
+		 <img src="/resources/images/cards/${game.getUseCard().getName()}.png" alt="card" style="height: 70%; width:auto" />
+	
+	</div></c:if>
+                                <c:if test="${ game.playersInRange.size()!=0 }">
+                                
+                                
+                                
+								<c:forEach items="${ game.playersInRange }" var ="player" varStatus="loop">
+							
+            <div id="select" >                
+                
+                           
+                   <form:form class="form-horizontal"
+							action="/game/selectPlayer/${game.id}/${player.getUser().getUsername()}"
+							id="edit-user-form">
+							  <c:if test="${game.getGamePhase().equals(GamePhase.ATTACK) }">
+							<br><br>
+							<button class="btn btn-default" type="submit">${player.getUser().getUsername()}</button></c:if>
+							
+							</form:form> 
+			  </div>
+			  
+			  
+			  
+			  
+			  
+								</c:forEach>
+								
+								</c:if>
+								 
+								 </c:if>
+								 
+			<c:if test="${game.getGamePhase().equals(GamePhase.PARADA) && game.getAttackerPlayer().equals(POVplayer)}">
+			<div id="card">
+			<p>ATTACK CARD</p>
+		 <img src="/resources/images/cards/${game.getUseCard().getName()}.png" alt="card" style="height: 70%; width:auto" />
+	
+	</div>
+			<p>Estas siendo atacado. ¿Quieres usar una parada?</p>
+			 <form:form class="form-horizontal"
+							action="/game/parada/${game.id}/${game.getAttackerPlayer()}"
+							id="edit-user-form">
+							
+							<br><br>
+							<button class="btn btn-default" type="submit">SI</button>
+							
+							</form:form>
+							
+			<form:form class="form-horizontal"
+							action="/game/attack/${game.id}/${game.getAttackerPlayer()}"
+							id="edit-user-form">
+							
+							<br><br>
+							<button class="btn btn-default" type="submit">NO</button>
+							
+							</form:form>  
+			</c:if>
+			
+			
+			<c:if test="${game.getGamePhase().equals(GamePhase.GRITODEBATALLA) && (!(game.getCurrentPlayer().equals(POVplayer))) && game.waitingForPlayer.contains(POVplayer)}">
+			<p>Han usado Grito de batalla. ¿Que quieres hacer?</p>
+			 <form:form class="form-horizontal"
+							action="/game/choose1/${game.id}/${POVplayer}"
+							id="edit-user-form">
+							
+							<br><br>
+							<button class="btn btn-default" type="submit">Sufrir 1 de daño</button>
+							
+							</form:form>
+							
+							
+			<c:if test="${POVplayer.getHaveParada()==true}">				
+			<form:form class="form-horizontal"
+							action="/game/choose2/${game.id}/${POVplayer}"
+							id="edit-user-form">
+							
+							<br><br>
+							<button class="btn btn-default" type="submit">Descartar parada</button>
+							
+							</form:form>  </c:if>
+			</c:if>
+			
+			<c:if test="${game.getGamePhase().equals(GamePhase.JIUJITSU) && (!(game.getCurrentPlayer().equals(POVplayer))) && game.waitingForPlayer.contains(POVplayer)}">
+			<p>Han usado JIU-JITSU. ¿Que quieres hacer?</p>
+			 <form:form class="form-horizontal"
+							action="/game/choose11/${game.id}/${POVplayer}"
+							id="edit-user-form">
+							
+							<br><br>
+							<button class="btn btn-default" type="submit">Sufrir 1 de daño</button>
+							
+							</form:form>
+							
+			<c:if test="${POVplayer.getHaveRedCard()==true}">			
+						
+			<form:form class="form-horizontal"
+							action="/game/choose21/${game.id}/${POVplayer}"
+							id="edit-user-form">
+							
+							<br><br>
+							<button class="btn btn-default" type="submit">Descartar 1 arma</button>
+							
+							</form:form>  </c:if></c:if>
+			
+			<c:if test="${game.getGamePhase().equals(GamePhase.DISCARDARM) && (!(game.getCurrentPlayer().equals(POVplayer))) && game.waitingForPlayer.contains(POVplayer)}">
+			<p>¿Que arma quieres descartar?</p>
+			<c:forEach items="${game.getListJiuJitsu()}" var ="cards" varStatus="loop">
+		
+			<form:form class="form-horizontal"
+							action="/game/deleteCard/${cards.getName()}/${game.id}/${POVplayer}"
+							id="edit-user-form">
+							
+							
+							<button class="btn btn-default" type="submit">${cards.getName()}</button>
+							
+							</form:form>
+			</c:forEach>
+			</c:if>
+			
+														
+							                                    
+	
+	</div>
 
 	<!-- YOUR PLAYER INFO -->
 	<div class="your-player container">
