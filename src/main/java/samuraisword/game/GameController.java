@@ -568,10 +568,7 @@ public class GameController {
 			//----------Aqui va el método
 			Game game= GameSingleton.getInstance().getMapGames().get(gameId);
 			game.setGamePhase(GamePhase.DISCARDPLAYER);
-			
-			
-			
-			
+				
 			
 			return view;
 		}
@@ -592,7 +589,7 @@ public class GameController {
 			List<Card> handOpponent= opponent.getHand();
 			myPlayer.getHand().add(handOpponent.get(valorDado));
 			handOpponent.remove(valorDado);
-			
+			game.setGamePhase(GamePhase.MAIN);
 			
 			
 			
@@ -634,12 +631,33 @@ public class GameController {
 		}
 		
 		@GetMapping(value = {"/game/respiracion/{id_game}"})
-		public String respiracionCard(@PathVariable("id_game") int gameId, Map<String, Object> model) {
+		public String respiracionCard(@PathVariable("id_game") int gameId) {
 			String view = "redirect:/game/continue/"+gameId;
 			//----------Aqui va el método
-			
+			Game game= GameSingleton.getInstance().getMapGames().get(gameId);
+			game.setGamePhase(GamePhase.RESPIRACION);
 			return view;
 		}
+		
+		@PostMapping(value= {"/game/respiracion/{id_game}/{playerName}"})
+		public String respiracionCard(@PathVariable("id_game") int gameId,@PathVariable("playerName") String playerName,
+				Map<String,Object> model) {
+		String view = "redirect:/game/continue/"+gameId;
+		Game game= GameSingleton.getInstance().getMapGames().get(gameId);
+		model.put("game",game);
+		Player myPlayer= game.getCurrentPlayer();
+		Player opponent= gameService.findPlayerInGameByName(game, playerName);
+		
+		gameService.proceesDrawPhasePlayer(game, opponent, 1);
+		Integer maxLife= myPlayer.getCharacter().getLife();
+		
+		if(myPlayer.getCurrentHearts() !=maxLife) {
+			myPlayer.setCurrentHearts(maxLife);
+		}
+		game.setGamePhase(GamePhase.MAIN);
+		return view;
+		}
+		
 		
 		//--------------------------------------------------------------------------------------------------------Azul
 		@GetMapping(value = {"/game/armadura/{id_game}"})
