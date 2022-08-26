@@ -63,6 +63,9 @@ public class GameService {
 			p.setDamageBonus(0);
 			p.setDistanceBonus(0);
 			p.setWeaponBonus(0);
+			p.setAntiDamageBonus(0);
+			p.setDrawCardBonus(0);
+			p.getCharacter().action(p);
 		}
 		return players;
 	}

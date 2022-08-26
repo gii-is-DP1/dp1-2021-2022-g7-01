@@ -126,21 +126,20 @@ INSERT INTO players(id,current_hearts,honor,max_hearts,rol,won_game,game_id,user
 INSERT INTO players(id,current_hearts,honor,max_hearts,rol,won_game,game_id,username, disabled) VALUES (4,0,0,0,1,false,1,'pedolirod', false);
 INSERT INTO players(id,current_hearts,honor,max_hearts,rol,won_game,game_id,username, disabled) VALUES (5,0,0,0,1,false,1,'antquiher1', false);
 INSERT INTO players(id,current_hearts,honor,max_hearts,rol,won_game,game_id,username, disabled) VALUES (6,0,0,0,1,false,1,'prueba', false);
+INSERT INTO players(id,current_hearts,honor,max_hearts,rol,won_game,game_id,username, disabled) VALUES (7,0,0,0,1,false,1,'DonShelby', false);
 
 INSERT INTO cards_in_hands(card_id, card_hand_id) VALUES (5, 5);
 INSERT INTO cards_in_hands(card_id, card_hand_id) VALUES (7, 1);
 INSERT INTO cards_in_hands(card_id, card_hand_id) VALUES (1, 4);
 
 
-INSERT INTO characters(id,name,life,image,text, game_phase) VALUES (1,'Benkei',5,'characters/benkei.png','All other players have +1 Difficulty when they attack you.', 0);
-INSERT INTO characters(id,name,life,image,text, game_phase) VALUES (2,'Chiyome',4,'characters/chiyome.png','You can only be wounded by Weapon cards. You are not affected by Jujutsu and Battle Cry cards. You are affected normally by other Action cards, such as Tea Ceremony.',3);
-INSERT INTO characters(id,name,life,image,text, game_phase) VALUES (3,'Ginchiyo',4,'characters/ginchiyo.png','You take 1 wound less than normal when attacked by any Weapon, to a minimum of 1 wound. E.g., a Nodachi would only deal 2 wounds to you instead of 3, but a Shuriken still inflicts 1 wound.', 4);
-INSERT INTO characters(id,name,life,image,text, game_phase) VALUES (4,'Goemon',5,'characters/goemon.png','You may play 1 additional Weapon card during your turn. So, if you have 1 Focus in play, you may play up to 3 Weapon cards each turn.',0);
-INSERT INTO characters(id,name,life,image,text, game_phase) VALUES (5,'Hideyoshi',4,'characters/hideyoshi.png','You may play a Weapon card from your hand as a parry , unless it is the only card in your hand. You may use this ability even in response to cards such as Battle Cry.',2);
-INSERT INTO characters(id,name,life,image,text, game_phase) VALUES (6,'Kojiro',5,'characters/kojiro.png','Your Weapons can hit any Difficulty, regardless of the value on your Weapon card.',4);
-INSERT INTO characters(id,name,life,image,text, game_phase) VALUES (7,'Musashi',5,'characters/musashi.png','If you successfully attack another character with a Weapon card, you inflict 1 additional wound. This does not apply to cards that are not Weapons, like Jujutsu.',0);
-INSERT INTO characters(id,name,life,image,text, game_phase) VALUES (8,'Tomoe',5,'characters/tomoe.png','Each time you successfully attack another character with a Weapon card, you draw 1 card from the deck. You only draw 1 card, even if your Weapon does more than 1 wound.',4);
-INSERT INTO characters(id,name,life,image,text, game_phase) VALUES (9,'Ushiwaka',4,'characters/ushiwaka.png','Each time you suffer a wound from a Weapon card, you draw 1 card from the deck (so 3 wounds = 3 cards).',4);
+INSERT INTO characters(id,name,life,image) VALUES (1,'Benkei',5,'characters/benkei.png');
+INSERT INTO characters(id,name,life,image) VALUES (2,'Chiyome',4,'characters/chiyome.png');
+INSERT INTO characters(id,name,life,image) VALUES (3,'Ginchiyo',4,'characters/ginchiyo.png');
+INSERT INTO characters(id,name,life,image) VALUES (4,'Goemon',5,'characters/goemon.png');
+INSERT INTO characters(id,name,life,image) VALUES (5,'Hideyoshi',4,'characters/hideyoshi.png');
+INSERT INTO characters(id,name,life,image) VALUES (6,'Musashi',5,'characters/musashi.png');
+INSERT INTO characters(id,name,life,image) VALUES (7,'Tomoe',5,'characters/tomoe.png');
 
 
 INSERT INTO invitation(user_sender, user_addresse, game_id) VALUES ('alefr99', 'alfcadmor', 1);

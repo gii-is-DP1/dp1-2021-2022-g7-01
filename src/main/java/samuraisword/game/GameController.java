@@ -190,7 +190,12 @@ public class GameController {
 					gameService.processRecoveryPhase(game);
 					Boolean check = gameService.checkBushido(game);
 					if(!check) {
-						gameService.processDrawPhase(game);
+            gameService.processDrawPhase(game);
+					  if(game.getCurrentPlayer().getCharacter().equals("Hideyoshi")) {
+						  Card card = game.getDeck().get(0);
+              game.getCurrentPlayer().getHand().add(card);
+              game.getDeck().remove(0);
+            }
 					}
 				}
 			} else {// fin de la partida cuando algun jugador no le quedan puntos de honor
@@ -539,6 +544,11 @@ public class GameController {
 					Boolean check = gameService.checkBushido(game);
 					if(!check) {
 						gameService.processDrawPhase(game);
+            if(game.getCurrentPlayer().getCharacter().equals("Hideyoshi")) {
+						  Card card = game.getDeck().get(0);
+              game.getCurrentPlayer().getHand().add(card);
+              game.getDeck().remove(0);
+            }
 					}
 				}
 			} else {// fin de la partida cuando algun jugador no le quedan puntos de honor
@@ -620,6 +630,7 @@ public class GameController {
 			}
 			return view;
 		}
+    
 		@PostMapping(value = {"/game/pass-bushido"})
 		public String bushidoDiscardFrom(@RequestParam("gameId") Integer gameId, 
 				@RequestParam("card") String card, Map<String, Object> model) {
@@ -636,6 +647,11 @@ public class GameController {
 				cardService.discard("bushido", game.getCurrentPlayer().getEquipment(), game.getListPlayers().get(nextPlayerIndex).getEquipment());
 			}
 			gameService.processDrawPhase(game);
+      if(game.getCurrentPlayer().getCharacter().equals("Hideyoshi")) {
+						  Card card = game.getDeck().get(0);
+              game.getCurrentPlayer().getHand().add(card);
+              game.getDeck().remove(0);
+      }
 			game.setGamePhase(GamePhase.MAIN);
 			return view;
 		}
