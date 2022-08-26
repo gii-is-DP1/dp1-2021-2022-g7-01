@@ -19,7 +19,6 @@ import samuraisword.character.CharacterService;
 import samuraisword.player.Player;
 import samuraisword.player.Rol;
 import samuraisword.samples.petclinic.card.Card;
-import samuraisword.samples.petclinic.card.CardService;
 import samuraisword.samples.petclinic.card.RedCard;
 
 @Service
@@ -213,14 +212,16 @@ public class GameService {
 		return playersBetween;
 	}
 
+
 	public Boolean endTurn(Game game) {
 		Boolean correctMaxCardHand = game.getCurrentPlayer().getHand().size() <= MAX_CARDS_HAND;
+
 
 		if (correctMaxCardHand) {
 			Integer numPlayers = game.getListPlayers().size();
 			Integer nextPlayerIndex = (game.getListPlayers().indexOf(game.getCurrentPlayer()) + 1) % numPlayers;
 			game.setCurrentPlayer(game.getListPlayers().get(nextPlayerIndex));
-			game.setGamePhase(GamePhase.RECOVERY);
+			game.setGamePhase(GamePhase.MAIN);
 		} else {
 			game.setGamePhase(GamePhase.DISCARD);
 		}
@@ -322,4 +323,14 @@ public class GameService {
 				.collect(Collectors.groupingBy(Player::getRol, Collectors.summingDouble(x -> x.getHonor())));
 	}
 
+	public void proceesDrawPhasePlayer(Game game,Player player,Integer cards) {
+        for(int i=0;i<cards;i++) {
+            Card card=game.getDeck().get(0);
+            player.getHand().add(card);
+            game.getDeck().remove(0);
+
+        }
+        game.setGamePhase(GamePhase.MAIN);
+
+    }
 }

@@ -62,7 +62,7 @@ public class GameController {
 	@GetMapping(value = "/game/new")
 	public String initCreationForm(Map<String, Object> model, HttpServletResponse a) {
 		Game game = new Game();
-		a.addHeader("Refresh", "1");
+		a.addHeader("Refresh", "3");
 
 		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		List<Invitation> li = (List<Invitation>) invitationService.findAllByUser(userDetails.getUsername());
@@ -94,16 +94,28 @@ public class GameController {
 		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		User user = userService.findUser(userDetails.getUsername()).get();
 		if (!(GameSingleton.getInstance().getMapGames().containsKey(gameId))) {
-			a.addHeader("Refresh", "1");
+			a.addHeader("Refresh", "3");
 			Game game = gameService.findById(gameId).get();
+			game.setGamePhase(GamePhase.LOBBY);
 			model.put("now", new Date());
 			model.put("listFriends", user.getListAllFriends());
 			model.put("user", user.getUsername());
 			model.put("listPlayer", game.getListPlayers());
 			model.put("gameId", gameId);
+			GameSingleton.getInstance().getMapGames().put(gameId, game);
 			return "game/game";
 		} else {
 			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
+			if (game.getGamePhase().equals(GamePhase.LOBBY)) {
+				a.addHeader("Refresh", "3");
+				model.put("now", new Date());
+				model.put("listFriends", user.getListAllFriends());
+				model.put("user", user.getUsername());
+				model.put("listPlayer", game.getListPlayers());
+				model.put("gameId", gameId);
+				GameSingleton.getInstance().getMapGames().put(gameId, game);
+				return "game/game";
+			}
 			model.put("game", game);
 			model.put("POVplayer", user);
 			return "game/gameboard";
@@ -118,10 +130,8 @@ public class GameController {
 
 	@GetMapping(value = { "/game/start/{id_game}" })
 	public String initGame(@PathVariable("id_game") int gameId, Map<String, Object> model) {
-
-		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		User user = userService.findUser(userDetails.getUsername()).get();
-		Game game = gameService.findById(gameId).get();
+		String view = "redirect:/game/continue/"+gameId;
+		Game game = GameSingleton.getInstance().getMapGames().get(gameId);
 
 		game.setGamePhase(GamePhase.MAIN);
 		game.setDeck(cardService.createDeck());
@@ -163,90 +173,24 @@ public class GameController {
 
 		gameService.asignCards(game.getDeck(), players);
 
-		GameSingleton.getInstance().getMapGames().put(game.getId(), game);
-
-		Player POVplayer = game.getListPlayers().stream()
-				.filter(p -> p.getUser().getUsername().equals(user.getUsername()))
-				.findFirst().get();
-		model.put("POVplayer", POVplayer);
-		model.put("game", game);
-
-		return "/game/gameboard";
-	}
-
-	@PostMapping(value = { "/game/attack/selectplayer" })
-	public String handleAttack(@RequestParam("gameId") Integer gameId, @RequestParam("cardName") String cardName,
-			Map<String, Object> model) {
-		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		User user = userService.findUser(userDetails.getUsername()).get();
-		Game game = GameSingleton.getInstance().getMapGames().get(gameId);
-		game.setGamePhase(GamePhase.ATTACK);
-		RedCard attackWeapon = cardService.findRedCardByName(cardName).get();
-
-		Player attacker = game.getCurrentPlayer();
-
-		List<Player> inRange = gameService.playersInRangeOfAttack(game, attackWeapon, attacker);
-
-		model.put("attackWeapon", attackWeapon);
-		model.put("inRange", inRange);
-		model.put("game", game);
-		
-		Player POVplayer = game.getListPlayers().stream()
-				.filter(p -> p.getUser().getUsername().equals(user.getUsername()))
-				.findFirst().get();
-		model.put("POVplayer", POVplayer);
-
-		return "/game/gameboard";
-	}
-
-	@PostMapping(value = { "/game/attack/playerselected" })
-	public String performAttack(@RequestParam("gameId") Integer gameId,
-			@RequestParam("objectivePlayer") String objectiveName, @RequestParam("cardName") String cardName,
-			Map<String, Object> model) {
-
-		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		User user = userService.findUser(userDetails.getUsername()).get();
-		Game game = GameSingleton.getInstance().getMapGames().get(gameId);
-		RedCard attackWeapon = cardService.findRedCardByName(cardName).get();
-
-		Player objective = gameService.findPlayerInGameByName(game, objectiveName); //
-		Player attacker = game.getCurrentPlayer();
-
-		gameService.handleAttack(attacker, objective, attackWeapon);
-		// descartamos una carta de parada del objetivo. En handle attack si tiene una
-		// parada no se resta pts de vida
-		// al objetivo por lo tanto, la asumimos como utilizada y ahora hay que
-		// descartarla.
-		cardService.discard("parada", attacker.getHand(), game.getDiscardPile());
-		// descartamos la 1era carta que coincida con el nombre del arma usada
-		cardService.discard(cardName, attacker.getHand(), game.getDiscardPile());
-
-		Boolean hasAdvancedPhase = gameService.endTurn(game);
-		if (hasAdvancedPhase) {
-			// gameService.processRecoveryPhase(game);
-			gameService.processDrawPhase(game);
-		}
-		model.put("game", game);
-		
-		Player POVplayer = game.getListPlayers().stream()
-				.filter(p -> p.getUser().getUsername().equals(user.getUsername()))
-				.findFirst().get();
-		model.put("POVplayer", POVplayer);
-		return "/game/gameboard";
+		game.setGamePhase(GamePhase.MAIN);
+		return view;
 	}
 
 	@PostMapping(value = { "/game/end-turn" })
 	public String endTurn(@RequestParam("gameId") Integer gameId, Map<String, Object> model) {
-		String view = "/game/gameboard";
+		String view = "redirect:/game/continue/"+gameId;
 		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		User user = userService.findUser(userDetails.getUsername()).get();
 		Game game = GameSingleton.getInstance().getMapGames().get(gameId);
-		Boolean hasAdvancedPhase = gameService.endTurn(game);
-
-		if (gameService.checkAllPlayersHavePositiveHonor(game)) {
-			if (hasAdvancedPhase) {
-				gameService.processRecoveryPhase(game);
-				gameService.processDrawPhase(game);
+		if(user.equals(game.getCurrentPlayer().getUser())) {
+			Boolean hasAdvancedPhase = gameService.endTurn(game);
+	
+			if (gameService.checkAllPlayersHavePositiveHonor(game)) {
+				if (hasAdvancedPhase) {
+					gameService.processRecoveryPhase(game);
+					gameService.processDrawPhase(game);
+				}
 			} else {// fin de la partida cuando algun jugador no le quedan puntos de honor
 					// (honor<=0)
 				view = "/game/endgame";
@@ -254,16 +198,10 @@ public class GameController {
 				model.put("winnerRol", winnerRol);
 			}
 		}
-
-		model.put("game", game);
-		
-		Player POVplayer = game.getListPlayers().stream()
-				.filter(p -> p.getUser().getUsername().equals(user.getUsername()))
-				.findFirst().get();
-		model.put("POVplayer", POVplayer);
 		return view;
 	}
 
+<<<<<<< HEAD
 	@PostMapping(value = "/game/discard-card")
 	public String discardCard(@RequestParam("gameId") Integer gameId, @RequestParam("cardName") String cardName,
 			Map<String, Object> model) {
@@ -379,6 +317,8 @@ public class GameController {
 		model.put("POVplayer", user);
 		return "/game/gameboard";
 	}
+=======
+>>>>>>> branch 'master' of https://github.com/gii-is-DP1/dp1-2021-2022-g7-01.git
 
 	//--------------------------------------------------------------------------------------------------------------------------
 		@GetMapping(value = {"/game/continue/{id_game}"})
@@ -387,15 +327,18 @@ public class GameController {
 			UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			User user = userService.findUser(userDetails.getUsername()).get();
 			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
-
+			
 			model.put("game", game);
 			
 			Player POVplayer = game.getListPlayers().stream()
 					.filter(p -> p.getUser().getUsername().equals(user.getUsername()))
 					.findFirst().get();
 			model.put("POVplayer", POVplayer);
+			model.put("gameStatus", game.getGamePhase().toString());
 			return view;
 		}
+
+	
 	//--------------------------------------------------------------------------------------------------------------------------
 		
 		
@@ -406,8 +349,19 @@ public class GameController {
 		public String useCard(@RequestParam("gameId") Integer gameId, @RequestParam("cardName") String cardName, 
 				Map<String, Object> model) {
 			String view = "redirect:/game/"+cardName+"/"+gameId;
+			UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			User user = userService.findUser(userDetails.getUsername()).get();
 			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
-			cardService.discard(cardName, game.getCurrentPlayer().getHand(), game.getDiscardPile());
+			if(user.equals(game.getCurrentPlayer().getUser())) {
+				Optional<Card> card= cardService.findByName(cardName);
+				if(card.get().getColor().equals("Blue")) {
+					cardService.discard(cardName, game.getCurrentPlayer().getHand(), game.getCurrentPlayer().getEquipment());
+					
+				}else {
+					cardService.discard(cardName, game.getCurrentPlayer().getHand(), game.getDiscardPile());
+				}
+			}
+
 			
 			return view;
 		}
@@ -527,6 +481,7 @@ public class GameController {
 		//--------------------------------------------------------------------------------------------------------Amarillo
 		
 		@GetMapping(value = {"/game/ceremonia del te/{id_game}"})
+<<<<<<< HEAD
 		public String ceremoniaDelTeCard(@PathVariable("id_game") int gameId, Map<String, Object> model) {
 			String view = "redirect:/game/continue/"+gameId;
 			//----------Aqui va el método
@@ -546,6 +501,30 @@ public class GameController {
 			
 			return view;
 		}
+=======
+        public String ceremoniaDelTeCard(@PathVariable("id_game") int gameId, Map<String, Object> model) {
+            String view = "redirect:/game/continue/"+gameId;
+            //----------Aqui va el método
+            UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			User user = userService.findUser(userDetails.getUsername()).get();
+			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
+			if(user.equals(game.getCurrentPlayer().getUser())) {
+				Player myPlayer= game.getCurrentPlayer();
+	
+	            gameService.proceesDrawPhasePlayer(game, myPlayer, 3);
+	
+	
+	            List<Player> allOpponents= game.getListPlayers();
+	            allOpponents.remove(myPlayer);
+	
+	            for(Player pl:allOpponents) {
+	                gameService.proceesDrawPhasePlayer(game, pl, 1);
+	            }
+			}
+
+            return view;
+        }
+>>>>>>> branch 'master' of https://github.com/gii-is-DP1/dp1-2021-2022-g7-01.git
 		
 		@GetMapping(value = {"/game/daimio/{id_game}"})
 		public String daimioCard(@PathVariable("id_game") int gameId, Map<String, Object> model) {
@@ -602,7 +581,12 @@ public class GameController {
 		public String geishaCard(@PathVariable("id_game") int gameId, Map<String, Object> model) {
 			String view = "redirect:/game/continue/"+gameId;
 			//----------Aqui va el método
-			
+			UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			User user = userService.findUser(userDetails.getUsername()).get();
+			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
+			if(user.equals(game.getCurrentPlayer().getUser())) {
+				game.setGamePhase(GamePhase.DISCARDOTHER);
+			}
 			return view;
 		}
 		
@@ -664,6 +648,13 @@ public class GameController {
 		public String armaduraCard(@PathVariable("id_game") int gameId, Map<String, Object> model) {
 			String view = "redirect:/game/continue/"+gameId;
 			//----------Aqui va el método
+			UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			User user = userService.findUser(userDetails.getUsername()).get();
+			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
+			if(user.equals(game.getCurrentPlayer().getUser())) {
+				Player p = game.getCurrentPlayer();
+				p.setDistanceBonus(p.getDistanceBonus()+1);
+			}
 			
 			return view;
 		}
@@ -680,7 +671,13 @@ public class GameController {
 		public String concentracionCard(@PathVariable("id_game") int gameId, Map<String, Object> model) {
 			String view = "redirect:/game/continue/"+gameId;
 			//----------Aqui va el método
-			
+			UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			User user = userService.findUser(userDetails.getUsername()).get();
+			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
+			if(user.equals(game.getCurrentPlayer().getUser())) {
+				Player p = game.getCurrentPlayer();
+				p.setWeaponBonus(p.getWeaponBonus()+1);
+			}
 			return view;
 		}
 		
@@ -688,8 +685,99 @@ public class GameController {
 		public String desenvainadoRapidoCard(@PathVariable("id_game") int gameId, Map<String, Object> model) {
 			String view = "redirect:/game/continue/"+gameId;
 			//----------Aqui va el método
-			
+			UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			User user = userService.findUser(userDetails.getUsername()).get();
+			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
+			if(user.equals(game.getCurrentPlayer().getUser())) {
+				Player p = game.getCurrentPlayer();
+				p.setDamageBonus(p.getDamageBonus()+1);
+			}
 			return view;
 		}
 		
+		@PostMapping(value = {"/game/discard-hand-card"})
+		public String discardHandCard(@RequestParam("gameId") Integer gameId, @RequestParam("cardName") String cardName, 
+				Map<String, Object> model) {
+			String view = "redirect:/game/continue/"+gameId;
+			UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			User user = userService.findUser(userDetails.getUsername()).get();
+			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
+			if(user.equals(game.getCurrentPlayer().getUser())) {
+				view = endTurnPostDiscard(gameId,model);
+				cardService.discard(cardName, game.getCurrentPlayer().getHand(), game.getDiscardPile());
+			}
+			return view;
+		}
+		
+		public String endTurnPostDiscard(Integer gameId, Map<String, Object> model) {
+			String view = "redirect:/game/continue/"+gameId;
+			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
+			Boolean hasAdvancedPhase = gameService.endTurn(game);
+
+			if (gameService.checkAllPlayersHavePositiveHonor(game)) {
+				if (hasAdvancedPhase) {
+					gameService.processRecoveryPhase(game);
+					gameService.processDrawPhase(game);
+				}
+			} else {// fin de la partida cuando algun jugador no le quedan puntos de honor
+					// (honor<=0)
+				view = "/game/endgame";
+				Rol winnerRol = gameService.calcWinners(game);
+				model.put("winnerRol", winnerRol);
+			}
+
+			return view;
+		}
+		
+		@PostMapping(value = {"/game/discard-other-card"})
+		public String discardFrom(@RequestParam("gameId") Integer gameId, @RequestParam("cardName") String cardName, 
+				@RequestParam("player") String player, Map<String, Object> model) {
+			String view = "redirect:/game/continue/"+gameId;
+			UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			User user = userService.findUser(userDetails.getUsername()).get();
+			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
+			if(user.equals(game.getCurrentPlayer().getUser())) {
+				Player p = new Player();
+				for(int i=0; i<game.getListPlayers().size(); i++) {
+					if(game.getListPlayers().get(i).getUser().getUsername().equals(player)) {
+						p = game.getListPlayers().get(i);
+					}
+				}
+				switch (cardName) {
+				case "hand":
+					List<Card>lh = p.getHand();
+					if(lh.size()!=0) {
+						game.setGamePhase(GamePhase.MAIN);
+						int i = 0 + (int)(Math.random() * ((lh.size() - 0) + 1));
+						cardService.discard(lh.get(i).getName(), p.getHand(), game.getDiscardPile());
+					}
+					break;
+				case "armadura":
+					if(p.getDistanceBonus()!=0) {
+						p.setDistanceBonus(p.getDistanceBonus()-1);
+						game.setGamePhase(GamePhase.MAIN);
+						cardService.discard(cardName, p.getEquipment(), game.getDiscardPile());
+					}
+					break;
+				case "concentracion":
+					if(p.getWeaponBonus()!=0) {
+						p.setWeaponBonus(p.getWeaponBonus()-1);
+						game.setGamePhase(GamePhase.MAIN);
+						cardService.discard(cardName, p.getEquipment(), game.getDiscardPile());
+					}
+					break;
+				case "desenvainado rapido":
+					if(p.getWeaponBonus()!=0) {
+						p.setDamageBonus(p.getDamageBonus()+1);
+						game.setGamePhase(GamePhase.MAIN);
+						cardService.discard(cardName, p.getEquipment(), game.getDiscardPile());
+					}
+					break;
+				default:
+					break;
+				}
+			}
+			return view;
+		}
+			
 }

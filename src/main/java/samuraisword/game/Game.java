@@ -53,6 +53,8 @@ public class Game extends BaseEntity{
 	
 	private LocalDateTime endDate;
 	
+	@Transient
+	private Card useCard;
 	
 			
 	public Game() {
