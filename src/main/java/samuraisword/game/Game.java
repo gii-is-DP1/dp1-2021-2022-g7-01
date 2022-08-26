@@ -70,8 +70,6 @@ public class Game extends BaseEntity{
 	
 	@Transient
 	private Player playerChoose;
-	
-	
 			
 	public Game() {
 		this.listPlayers = new ArrayList<>();

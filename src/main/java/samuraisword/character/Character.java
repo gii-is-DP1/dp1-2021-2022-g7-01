@@ -1,5 +1,6 @@
 package samuraisword.character;
 
+
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -34,10 +35,23 @@ public class Character extends BaseEntity{
 	
 	private String image;
 	
-	private String text;
+
 	
-	private GamePhase gamePhase;
+	public void action(Player p) {
+		
+		if(p.getCharacter().getName().equals("Benkei")) {
+			p.setDistanceBonus(p.getDistanceBonus()+1);
+		}else if(p.getCharacter().getName().equals("Goemon")) {
+			p.setWeaponBonus(p.getWeaponBonus()+1);
+		}else if(p.getCharacter().getName().equals("Hideyoshi")) {
+			p.setAntiDamageBonus(p.getAntiDamageBonus()+1);
+		}else if(p.getCharacter().getName().equals("Musashi")) {
+			p.setDamageBonus(p.getDamageBonus()+1);
+		}
+		
+		
+	}
 	
-	private GameStatus status;
+	
 	
 }

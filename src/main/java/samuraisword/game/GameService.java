@@ -19,7 +19,6 @@ import samuraisword.character.CharacterService;
 import samuraisword.player.Player;
 import samuraisword.player.Rol;
 import samuraisword.samples.petclinic.card.Card;
-import samuraisword.samples.petclinic.card.CardService;
 import samuraisword.samples.petclinic.card.RedCard;
 
 @Service
@@ -27,7 +26,6 @@ public class GameService {
 
 	private GameRepository gameRepository;
 	private final CharacterService characterService;
-
 	private final Integer MAX_CARDS_HAND = 7;
 	private final Integer NUM_CARD_DRAWN = 2;
 
@@ -65,6 +63,9 @@ public class GameService {
 			p.setDamageBonus(0);
 			p.setDistanceBonus(0);
 			p.setWeaponBonus(0);
+			p.setAntiDamageBonus(0);
+			p.setDrawCardBonus(0);
+			p.getCharacter().action(p);
 		}
 		return players;
 	}
@@ -213,14 +214,16 @@ public class GameService {
 		return playersBetween;
 	}
 
+
 	public Boolean endTurn(Game game) {
 		Boolean correctMaxCardHand = game.getCurrentPlayer().getHand().size() <= MAX_CARDS_HAND;
+
 
 		if (correctMaxCardHand) {
 			Integer numPlayers = game.getListPlayers().size();
 			Integer nextPlayerIndex = (game.getListPlayers().indexOf(game.getCurrentPlayer()) + 1) % numPlayers;
 			game.setCurrentPlayer(game.getListPlayers().get(nextPlayerIndex));
-			game.setGamePhase(GamePhase.RECOVERY);
+			game.setGamePhase(GamePhase.MAIN);
 		} else {
 			game.setGamePhase(GamePhase.DISCARD);
 		}
@@ -244,6 +247,56 @@ public class GameService {
 			game.getDeck().remove(0);
 		}
 		game.setGamePhase(GamePhase.MAIN);
+	}
+	
+	public void proceesDrawPhasePlayer(Game game,Player player,Integer cards) {
+		for(int i=0;i<cards;i++) {
+			Card card=game.getDeck().get(0);
+			player.getHand().add(card);
+			game.getDeck().remove(0);
+			
+		}
+		game.setGamePhase(GamePhase.MAIN);
+		
+	}
+	
+	public Boolean checkBushido(Game game) {
+		Boolean check = false;
+		Card bush = new Card();
+		boolean hasBushido = false;
+		for(int o=0;o<game.getCurrentPlayer().getEquipment().size();o++) {
+			if(game.getCurrentPlayer().getEquipment().get(o).getName().equals("bushido")) {
+				bush = game.getCurrentPlayer().getEquipment().get(o);
+				hasBushido=true;
+			}
+		}
+		if(hasBushido) {
+			Card card = game.getDeck().get(0);
+			game.getDiscardPile().add(card);
+			game.getDeck().remove(0);
+			Integer numPlayers = game.getListPlayers().size();
+			Integer nextPlayerIndex = (game.getListPlayers().indexOf(game.getCurrentPlayer()) + 1) % numPlayers;
+			if(card.getColor().equals("Red")) {
+				boolean hasRedCard = false;
+				for(int i = 0; i<game.getCurrentPlayer().getHand().size();i++) {
+					if(game.getCurrentPlayer().getHand().get(i).getColor().equals("Red")) {
+						hasRedCard = true;
+					}
+				}
+				if(hasRedCard) {
+					check = true;
+					game.setGamePhase(GamePhase.DISCARTRED);
+				}else {
+					game.getCurrentPlayer().setHonor(game.getCurrentPlayer().getHonor()-1);
+					game.getCurrentPlayer().getEquipment().remove(bush);
+					game.getListPlayers().get(nextPlayerIndex).getEquipment().add(bush);
+				}
+			}else {
+				game.getCurrentPlayer().getEquipment().remove(bush);
+				game.getListPlayers().get(nextPlayerIndex).getEquipment().add(bush);
+			}
+		}
+		return check;
 	}
 
 	public void substractHearts(Player attacker, Player objective, RedCard attackWeapon) {
@@ -309,4 +362,14 @@ public class GameService {
 				.collect(Collectors.groupingBy(Player::getRol, Collectors.summingDouble(x -> x.getHonor())));
 	}
 
+	public void proceesDrawPhasePlayer(Game game,Player player,Integer cards) {
+        for(int i=0;i<cards;i++) {
+            Card card=game.getDeck().get(0);
+            player.getHand().add(card);
+            game.getDeck().remove(0);
+
+        }
+        game.setGamePhase(GamePhase.MAIN);
+
+    }
 }
