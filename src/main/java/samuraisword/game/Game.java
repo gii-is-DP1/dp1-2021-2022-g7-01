@@ -68,6 +68,9 @@ public class Game extends BaseEntity{
 	@Transient
 	private List<Card> listJiuJitsu;
 	
+	@Transient
+	private Player playerChoose;
+	
 	
 			
 	public Game() {

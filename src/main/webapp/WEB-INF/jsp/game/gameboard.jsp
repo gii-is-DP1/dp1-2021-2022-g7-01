@@ -488,7 +488,7 @@ table {
 							
 							</form:form>  </c:if></c:if>
 			
-			<c:if test="${game.getGamePhase().equals(GamePhase.DISCARDARM) && (!(game.getCurrentPlayer().equals(POVplayer))) && game.waitingForPlayer.contains(POVplayer)}">
+			<c:if test="${game.getGamePhase().equals(GamePhase.DISCARDARM) && (!(game.getCurrentPlayer().equals(POVplayer))) && game.waitingForPlayer.contains(POVplayer) && game.getPlayerChoose().equals(POVplayer)}">
 			<p>¿Que arma quieres descartar?</p>
 			<c:forEach items="${game.getListJiuJitsu()}" var ="cards" varStatus="loop">
 		
@@ -503,9 +503,31 @@ table {
 			</c:forEach>
 			</c:if>
 			
-														
+			<c:if test="${game.getGamePhase().equals(GamePhase.DISCARDARM) && (!(game.getCurrentPlayer().equals(POVplayer))) && game.waitingForPlayer.contains(POVplayer) && (!(game.getPlayerChoose().equals(POVplayer)))}">
+			<p>EL JUGADOR ${ game.getPlayerChoose()} ESTÁ DESCARTANDO UN ARMA. POR FAVOR ESPERE</p>
+			</c:if>
+			
+			<c:if test="${game.getGamePhase().equals(GamePhase.GRITODEBATALLA) && game.getCurrentPlayer().equals(POVplayer)}">
+			<div align="center">
+			<img src="/resources/images/reloj.gif" alt="card" style="height: 70%; width:auto" />
+			<p>${game.waitingForPlayer.size()} JUGADORES ESTAN DECIDIENDO QUE HACER</p>
+			</div>
+			</c:if>											
 							                                    
-	
+			<c:if test="${(game.getGamePhase().equals(GamePhase.JIUJITSU) || (game.getGamePhase().equals(GamePhase.DISCARDARM))) && game.getCurrentPlayer().equals(POVplayer)}">
+			<div align="center">
+			<img src="/resources/images/reloj.gif" alt="card" style="height: 70%; width:auto" />
+		
+			<p>${game.waitingForPlayer.size()} JUGADORES ESTAN DECIDIENDO QUE HACER</p>
+			</div>
+			</c:if>	
+			
+			<c:if test="${game.getGamePhase().equals(GamePhase.PARADA)  && game.getCurrentPlayer().equals(POVplayer)}">
+			<div align="center">
+			<img src="/resources/images/reloj.gif" alt="card" style="height: 70%; width:auto" />
+			<p>EL JUGADOR QUE HAS ATACADO TIENE PARADA Y ESTA DECIDIENDO QUE HACER</p>
+			</div>
+			</c:if>
 	</div>
 
 	<!-- YOUR PLAYER INFO -->

@@ -419,6 +419,7 @@ public class GameController {
 				if(lp.get(i).getUser().getUsername().equals(POVplayer.getUser().getUsername())) {
 					lp.remove(i);
 				}
+				
 				}
 			game.setPlayersInRange(lp);
 			game.setGamePhase(GamePhase.ATTACK);
@@ -437,8 +438,9 @@ public class GameController {
 			List<Player> lp=gameService.playersInRangeOfAttack(game, cardService.findRedCardByName("bokken").get(), POVplayer);
 			for(int i=0;i<lp.size();i++) {
 			if(lp.get(i).getUser().getUsername().equals(POVplayer.getUser().getUsername())) {
+				
 				lp.remove(i);
-			}
+				}
 			}
 			game.setPlayersInRange(lp);
 			game.setGamePhase(GamePhase.ATTACK);
@@ -455,6 +457,12 @@ public class GameController {
 			for(int i2=0;i2<game.getListPlayers().size();i2++) {
 				if(game.getListPlayers().get(i2).getUser().getUsername().equals(playerA)) {
 					game.getListPlayers().get(i2).setCurrentHearts(game.getListPlayers().get(i2).getCurrentHearts()-i);
+					if(game.getListPlayers().get(i2).getCurrentHearts()<=0) {
+						if(game.getListPlayers().get(i2).getHonor()>0) {
+							game.getListPlayers().get(i2).setCurrentHearts(game.getListPlayers().get(i2).getCharacter().getLife());
+							game.getListPlayers().get(i2).setHonor(game.getListPlayers().get(i2).getHonor()-1);
+						}
+					}
 				}
 			}
 			game.setGamePhase(GamePhase.MAIN);
@@ -511,6 +519,7 @@ public class GameController {
 				if(lp.get(i).getUser().getUsername().equals(POVplayer.getUser().getUsername())) {
 					lp.remove(i);
 				}
+				
 				}
 			game.setPlayersInRange(lp);
 			game.setGamePhase(GamePhase.ATTACK);
@@ -530,6 +539,7 @@ public class GameController {
 				if(lp.get(i).getUser().getUsername().equals(POVplayer.getUser().getUsername())) {
 					lp.remove(i);
 				}
+				
 				}
 			game.setPlayersInRange(lp);
 			game.setGamePhase(GamePhase.ATTACK);
@@ -549,6 +559,7 @@ public class GameController {
 				if(lp.get(i).getUser().getUsername().equals(POVplayer.getUser().getUsername())) {
 					lp.remove(i);
 				}
+				
 				}
 			game.setPlayersInRange(lp);
 			game.setGamePhase(GamePhase.ATTACK);
@@ -568,6 +579,7 @@ public class GameController {
 				if(lp.get(i).getUser().getUsername().equals(POVplayer.getUser().getUsername())) {
 					lp.remove(i);
 				}
+				
 				}
 			game.setPlayersInRange(lp);
 			game.setGamePhase(GamePhase.ATTACK);
@@ -587,6 +599,7 @@ public class GameController {
 				if(lp.get(i).getUser().getUsername().equals(POVplayer.getUser().getUsername())) {
 					lp.remove(i);
 				}
+				
 				}
 			game.setPlayersInRange(lp);
 			game.setGamePhase(GamePhase.ATTACK);
@@ -606,6 +619,7 @@ public class GameController {
 				if(lp.get(i).getUser().getUsername().equals(POVplayer.getUser().getUsername())) {
 					lp.remove(i);
 				}
+				
 				}
 			game.setPlayersInRange(lp);
 			game.setGamePhase(GamePhase.ATTACK);
@@ -625,6 +639,7 @@ public class GameController {
 				if(lp.get(i).getUser().getUsername().equals(POVplayer.getUser().getUsername())) {
 					lp.remove(i);
 				}
+				
 				}
 			game.setPlayersInRange(lp);
 			game.setGamePhase(GamePhase.ATTACK);
@@ -644,6 +659,7 @@ public class GameController {
 				if(lp.get(i).getUser().getUsername().equals(POVplayer.getUser().getUsername())) {
 					lp.remove(i);
 				}
+				
 				}
 			game.setPlayersInRange(lp);
 			game.setGamePhase(GamePhase.ATTACK);
@@ -663,6 +679,7 @@ public class GameController {
 				if(lp.get(i).getUser().getUsername().equals(POVplayer.getUser().getUsername())) {
 					lp.remove(i);
 				}
+				
 				}
 			game.setPlayersInRange(lp);
 			game.setGamePhase(GamePhase.ATTACK);
@@ -682,6 +699,7 @@ public class GameController {
 				if(lp.get(i).getUser().getUsername().equals(POVplayer.getUser().getUsername())) {
 					lp.remove(i);
 				}
+				
 				}
 			game.setPlayersInRange(lp);
 			game.setGamePhase(GamePhase.ATTACK);
@@ -701,6 +719,7 @@ public class GameController {
 				if(lp.get(i).getUser().getUsername().equals(POVplayer.getUser().getUsername())) {
 					lp.remove(i);
 				}
+				
 				}
 			game.setPlayersInRange(lp);
 			game.setGamePhase(GamePhase.ATTACK);
@@ -782,6 +801,12 @@ public class GameController {
 			
 			Player p=playerService.findPlayerByUsernameAndGame(playerA, game);
 			p.setCurrentHearts(p.getCurrentHearts()-1);
+			if(p.getCurrentHearts()<=0) {
+				if(p.getHonor()>0) {
+					p.setCurrentHearts(p.getCharacter().getLife());
+					p.setHonor(p.getHonor()-1);
+				}
+			}
 			game.getWaitingForPlayer().remove(p);
 			if(game.getWaitingForPlayer().size()==0) {
 				game.setGamePhase(GamePhase.MAIN);
@@ -849,6 +874,12 @@ public class GameController {
 			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
 			Player p=playerService.findPlayerByUsernameAndGame(playerA, game);
 			p.setCurrentHearts(p.getCurrentHearts()-1);
+			if(p.getCurrentHearts()<=0) {
+				if(p.getHonor()>0) {
+					p.setCurrentHearts(p.getCharacter().getLife());
+					p.setHonor(p.getHonor()-1);
+				}
+			}
 			game.getWaitingForPlayer().remove(p);
 			if(game.getWaitingForPlayer().size()==0) {
 				game.setGamePhase(GamePhase.MAIN);
@@ -866,6 +897,7 @@ public class GameController {
 			
 			Player p=playerService.findPlayerByUsernameAndGame(playerA, game);
 			game.setGamePhase(GamePhase.DISCARDARM);
+			game.setPlayerChoose(p);
 			List<Card> lc= new ArrayList<>();
 			game.setListJiuJitsu(lc);
 			for(int i=0;i<p.getHand().size();i++) {
@@ -894,12 +926,16 @@ public class GameController {
 			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
 			
 			Player p=playerService.findPlayerByUsernameAndGame(playerA, game);
+			
 			p.getHand().remove(cardService.findByName(cardName).get());
 			game.getWaitingForPlayer().remove(p);
 			
 			if(game.getWaitingForPlayer().size()==0) {
 				game.setGamePhase(GamePhase.MAIN);
+			}else {
+				game.setGamePhase(GamePhase.JIUJITSU);
 			}
+			
 			return view;
 		}
 		
