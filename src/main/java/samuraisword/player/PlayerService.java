@@ -78,4 +78,9 @@ public class PlayerService {
 	public Collection<RolType> findRolTypes() throws DataAccessException {
 		return playerRepository.findRolTypes();
 	}
+	
+	@Transactional
+	public Player findPlayerByUsernameAndGame(String username, Game game) throws DataAccessException {
+		return game.getListPlayers().stream().filter(x->x.getUser().getUsername().equals(username)).findFirst().get();		
+	}
 }

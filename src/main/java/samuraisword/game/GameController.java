@@ -1,13 +1,12 @@
 package samuraisword.game;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
-import java.util.Map.Entry;
+
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -15,13 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
 import samuraisword.cardhand.CardHand;
 import samuraisword.character.Character;
 import samuraisword.character.CharacterService;
@@ -46,7 +42,7 @@ public class GameController {
 	private final InvitationService invitationService;
 	private final CharacterService characterService;
 
-	private static final String VIEWS_CREATE_GAME = "game/createGame";
+	private static final String VIEWS_CREATE_GAME = "game/createGame"; 
 
 	@Autowired
 	public GameController(GameService GameService, UserService userService, PlayerService playerService,
@@ -209,125 +205,6 @@ public class GameController {
 		return view;
 	}
 
-<<<<<<< HEAD
-	@PostMapping(value = "/game/discard-card")
-	public String discardCard(@RequestParam("gameId") Integer gameId, @RequestParam("cardName") String cardName,
-			Map<String, Object> model) {
-		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		User user = userService.findUser(userDetails.getUsername()).get();
-		Game game = GameSingleton.getInstance().getMapGames().get(gameId);
-
-		cardService.discard(cardName, game.getCurrentPlayer().getHand(), game.getDiscardPile());
-
-		Boolean hasAdvancedPhase = gameService.endTurn(game);
-		if (hasAdvancedPhase) {
-			gameService.processRecoveryPhase(game);
-			gameService.processDrawPhase(game);
-		}
-		model.put("game", game);
-		Player POVplayer = game.getListPlayers().stream()
-				.filter(p -> p.getUser().getUsername().equals(user.getUsername()))
-				.findFirst().get();
-		model.put("POVplayer", POVplayer);
-		return "/game/gameboard";
-	}
-
-	@PostMapping(value = { "/game/select" })
-	public String acceptController(@RequestParam("gameId") Integer gameId, @RequestParam("cardName") String cardName,
-			Map<String, Object> model) {
-		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		User user = userService.findUser(userDetails.getUsername()).get();
-		Optional<Card> card = cardService.findByName(cardName);
-		Game game = GameSingleton.getInstance().getMapGames().get(gameId);
-		Player p = game.getCurrentPlayer();
-
-		if (card.get().getName().contains("armadura")) {
-			characterService.statUp(p, "distanceBonus", 1);
-		} else if (card.get().getName().contains("concentracion")) {
-			characterService.statUp(p, "damageBonus", 1);
-		} else if (card.get().getName().contains("desenvainado")) {
-			characterService.statUp(p, "weaponBonus", 1);
-		}
-		p.getEquipment().add(card.get());
-
-		cardService.removeCardByName(cardName, p.getHand());
-
-		cardService.discard(cardName, p.getHand(), game.getDiscardPile());
-
-		model.put("game", game);
-		Player POVplayer = game.getListPlayers().stream()
-				.filter(pl -> pl.getUser().getUsername().equals(user.getUsername()))
-				.findFirst().get();
-		model.put("POVplayer", POVplayer);
-		return "/game/gameboard";
-	}
-
-//	@PostMapping(value = { "/game/steal" })
-//	public String stealCard(@RequestParam("gameId") Integer gameId, Map<String, Object> model) {
-//		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//		User user = userService.findUser(userDetails.getUsername()).get();
-//		Game game = GameSingleton.getInstance().getMapGames().get(gameId);
-//		Player p = game.getCurrentPlayer();
-//
-//		Random r = new Random();
-//		int valorDado = r.nextInt(game.getDeck().size());
-//
-//		p.getHand().add(game.getDeck().get(valorDado));
-//		game.getDeck().remove(valorDado);
-//
-//		model.put("game", game);
-//		model.put("POVplayer", user);
-//		return "/game/gameboard";
-//	}
-
-//	@PostMapping(value = { "/game/stealPlayer" })
-//	public String stealCardPlayer(@RequestParam("gameId") Integer gameId, @RequestParam("playerName") String playerName,
-//			Map<String, Object> model) {
-//		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//
-//		Game game = GameSingleton.getInstance().getMapGames().get(gameId);
-//		User user = userService.findUser(userDetails.getUsername()).get();
-//		Player p = game.getCurrentPlayer();
-//		Player p2 = gameService.findPlayerInGameByName(game, playerName);
-//		Random r = new Random();
-//		int valorDado = r.nextInt(p2.getHand().size());
-//
-//		p.getHand().add(p2.getHand().get(valorDado));
-//		p2.getHand().remove(valorDado);
-//
-//		for (Card i : p.getHand()) {
-//			if (i.getName().equals("distraccion")) {
-//				game.getDiscardPile().add(i);
-//				p.getHand().remove(i);
-//				break;
-//			}
-//		}
-//
-//		model.put("game", game);
-//		model.put("POVplayer", user);
-//		return "/game/gameboard";
-//	}
-
-	@PostMapping(value = { "/game/stealEquipment" })
-	public String stealCard(@RequestParam("gameId") Integer gameId, @RequestParam("playerName") String playerName,
-			@RequestParam("cardName") String cardName, Map<String, Object> model) {
-		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		User user = userService.findUser(userDetails.getUsername()).get();
-		Game game = GameSingleton.getInstance().getMapGames().get(gameId);
-		Player p = game.getCurrentPlayer();
-		Player p2 = gameService.findPlayerInGameByName(game, playerName);
-		Optional<Card> card = cardService.findByName(cardName);
-
-		p.getEquipment().add(card.get());
-		p2.getEquipment().remove(card.get());
-
-		model.put("game", game);
-		model.put("POVplayer", user);
-		return "/game/gameboard";
-	}
-=======
->>>>>>> branch 'master' of https://github.com/gii-is-DP1/dp1-2021-2022-g7-01.git
-
 	//--------------------------------------------------------------------------------------------------------------------------
 		@GetMapping(value = {"/game/continue/{id_game}"})
 		public String continueGame(@PathVariable("id_game") int gameId, Map<String, Object> model) {
@@ -360,6 +237,7 @@ public class GameController {
 			UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			User user = userService.findUser(userDetails.getUsername()).get();
 			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
+			game.setUseCard(cardService.findByName(cardName).get());
 			if(user.getUsername().equals(game.getCurrentPlayer().getUser().getUsername())) {
 				Optional<Card> card= cardService.findByName(cardName);
 				if(card.get().getColor().equals("Blue")) {
@@ -386,8 +264,6 @@ public class GameController {
 					cardService.discard(cardName, game.getCurrentPlayer().getHand(), game.getDiscardPile());
 				}
 			}
-
-			
 			return view;
 		}
 		
@@ -402,6 +278,19 @@ public class GameController {
 		public String boCard(@PathVariable("id_game") int gameId, Map<String, Object> model) {
 			String view = "redirect:/game/continue/"+gameId;
 			//----------Aqui va el método
+			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
+
+			Player POVplayer = game.getCurrentPlayer();
+			
+			List<Player> lp=gameService.playersInRangeOfAttack(game, cardService.findRedCardByName("bo").get(), POVplayer);
+			for(int i=0;i<lp.size();i++) {
+				if(lp.get(i).getUser().getUsername().equals(POVplayer.getUser().getUsername())) {
+					lp.remove(i);
+				}
+				
+				}
+			game.setPlayersInRange(lp);
+			game.setGamePhase(GamePhase.ATTACK);
 			
 			
 			return view;
@@ -411,15 +300,98 @@ public class GameController {
 		public String bokkenCard(@PathVariable("id_game") int gameId, Map<String, Object> model) {
 			String view = "redirect:/game/continue/"+gameId;
 			//----------Aqui va el método
+			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
+
+			Player POVplayer = game.getCurrentPlayer();
+			
+			List<Player> lp=gameService.playersInRangeOfAttack(game, cardService.findRedCardByName("bokken").get(), POVplayer);
+			for(int i=0;i<lp.size();i++) {
+			if(lp.get(i).getUser().getUsername().equals(POVplayer.getUser().getUsername())) {
+				
+				lp.remove(i);
+				}
+			}
+			game.setPlayersInRange(lp);
+			game.setGamePhase(GamePhase.ATTACK);
+			return view;
+		}
+		
+		@PostMapping(value = {"/game/attack/{id_game}/{playerA}"}) 
+		public String DoDamage(@PathVariable("id_game") int gameId, @PathVariable("playerA") String playerA ,Map<String, Object> model) {
+			String view = "redirect:/game/continue/"+gameId;
+			//----------Aqui va el método
+			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
+			Card c= game.getUseCard();
+			int i=cardService.findDamage(c.getName()).get();
+			for(int i2=0;i2<game.getListPlayers().size();i2++) {
+				if(game.getListPlayers().get(i2).getUser().getUsername().equals(playerA)) {
+					game.getListPlayers().get(i2).setCurrentHearts(game.getListPlayers().get(i2).getCurrentHearts()-i);
+					if(game.getListPlayers().get(i2).getCurrentHearts()<=0) {
+						if(game.getListPlayers().get(i2).getHonor()>0) {
+							game.getListPlayers().get(i2).setCurrentHearts(game.getListPlayers().get(i2).getCharacter().getLife());
+							game.getListPlayers().get(i2).setHonor(game.getListPlayers().get(i2).getHonor()-1);
+						}
+					}
+				}
+			}
+			game.setGamePhase(GamePhase.MAIN);
+			return view;
+		}
+		
+		
+		@PostMapping(value = {"/game/selectPlayer/{id_game}/{playerA}"}) 
+		public String selectPlayer(@PathVariable("id_game") int gameId, @PathVariable("playerA") String playerA ,Map<String, Object> model) {
+			String view = "redirect:/game/continue/"+gameId;
+			//----------Aqui va el método
+			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
+			Player p=playerService.findPlayerByUsernameAndGame(playerA, game);
+			for(int i=0;i<p.getHand().size();i++) {
+				if(p.getHand().get(i).getName().equals("parada")) {
+					game.setAttackerPlayer(p);
+					game.setGamePhase(GamePhase.PARADA); 
+				}
+		
+			} 
+			
+			if(!(game.getGamePhase().equals(GamePhase.PARADA))){
+				 DoDamage(gameId, playerA, model);
+			}
 			
 			return view;
 		}
 		
-		@GetMapping(value = {"/game/daiku/{id_game}"})
+		
+		@PostMapping(value = {"/game/parada/{id_game}/{playerA}"}) 
+		public String parada(@PathVariable("id_game") int gameId, @PathVariable("playerA") String playerA ,Map<String, Object> model) {
+			String view = "redirect:/game/continue/"+gameId;
+			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
+			game.setGamePhase(GamePhase.MAIN);
+			Player p=playerService.findPlayerByUsernameAndGame(playerA, game);
+			
+			
+			cardService.discard("parada", p.getHand(), game.getDiscardPile());
+				
+			return view;
+		}
+		
+		
+		@GetMapping(value = {"/game/daiku/{id_game}"}) 
 		public String daikuCard(@PathVariable("id_game") int gameId, Map<String, Object> model) {
 			String view = "redirect:/game/continue/"+gameId;
 			//----------Aqui va el método
+			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
+
+			Player POVplayer = game.getCurrentPlayer();
 			
+			List<Player> lp=gameService.playersInRangeOfAttack(game, cardService.findRedCardByName("daiku").get(), POVplayer);
+			for(int i=0;i<lp.size();i++) {
+				if(lp.get(i).getUser().getUsername().equals(POVplayer.getUser().getUsername())) {
+					lp.remove(i);
+				}
+				
+				}
+			game.setPlayersInRange(lp);
+			game.setGamePhase(GamePhase.ATTACK);
 			return view;
 		}
 		
@@ -427,7 +399,19 @@ public class GameController {
 		public String kanaboCard(@PathVariable("id_game") int gameId, Map<String, Object> model) {
 			String view = "redirect:/game/continue/"+gameId;
 			//----------Aqui va el método
+			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
+
+			Player POVplayer = game.getCurrentPlayer();
 			
+			List<Player> lp=gameService.playersInRangeOfAttack(game, cardService.findRedCardByName("kanabo").get(), POVplayer);
+			for(int i=0;i<lp.size();i++) {
+				if(lp.get(i).getUser().getUsername().equals(POVplayer.getUser().getUsername())) {
+					lp.remove(i);
+				}
+				
+				}
+			game.setPlayersInRange(lp);
+			game.setGamePhase(GamePhase.ATTACK);
 			return view;
 		}
 		
@@ -435,7 +419,19 @@ public class GameController {
 		public String katanaCard(@PathVariable("id_game") int gameId, Map<String, Object> model) {
 			String view = "redirect:/game/continue/"+gameId;
 			//----------Aqui va el método
+			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
+
+			Player POVplayer = game.getCurrentPlayer();
 			
+			List<Player> lp=gameService.playersInRangeOfAttack(game, cardService.findRedCardByName("katana").get(), POVplayer);
+			for(int i=0;i<lp.size();i++) {
+				if(lp.get(i).getUser().getUsername().equals(POVplayer.getUser().getUsername())) {
+					lp.remove(i);
+				}
+				
+				}
+			game.setPlayersInRange(lp);
+			game.setGamePhase(GamePhase.ATTACK);
 			return view;
 		}
 		
@@ -443,7 +439,19 @@ public class GameController {
 		public String kiseruCard(@PathVariable("id_game") int gameId, Map<String, Object> model) {
 			String view = "redirect:/game/continue/"+gameId;
 			//----------Aqui va el método
+			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
+
+			Player POVplayer = game.getCurrentPlayer();
 			
+			List<Player> lp=gameService.playersInRangeOfAttack(game, cardService.findRedCardByName("kiseru").get(), POVplayer);
+			for(int i=0;i<lp.size();i++) {
+				if(lp.get(i).getUser().getUsername().equals(POVplayer.getUser().getUsername())) {
+					lp.remove(i);
+				}
+				
+				}
+			game.setPlayersInRange(lp);
+			game.setGamePhase(GamePhase.ATTACK);
 			return view;
 		}
 		
@@ -451,7 +459,19 @@ public class GameController {
 		public String kusarigamaCard(@PathVariable("id_game") int gameId, Map<String, Object> model) {
 			String view = "redirect:/game/continue/"+gameId;
 			//----------Aqui va el método
+			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
+
+			Player POVplayer = game.getCurrentPlayer();
 			
+			List<Player> lp=gameService.playersInRangeOfAttack(game, cardService.findRedCardByName("kusarigama").get(), POVplayer);
+			for(int i=0;i<lp.size();i++) {
+				if(lp.get(i).getUser().getUsername().equals(POVplayer.getUser().getUsername())) {
+					lp.remove(i);
+				}
+				
+				}
+			game.setPlayersInRange(lp);
+			game.setGamePhase(GamePhase.ATTACK);
 			return view;
 		}
 		
@@ -459,7 +479,19 @@ public class GameController {
 		public String nagayariCard(@PathVariable("id_game") int gameId, Map<String, Object> model) {
 			String view = "redirect:/game/continue/"+gameId;
 			//----------Aqui va el método
+			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
+
+			Player POVplayer = game.getCurrentPlayer();
 			
+			List<Player> lp=gameService.playersInRangeOfAttack(game, cardService.findRedCardByName("nagayari").get(), POVplayer);
+			for(int i=0;i<lp.size();i++) {
+				if(lp.get(i).getUser().getUsername().equals(POVplayer.getUser().getUsername())) {
+					lp.remove(i);
+				}
+				
+				}
+			game.setPlayersInRange(lp);
+			game.setGamePhase(GamePhase.ATTACK);
 			return view;
 		}
 		
@@ -467,7 +499,19 @@ public class GameController {
 		public String naginataCard(@PathVariable("id_game") int gameId, Map<String, Object> model) {
 			String view = "redirect:/game/continue/"+gameId;
 			//----------Aqui va el método
+			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
+
+			Player POVplayer = game.getCurrentPlayer();
 			
+			List<Player> lp=gameService.playersInRangeOfAttack(game, cardService.findRedCardByName("naginata").get(), POVplayer);
+			for(int i=0;i<lp.size();i++) {
+				if(lp.get(i).getUser().getUsername().equals(POVplayer.getUser().getUsername())) {
+					lp.remove(i);
+				}
+				
+				}
+			game.setPlayersInRange(lp);
+			game.setGamePhase(GamePhase.ATTACK);
 			return view;
 		}
 		
@@ -475,7 +519,19 @@ public class GameController {
 		public String nodachiCard(@PathVariable("id_game") int gameId, Map<String, Object> model) {
 			String view = "redirect:/game/continue/"+gameId;
 			//----------Aqui va el método
+			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
+
+			Player POVplayer = game.getCurrentPlayer();
 			
+			List<Player> lp=gameService.playersInRangeOfAttack(game, cardService.findRedCardByName("nodachi").get(), POVplayer);
+			for(int i=0;i<lp.size();i++) {
+				if(lp.get(i).getUser().getUsername().equals(POVplayer.getUser().getUsername())) {
+					lp.remove(i);
+				}
+				
+				}
+			game.setPlayersInRange(lp);
+			game.setGamePhase(GamePhase.ATTACK);
 			return view;
 		}
 		
@@ -483,7 +539,19 @@ public class GameController {
 		public String shurikenCard(@PathVariable("id_game") int gameId, Map<String, Object> model) {
 			String view = "redirect:/game/continue/"+gameId;
 			//----------Aqui va el método
+			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
+
+			Player POVplayer = game.getCurrentPlayer();
 			
+			List<Player> lp=gameService.playersInRangeOfAttack(game, cardService.findRedCardByName("shuriken").get(), POVplayer);
+			for(int i=0;i<lp.size();i++) {
+				if(lp.get(i).getUser().getUsername().equals(POVplayer.getUser().getUsername())) {
+					lp.remove(i);
+				}
+				
+				}
+			game.setPlayersInRange(lp);
+			game.setGamePhase(GamePhase.ATTACK);
 			return view;
 		}
 		
@@ -491,7 +559,19 @@ public class GameController {
 		public String tanegashimaCard(@PathVariable("id_game") int gameId, Map<String, Object> model) {
 			String view = "redirect:/game/continue/"+gameId;
 			//----------Aqui va el método
+			Game game = GameSingleton.getInstance().getMapGames().get(gameId); 
+
+			Player POVplayer = game.getCurrentPlayer();
 			
+			List<Player> lp=gameService.playersInRangeOfAttack(game, cardService.findRedCardByName("tanegashima").get(), POVplayer);
+			for(int i=0;i<lp.size();i++) {
+				if(lp.get(i).getUser().getUsername().equals(POVplayer.getUser().getUsername())) {
+					lp.remove(i);
+				}
+				
+				}
+			game.setPlayersInRange(lp);
+			game.setGamePhase(GamePhase.ATTACK);
 			return view;
 		}
 		
@@ -499,35 +579,26 @@ public class GameController {
 		public String wakizashiCard(@PathVariable("id_game") int gameId, Map<String, Object> model) {
 			String view = "redirect:/game/continue/"+gameId;
 			//----------Aqui va el método
+			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
+
+			Player POVplayer = game.getCurrentPlayer();
 			
+			List<Player> lp=gameService.playersInRangeOfAttack(game, cardService.findRedCardByName("wakizashi").get(), POVplayer);
+			for(int i=0;i<lp.size();i++) {
+				if(lp.get(i).getUser().getUsername().equals(POVplayer.getUser().getUsername())) {
+					lp.remove(i);
+				}
+				
+				}
+			game.setPlayersInRange(lp);
+			game.setGamePhase(GamePhase.ATTACK);
 			return view;
 		}
 		
 		//--------------------------------------------------------------------------------------------------------Amarillo
 		
 		@GetMapping(value = {"/game/ceremonia del te/{id_game}"})
-<<<<<<< HEAD
-		public String ceremoniaDelTeCard(@PathVariable("id_game") int gameId, Map<String, Object> model) {
-			String view = "redirect:/game/continue/"+gameId;
-			//----------Aqui va el método
-			Game game=GameSingleton.getInstance().getMapGames().get(gameId);
-			model.put("game",game);
-			Player myPlayer= game.getCurrentPlayer();
-			
-			gameService.proceesDrawPhasePlayer(game, myPlayer, 3);
-			
-			
-			List<Player> allOpponents= new ArrayList<>(game.getListPlayers());
-			allOpponents.remove(myPlayer);
-			
-			for(Player pl:allOpponents) {
-				gameService.proceesDrawPhasePlayer(game, pl, 1);				
-			}
-			
-			return view;
-		}
-=======
-        public String ceremoniaDelTeCard(@PathVariable("id_game") int gameId, Map<String, Object> model) {
+    public String ceremoniaDelTeCard(@PathVariable("id_game") int gameId, Map<String, Object> model) {
             String view = "redirect:/game/continue/"+gameId;
             //----------Aqui va el método
             UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -549,7 +620,6 @@ public class GameController {
 
             return view;
         }
->>>>>>> branch 'master' of https://github.com/gii-is-DP1/dp1-2021-2022-g7-01.git
 		
 		@GetMapping(value = {"/game/daimio/{id_game}"})
 		public String daimioCard(@PathVariable("id_game") int gameId, Map<String, Object> model) {
@@ -615,11 +685,78 @@ public class GameController {
 			return view;
 		}
 		
-		@GetMapping(value = {"/game/grito de batalla/{id_game}"})
+		@GetMapping(value = {"/game/grito de batalla/{id_game}"}) 
 		public String gritoDeBatallaCard(@PathVariable("id_game") int gameId, Map<String, Object> model) {
 			String view = "redirect:/game/continue/"+gameId;
 			//----------Aqui va el método
+			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
 			
+			for(int i=0;i<game.getListPlayers().size();i++) {
+				for(int a=0; a<game.getListPlayers().get(i).getHand().size();a++) {
+					if(game.getListPlayers().get(i).getHand().get(a).equals(cardService.findByName("parada").get())) {
+						game.getListPlayers().get(i).setHaveParada(true);
+						break;
+					}else {
+						game.getListPlayers().get(i).setHaveParada(false);
+					}
+					
+				}
+			}
+			
+			List<Player>lp=new ArrayList<>();
+			game.setWaitingForPlayer(lp);
+			for(int a=0;a<game.getListPlayers().size();a++) {
+				if(!(game.getListPlayers().get(a).equals(game.getCurrentPlayer()))) {
+					game.getWaitingForPlayer().add(game.getListPlayers().get(a));
+				}
+			}
+			
+			if(game.getUseCard().equals(cardService.findByName("grito de batalla").get())) {
+				game.setGamePhase(GamePhase.GRITODEBATALLA);
+			}
+			
+			
+			return view;
+		}
+		
+		@PostMapping(value = {"/game/choose1/{id_game}/{playerA}"})
+		public String choose1(@PathVariable("id_game") int gameId, @PathVariable("playerA") String playerA,Map<String, Object> model) {
+			String view = "redirect:/game/continue/"+gameId;
+			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
+			
+			Player p=playerService.findPlayerByUsernameAndGame(playerA, game);
+			p.setCurrentHearts(p.getCurrentHearts()-1);
+			if(p.getCurrentHearts()<=0) {
+				if(p.getHonor()>0) {
+					p.setCurrentHearts(p.getCharacter().getLife());
+					p.setHonor(p.getHonor()-1);
+				}
+			}
+			game.getWaitingForPlayer().remove(p);
+			if(game.getWaitingForPlayer().size()==0) {
+				game.setGamePhase(GamePhase.MAIN);
+			}
+			return view;
+		}
+		
+		@PostMapping(value = {"/game/choose2/{id_game}/{playerA}"})
+		public String choose2(@PathVariable("id_game") int gameId, @PathVariable("playerA") String playerA, Map<String, Object> model) {
+			String view = "redirect:/game/continue/"+gameId;
+			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
+			
+		
+			Player p=playerService.findPlayerByUsernameAndGame(playerA, game);
+//			for(int i=0;i<p.getHand().size();i++)
+//			if(p.getHand().get(i).equals(cardService.findByName("parada").get())) {
+//				p.setHaveParada(true);
+//			}else {
+//				p.setHaveParada(false);
+//			}
+			cardService.discard("parada", p.getHand(), game.getDiscardPile());
+			game.getWaitingForPlayer().remove(p);
+			if(game.getWaitingForPlayer().size()==0) {
+				game.setGamePhase(GamePhase.MAIN);
+			}
 			return view;
 		}
 		
@@ -627,6 +764,102 @@ public class GameController {
 		public String jiuJitsuCard(@PathVariable("id_game") int gameId, Map<String, Object> model) {
 			String view = "redirect:/game/continue/"+gameId;
 			//----------Aqui va el método
+			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
+			
+			UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			User user = userService.findUser(userDetails.getUsername()).get();
+			
+			List<Player>lp=new ArrayList<>();
+			game.setWaitingForPlayer(lp);
+			for(int a=0;a<game.getListPlayers().size();a++) {
+				if(!(game.getListPlayers().get(a).equals(game.getCurrentPlayer()))) {
+					game.getWaitingForPlayer().add(game.getListPlayers().get(a));
+				}
+			}
+			for(int a=0;a<game.getListPlayers().size();a++) {
+			for(int i=0;i<game.getListPlayers().get(a).getHand().size();i++) {
+				if(game.getListPlayers().get(a).getHand().get(i).getColor().equals("Red")) {
+					game.getListPlayers().get(a).setHaveRedCard(true);
+					break;
+				}else {
+					game.getListPlayers().get(a).setHaveRedCard(false);
+				}
+			}
+				
+			}
+			if(game.getUseCard().equals(cardService.findByName("jiu-jitsu").get())) {
+				game.setGamePhase(GamePhase.JIUJITSU);
+			}
+			return view;
+		}
+		
+		@PostMapping(value = {"/game/choose11/{id_game}/{playerA}"})
+		public String choose11(@PathVariable("id_game") int gameId, @PathVariable("playerA") String playerA,Map<String, Object> model) {
+			String view = "redirect:/game/continue/"+gameId;
+			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
+			Player p=playerService.findPlayerByUsernameAndGame(playerA, game);
+			p.setCurrentHearts(p.getCurrentHearts()-1);
+			if(p.getCurrentHearts()<=0) {
+				if(p.getHonor()>0) {
+					p.setCurrentHearts(p.getCharacter().getLife());
+					p.setHonor(p.getHonor()-1);
+				}
+			}
+			game.getWaitingForPlayer().remove(p);
+			if(game.getWaitingForPlayer().size()==0) {
+				game.setGamePhase(GamePhase.MAIN);
+			}
+			return view;
+		}
+		
+		
+		
+		
+		@PostMapping(value = {"/game/choose21/{id_game}/{playerA}"})
+		public String choose21(@PathVariable("id_game") int gameId, @PathVariable("playerA") String playerA, Map<String, Object> model) {
+			String view = "redirect:/game/continue/"+gameId;
+			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
+			
+			Player p=playerService.findPlayerByUsernameAndGame(playerA, game);
+			game.setGamePhase(GamePhase.DISCARDARM);
+			game.setPlayerChoose(p);
+			List<Card> lc= new ArrayList<>();
+			game.setListJiuJitsu(lc);
+			for(int i=0;i<p.getHand().size();i++) {
+				if(p.getHand().get(i).getColor().equals("Red")) {
+					game.getListJiuJitsu().add(p.getHand().get(i));
+				}
+			}
+//			for(int i=0;i<p.getHand().size();i++)
+//			if(p.getHand().get(i).equals(cardService.findByName("parada").get())) {
+//				p.setHaveParada(true);
+//			}else {
+//				p.setHaveParada(false);
+//			}
+			
+		
+			
+			return view;
+		}
+		
+		
+		
+		
+		@PostMapping(value = {"/game/deleteCard/{cardName}/{id_game}/{playerA}"})
+		public String deletecard(@PathVariable("cardName") String cardName, @PathVariable("id_game") int gameId, @PathVariable("playerA") String playerA, Map<String, Object> model) {
+			String view = "redirect:/game/continue/"+gameId;
+			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
+			
+			Player p=playerService.findPlayerByUsernameAndGame(playerA, game);
+			
+			p.getHand().remove(cardService.findByName(cardName).get());
+			game.getWaitingForPlayer().remove(p);
+			
+			if(game.getWaitingForPlayer().size()==0) {
+				game.setGamePhase(GamePhase.MAIN);
+			}else {
+				game.setGamePhase(GamePhase.JIUJITSU);
+			}
 			
 			return view;
 		}
