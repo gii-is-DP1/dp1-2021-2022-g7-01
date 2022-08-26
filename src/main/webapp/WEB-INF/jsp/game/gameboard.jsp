@@ -385,6 +385,70 @@ table {
 
 	<!-- BLANK SPACE -->
 	<div class="blank-space container">
+<<<<<<< HEAD
+	
+	
+	    <c:if test="${ game.currentPlayer.getUser().getUsername().equals(POVplayer.getUser().getUsername()) }">
+	    
+        <c:if test="${game.getGamePhase().equals(GamePhase.DISCARDPLAYER) }">
+    	<div id="card">
+    		<p>DISCARD SOME PLAYER</p>
+         	<!--  <img src="/resources/images/cards/distraccion.png" alt="card" style="height: 70%; width:auto" /> -->
+		</div>
+    	
+   		                      
+        <div id="select" >
+                
+					<c:forEach items="${ game.listPlayers }" var ="player" varStatus="loop">
+
+                        <p>${player.getUser().getUsername()}</p>
+
+
+                   <form:form class="form-horizontal"
+                            action="/game/distraccion/${game.id}/${player.getUser().getUsername()}"
+                            id="edit-user-form">
+                              
+
+                            <button class="btn btn-default" type="submit">SELECT</button>
+                            </form:form> 
+                    </c:forEach>
+                            
+        </div>
+        </c:if>                      
+		<c:if test="${game.getGamePhase().equals(GamePhase.RESPIRACION) }">
+    	<div id="card res">
+    		<p>SELECT SOME PLAYER</p>
+         	<!--  <img src="/resources/images/cards/distraccion.png" alt="card" style="height: 70%; width:auto" /> -->
+		</div>
+    	
+   		                      
+        <div id="select res" >
+                
+					<c:forEach items="${ game.listPlayers }" var ="player" varStatus="loop">
+						<c:if test="${!player.equals(POVplayer)}">
+                        <p>${player.getUser().getUsername()}</p>
+
+
+                   <form:form class="form-horizontal"
+                            action="/game/respiracion/${game.id}/${player.getUser().getUsername()}"
+                            id="edit-user-form">
+                              
+
+                            <button class="btn btn-default" type="submit">SELECT</button>
+                            </form:form> 
+                            </c:if>
+                    </c:forEach>
+                            
+        </div>
+                               
+		</c:if>
+		
+		
+        </c:if>
+                              
+	
+	
+=======
 		<c:if test="${POVplayer.equals(game.currentPlayer)}">
 			<c:if test="${gameStatus=='DISCARDOTHER'}">
 				<form:form action="/game/discard-other-card" id = "discardForm">
@@ -458,6 +522,7 @@ table {
 				</table>
 			</c:if>
 		</c:if>
+>>>>>>> branch 'master' of https://github.com/gii-is-DP1/dp1-2021-2022-g7-01.git
 	</div>
 
 	<!-- YOUR PLAYER INFO -->

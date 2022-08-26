@@ -249,6 +249,17 @@ public class GameService {
 		game.setGamePhase(GamePhase.MAIN);
 	}
 	
+	public void proceesDrawPhasePlayer(Game game,Player player,Integer cards) {
+		for(int i=0;i<cards;i++) {
+			Card card=game.getDeck().get(0);
+			player.getHand().add(card);
+			game.getDeck().remove(0);
+			
+		}
+		game.setGamePhase(GamePhase.MAIN);
+		
+	}
+	
 	public Boolean checkBushido(Game game) {
 		Boolean check = false;
 		Card bush = new Card();
