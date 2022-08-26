@@ -40,7 +40,7 @@ public class Game extends BaseEntity{
 	@Transient
 	private List<Card> discardPile;
 	
-	@Transient
+	
 	private GamePhase gamePhase;
 	
 	@Transient

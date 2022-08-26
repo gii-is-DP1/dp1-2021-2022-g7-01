@@ -38,7 +38,7 @@ public class GameService {
 	public Collection<Game> findAll() {
 		return gameRepository.findAll();
 	}
-
+	
 	public Optional<Game> findById(int idGame) {
 		return gameRepository.findById(idGame);
 	}
@@ -249,16 +249,7 @@ public class GameService {
 		game.setGamePhase(GamePhase.MAIN);
 	}
 	
-	public void proceesDrawPhasePlayer(Game game,Player player,Integer cards) {
-		for(int i=0;i<cards;i++) {
-			Card card=game.getDeck().get(0);
-			player.getHand().add(card);
-			game.getDeck().remove(0);
-			
-		}
-		game.setGamePhase(GamePhase.MAIN);
-		
-	}
+	
 	
 	public Boolean checkBushido(Game game) {
 		Boolean check = false;
@@ -325,12 +316,13 @@ public class GameService {
 	}
 
 	public Rol calcWinners(Game game) {
-		Double bonusNinja = 1.5;
+		Double bonusNinja = 1.;
 		Double bonusSamurai = 0.;
 		Double bonusRonin = 0.;
 		switch (game.getListPlayers().size()) {
 		case 4:
 			bonusSamurai = 2.;
+			bonusNinja = 1.5;
 			break;
 		case 5:
 			bonusSamurai = 1.;

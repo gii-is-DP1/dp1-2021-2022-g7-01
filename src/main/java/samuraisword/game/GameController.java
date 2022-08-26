@@ -73,6 +73,7 @@ public class GameController {
 
 		// creating owner, user and authorities
 		Game game = new Game();
+		game.setGamePhase(GamePhase.LOBBY);
 		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		User user = userService.findUser(userDetails.getUsername()).get();
 		Player player = new Player();
@@ -101,7 +102,8 @@ public class GameController {
 			GameSingleton.getInstance().getMapGames().put(gameId, game);
 			return "game/game";
 		} else {
-			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
+			Game game = gameService.findById(gameId).get();
+			GameSingleton.getInstance().getMapGames().put(gameId, game);
 			if (game.getGamePhase().equals(GamePhase.LOBBY)) {
 				a.addHeader("Refresh", "3");
 				model.put("now", new Date());
@@ -136,24 +138,24 @@ public class GameController {
 		List<Player> players = game.getListPlayers();
 
 		// players de prueba
-		Player p1 = playerService.findById(1).get();
-
-		Player p2 = playerService.findById(2).get();
-
-		Player p3 = playerService.findById(3).get();
-
-		Player p4 = playerService.findById(4).get();
-
-		Player p5 = playerService.findById(5).get();
-
-		Player p6 = playerService.findById(6).get();
-
-		players.add(p1);
-		players.add(p2);
-		players.add(p3);
-		players.add(p4);
-		players.add(p5);
-		players.add(p6);
+//		Player p1 = playerService.findById(1).get();
+//
+//		Player p2 = playerService.findById(2).get();
+//
+//		Player p3 = playerService.findById(3).get();
+//
+//		Player p4 = playerService.findById(4).get();
+//
+//		Player p5 = playerService.findById(5).get();
+//
+//		Player p6 = playerService.findById(6).get();
+//
+//		players.add(p1);
+//		players.add(p2);
+//		players.add(p3);
+//		players.add(p4);
+//		players.add(p5);
+//		players.add(p6);
 
 		gameService.asignCharacterAndHearts(players);
 		gameService.asignRolAndHonor(players);
@@ -181,14 +183,22 @@ public class GameController {
 		Game game = GameSingleton.getInstance().getMapGames().get(gameId);
 		if(user.getUsername().equals(game.getCurrentPlayer().getUser().getUsername())) {
 			Boolean hasAdvancedPhase = gameService.endTurn(game);
-	
+			game.getCurrentPlayer().setWeaponBonus(1);
+			for(int i=0; i<game.getCurrentPlayer().getHand().size();i++) {
+				if(game.getCurrentPlayer().getHand().get(i).getName().equals("concentracion")) {
+					game.getCurrentPlayer().setWeaponBonus(game.getCurrentPlayer().getWeaponBonus()+1);
+				}
+			}
+			if(game.getCurrentPlayer().getCharacter().getName().equals("Goemon")) {
+				game.getCurrentPlayer().setWeaponBonus(game.getCurrentPlayer().getWeaponBonus()+1);
+			}
 			if (gameService.checkAllPlayersHavePositiveHonor(game)) {
 				if (hasAdvancedPhase) {
 					gameService.processRecoveryPhase(game);
 					Boolean check = gameService.checkBushido(game);
 					if(!check) {
             gameService.processDrawPhase(game);
-					  if(game.getCurrentPlayer().getCharacter().equals("Hideyoshi")) {
+					  if(game.getCurrentPlayer().getCharacter().getName().equals("Hideyoshi")) {
 						  Card card = game.getDeck().get(0);
               game.getCurrentPlayer().getHand().add(card);
               game.getDeck().remove(0);
@@ -220,6 +230,25 @@ public class GameController {
 					.findFirst().get();
 			model.put("POVplayer", POVplayer);
 			model.put("gameStatus", game.getGamePhase().toString());
+			int nArmadura=0;
+			int nConcentracion=0;
+			int nDesenvainado=0;
+			
+			for(int i=0; i<game.getCurrentPlayer().getEquipment().size();i++) {
+				if(game.getCurrentPlayer().getEquipment().get(i).getName().equals("armadura")) {
+					nArmadura++;
+				}
+				if(game.getCurrentPlayer().getEquipment().get(i).getName().equals("concentracion")) {
+					nConcentracion++;
+				}
+				if(game.getCurrentPlayer().getEquipment().get(i).getName().equals("desenvainado rapido")) {
+					nDesenvainado++;
+				}
+			}
+			
+			model.put("nArmadura", nArmadura);
+			model.put("nConcentracion", nConcentracion);
+			model.put("nDesenvainado", nDesenvainado);
 			return view;
 		}
 
@@ -261,7 +290,18 @@ public class GameController {
 						}
 					}
 				}else {
+					if(card.get().getColor().equals("Red")) {
+						
+						
+						if(game.getCurrentPlayer().getWeaponBonus()>0) {
+							game.getCurrentPlayer().setWeaponBonus(game.getCurrentPlayer().getWeaponBonus()-1);
+							cardService.discard(cardName, game.getCurrentPlayer().getHand(), game.getDiscardPile());
+						}else {
+							view = "redirect:/game/continue/"+gameId;
+						}
+					}else {
 					cardService.discard(cardName, game.getCurrentPlayer().getHand(), game.getDiscardPile());
+					}
 				}
 			}
 			return view;
@@ -322,14 +362,19 @@ public class GameController {
 			//----------Aqui va el método
 			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
 			Card c= game.getUseCard();
-			int i=cardService.findDamage(c.getName()).get();
+			int i=cardService.findDamage(c.getName()).get()+game.getCurrentPlayer().getDamageBonus();
 			for(int i2=0;i2<game.getListPlayers().size();i2++) {
 				if(game.getListPlayers().get(i2).getUser().getUsername().equals(playerA)) {
-					game.getListPlayers().get(i2).setCurrentHearts(game.getListPlayers().get(i2).getCurrentHearts()-i);
+					if(i>1) {
+					game.getListPlayers().get(i2).setCurrentHearts(game.getListPlayers().get(i2).getCurrentHearts()-i+game.getListPlayers().get(i2).getAntiDamageBonus());
+					}else{
+						game.getListPlayers().get(i2).setCurrentHearts(game.getListPlayers().get(i2).getCurrentHearts()-i);	
+					}
 					if(game.getListPlayers().get(i2).getCurrentHearts()<=0) {
 						if(game.getListPlayers().get(i2).getHonor()>0) {
 							game.getListPlayers().get(i2).setCurrentHearts(game.getListPlayers().get(i2).getCharacter().getLife());
 							game.getListPlayers().get(i2).setHonor(game.getListPlayers().get(i2).getHonor()-1);
+							game.getCurrentPlayer().setHonor(game.getCurrentPlayer().getHonor()+1);
 						}
 					}
 				}
@@ -601,22 +646,19 @@ public class GameController {
     public String ceremoniaDelTeCard(@PathVariable("id_game") int gameId, Map<String, Object> model) {
             String view = "redirect:/game/continue/"+gameId;
             //----------Aqui va el método
-            UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-			User user = userService.findUser(userDetails.getUsername()).get();
-			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
-			if(user.getUsername().equals(game.getCurrentPlayer().getUser().getUsername())) {
-				Player myPlayer= game.getCurrentPlayer();
-	
-	            gameService.proceesDrawPhasePlayer(game, myPlayer, 3);
-	
-	
-	            List<Player> allOpponents= game.getListPlayers();
-	            allOpponents.remove(myPlayer);
-	
-	            for(Player pl:allOpponents) {
-	                gameService.proceesDrawPhasePlayer(game, pl, 1);
-	            }
-			}
+            Game game=GameSingleton.getInstance().getMapGames().get(gameId);
+            model.put("game",game);
+            Player myPlayer= game.getCurrentPlayer();
+
+            gameService.proceesDrawPhasePlayer(game, myPlayer, 3);
+
+
+            List<Player> allOpponents= new ArrayList<>(game.getListPlayers());
+            allOpponents.remove(myPlayer);
+
+            for(Player pl:allOpponents) {
+                gameService.proceesDrawPhasePlayer(game, pl, 1);
+            }
 
             return view;
         }
@@ -636,40 +678,40 @@ public class GameController {
 		}
 		
 		@GetMapping(value = {"/game/distraccion/{id_game}"})
-		public String distraccionCard(@PathVariable("id_game") int gameId, 
-				Map<String, Object> model) {
-			String view = "redirect:/game/continue/"+gameId;
-			//----------Aqui va el método
-			Game game= GameSingleton.getInstance().getMapGames().get(gameId);
-			game.setGamePhase(GamePhase.DISCARDPLAYER);
-				
-			
-			return view;
-		}
-		
-		@PostMapping(value = {"/game/distraccion/{id_game}/{playerName}"})
-		public String distraccionCard(@PathVariable("id_game") int gameId, @PathVariable("playerName") String playerName,
-				Map<String, Object> model) {
-			String view = "redirect:/game/continue/"+gameId;
-			//----------Aqui va el método
-			Game game= GameSingleton.getInstance().getMapGames().get(gameId);
-			model.put("game",game);
-			Player myPlayer= game.getCurrentPlayer();
-			
-			Player opponent= gameService.findPlayerInGameByName(game, playerName);
-			
-			Random r = new Random();
-			int valorDado = r.nextInt(myPlayer.getHand().size());
-			List<Card> handOpponent= opponent.getHand();
-			myPlayer.getHand().add(handOpponent.get(valorDado));
-			handOpponent.remove(valorDado);
-			game.setGamePhase(GamePhase.MAIN);
-			
-			
-			
-			
-			return view;
-		}
+        public String distraccionCard(@PathVariable("id_game") int gameId, 
+                Map<String, Object> model) {
+            String view = "redirect:/game/continue/"+gameId;
+            //----------Aqui va el método
+            Game game= GameSingleton.getInstance().getMapGames().get(gameId);
+            game.setGamePhase(GamePhase.DISCARDPLAYER);
+
+
+            return view;
+        }
+
+        @PostMapping(value = {"/game/distraccion/{id_game}/{playerName}"})
+        public String distraccionCard(@PathVariable("id_game") int gameId, @PathVariable("playerName") String playerName,
+                Map<String, Object> model) {
+            String view = "redirect:/game/continue/"+gameId;
+            //----------Aqui va el método
+            Game game= GameSingleton.getInstance().getMapGames().get(gameId);
+            model.put("game",game);
+            Player myPlayer= game.getCurrentPlayer();
+
+            Player opponent= gameService.findPlayerInGameByName(game, playerName);
+
+            Random r = new Random();
+            int valorDado = r.nextInt(opponent.getHand().size());
+            List<Card> handOpponent= opponent.getHand();
+            myPlayer.getHand().add(handOpponent.get(valorDado));
+            handOpponent.remove(valorDado);
+            game.setGamePhase(GamePhase.MAIN);
+
+
+
+
+            return view;
+        }
 		
 		
 		@GetMapping(value = {"/game/geisha/{id_game}"})
@@ -730,6 +772,7 @@ public class GameController {
 				if(p.getHonor()>0) {
 					p.setCurrentHearts(p.getCharacter().getLife());
 					p.setHonor(p.getHonor()-1);
+					game.getCurrentPlayer().setHonor(game.getCurrentPlayer().getHonor()+1);
 				}
 			}
 			game.getWaitingForPlayer().remove(p);
@@ -803,6 +846,7 @@ public class GameController {
 				if(p.getHonor()>0) {
 					p.setCurrentHearts(p.getCharacter().getLife());
 					p.setHonor(p.getHonor()-1);
+					game.getCurrentPlayer().setHonor(game.getCurrentPlayer().getHonor()+1);
 				}
 			}
 			game.getWaitingForPlayer().remove(p);
@@ -985,7 +1029,7 @@ public class GameController {
 					Boolean check = gameService.checkBushido(game);
 					if(!check) {
 						gameService.processDrawPhase(game);
-            if(game.getCurrentPlayer().getCharacter().equals("Hideyoshi")) {
+            if(game.getCurrentPlayer().getCharacter().getName().equals("Hideyoshi")) {
 						  Card card = game.getDeck().get(0);
               game.getCurrentPlayer().getHand().add(card);
               game.getDeck().remove(0);
@@ -1021,7 +1065,7 @@ public class GameController {
 					List<Card>lh = p.getHand();
 					if(lh.size()!=0) {
 						game.setGamePhase(GamePhase.MAIN);
-						int i = 0 + (int)(Math.random() * ((lh.size() - 0) + 1));
+						int i = 0 + (int)(Math.random() * ((lh.size() - 0)));
 						cardService.discard(lh.get(i).getName(), p.getHand(), game.getDiscardPile());
 					}
 					break;
@@ -1088,9 +1132,9 @@ public class GameController {
 				cardService.discard("bushido", game.getCurrentPlayer().getEquipment(), game.getListPlayers().get(nextPlayerIndex).getEquipment());
 			}
 			gameService.processDrawPhase(game);
-      if(game.getCurrentPlayer().getCharacter().equals("Hideyoshi")) {
-						  Card card = game.getDeck().get(0);
-              game.getCurrentPlayer().getHand().add(card);
+      if(game.getCurrentPlayer().getCharacter().getName().equals("Hideyoshi")) {
+						  Card drawCard = game.getDeck().get(0);
+              game.getCurrentPlayer().getHand().add(drawCard);
               game.getDeck().remove(0);
       }
 			game.setGamePhase(GamePhase.MAIN);
