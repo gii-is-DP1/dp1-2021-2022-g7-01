@@ -189,6 +189,9 @@ public class GameController {
 				if (hasAdvancedPhase) {
 					gameService.processRecoveryPhase(game);
 					gameService.processDrawPhase(game);
+					if(game.getCurrentPlayer().getCharacter().equals("Hideyoshi")) {
+						gameService.processDrawPhase(game);
+					}
 				}
 			} else {// fin de la partida cuando algun jugador no le quedan puntos de honor
 					// (honor<=0)
