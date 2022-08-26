@@ -363,14 +363,14 @@ table {
                     <p style=" padding: 1px 1px 10px 50px;color:red;">(${deck.size()})</p>
                     <img src="/resources/images/roles/ninguno.png" alt="SHOGUN" style="width: 35%; height: 35%;padding:5px 35px ;" />
 
-                    <form:form action="/game/steal">
+                    <!-- <form:form action="/game/steal">
                                                 <input type="hidden" name="gameId" value="${ game.id }"></input>
-                                                <!--  BOTï¿½N PARA ROBAR
+                                                  BOTï¿½N PARA ROBAR
                                                 <c:if test="${game.currentPlayer==POVplayer.getUser().username}">
                                                 <button class="btn btn-default" type="submit" style="padding:5px 25px">Select</button>
                                                 </c:if>
-                                                -->
-                                </form:form>
+                                               
+                                </form:form> -->
                 </div>
                 <div style="border-radius: 10px; background-color: #DFDADA">
                     <p style=" padding: 5px 10px 1px 50px;"> DISCARD </p>
@@ -454,6 +454,7 @@ table {
 				<form:form action="/game/discard-other-card" id = "discardForm">
 					<table>
 						<tr>
+							<h2>Selecciona a qui�n quieres descartarle una carta</h2>
 							<input type="hidden" name="gameId" value="${ game.id }"></input>
 							<c:forEach items="${listPlayer}" var ="player" varStatus="loop">
 								<c:if test="${!player.getUser().getUsername().equals(POVplayer.getUser().getUsername())}">
@@ -464,6 +465,7 @@ table {
 						</tr>
 						<br>
 						<tr>
+							<h2>Selecciona lo que el objeto que le quieres quitar</h2>
 							<input type="radio" value="hand" name="cardName"/>
 							<label for="hand">hand</label>
 							<input type="radio" value="armadura" name="cardName"/>
@@ -475,6 +477,49 @@ table {
 						</tr>
 					</table>
 				</form:form>
+			</c:if>
+			<c:if test="${gameStatus=='BUSHIDO'}">
+				<h2>Selecciona a qui�n quieres equiparle el bushido</h2>
+				<table>
+					<tr>
+						<c:forEach items="${listPlayer}" var ="player" varStatus="loop">
+							<c:if test="${!player.getUser().getUsername().equals(POVplayer.getUser().getUsername())}">
+							<th>
+								<form:form action="/game/equip-bushido" id = "discardForm">
+									<input type="hidden" name="gameId" value="${ game.id }"></input>
+									<input type="hidden" name="player" value="${ player.getUser().getUsername() }"></input>
+									<button > ${ player.getUser().getUsername() } </button>
+								</form:form>
+							</th>
+							</c:if>
+						</c:forEach>
+					</tr>
+				</table>
+			</c:if>
+			<c:if test="${gameStatus=='DISCARTRED'}">
+				<h2>Selecciona la carta que quieras eliminar por culpa del bushido</h2>
+				<table>
+					<tr>
+						<c:forEach items="${POVplayer.getHand()}" var ="hand" varStatus="loop">
+							<form:form action="/game/pass-bushido" id = "discardForm">
+								<c:if test="${hand.color=='Red'}">
+									<th>
+									<input type="hidden" name="gameId" value="${ game.id }"></input>
+									<input type="hidden" name="card" value="${ hand.getName() }"></input>
+									<button> ${ hand.getName() } </button>
+									</th>
+								</c:if>
+							</form:form>
+						</c:forEach>
+						<th>
+						<form:form action="/game/pass-bushido" id = "discardForm">
+							<input type="hidden" name="gameId" value="${ game.id }"></input>
+							<input type="hidden" name="card" value="NONE"></input>
+							<button> No descartar </button>
+						</form:form>
+						</th>
+					</tr>
+				</table>
 			</c:if>
 		</c:if>
 >>>>>>> branch 'master' of https://github.com/gii-is-DP1/dp1-2021-2022-g7-01.git
