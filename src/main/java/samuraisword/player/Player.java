@@ -71,6 +71,18 @@ public class Player extends BaseEntity{
 	@Transient
 	private Boolean haveRedCard;
 	
+	@Transient
+	private Integer nArmor;
+	
+	@Transient
+	private Integer nFastDraw;
+	
+	@Transient
+	private Integer nFocus;
+	
+	@Transient
+	private Integer nBushido;
+	
 	@OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "character")
     private Character character;

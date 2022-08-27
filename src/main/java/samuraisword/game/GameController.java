@@ -222,6 +222,23 @@ public class GameController {
 			UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			User user = userService.findUser(userDetails.getUsername()).get();
 			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
+			for(int i=0; i<game.getListPlayers().size();i++) {
+				game.getListPlayers().get(i).setNArmor(0);
+				game.getListPlayers().get(i).setNFastDraw(0);
+				game.getListPlayers().get(i).setNBushido(0);
+				game.getListPlayers().get(i).setNFocus(0);
+				for(int o=0; o<game.getListPlayers().get(i).getEquipment().size();o++) {
+					if(game.getListPlayers().get(i).getEquipment().get(o).getName().equals("armadura")) {
+						game.getListPlayers().get(i).setNArmor(game.getListPlayers().get(i).getNArmor()+1);
+					}if(game.getListPlayers().get(i).getEquipment().get(o).getName().equals("desenvainado rapido")) {
+						game.getListPlayers().get(i).setNFastDraw(game.getListPlayers().get(i).getNFastDraw()+1);
+					}if(game.getListPlayers().get(i).getEquipment().get(o).getName().equals("concentracion")) {
+						game.getListPlayers().get(i).setNFocus(game.getListPlayers().get(i).getNFocus()+1);
+					}if(game.getListPlayers().get(i).getEquipment().get(o).getName().equals("bushido")) {
+						game.getListPlayers().get(i).setNBushido(game.getListPlayers().get(i).getNBushido()+1);
+					}
+				}
+			}
 			
 			model.put("game", game);
 			
@@ -230,25 +247,7 @@ public class GameController {
 					.findFirst().get();
 			model.put("POVplayer", POVplayer);
 			model.put("gameStatus", game.getGamePhase().toString());
-			int nArmadura=0;
-			int nConcentracion=0;
-			int nDesenvainado=0;
 			
-			for(int i=0; i<game.getCurrentPlayer().getEquipment().size();i++) {
-				if(game.getCurrentPlayer().getEquipment().get(i).getName().equals("armadura")) {
-					nArmadura++;
-				}
-				if(game.getCurrentPlayer().getEquipment().get(i).getName().equals("concentracion")) {
-					nConcentracion++;
-				}
-				if(game.getCurrentPlayer().getEquipment().get(i).getName().equals("desenvainado rapido")) {
-					nDesenvainado++;
-				}
-			}
-			
-			model.put("nArmadura", nArmadura);
-			model.put("nConcentracion", nConcentracion);
-			model.put("nDesenvainado", nDesenvainado);
 			return view;
 		}
 
@@ -1051,11 +1050,11 @@ public class GameController {
 					Boolean check = gameService.checkBushido(game);
 					if(!check) {
 						gameService.processDrawPhase(game);
-            if(game.getCurrentPlayer().getCharacter().getName().equals("Hideyoshi")) {
+						if(game.getCurrentPlayer().getCharacter().getName().equals("Hideyoshi")) {
 						  Card card = game.getDeck().get(0);
-              game.getCurrentPlayer().getHand().add(card);
-              game.getDeck().remove(0);
-            }
+						  game.getCurrentPlayer().getHand().add(card);
+						  game.getDeck().remove(0);
+						}
 					}
 				}
 			} else {// fin de la partida cuando algun jugador no le quedan puntos de honor
@@ -1085,31 +1084,38 @@ public class GameController {
 				switch (cardName) {
 				case "hand":
 					List<Card>lh = p.getHand();
-					if(lh.size()!=0) {
+					if(lh.size()>0) {
 						game.setGamePhase(GamePhase.MAIN);
 						int i = 0 + (int)(Math.random() * ((lh.size() - 0)));
 						cardService.discard(lh.get(i).getName(), p.getHand(), game.getDiscardPile());
 					}
 					break;
 				case "armadura":
-					if(p.getDistanceBonus()!=0) {
-						p.setDistanceBonus(p.getDistanceBonus()-1);
-						game.setGamePhase(GamePhase.MAIN);
-						cardService.discard(cardName, p.getEquipment(), game.getDiscardPile());
+					if(p.getDistanceBonus()>0) {
+						if(!(p.getCharacter().getName().equals("Benkei") && p.getDistanceBonus()==1)) {
+							p.setDistanceBonus(p.getDistanceBonus()-1);
+							game.setGamePhase(GamePhase.MAIN);
+							cardService.discard(cardName, p.getEquipment(), game.getDiscardPile());
+						}
 					}
 					break;
 				case "concentracion":
-					if(p.getWeaponBonus()!=0) {
-						p.setWeaponBonus(p.getWeaponBonus()-1);
-						game.setGamePhase(GamePhase.MAIN);
-						cardService.discard(cardName, p.getEquipment(), game.getDiscardPile());
+					if(p.getWeaponBonus()>0) {
+						if(!(p.getCharacter().getName().equals("Goemon") && p.getWeaponBonus()==1)) {
+							p.setWeaponBonus(p.getWeaponBonus()-1);
+							game.setGamePhase(GamePhase.MAIN);
+							cardService.discard(cardName, p.getEquipment(), game.getDiscardPile());
+						}
 					}
 					break;
 				case "desenvainado rapido":
-					if(p.getWeaponBonus()!=0) {
-						p.setDamageBonus(p.getDamageBonus()+1);
-						game.setGamePhase(GamePhase.MAIN);
-						cardService.discard(cardName, p.getEquipment(), game.getDiscardPile());
+					if(p.getWeaponBonus()>0) {
+						if(!(p.getCharacter().getName().equals("Musashi") && p.getDamageBonus()==1)) {
+							p.setDamageBonus(p.getDamageBonus()+1);
+							game.setGamePhase(GamePhase.MAIN);
+							cardService.discard(cardName, p.getEquipment(), game.getDiscardPile());
+						}
+						
 					}
 					break;
 				default:
@@ -1145,7 +1151,7 @@ public class GameController {
 			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
 			if(card.equals("NONE")) {
 				game.getCurrentPlayer().setHonor(game.getCurrentPlayer().getHonor()-1);
-				cardService.discard(card, game.getCurrentPlayer().getEquipment(), game.getDiscardPile());
+				cardService.discard("bushido", game.getCurrentPlayer().getEquipment(), game.getDiscardPile());
 			}
 			else {
 				Integer numPlayers = game.getListPlayers().size();

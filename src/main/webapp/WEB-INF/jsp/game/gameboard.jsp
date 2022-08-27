@@ -271,16 +271,21 @@ table {
 					<th>
 						<h2 style ="color:#f2f2f2" >Cartas: ${ player.getHand().size() }</h2>
 					</th>
+					<th>
+						<c:if test="${ player.getNBushido()>0 }">
+							<h2 style ="color:#f2f2f2" >Tiene Bushido</h2>
+						</c:if>
+					</th>
 				</tr>
 				<tr>
 					<td >
 						<spring:url value="/resources/images/cards/armadura.png" htmlEscape="true" var="equipment1" /> 
 						<c:choose>
-							<c:when test="${ player.getDistanceBonus()==0 }">
-								<p><img style="float: left; width: 80px; opacity: 0.5;" title="" src="${equipment1}" id="equipment1" /> x${ player.getDistanceBonus() }</p>
+							<c:when test="${ player.getNArmor()==0 }">
+								<p><img style="float: left; width: 80px; opacity: 0.5;" title="" src="${equipment1}" id="equipment1" /> x${ player.getNArmor() }</p>
 							</c:when>
 							<c:otherwise>
-								<p><img style="float: left; width: 80px;" title="" src="${equipment1}" id="equipment1" /> x${ player.getDistanceBonus() }</p>
+								<p><img style="float: left; width: 80px;" title="" src="${equipment1}" id="equipment1" /> x${ player.getNArmor() }</p>
 							</c:otherwise>
 						</c:choose>
 						
@@ -289,11 +294,11 @@ table {
 					<td>
 						<spring:url value="/resources/images/cards/desenvainado rapido.png" htmlEscape="true" var="equipment2" />
 						<c:choose>
-							<c:when test="${ player.getDamageBonus()==0 }">
-								<p><img style="float: left; width: 80px; opacity: 0.5;" title="" src="${equipment2}" id="equipment2" /> x${ player.getDamageBonus() } </p>
+							<c:when test="${ player.getNFastDraw()==0 }">
+								<p><img style="float: left; width: 80px; opacity: 0.5;" title="" src="${equipment2}" id="equipment2" /> x${ player.getNFastDraw() } </p>
 							</c:when>
 							<c:otherwise>
-								<p><img style="float: left; width: 80px;" title="" src="${equipment2}" id="equipment2" /> x${ player.getDamageBonus() } </p>
+								<p><img style="float: left; width: 80px;" title="" src="${equipment2}" id="equipment2" /> x${ player.getNFastDraw() } </p>
 							</c:otherwise>
 						</c:choose> 
 						
@@ -301,11 +306,11 @@ table {
 					<td>
 						<spring:url value="/resources/images/cards/concentracion.png" htmlEscape="true" var="equipment3" /> 
 						<c:choose>
-							<c:when test="${ player.getWeaponBonus()==0 }">
-								<p><img style="float: left; width: 80px; opacity: 0.5;" title="" src="${equipment3}" id="equipment3" /> x${ player.getWeaponBonus() } </p>
+							<c:when test="${ player.getNFocus()==0 }">
+								<p><img style="float: left; width: 80px; opacity: 0.5;" title="" src="${equipment3}" id="equipment3" /> x${ player.getNFocus() } </p>
 							</c:when>
 							<c:otherwise>
-								<p><img style="float: left; width: 80px;" title="" src="${equipment3}" id="equipment3" /> x${ player.getWeaponBonus() } </p>
+								<p><img style="float: left; width: 80px;" title="" src="${equipment3}" id="equipment3" /> x${ player.getNFocus() } </p>
 	
 							</c:otherwise>
 						</c:choose>
@@ -625,7 +630,7 @@ table {
 						<tr>
 							<h2>Selecciona lo que el objeto que le quieres quitar</h2>
 							<input type="radio" value="hand" name="cardName"/>
-							<label for="hand">hand</label>
+							<label for="hand">mano</label>
 							<input type="radio" value="armadura" name="cardName"/>
 							<label for="armadura">armadura</label>
 							<input type="radio" value="concentracion" name="cardName"/>
@@ -713,7 +718,12 @@ table {
 <div class="row">
 
 	<!-- DISCARD -->
-	<div class="discard container"></div>
+	<div class="discard container">
+	<h2 style ="color:#f2f2f2" >Número de ataques restantes: ${ POVplayer.getWeaponBonus() }</h2>
+	<h2 style ="color:#f2f2f2" >Aumento de daño: +${ POVplayer.getDamageBonus() }</h2>
+	<h2 style ="color:#f2f2f2" >Distancia a la que te ven: +${ POVplayer.getDistanceBonus() }</h2>
+	
+	</div>
 
 	<!-- YOUR EQUIPMENT -->
 	<div class="equipment container">
@@ -724,11 +734,11 @@ table {
 	<td >
 					<spring:url value="/resources/images/cards/armadura.png" htmlEscape="true" var="equipment1" /> 
 					<c:choose>
-						<c:when test="${ POVplayer.getDistanceBonus()==0 }">
-							<p><img style="float: left; width: 80px; opacity: 0.5;" title="" src="${equipment1}" id="equipment1" /> x${ POVplayer.getDistanceBonus() }</p>
+						<c:when test="${ POVplayer.getNArmor()==0 }">
+							<p><img style="float: left; width: 80px; opacity: 0.5;" title="" src="${equipment1}" id="equipment1" /> x${ POVplayer.getNArmor() }</p>
 						</c:when>
 						<c:otherwise>
-							<p><img style="float: left; width: 80px;" title="" src="${equipment1}" id="equipment1" /> x${ POVplayer.getDistanceBonus() }</p>
+							<p><img style="float: left; width: 80px;" title="" src="${equipment1}" id="equipment1" /> x${ POVplayer.getNArmor() }</p>
 						</c:otherwise>
 					</c:choose>
 					
@@ -737,11 +747,11 @@ table {
 				<td>
 					<spring:url value="/resources/images/cards/desenvainado rapido.png" htmlEscape="true" var="equipment2" />
 					<c:choose>
-						<c:when test="${ POVplayer.getDamageBonus()==0 }">
-							<p><img style="float: left; width: 80px; opacity: 0.5;" title="" src="${equipment2}" id="equipment2" /> x${ POVplayer.getDamageBonus() } </p>
+						<c:when test="${ POVplayer.getNFastDraw()==0 }">
+							<p><img style="float: left; width: 80px; opacity: 0.5;" title="" src="${equipment2}" id="equipment2" /> x${ POVplayer.getNFastDraw() } </p>
 						</c:when>
 						<c:otherwise>
-							<p><img style="float: left; width: 80px;" title="" src="${equipment2}" id="equipment2" /> x${ POVplayer.getDamageBonus() } </p>
+							<p><img style="float: left; width: 80px;" title="" src="${equipment2}" id="equipment2" /> x${ POVplayer.getNFastDraw() } </p>
 						</c:otherwise>
 					</c:choose> 
 					
@@ -749,14 +759,20 @@ table {
 				<td>
 					<spring:url value="/resources/images/cards/concentracion.png" htmlEscape="true" var="equipment3" /> 
 					<c:choose>
-						<c:when test="${POVplayer.getWeaponBonus()==0 }">
-							<p><img style="float: left; width: 80px; opacity: 0.5;" title="" src="${equipment3}" id="equipment3" /> x${ POVplayer.getWeaponBonus() } </p>
+						<c:when test="${POVplayer.getNFocus()==0 }">
+							<p><img style="float: left; width: 80px; opacity: 0.5;" title="" src="${equipment3}" id="equipment3" /> x${ POVplayer.getNFocus() } </p>
 						</c:when>
 						<c:otherwise>
-							<p><img style="float: left; width: 80px;" title="" src="${equipment3}" id="equipment3" /> x${ POVplayer.getWeaponBonus() } </p>
+							<p><img style="float: left; width: 80px;" title="" src="${equipment3}" id="equipment3" /> x${ POVplayer.getNFocus() } </p>
 						</c:otherwise>
 					</c:choose>
 					
+				</td>
+				<td>
+					<c:if test="${POVplayer.getNBushido()>0 }">
+						<spring:url value="/resources/images/cards/bushido.png" htmlEscape="true" var="equipment4" /> 
+						<p><img style="float: left; width: 80px;" title="" src="${equipment4}" id="equipment4" /></p>
+					</c:if>
 				</td>
 				</tr>
 				</table>
@@ -782,9 +798,9 @@ table {
                                         <input type="radio" value="${card.name}" name="cardName" />
                                     </div>
 								</c:forEach>
-								<!--<c:if test="${POVplayer.equals(game.currentPlayer)}">-->
-								<button id="btn-end-turn" class="button"> DESCARTAR CARTA </button>
-								<!--</c:if>-->
+								<c:if test="${POVplayer.hand.size()>0}">
+									<button id="btn-end-turn" class="button"> DESCARTAR CARTA </button>
+								</c:if>
 							</form:form>
 						</c:when>
 						<c:when test="${gameStatus=='MAIN'}">
@@ -797,7 +813,10 @@ table {
                                     </div>
 								</c:forEach>
 								<c:if test="${POVplayer.equals(game.currentPlayer)}">
-								<button id="btn-end-turn" class="button"> USAR CARTA </button>
+									<c:if test="${POVplayer.hand.size()>0}">
+										<button id="btn-end-turn" class="button"> USAR CARTA </button>
+									</c:if>
+								
 								</c:if>
 							</form:form>
 						</c:when>
