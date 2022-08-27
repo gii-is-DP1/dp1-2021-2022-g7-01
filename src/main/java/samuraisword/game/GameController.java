@@ -184,8 +184,8 @@ public class GameController {
 		if(user.getUsername().equals(game.getCurrentPlayer().getUser().getUsername())) {
 			Boolean hasAdvancedPhase = gameService.endTurn(game);
 			game.getCurrentPlayer().setWeaponBonus(1);
-			for(int i=0; i<game.getCurrentPlayer().getHand().size();i++) {
-				if(game.getCurrentPlayer().getHand().get(i).getName().equals("concentracion")) {
+			for(int i=0; i<game.getCurrentPlayer().getEquipment().size();i++) {
+				if(game.getCurrentPlayer().getEquipment().get(i).getName().equals("concentracion")) {
 					game.getCurrentPlayer().setWeaponBonus(game.getCurrentPlayer().getWeaponBonus()+1);
 				}
 			}
@@ -372,7 +372,7 @@ public class GameController {
 					}
 					if(game.getListPlayers().get(i2).getCurrentHearts()<=0) {
 						if(game.getListPlayers().get(i2).getHonor()>0) {
-							game.getListPlayers().get(i2).setCurrentHearts(game.getListPlayers().get(i2).getCharacter().getLife());
+//							game.getListPlayers().get(i2).setCurrentHearts(game.getListPlayers().get(i2).getCharacter().getLife());
 							game.getListPlayers().get(i2).setHonor(game.getListPlayers().get(i2).getHonor()-1);
 							game.getCurrentPlayer().setHonor(game.getCurrentPlayer().getHonor()+1);
 						}
@@ -389,6 +389,12 @@ public class GameController {
 			String view = "redirect:/game/continue/"+gameId;
 			//----------Aqui va el método
 			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
+			if(playerA.equals("none")) {
+				
+				cardService.discard(game.getUseCard().getName(), game.getDiscardPile(), game.getCurrentPlayer().getHand());
+				game.setGamePhase(GamePhase.MAIN);
+				game.getCurrentPlayer().setWeaponBonus(game.getCurrentPlayer().getWeaponBonus()+1);
+			}else {
 			Player p=playerService.findPlayerByUsernameAndGame(playerA, game);
 			for(int i=0;i<p.getHand().size();i++) {
 				if(p.getHand().get(i).getName().equals("parada")) {
@@ -401,7 +407,7 @@ public class GameController {
 			if(!(game.getGamePhase().equals(GamePhase.PARADA))){
 				 DoDamage(gameId, playerA, model);
 			}
-			
+			}
 			return view;
 		}
 		
@@ -743,6 +749,13 @@ public class GameController {
 					}
 					
 				}
+				
+				if(game.getListPlayers().get(i).getHand().size()==0 || game.getListPlayers().get(i).getCurrentHearts()<=0) {
+					game.getListPlayers().get(i).setIndefence(true);
+					
+				}else {
+					game.getListPlayers().get(i).setIndefence(false);
+				}
 			}
 			
 			List<Player>lp=new ArrayList<>();
@@ -750,6 +763,9 @@ public class GameController {
 			for(int a=0;a<game.getListPlayers().size();a++) {
 				if(!(game.getListPlayers().get(a).equals(game.getCurrentPlayer()))) {
 					game.getWaitingForPlayer().add(game.getListPlayers().get(a));
+				}
+				if(game.getListPlayers().get(a).getHand().size()==0 || game.getListPlayers().get(a).getCurrentHearts()<=0) {
+					game.getWaitingForPlayer().remove(game.getListPlayers().get(a));
 				}
 			}
 			
@@ -770,7 +786,7 @@ public class GameController {
 			p.setCurrentHearts(p.getCurrentHearts()-1);
 			if(p.getCurrentHearts()<=0) {
 				if(p.getHonor()>0) {
-					p.setCurrentHearts(p.getCharacter().getLife());
+				//	p.setCurrentHearts(p.getCharacter().getLife());
 					p.setHonor(p.getHonor()-1);
 					game.getCurrentPlayer().setHonor(game.getCurrentPlayer().getHonor()+1);
 				}
@@ -828,6 +844,12 @@ public class GameController {
 					game.getListPlayers().get(a).setHaveRedCard(false);
 				}
 			}
+			if(game.getListPlayers().get(a).getHand().size()==0 || game.getListPlayers().get(a).getCurrentHearts()<=0) {
+				game.getListPlayers().get(a).setIndefence(true);
+				game.getWaitingForPlayer().remove(game.getListPlayers().get(a));
+			}else {
+				game.getListPlayers().get(a).setIndefence(false);
+			}
 				
 			}
 			if(game.getUseCard().equals(cardService.findByName("jiu-jitsu").get())) {
@@ -844,7 +866,7 @@ public class GameController {
 			p.setCurrentHearts(p.getCurrentHearts()-1);
 			if(p.getCurrentHearts()<=0) {
 				if(p.getHonor()>0) {
-					p.setCurrentHearts(p.getCharacter().getLife());
+			//		p.setCurrentHearts(p.getCharacter().getLife());
 					p.setHonor(p.getHonor()-1);
 					game.getCurrentPlayer().setHonor(game.getCurrentPlayer().getHonor()+1);
 				}

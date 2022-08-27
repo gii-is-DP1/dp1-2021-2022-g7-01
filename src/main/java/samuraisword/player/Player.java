@@ -63,6 +63,9 @@ public class Player extends BaseEntity{
 	private Boolean haveParada;
 	
 	@Transient
+	private Boolean indefence;
+	
+	@Transient
 	private List<Card> equipment;
 	
 	@Transient

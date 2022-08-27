@@ -419,6 +419,19 @@ table {
 			  
 								</c:forEach>
 								
+								<div id="select" >                
+                
+                           
+                   <form:form class="form-horizontal"
+							action="/game/selectPlayer/${game.id}/none"
+							id="edit-user-form">
+							  <c:if test="${game.getGamePhase().equals(GamePhase.ATTACK) }">
+							<br><br>
+							<button class="btn btn-default" type="submit">Me he arrepentido</button></c:if>
+							
+							</form:form> 
+			  </div>
+								
 								</c:if>
 								 
 								 </c:if>
@@ -450,7 +463,7 @@ table {
 			</c:if>
 			
 			
-			<c:if test="${game.getGamePhase().equals(GamePhase.GRITODEBATALLA) && (!(game.getCurrentPlayer().equals(POVplayer))) && game.waitingForPlayer.contains(POVplayer)}">
+			<c:if test="${game.getGamePhase().equals(GamePhase.GRITODEBATALLA) && (!(game.getCurrentPlayer().equals(POVplayer))) && game.waitingForPlayer.contains(POVplayer) && POVplayer.getIndefence()==false}">
 			<p>Han usado Grito de batalla. ¿Que quieres hacer?</p>
 			 <form:form class="form-horizontal"
 							action="/game/choose1/${game.id}/${POVplayer}"
@@ -473,7 +486,7 @@ table {
 							</form:form>  </c:if>
 			</c:if>
 			
-			<c:if test="${game.getGamePhase().equals(GamePhase.JIUJITSU) && (!(game.getCurrentPlayer().equals(POVplayer))) && game.waitingForPlayer.contains(POVplayer)}">
+			<c:if test="${game.getGamePhase().equals(GamePhase.JIUJITSU) && (!(game.getCurrentPlayer().equals(POVplayer))) && game.waitingForPlayer.contains(POVplayer) && POVplayer.getIndefence()==false}">
 			<p>Han usado JIU-JITSU. ¿Que quieres hacer?</p>
 			 <form:form class="form-horizontal"
 							action="/game/choose11/${game.id}/${POVplayer}"
@@ -495,7 +508,7 @@ table {
 							
 							</form:form>  </c:if></c:if>
 			
-			<c:if test="${game.getGamePhase().equals(GamePhase.DISCARDARM) && (!(game.getCurrentPlayer().equals(POVplayer))) && game.waitingForPlayer.contains(POVplayer) && game.getPlayerChoose().equals(POVplayer)}">
+			<c:if test="${game.getGamePhase().equals(GamePhase.DISCARDARM) && (!(game.getCurrentPlayer().equals(POVplayer))) && game.waitingForPlayer.contains(POVplayer) && game.getPlayerChoose().equals(POVplayer) && POVplayer.getIndefence()==false}">
 			<p>¿Que arma quieres descartar?</p>
 			<c:forEach items="${game.getListJiuJitsu()}" var ="cards" varStatus="loop">
 		

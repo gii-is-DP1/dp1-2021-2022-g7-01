@@ -188,10 +188,18 @@ public class GameService {
 	}
 
 	public List<Player> playersInRangeOfAttack(Game game, RedCard attackWeapon, Player attacker) {
-		List<Player> playerList = game.getListPlayers();
+		List<Player> playerList = new ArrayList<Player>(game.getListPlayers());
 		List<Player> inRange = new ArrayList<>();
+		List<Player> auxPlayerList = new ArrayList<Player>(game.getListPlayers());
 		// Omitimos los jugadores inofensivos (disabled) para el calculo del rango
-		playerList.stream().filter(x -> x.isDisabled()).forEach(y -> playerList.remove(y));
+	//	playerList.stream().filter(x -> x.getIndefence()).filter(x -> x.getHand().size()==0).filter(x -> x.getCurrentHearts()<=0).forEach(y -> playerList.remove(y));
+		for(Player pl : auxPlayerList) {
+			if(pl.getHand().size()<=0 || pl.getCurrentHearts()<=0){				
+				playerList.remove(pl);
+				}
+			playerList.size();
+			}
+		playerList.size();
 		// calculamos la distancia minima desde cada jugador al atacante
 		for (Player p : playerList) {
 			if (p.getCharacter().getName().equals("Chiyome"))
@@ -232,9 +240,9 @@ public class GameService {
 
 	public void processRecoveryPhase(Game game) {
 		Player player = game.getCurrentPlayer();
-		if (player.isDisabled() && player.getCurrentHearts() <= 0) {
+		if (player.getCurrentHearts() <= 0) {
 			player.setCurrentHearts(player.getCharacter().getLife());
-			player.setDisabled(false);
+			player.setIndefence(false);
 		}
 		game.setGamePhase(GamePhase.DRAW);
 	}
