@@ -78,14 +78,14 @@ img.estrella {
 					<div align="center">
 						<br>
 
-						<c:if test="${listPlayer.size()>=0}">
+						<c:if test="${listPlayer.size()>=4}">
 							<spring:url value="start/{gameId}" var="startUrl">
 								<spring:param name="gameId" value="${gameId}" />
 							</spring:url>
 								<a href="${fn:escapeXml(startUrl)}" class="btn btn-success">Start
 								Game</a>
 						</c:if>
-						<c:if test="${listPlayer.size()<0}">
+						<c:if test="${listPlayer.size()<4}">
 							<b>TIENEN QUE HABER AL MENOS 4 JUGADORES PARA EMPEZAR LA
 								PARTIDA</b>
 							<br>
