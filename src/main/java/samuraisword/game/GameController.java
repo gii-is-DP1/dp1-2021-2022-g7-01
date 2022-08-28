@@ -214,6 +214,15 @@ public class GameController {
 		}
 		return view;
 	}
+	
+	@PostMapping(value= {"/game/shuffleDeck/{id_game}"})
+	public String shuffleDeckInGame(@PathVariable("id_game") int gameId, Map<String, Object> model) {
+		String view = "redirect:/game/continue/"+gameId;
+		Game game = GameSingleton.getInstance().getMapGames().get(gameId);
+		cardService.shuffleDeckInGame(game);
+		return view;
+	}
+	
 
 	//--------------------------------------------------------------------------------------------------------------------------
 		@GetMapping(value = {"/game/continue/{id_game}"})

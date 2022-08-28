@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import samuraisword.game.Game;
 import samuraisword.player.Player;
 
 @Service
@@ -77,6 +78,21 @@ public class CardService {
 		Collections.shuffle(gameDeck);
 		return gameDeck;
 	}
+	
+	public void shuffleDeckInGame(Game game) {
+		List<Card> discard= game.getDiscardPile();
+		Collections.shuffle(discard);
+		for(Card card:discard) {
+			game.getDeck().add(card);
+		}
+		
+		for(Card card:discard) {
+			discard.remove(card);
+		}
+	}
+	
+	
+	
 
 	public Boolean executeEquip(Player player, Integer i) {
 		Boolean res = false;

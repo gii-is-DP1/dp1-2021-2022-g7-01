@@ -362,7 +362,18 @@ table {
 
 	<!-- DECK -->
 	<div class="deck container">
+				<c:if test="${deck.size()==0}">
+				<form:form class="form-horizontal"
+							action="/game/shuffleDeck/${game.id}"
+							id="edit-user-form">
 
+							<br><br>
+							<button class="btn btn-default" type="submit">RELOAD THE DECK</button>
+							
+							</form:form> 
+				
+				
+				</c:if>
 
 
                 <div style="border-radius: 10px; background-color: #DFDADA">
