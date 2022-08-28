@@ -880,20 +880,17 @@ public class GameController {
 		
 		
 		
-		@PostMapping(value = {"/game/choose21/{id_game}/{playerA}"})
-		public String choose21(@PathVariable("id_game") int gameId, @PathVariable("playerA") String playerA, Map<String, Object> model) {
+		@PostMapping(value = {"/game/choose21/{cardName}/{id_game}/{playerA}"})
+		public String choose21(@PathVariable("id_game") int gameId, @PathVariable("cardName") String cardName, @PathVariable("playerA") String playerA, Map<String, Object> model) {
 			String view = "redirect:/game/continue/"+gameId;
 			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
 			
 			Player p=playerService.findPlayerByUsernameAndGame(playerA, game);
-			game.setGamePhase(GamePhase.DISCARDARM);
-			game.setPlayerChoose(p);
-			List<Card> lc= new ArrayList<>();
-			game.setListJiuJitsu(lc);
-			for(int i=0;i<p.getHand().size();i++) {
-				if(p.getHand().get(i).getColor().equals("Red")) {
-					game.getListJiuJitsu().add(p.getHand().get(i));
-				}
+			
+			cardService.discard(cardName, p.getHand(), game.getDiscardPile());
+			game.getWaitingForPlayer().remove(p);
+			if(game.getWaitingForPlayer().size()==0) {
+				game.setGamePhase(GamePhase.MAIN);
 			}
 //			for(int i=0;i<p.getHand().size();i++)
 //			if(p.getHand().get(i).equals(cardService.findByName("parada").get())) {

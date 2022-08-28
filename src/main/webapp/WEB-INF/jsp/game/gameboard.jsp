@@ -180,6 +180,9 @@ table {
 #div1, #div2 {margin: 20px}
 #card {margin: 8px; height:200px; width:27%; float:left}
 #select {float: right; margin: 5px}
+#dano1 {margin: 10px; float: left; }
+#dano2 {float: right; margin: 5px}
+#but {font-size: 10px;}
 
 .viewAttackCards{
 	visibility: hidden;
@@ -493,40 +496,29 @@ table {
 			
 			<c:if test="${game.getGamePhase().equals(GamePhase.JIUJITSU) && (!(game.getCurrentPlayer().equals(POVplayer))) && game.waitingForPlayer.contains(POVplayer) && POVplayer.getIndefence()==false}">
 			<p>Han usado JIU-JITSU. ¿Que quieres hacer?</p>
+			<div id="dano1">
 			 <form:form class="form-horizontal"
 							action="/game/choose11/${game.id}/${POVplayer}"
 							id="edit-user-form">
 							
-							<br><br>
-							<button class="btn btn-default" type="submit">Sufrir 1 de daño</button>
+							<br><br><div id="dano">
+							<button class="btn btn-default" type="submit">Sufrir 1 de daño</button></div>
 							
-							</form:form>
+							</form:form></div>
 							
 			<c:if test="${POVplayer.getHaveRedCard()==true}">			
-						
-			<form:form class="form-horizontal"
-							action="/game/choose21/${game.id}/${POVplayer}"
-							id="edit-user-form">
-							
-							<br><br>
-							<button class="btn btn-default" type="submit">Descartar 1 arma</button>
-							
-							</form:form>  </c:if></c:if>
+			<c:forEach items="${POVplayer.getHand()}" var ="hand" varStatus="loop">
 			
-			<c:if test="${game.getGamePhase().equals(GamePhase.DISCARDARM) && (!(game.getCurrentPlayer().equals(POVplayer))) && game.waitingForPlayer.contains(POVplayer) && game.getPlayerChoose().equals(POVplayer) && POVplayer.getIndefence()==false}">
-			<p>¿Que arma quieres descartar?</p>
-			<c:forEach items="${game.getListJiuJitsu()}" var ="cards" varStatus="loop">
-		
 			<form:form class="form-horizontal"
-							action="/game/deleteCard/${cards.getName()}/${game.id}/${POVplayer}"
+							action="/game/choose21/${hand.getName()}/${game.id}/${POVplayer}"
 							id="edit-user-form">
 							
+							<c:if test="${hand.color=='Red'}"><div id="select" > 
+							<button id="but" class="btn btn-default" type="submit">Descartar ${hand.getName() }</button></div></c:if>
 							
-							<button class="btn btn-default" type="submit">${cards.getName()}</button>
-							
-							</form:form>
-			</c:forEach>
-			</c:if>
+							</form:form></c:forEach></c:if></c:if>
+			
+			
 			
 			<c:if test="${game.getGamePhase().equals(GamePhase.DISCARDARM) && (!(game.getCurrentPlayer().equals(POVplayer))) && game.waitingForPlayer.contains(POVplayer) && (!(game.getPlayerChoose().equals(POVplayer)))}">
 			<p>EL JUGADOR ${ game.getPlayerChoose()} ESTÁ DESCARTANDO UN ARMA. POR FAVOR ESPERE</p>
