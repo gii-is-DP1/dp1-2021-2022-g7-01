@@ -183,6 +183,7 @@ table {
 #dano1 {margin: 10px; float: left; }
 #dano2 {float: right; margin: 5px}
 #but {font-size: 10px;}
+#sel {float: left; margin: 5px}
 
 .viewAttackCards{
 	visibility: hidden;
@@ -549,29 +550,26 @@ table {
 	    <c:if test="${ game.currentPlayer.getUser().getUsername().equals(POVplayer.getUser().getUsername()) }">
 	    
         <c:if test="${game.getGamePhase().equals(GamePhase.DISCARDPLAYER) }">
-    	<div id="card">
+    	<div id="card res">
     		<p>DISCARD SOME PLAYER</p>
          	<!--  <img src="/resources/images/cards/distraccion.png" alt="card" style="height: 70%; width:auto" /> -->
 		</div>
     	
    		                      
-        <div id="select" >
+       
                 
-					<c:forEach items="${ game.listPlayers }" var ="player" varStatus="loop">
-
-                        <p>${player.getUser().getUsername()}</p>
-
+					<c:forEach items="${ game.listPlayers }" var ="player" varStatus="loop">                  
 
                    <form:form class="form-horizontal"
                             action="/game/distraccion/${game.id}/${player.getUser().getUsername()}"
                             id="edit-user-form">
                               
-
-                            <button class="btn btn-default" type="submit">SELECT</button>
+							<div id="sel">
+                            <button class="btn btn-default" type="submit">${player.getUser().getUsername()}</button></div>
                             </form:form> 
                     </c:forEach>
                             
-        </div>
+       
         </c:if>                      
 		<c:if test="${game.getGamePhase().equals(GamePhase.RESPIRACION) }">
     	<div id="card res">
@@ -580,24 +578,22 @@ table {
 		</div>
     	
    		                      
-        <div id="select res" >
+       
                 
 					<c:forEach items="${ game.listPlayers }" var ="player" varStatus="loop">
 						<c:if test="${!player.equals(POVplayer)}">
-                        <p>${player.getUser().getUsername()}</p>
-
-
+                       
                    <form:form class="form-horizontal"
                             action="/game/respiracion/${game.id}/${player.getUser().getUsername()}"
                             id="edit-user-form">
                               
-
-                            <button class="btn btn-default" type="submit">SELECT</button>
+ 							<div id="sel" >
+                            <button class="btn btn-default" type="submit">${player.getUser().getUsername()}</button> </div>
                             </form:form> 
                             </c:if>
                     </c:forEach>
                             
-        </div>
+       
                                
 		</c:if>
 		
