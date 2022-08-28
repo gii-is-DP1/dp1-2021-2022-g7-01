@@ -190,7 +190,8 @@ table {
 #dano1 {margin: 10px; float: left; }
 #dano2 {float: right; margin: 5px}
 #but {font-size: 10px;}
-#sel {float: left; margin: 5px}
+#sel, #mes {float: left; margin: 5px}
+#s {float: none; margin: 50px}
 
 .viewAttackCards{
 	visibility: hidden;
@@ -458,7 +459,7 @@ table {
 		 <img src="/resources/images/cards/${game.getUseCard().getName()}.png" alt="card" style="height: 70%; width:auto" />
 	
 	</div>
-			<p>Estas siendo atacado. Â¿Quieres usar una parada?</p>
+			<p>Estas siendo atacado. ¿Quieres usar una parada?</p>
 			 <form:form class="form-horizontal"
 							action="/game/parada/${game.id}/${game.getAttackerPlayer()}"
 							id="edit-user-form">
@@ -477,6 +478,29 @@ table {
 							
 							</form:form>  
 			</c:if>
+			
+			<c:if test="${game.getGamePhase().equals(GamePhase.AVISO) && game.getAttackerPlayer().equals(POVplayer)}">
+			<div id="mes">
+			<c:if test="${game.getCurrentPlayer().getDamageBonus()==0}">
+			<p>${ game.getCurrentPlayer()} te han atacado y te ha hecho ${dano} de daño</p></c:if>
+			<c:if test="${game.getCurrentPlayer().getDamageBonus()>0}">
+			<p>${ game.getCurrentPlayer()} te han atacado y te ha hecho ${dano+game.getCurrentPlayer().getDamageBonus()} de daño (Bonus de daño incluido)</p></c:if>
+		 <img src="/resources/images/cards/${game.getUseCard().getName()}.png" alt="card" style="height: 70%; width:auto" />
+	
+		</div>
+		
+		
+		<form:form class="form-horizontal"
+							action="/game/aviso/${game.id}"
+							id="edit-user-form">
+							
+							<br><br><div id="s">
+							<button class="btn btn-default" type="submit">OK</button></div>
+							
+							</form:form> 
+		
+			</c:if>
+			
 			
 			
 			<c:if test="${game.getGamePhase().equals(GamePhase.GRITODEBATALLA) && (!(game.getCurrentPlayer().equals(POVplayer))) && game.waitingForPlayer.contains(POVplayer) && POVplayer.getIndefence()==false}">

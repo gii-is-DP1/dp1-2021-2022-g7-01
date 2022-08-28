@@ -361,6 +361,10 @@ public class GameController {
 			//----------Aqui va el método
 			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
 			Card c= game.getUseCard();
+			Player p=playerService.findPlayerByUsernameAndGame(playerA, game);
+			int dano=cardService.findDamage(game.getUseCard().getName()).get();
+			model.put("dano", dano);
+			game.setAttackerPlayer(p);
 			int i=cardService.findDamage(c.getName()).get()+game.getCurrentPlayer().getDamageBonus();
 			for(int i2=0;i2<game.getListPlayers().size();i2++) {
 				if(game.getListPlayers().get(i2).getUser().getUsername().equals(playerA)) {
@@ -378,7 +382,7 @@ public class GameController {
 					}
 				}
 			}
-			game.setGamePhase(GamePhase.MAIN);
+			game.setGamePhase(GamePhase.AVISO);
 			return view;
 		}
 		
@@ -404,9 +408,19 @@ public class GameController {
 			} 
 			
 			if(!(game.getGamePhase().equals(GamePhase.PARADA))){
+				
 				 DoDamage(gameId, playerA, model);
 			}
 			}
+			return view;
+		}
+		
+		@PostMapping(value = {"/game/aviso/{id_game}"}) 
+		public String aviso(@PathVariable("id_game") int gameId, Map<String, Object> model) {
+			String view = "redirect:/game/continue/"+gameId;
+			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
+			game.setGamePhase(GamePhase.MAIN);
+			
 			return view;
 		}
 		
