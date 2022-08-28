@@ -7,6 +7,12 @@
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags"%>
 <%@ page import="samuraisword.game.GamePhase"%>
 
+<script type="text/javascript">
+setTimeout(function() {
+	  location.reload();
+	}, 3500);
+</script>
+
 <style>
 body {
 	background-image: url("/resources/images/wood2.jpg");
@@ -18,6 +24,7 @@ body {
 	padding: 0;
 	margin: 0;
 }
+
 
 .innerCircle {
     left: calc(15% - 25px);
