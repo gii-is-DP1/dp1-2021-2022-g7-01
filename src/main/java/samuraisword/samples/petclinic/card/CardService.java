@@ -82,13 +82,14 @@ public class CardService {
 	public void shuffleDeckInGame(Game game) {
 		List<Card> discard= game.getDiscardPile();
 		Collections.shuffle(discard);
-		for(Card card:discard) {
-			game.getDeck().add(card);
+		for(Card card1:discard) {
+			game.getDeck().add(card1);
 		}
 		
-		for(Card card:discard) {
-			discard.remove(card);
-		}
+		List<Card> newDiscard = new ArrayList<Card>();
+		game.setDiscardPile(newDiscard);
+		
+		
 	}
 	
 	
