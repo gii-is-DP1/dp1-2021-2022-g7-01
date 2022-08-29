@@ -189,8 +189,11 @@ public class GameController {
 					// (honor<=0)
 				view = "/game/endgame";
 				Rol winnerRol = gameService.calcWinners(game);
+				game.setWonPlayers(new ArrayList<User>());
 				for(Player p: game.getListPlayers()) {
+					if(p.getRol().equals(winnerRol) || (winnerRol.equals(Rol.SAMURAI) && p.getRol().equals(Rol.SHOGUN))) {
 					game.getWonPlayers().add(p.getUser());
+					}
 				}
 				model.put("winnerRol", winnerRol);
 			}
@@ -766,7 +769,7 @@ public class GameController {
 					game.getWaitingForPlayer().add(game.getListPlayers().get(a));
 				}
 				if(game.getListPlayers().get(a).getHand().size()==0 || game.getListPlayers().get(a).getCurrentHearts()<=0
-						|| game.getListPlayers().get(a).getCharacter().equals("Chiyome")) {
+						|| game.getListPlayers().get(a).getCharacter().getName().equals("Chiyome")) {
 					game.getWaitingForPlayer().remove(game.getListPlayers().get(a));
 				}
 			}
@@ -850,6 +853,9 @@ public class GameController {
 				game.getListPlayers().get(a).setIndefence(true);
 				game.getWaitingForPlayer().remove(game.getListPlayers().get(a));
 			}else {
+				if(game.getListPlayers().get(a).getCharacter().getName().equals("Chiyome")) {
+					game.getWaitingForPlayer().remove(game.getListPlayers().get(a));
+				}
 				game.getListPlayers().get(a).setIndefence(false);
 			}
 				
