@@ -38,7 +38,7 @@ public class Game extends BaseEntity{
 	private List<Player> listPlayers;
 	
 	@Column
-    @ElementCollection(targetClass=User.class)
+	@ManyToMany(cascade = CascadeType.ALL)
 	private List<User> wonPlayers;
 	
 	@Transient
@@ -80,6 +80,9 @@ public class Game extends BaseEntity{
 	
 	@Transient
 	private Player playerChoose;
+	
+	@Transient
+	private String error;
 			
 	public Game() {
 		this.listPlayers = new ArrayList<>();
