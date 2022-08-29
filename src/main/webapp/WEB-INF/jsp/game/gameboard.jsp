@@ -7,6 +7,12 @@
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags"%>
 <%@ page import="samuraisword.game.GamePhase"%>
 
+<script type="text/javascript">
+setTimeout(function() {
+	  location.reload();
+	}, 6000);
+</script>
+
 <style>
 body {
 	background-image: url("/resources/images/wood2.jpg");
@@ -18,6 +24,7 @@ body {
 	padding: 0;
 	margin: 0;
 }
+
 
 .innerCircle {
     left: calc(15% - 25px);
@@ -180,6 +187,12 @@ table {
 #div1, #div2 {margin: 20px}
 #card {margin: 8px; height:200px; width:27%; float:left}
 #select {float: right; margin: 5px}
+#dano1 {margin: 10px; float: left; }
+#dano2 {float: right; margin: 5px}
+#but {font-size: 10px;}
+#sel {float: left; margin: 5px} 
+#mes {float: left;  height: 180px; width:70%; margin-left: 10px} 
+#s {float: right; margin: 50px}
 
 .viewAttackCards{
 	visibility: hidden;
@@ -234,10 +247,10 @@ table {
 				    		<button class = "player" style="border-radius: 10px; background-color: green;" onclick="myFunction(${player.getUser().getUsername()})"> ${player.getUser().getUsername()} </button>
 				    	</c:when>
 				    	<c:when test="${ player.getRol().toString().equals('SHOGUN') }">
-				    		<button class = "player" style="border-radius: 10px; background-color: blue;" onclick="myFunction(${player.getUser().getUsername()})"> ${ player.getUser().getUsername() } </button>
+				    		<button class = "player" style="border-radius: 10px; background-color: yellow;" onclick="myFunction(${player.getUser().getUsername()})"> ${ player.getUser().getUsername() } </button>
 				    	</c:when>
 				    	<c:when test="${ player.getUser().getUsername().equals(POVplayer.getUser().getUsername()) }">
-				    		<button class = "player" style="border-radius: 10px; background-color: yellow;" onclick="myFunction(${player.getUser().getUsername()})"> ${ player.getUser().getUsername() } </button>
+				    		<button class = "player" style="border-radius: 10px; background-color: #40CFFF;" onclick="myFunction(${player.getUser().getUsername()})"> ${ player.getUser().getUsername() } </button>
 				    	</c:when>
 				    	
 				    	<c:otherwise>
@@ -447,7 +460,7 @@ table {
 		 <img src="/resources/images/cards/${game.getUseCard().getName()}.png" alt="card" style="height: 70%; width:auto" />
 	
 	</div>
-			<p>Estas siendo atacado. ¬øQuieres usar una parada?</p>
+			<p>Estas siendo atacado. øQuieres usar una parada?</p>
 			 <form:form class="form-horizontal"
 							action="/game/parada/${game.id}/${game.getAttackerPlayer()}"
 							id="edit-user-form">
@@ -466,6 +479,29 @@ table {
 							
 							</form:form>  
 			</c:if>
+			
+			<c:if test="${game.getGamePhase().equals(GamePhase.AVISO) && game.getAttackerPlayer().equals(POVplayer)}">
+			<div id="mes">
+			<c:if test="${game.getCurrentPlayer().getDamageBonus()==0}">
+			<p>${ game.getCurrentPlayer()} te ha atacado y te ha hecho ${game.getAttackerDamage()} de daÒo</p></c:if>
+			<c:if test="${game.getCurrentPlayer().getDamageBonus()>0}">
+			<p>${ game.getCurrentPlayer()} te ha atacado y te ha hecho ${game.getAttackerDamage()} de daÒo (Bonus de daÒo incluido)</p></c:if>
+		 <img src="/resources/images/cards/${game.getUseCard().getName()}.png" alt="card" style="height: 70%; width:auto" />
+	
+		</div>
+		
+		
+		<form:form class="form-horizontal"
+							action="/game/aviso/${game.id}"
+							id="edit-user-form">
+							
+							<div id="s">
+							<button class="btn btn-default" type="submit">OK</button></div>
+							
+							</form:form>
+		
+			</c:if>
+			
 			
 			
 			<c:if test="${game.getGamePhase().equals(GamePhase.GRITODEBATALLA) && (!(game.getCurrentPlayer().equals(POVplayer))) && game.waitingForPlayer.contains(POVplayer) && POVplayer.getIndefence()==false}">
@@ -493,40 +529,29 @@ table {
 			
 			<c:if test="${game.getGamePhase().equals(GamePhase.JIUJITSU) && (!(game.getCurrentPlayer().equals(POVplayer))) && game.waitingForPlayer.contains(POVplayer) && POVplayer.getIndefence()==false}">
 			<p>Han usado JIU-JITSU. ¬øQue quieres hacer?</p>
+			<div id="dano1">
 			 <form:form class="form-horizontal"
 							action="/game/choose11/${game.id}/${POVplayer}"
 							id="edit-user-form">
 							
-							<br><br>
-							<button class="btn btn-default" type="submit">Sufrir 1 de da√±o</button>
+							<br><br><div id="dano">
+							<button class="btn btn-default" type="submit">Sufrir 1 de da√±o</button></div>
 							
-							</form:form>
+							</form:form></div>
 							
 			<c:if test="${POVplayer.getHaveRedCard()==true}">			
-						
-			<form:form class="form-horizontal"
-							action="/game/choose21/${game.id}/${POVplayer}"
-							id="edit-user-form">
-							
-							<br><br>
-							<button class="btn btn-default" type="submit">Descartar 1 arma</button>
-							
-							</form:form>  </c:if></c:if>
+			<c:forEach items="${POVplayer.getHand()}" var ="hand" varStatus="loop">
 			
-			<c:if test="${game.getGamePhase().equals(GamePhase.DISCARDARM) && (!(game.getCurrentPlayer().equals(POVplayer))) && game.waitingForPlayer.contains(POVplayer) && game.getPlayerChoose().equals(POVplayer) && POVplayer.getIndefence()==false}">
-			<p>¬øQue arma quieres descartar?</p>
-			<c:forEach items="${game.getListJiuJitsu()}" var ="cards" varStatus="loop">
-		
 			<form:form class="form-horizontal"
-							action="/game/deleteCard/${cards.getName()}/${game.id}/${POVplayer}"
+							action="/game/choose21/${hand.getName()}/${game.id}/${POVplayer}"
 							id="edit-user-form">
 							
+							<c:if test="${hand.color=='Red'}"><div id="select" > 
+							<button id="but" class="btn btn-default" type="submit">Descartar ${hand.getName() }</button></div></c:if>
 							
-							<button class="btn btn-default" type="submit">${cards.getName()}</button>
-							
-							</form:form>
-			</c:forEach>
-			</c:if>
+							</form:form></c:forEach></c:if></c:if>
+			
+			
 			
 			<c:if test="${game.getGamePhase().equals(GamePhase.DISCARDARM) && (!(game.getCurrentPlayer().equals(POVplayer))) && game.waitingForPlayer.contains(POVplayer) && (!(game.getPlayerChoose().equals(POVplayer)))}">
 			<p>EL JUGADOR ${ game.getPlayerChoose()} EST√Å DESCARTANDO UN ARMA. POR FAVOR ESPERE</p>
@@ -557,29 +582,26 @@ table {
 	    <c:if test="${ game.currentPlayer.getUser().getUsername().equals(POVplayer.getUser().getUsername()) }">
 	    
         <c:if test="${game.getGamePhase().equals(GamePhase.DISCARDPLAYER) }">
-    	<div id="card">
+    	<div id="card res">
     		<p>DISCARD SOME PLAYER</p>
          	<!--  <img src="/resources/images/cards/distraccion.png" alt="card" style="height: 70%; width:auto" /> -->
 		</div>
     	
    		                      
-        <div id="select" >
+       
                 
-					<c:forEach items="${ game.listPlayers }" var ="player" varStatus="loop">
-
-                        <p>${player.getUser().getUsername()}</p>
-
+					<c:forEach items="${ game.listPlayers }" var ="player" varStatus="loop">                  
 
                    <form:form class="form-horizontal"
                             action="/game/distraccion/${game.id}/${player.getUser().getUsername()}"
                             id="edit-user-form">
                               
-
-                            <button class="btn btn-default" type="submit">SELECT</button>
+							<div id="sel">
+                            <button class="btn btn-default" type="submit">${player.getUser().getUsername()}</button></div>
                             </form:form> 
                     </c:forEach>
                             
-        </div>
+       
         </c:if>                      
 		<c:if test="${game.getGamePhase().equals(GamePhase.RESPIRACION) }">
     	<div id="card res">
@@ -588,24 +610,22 @@ table {
 		</div>
     	
    		                      
-        <div id="select res" >
+       
                 
 					<c:forEach items="${ game.listPlayers }" var ="player" varStatus="loop">
 						<c:if test="${!player.equals(POVplayer)}">
-                        <p>${player.getUser().getUsername()}</p>
-
-
+                       
                    <form:form class="form-horizontal"
                             action="/game/respiracion/${game.id}/${player.getUser().getUsername()}"
                             id="edit-user-form">
                               
-
-                            <button class="btn btn-default" type="submit">SELECT</button>
+ 							<div id="sel" >
+                            <button class="btn btn-default" type="submit">${player.getUser().getUsername()}</button> </div>
                             </form:form> 
                             </c:if>
                     </c:forEach>
                             
-        </div>
+       
                                
 		</c:if>
 		
@@ -824,7 +844,7 @@ table {
 							<c:forEach items="${ player.hand }" var ="card" varStatus="loop">
                                    <div style="display: inline-block; height:auto; width:12%">
                                        <img style="height:auto; width:100%" src="/resources/images/cards/${card.name}.png" alt="${card.name}"/>
-                                       <input type="radio" value="${card.name}" name="cardName" />
+                                       <input type="radio" value="${card.name}" name="cardName" checked/>
                                    </div>
 							</c:forEach>
 						</c:otherwise>

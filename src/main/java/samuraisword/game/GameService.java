@@ -22,6 +22,7 @@ import samuraisword.character.CharacterService;
 import samuraisword.player.Player;
 import samuraisword.player.Rol;
 import samuraisword.samples.petclinic.card.Card;
+import samuraisword.samples.petclinic.card.CardService;
 import samuraisword.samples.petclinic.card.RedCard;
 
 @Service
@@ -29,13 +30,15 @@ public class GameService {
 
 	private GameRepository gameRepository;
 	private final CharacterService characterService;
+	private final CardService cardService;
 	private final Integer MAX_CARDS_HAND = 7;
 	private final Integer NUM_CARD_DRAWN = 2;
 
 	@Autowired
-	public GameService(GameRepository gameRepository, CharacterService characterService) {
+	public GameService(GameRepository gameRepository, CharacterService characterService, CardService cardService) {
 		this.gameRepository = gameRepository;
 		this.characterService = characterService;
+		this.cardService = cardService;
 	}
 
 	public Collection<Game> findAll() {
@@ -262,6 +265,11 @@ public class GameService {
 			player.getHand().add(card);
 			game.getDeck().remove(0);
 		}
+		if (game.getCurrentPlayer().getCharacter().getName().equals("Hideyoshi")) {
+			Card card = game.getDeck().get(0);
+			game.getCurrentPlayer().getHand().add(card);
+			game.getDeck().remove(0);
+		}
 		game.setGamePhase(GamePhase.MAIN);
 		return endGame;
 	}
@@ -374,6 +382,20 @@ public class GameService {
 		// Sumamos puntos por equipos aplicando bonus
 		pointsPerRole.put(Rol.SAMURAI, pointsPerRole.get(Rol.SHOGUN) + pointsPerRole.get(Rol.SAMURAI) * bonusSamurai);
 		pointsPerRole.put(Rol.NINJA, pointsPerRole.get(Rol.NINJA) * bonusNinja);
+		if(game.getListPlayers().size()>4) {
+		pointsPerRole.put(Rol.RONIN, pointsPerRole.get(Rol.RONIN) * bonusRonin);
+		}
+		
+		for(int i=0;i<game.getListPlayers().size();i++) {
+			for(int a=0;a<game.getListPlayers().get(i).getHand().size();a++) {
+				if(game.getListPlayers().get(i).getHand().get(a).equals(cardService.findByName("daimio").get())){
+					Rol rol = game.getListPlayers().get(i).getRol();
+					rol = rol == Rol.SHOGUN ? Rol.SAMURAI : rol;
+					pointsPerRole.put(rol, pointsPerRole.get(rol) + 1);
+					
+				}
+			}
+		}
 
 		Entry<Rol, Double> winnerRol = pointsPerRole.entrySet().stream().max(Map.Entry.comparingByValue()).get();
 
@@ -399,6 +421,5 @@ public class GameService {
 		}
 		game.setGamePhase(GamePhase.MAIN);
 		return endGame;
-
 	}
 }

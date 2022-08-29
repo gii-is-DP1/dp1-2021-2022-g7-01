@@ -136,32 +136,15 @@ public class GameController {
 
 		List<Player> players = game.getListPlayers();
 
-		// players de prueba
-//		Player p1 = playerService.findById(1).get();
-//
-//		Player p2 = playerService.findById(2).get();
-//
-//		Player p3 = playerService.findById(3).get();
-//
-//		Player p4 = playerService.findById(4).get();
-//
-//		Player p5 = playerService.findById(5).get();
-//
-//		Player p6 = playerService.findById(6).get();
-//
-//		players.add(p1);
-//		players.add(p2);
-//		players.add(p3);
-//		players.add(p4);
-//		players.add(p5);
-//		players.add(p6);
-
 		gameService.asignCharacterAndHearts(players);
 		gameService.asignRolAndHonor(players);
 		gameService.asignOrder(players);
+		
 
 		game.setListPlayers(players);
 		game.setCurrentPlayer(players.get(0));
+		game.getCurrentPlayer().setWeaponBonus(1);
+	
 
 		for (Player player : game.getListPlayers()) {
 			player.setGame(game);
@@ -170,12 +153,7 @@ public class GameController {
 		}
 
 		gameService.asignCards(game.getDeck(), players);
-		int size = game.getDeck().size();
-		for(int i = 0; i < size; i++) {
-			game.getDiscardPile().add(game.getDeck().get(0));
-			game.getDeck().remove(0);
-		}
-		
+		gameService.processDrawPhase(game);
 		game.setGamePhase(GamePhase.MAIN);
 		return view;
 	}
@@ -225,6 +203,13 @@ public class GameController {
 			} else {// fin de la partida cuando algun jugador no le quedan puntos de honor
 					// (honor<=0)
 				view = endGame(game, model);
+				Rol winnerRol = gameService.calcWinners(game);
+				game.setWonPlayers(new ArrayList<User>());
+				for(Player p: game.getListPlayers()) {
+					if(p.getRol().equals(winnerRol) || (winnerRol.equals(Rol.SAMURAI) && p.getRol().equals(Rol.SHOGUN))) {
+					game.getWonPlayers().add(p.getUser());
+					}
+        }
 			}
 		}
 		return view;
@@ -383,6 +368,10 @@ public class GameController {
 			//----------Aqui va el método
 			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
 			Card c= game.getUseCard();
+			Player p=playerService.findPlayerByUsernameAndGame(playerA, game);
+			int dano=cardService.findDamage(game.getUseCard().getName()).get();
+			game.setAttackerDamage(dano+game.getCurrentPlayer().getDamageBonus());
+			game.setAttackerPlayer(p);
 			int i=cardService.findDamage(c.getName()).get()+game.getCurrentPlayer().getDamageBonus();
 			for(int i2=0;i2<game.getListPlayers().size();i2++) {
 				if(game.getListPlayers().get(i2).getUser().getUsername().equals(playerA)) {
@@ -390,6 +379,11 @@ public class GameController {
 					game.getListPlayers().get(i2).setCurrentHearts(game.getListPlayers().get(i2).getCurrentHearts()-i+game.getListPlayers().get(i2).getAntiDamageBonus());
 					}else{
 						game.getListPlayers().get(i2).setCurrentHearts(game.getListPlayers().get(i2).getCurrentHearts()-i);	
+					}
+					if(game.getCurrentPlayer().getCharacter().getName().equals("Tomoe")) {
+						Card card = game.getDeck().get(0);
+						game.getCurrentPlayer().getHand().add(card);
+						game.getDeck().remove(0);
 					}
 					if(game.getListPlayers().get(i2).getCurrentHearts()<=0) {
 						if(game.getListPlayers().get(i2).getHonor()>0) {
@@ -400,7 +394,7 @@ public class GameController {
 					}
 				}
 			}
-			game.setGamePhase(GamePhase.MAIN);
+			game.setGamePhase(GamePhase.AVISO);
 			return view;
 		}
 		
@@ -426,9 +420,19 @@ public class GameController {
 			} 
 			
 			if(!(game.getGamePhase().equals(GamePhase.PARADA))){
+				
 				 DoDamage(gameId, playerA, model);
 			}
 			}
+			return view;
+		}
+		
+		@PostMapping(value = {"/game/aviso/{id_game}"}) 
+		public String aviso(@PathVariable("id_game") int gameId, Map<String, Object> model) {
+			String view = "redirect:/game/continue/"+gameId;
+			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
+			game.setGamePhase(GamePhase.MAIN);
+			
 			return view;
 		}
 		
@@ -793,7 +797,8 @@ public class GameController {
 				if(!(game.getListPlayers().get(a).equals(game.getCurrentPlayer()))) {
 					game.getWaitingForPlayer().add(game.getListPlayers().get(a));
 				}
-				if(game.getListPlayers().get(a).getHand().size()==0 || game.getListPlayers().get(a).getCurrentHearts()<=0) {
+				if(game.getListPlayers().get(a).getHand().size()==0 || game.getListPlayers().get(a).getCurrentHearts()<=0
+						|| game.getListPlayers().get(a).getCharacter().getName().equals("Chiyome")) {
 					game.getWaitingForPlayer().remove(game.getListPlayers().get(a));
 				}
 			}
@@ -877,6 +882,9 @@ public class GameController {
 				game.getListPlayers().get(a).setIndefence(true);
 				game.getWaitingForPlayer().remove(game.getListPlayers().get(a));
 			}else {
+				if(game.getListPlayers().get(a).getCharacter().getName().equals("Chiyome")) {
+					game.getWaitingForPlayer().remove(game.getListPlayers().get(a));
+				}
 				game.getListPlayers().get(a).setIndefence(false);
 			}
 				
@@ -910,20 +918,17 @@ public class GameController {
 		
 		
 		
-		@PostMapping(value = {"/game/choose21/{id_game}/{playerA}"})
-		public String choose21(@PathVariable("id_game") int gameId, @PathVariable("playerA") String playerA, Map<String, Object> model) {
+		@PostMapping(value = {"/game/choose21/{cardName}/{id_game}/{playerA}"})
+		public String choose21(@PathVariable("id_game") int gameId, @PathVariable("cardName") String cardName, @PathVariable("playerA") String playerA, Map<String, Object> model) {
 			String view = "redirect:/game/continue/"+gameId;
 			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
 			
 			Player p=playerService.findPlayerByUsernameAndGame(playerA, game);
-			game.setGamePhase(GamePhase.DISCARDARM);
-			game.setPlayerChoose(p);
-			List<Card> lc= new ArrayList<>();
-			game.setListJiuJitsu(lc);
-			for(int i=0;i<p.getHand().size();i++) {
-				if(p.getHand().get(i).getColor().equals("Red")) {
-					game.getListJiuJitsu().add(p.getHand().get(i));
-				}
+			
+			cardService.discard(cardName, p.getHand(), game.getDiscardPile());
+			game.getWaitingForPlayer().remove(p);
+			if(game.getWaitingForPlayer().size()==0) {
+				game.setGamePhase(GamePhase.MAIN);
 			}
 //			for(int i=0;i<p.getHand().size();i++)
 //			if(p.getHand().get(i).equals(cardService.findByName("parada").get())) {
