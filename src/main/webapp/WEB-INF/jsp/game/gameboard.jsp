@@ -10,7 +10,7 @@
 <script type="text/javascript">
 setTimeout(function() {
 	  location.reload();
-	}, 4500);
+	}, 6000);
 </script>
 
 <style>
