@@ -247,10 +247,10 @@ table {
 				    		<button class = "player" style="border-radius: 10px; background-color: green;" onclick="myFunction(${player.getUser().getUsername()})"> ${player.getUser().getUsername()} </button>
 				    	</c:when>
 				    	<c:when test="${ player.getRol().toString().equals('SHOGUN') }">
-				    		<button class = "player" style="border-radius: 10px; background-color: blue;" onclick="myFunction(${player.getUser().getUsername()})"> ${ player.getUser().getUsername() } </button>
+				    		<button class = "player" style="border-radius: 10px; background-color: yellow;" onclick="myFunction(${player.getUser().getUsername()})"> ${ player.getUser().getUsername() } </button>
 				    	</c:when>
 				    	<c:when test="${ player.getUser().getUsername().equals(POVplayer.getUser().getUsername()) }">
-				    		<button class = "player" style="border-radius: 10px; background-color: yellow;" onclick="myFunction(${player.getUser().getUsername()})"> ${ player.getUser().getUsername() } </button>
+				    		<button class = "player" style="border-radius: 10px; background-color: #40CFFF;" onclick="myFunction(${player.getUser().getUsername()})"> ${ player.getUser().getUsername() } </button>
 				    	</c:when>
 				    	
 				    	<c:otherwise>
@@ -844,7 +844,7 @@ table {
 							<c:forEach items="${ player.hand }" var ="card" varStatus="loop">
                                    <div style="display: inline-block; height:auto; width:12%">
                                        <img style="height:auto; width:100%" src="/resources/images/cards/${card.name}.png" alt="${card.name}"/>
-                                       <input type="radio" value="${card.name}" name="cardName" />
+                                       <input type="radio" value="${card.name}" name="cardName" checked/>
                                    </div>
 							</c:forEach>
 						</c:otherwise>

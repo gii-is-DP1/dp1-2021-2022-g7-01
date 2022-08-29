@@ -138,32 +138,14 @@ public class GameController {
 
 		List<Player> players = game.getListPlayers();
 
-		// players de prueba
-//		Player p1 = playerService.findById(1).get();
-//
-//		Player p2 = playerService.findById(2).get();
-//
-//		Player p3 = playerService.findById(3).get();
-//
-//		Player p4 = playerService.findById(4).get();
-//
-//		Player p5 = playerService.findById(5).get();
-//
-//		Player p6 = playerService.findById(6).get();
-//
-//		players.add(p1);
-//		players.add(p2);
-//		players.add(p3);
-//		players.add(p4);
-//		players.add(p5);
-//		players.add(p6);
-
 		gameService.asignCharacterAndHearts(players);
 		gameService.asignRolAndHonor(players);
 		gameService.asignOrder(players);
 
 		game.setListPlayers(players);
 		game.setCurrentPlayer(players.get(0));
+		game.getCurrentPlayer().setWeaponBonus(1);
+	
 
 		for (Player player : game.getListPlayers()) {
 			player.setGame(game);
@@ -171,7 +153,7 @@ public class GameController {
 		}
 
 		gameService.asignCards(game.getDeck(), players);
-
+		gameService.processDrawPhase(game);
 		game.setGamePhase(GamePhase.MAIN);
 		return view;
 	}

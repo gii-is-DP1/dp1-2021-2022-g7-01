@@ -49,8 +49,6 @@ public class Player extends BaseEntity{
     private Integer antiDamageBonus=0;
     private Integer weaponBonus=1;
     private Integer damageBonus=0;
-    
-    private Integer weaponUse=0;
 	
 	@ManyToOne
 	@JoinColumn(name="username")
