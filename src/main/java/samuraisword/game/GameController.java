@@ -114,6 +114,7 @@ public class GameController {
 				GameSingleton.getInstance().getMapGames().put(gameId, game);
 				return "game/game";
 			}
+			
 			model.put("game", game);
 			model.put("POVplayer", user);
 			return "game/gameboard";
@@ -363,7 +364,7 @@ public class GameController {
 			Card c= game.getUseCard();
 			Player p=playerService.findPlayerByUsernameAndGame(playerA, game);
 			int dano=cardService.findDamage(game.getUseCard().getName()).get();
-			model.put("dano", dano);
+			game.setAttackerDamage(dano+game.getCurrentPlayer().getDamageBonus());
 			game.setAttackerPlayer(p);
 			int i=cardService.findDamage(c.getName()).get()+game.getCurrentPlayer().getDamageBonus();
 			for(int i2=0;i2<game.getListPlayers().size();i2++) {

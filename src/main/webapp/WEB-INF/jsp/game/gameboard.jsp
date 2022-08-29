@@ -190,8 +190,9 @@ table {
 #dano1 {margin: 10px; float: left; }
 #dano2 {float: right; margin: 5px}
 #but {font-size: 10px;}
-#sel, #mes {float: left; margin: 5px}
-#s {float: none; margin: 50px}
+#sel {float: left; margin: 5px} 
+#mes {float: left;  height: 180px; width:70%; margin-left: 10px} 
+#s {float: right; margin: 50px}
 
 .viewAttackCards{
 	visibility: hidden;
@@ -482,9 +483,9 @@ table {
 			<c:if test="${game.getGamePhase().equals(GamePhase.AVISO) && game.getAttackerPlayer().equals(POVplayer)}">
 			<div id="mes">
 			<c:if test="${game.getCurrentPlayer().getDamageBonus()==0}">
-			<p>${ game.getCurrentPlayer()} te han atacado y te ha hecho ${dano} de daño</p></c:if>
+			<p>${ game.getCurrentPlayer()} te ha atacado y te ha hecho ${game.getAttackerDamage()} de daño</p></c:if>
 			<c:if test="${game.getCurrentPlayer().getDamageBonus()>0}">
-			<p>${ game.getCurrentPlayer()} te han atacado y te ha hecho ${dano+game.getCurrentPlayer().getDamageBonus()} de daño (Bonus de daño incluido)</p></c:if>
+			<p>${ game.getCurrentPlayer()} te ha atacado y te ha hecho ${game.getAttackerDamage()} de daño (Bonus de daño incluido)</p></c:if>
 		 <img src="/resources/images/cards/${game.getUseCard().getName()}.png" alt="card" style="height: 70%; width:auto" />
 	
 		</div>
@@ -494,10 +495,10 @@ table {
 							action="/game/aviso/${game.id}"
 							id="edit-user-form">
 							
-							<br><br><div id="s">
+							<div id="s">
 							<button class="btn btn-default" type="submit">OK</button></div>
 							
-							</form:form> 
+							</form:form>
 		
 			</c:if>
 			
