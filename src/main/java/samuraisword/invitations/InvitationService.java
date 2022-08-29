@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import samuraisword.game.Game;
 import samuraisword.game.GameRepository;
+import samuraisword.game.GameSingleton;
 import samuraisword.player.Player;
 import samuraisword.player.PlayerRepository;
 import samuraisword.samples.petclinic.user.User;
@@ -91,7 +92,9 @@ public class InvitationService {
 		
 		Player player= new Player();
 		player.setUser(inv.getUserAddresse());
-		player.setGame(inv.getGame());			
+		player.setGame(inv.getGame());
+		Game game = GameSingleton.getInstance().getMapGames().get(inv.getGame().getId());
+		game.getListPlayers().add(player);
 	//	inv.getGame().getListPlayers().add(player);
 		gameRepository.save(inv.getGame());
 		userRepository.save(inv.getUserAddresse());
