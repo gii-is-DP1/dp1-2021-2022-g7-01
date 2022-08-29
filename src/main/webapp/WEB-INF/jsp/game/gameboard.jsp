@@ -127,6 +127,14 @@ body {
 	width: 400px;
 	height: 200px;
 	background-color: white;
+	display: flex;
+	
+}
+
+.error {
+	width: 400px;
+	height: 200px;
+	background-color: yellow;
 }
 
 .blank-space {
@@ -144,13 +152,8 @@ body {
 .equipment {
     width: 500px;
     height: 200px;
-    background-color: silver;
-    outline-style: solid;
-    outline-color: black;
-    outline-width: 10px;
-    border-radius: 20px;
+    background-color: silver;   
 }
-*/
 
 .hand {
 	width: 100%;
@@ -184,7 +187,21 @@ table {
     box-shadow: 0 9px #999;
 }
 
-#div1, #div2 {margin: 20px}
+.your-player-info-container {
+	display: inline-block;
+	width:50%;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+}
+.your-player-title {
+	margin: 0;
+}
+.your-player-image {
+	height:180px;
+}
 #card {margin: 8px; height:200px; width:27%; float:left}
 #select {float: right; margin: 5px}
 #dano1 {margin: 10px; float: left; }
@@ -211,6 +228,7 @@ table {
 <c:set value="${game.deck}" var="deck" />
 <c:set value="${game.discardPile}" var="discardPile" />
 <c:set value="${game.currentPlayer.user}" var="currentUser" />
+<c:set value="${game.error}" var="error" />
 
 <!-- EN CASO DE QUE NO SEAN 4 JUGADORES REAJUSTAMOS EL ANGULO DE SEPARACION QUE SERA DADO POR 360/NÃ¯Â¿Â½jugadores -->
 
@@ -395,7 +413,7 @@ table {
                 <div style="border-radius: 10px; background-color: #DFDADA">
                     <p style=" padding: 5px 10px 1px 50px;"> DISCARD </p>
                     <p style=" padding: 1px 1px 10px 50px;color:red;">(${discardPile.size()})</p>
-                    <img src="/resources/images/roles/ninguno.png" alt="SHOGUN" style="width: 35%; height: 35%;  padding: 5px 35px" />
+                    <img src="${discardImage}" alt="SHOGUN" style="width: 35%; height: 35%;  padding: 5px 35px" />
 
                 </div>
 
@@ -411,7 +429,7 @@ table {
 	<p>ATTACK CARD</p>
 		 <img src="/resources/images/cards/${game.getUseCard().getName()}.png" alt="card" style="height: 70%; width:auto" />
 	
-	</div></c:if>
+	</div>
                                 <c:if test="${ game.playersInRange.size()!=0 }">
                                 
                                 
@@ -437,7 +455,10 @@ table {
 			  
 								</c:forEach>
 								
-								<div id="select" >                
+								
+								
+								</c:if>
+								 <div id="select" >                
                 
                            
                    <form:form class="form-horizontal"
@@ -449,11 +470,8 @@ table {
 							
 							</form:form> 
 			  </div>
-								
-								</c:if>
-								 
 								 </c:if>
-								 
+			</c:if>					 
 			<c:if test="${game.getGamePhase().equals(GamePhase.PARADA) && game.getAttackerPlayer().equals(POVplayer)}">
 			<div id="card">
 			<p>ATTACK CARD</p>
@@ -648,15 +666,15 @@ table {
 						</tr>
 						<br>
 						<tr>
-							<h2>Selecciona lo que el objeto que le quieres quitar</h2>
+							<h2>Selecciona el objeto que le quieres quitar</h2>
 							<input type="radio" value="hand" name="cardName"/>
 							<label for="hand">mano</label>
 							<input type="radio" value="armadura" name="cardName"/>
 							<label for="armadura">armadura</label>
 							<input type="radio" value="concentracion" name="cardName"/>
-							<label for="concentracion">concentracion</label>
+							<label for="concentracion">concentraci�n</label>
 							<input type="radio" value="desenvainado rapido" name="cardName"/>
-							<label for="desenvainado rapido">desenvainado rapido</label>
+							<label for="desenvainado rapido">Desenvainado rapido</label>
 						</tr>
 					</table>
 				</form:form>
@@ -712,20 +730,17 @@ table {
 	
 	<c:forEach items="${ listPlayer }" var ="player" varStatus="loop">
 			    		<c:if test="${ player.getUser().getUsername().equals(POVplayer.getUser().getUsername()) }">
-			    		<div>
+			    		
 			    		
 			    				
-			    				<div id="div2" style="display: inline-block; border-radius: 50px">
-			    				<h2>TU PERSONAJE</h2>
-			    						<img src="/resources/images/${ player.getCharacter().getImage() }" alt="character" style="height: 40%; width:auto" />
-			    						<p>${player.getCharacter().getName()}</p>
+			    				<div class="your-player-info-container">
+			    				<h4 class="your-player-title">TU PERSONAJE</h4>
+			    						<img class="your-player-image" src="/resources/images/${ player.getCharacter().getImage() }" alt="character" />
 			    				</div>
 			    				
-			    				<div id="div1" style="display: inline-block; border-radius: 50px">
-			    			<h2>TU ROL</h2>
-			    			<img src="/resources/images/roles/${player.getRol()}.png" alt="charactere" style="height: 40%; width:auto" />
-			    				<p> ${player.getRol()}</p> 
-			    				</div>
+			    				<div class="your-player-info-container">
+			    			<h4 class="your-player-title">TU ROL</h4>
+			    			<img class="your-player-image" src="/resources/images/roles/${player.getRol()}.png" alt="charactere" />
 			    				</div>
 			    				
 			    			
@@ -798,19 +813,23 @@ table {
 				</table>
 				
 							</div>
+	<div class="error container">
+		<c:if test="${POVplayer.equals(game.currentPlayer)}">
+		<p>${error}</p>
+		</c:if>
 	</div>
-
+	</div>
 <div class="row">
 
 	<!-- HAND -->
 	<div class="hand container">
-	<div  style="background-color: #DFDADA; border-radius:15px; justify-self:end;">
-		<div style="max-width:98%; display:inline">
+	<div  style="width:100%; background-color: #DFDADA; border-radius:15px; justify-self:end;">
+		<div style="width:98%; display:inline">
         	<c:forEach items="${ listPlayer }" var ="player" varStatus="loop">
             	<c:if test="${ player.getUser().getUsername().equals(POVplayer.getUser().getUsername())}">
             		<c:choose>
 						<c:when test="${gameStatus=='DISCARD'}">
-							<form:form action="/game/discard-hand-card">
+							<form:form action="/game/discard-hand-card" style="width: 100%">
 								<input type="hidden" name="gameId" value="${ game.id }"></input>
 								<c:forEach items="${ player.hand }" var ="card" varStatus="loop">
                                     <div style="display: inline-block; height:auto; width:12%">
@@ -818,13 +837,14 @@ table {
                                         <input type="radio" value="${card.name}" name="cardName" />
                                     </div>
 								</c:forEach>
+								<input type="radio" value="no-selected" name="cardName" checked style="display: none" />
 								<c:if test="${POVplayer.hand.size()>0}">
 									<button id="btn-end-turn" class="button"> DESCARTAR CARTA </button>
 								</c:if>
 							</form:form>
 						</c:when>
 						<c:when test="${gameStatus=='MAIN'}">
-							<form:form action="/game/use-card">
+							<form:form action="/game/use-card" style="width: 100%">
 								<input type="hidden" name="gameId" value="${ game.id }"></input>
 								<c:forEach items="${ player.hand }" var ="card" varStatus="loop">
                                     <div style="display: inline-block; height:auto; width:12%">
@@ -832,6 +852,7 @@ table {
                                         <input type="radio" value="${card.name}" name="cardName" />
                                     </div>
 								</c:forEach>
+								<input type="radio" value="no-selected" name="cardName" checked style="display: none" />
 								<c:if test="${POVplayer.equals(game.currentPlayer)}">
 									<c:if test="${POVplayer.hand.size()>0}">
 										<button id="btn-end-turn" class="button"> USAR CARTA </button>
@@ -844,7 +865,6 @@ table {
 							<c:forEach items="${ player.hand }" var ="card" varStatus="loop">
                                    <div style="display: inline-block; height:auto; width:12%">
                                        <img style="height:auto; width:100%" src="/resources/images/cards/${card.name}.png" alt="${card.name}"/>
-                                       <input type="radio" value="${card.name}" name="cardName" checked/>
                                    </div>
 							</c:forEach>
 						</c:otherwise>

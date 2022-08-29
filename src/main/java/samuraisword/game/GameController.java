@@ -210,6 +210,7 @@ public class GameController {
 					game.getWonPlayers().add(p.getUser());
 					}
         }
+				gameService.saveGame(game);
 			}
 		}
 		return view;
@@ -224,7 +225,6 @@ public class GameController {
 	//--------------------------------------------------------------------------------------------------------------------------
 		@GetMapping(value = {"/game/continue/{id_game}"})
 		public String continueGame(@PathVariable("id_game") int gameId, Map<String, Object> model, HttpServletResponse a) {
-			a.addHeader("Refresh", "3");
 			String view = "/game/gameboard";
 			UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			User user = userService.findUser(userDetails.getUsername()).get();
@@ -254,7 +254,13 @@ public class GameController {
 					.findFirst().get();
 			model.put("POVplayer", POVplayer);
 			model.put("gameStatus", game.getGamePhase().toString());
-			
+			String discardImage;
+			if(game.getDiscardPile().isEmpty()) {
+				discardImage = "/resources/images/roles/ninguno.png";
+			} else {
+				discardImage = "/resources/images/cards/" + game.getDiscardPile().get(game.getDiscardPile().size() - 1).getName() + ".png";
+			}
+			model.put("discardImage", discardImage);
 			return view;
 		}
 
@@ -268,10 +274,14 @@ public class GameController {
 		@PostMapping(value = {"/game/use-card"})
 		public String useCard(@RequestParam("gameId") Integer gameId, @RequestParam("cardName") String cardName, 
 				Map<String, Object> model) {
+			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
 			String view = "redirect:/game/"+cardName+"/"+gameId;
+			if(cardName.equals("no-selected")) {
+				game.setError("No has seleccionado ninguna carta");
+				return "redirect:/game/continue/"+gameId;
+			}
 			UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			User user = userService.findUser(userDetails.getUsername()).get();
-			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
 			game.setUseCard(cardService.findByName(cardName).get());
 			if(user.getUsername().equals(game.getCurrentPlayer().getUser().getUsername())) {
 				Optional<Card> card= cardService.findByName(cardName);
@@ -1065,9 +1075,13 @@ public class GameController {
 		public String discardHandCard(@RequestParam("gameId") Integer gameId, @RequestParam("cardName") String cardName, 
 				Map<String, Object> model) {
 			String view = "redirect:/game/continue/"+gameId;
+			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
+			if(cardName.equals("no-selected")) {
+				game.setError("No has seleccionado ninguna carta");
+				return "redirect:/game/continue/"+gameId;
+			}
 			UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			User user = userService.findUser(userDetails.getUsername()).get();
-			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
 			if(user.getUsername().equals(game.getCurrentPlayer().getUser().getUsername())) {
 				view = endTurnPostDiscard(gameId,model);
 				cardService.discard(cardName, game.getCurrentPlayer().getHand(), game.getDiscardPile());
@@ -1136,6 +1150,8 @@ public class GameController {
 						game.setGamePhase(GamePhase.MAIN);
 						int i = 0 + (int)(Math.random() * ((lh.size() - 0)));
 						cardService.discard(lh.get(i).getName(), p.getHand(), game.getDiscardPile());
+					} else {
+						game.setError("No tiene cartas en mano.");
 					}
 					break;
 				case "armadura":
@@ -1145,6 +1161,8 @@ public class GameController {
 							game.setGamePhase(GamePhase.MAIN);
 							cardService.discard(cardName, p.getEquipment(), game.getDiscardPile());
 						}
+					} else {
+						game.setError("No tiene ninguna armadura equipada.");
 					}
 					break;
 				case "concentracion":
@@ -1154,6 +1172,8 @@ public class GameController {
 							game.setGamePhase(GamePhase.MAIN);
 							cardService.discard(cardName, p.getEquipment(), game.getDiscardPile());
 						}
+					} else {
+						game.setError("No tiene ninguna concentración equipada.");
 					}
 					break;
 				case "desenvainado rapido":
@@ -1164,9 +1184,12 @@ public class GameController {
 							cardService.discard(cardName, p.getEquipment(), game.getDiscardPile());
 						}
 						
+					} else {
+						game.setError("No tiene ningún desenvainado rápido equipado.");
 					}
 					break;
 				default:
+					game.setError("No ha seleccionado correctamente.");
 					break;
 				}
 			}

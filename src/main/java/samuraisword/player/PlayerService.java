@@ -38,8 +38,8 @@ public class PlayerService {
 	}
 	
 	@Transactional
-	public Optional<Player> findByUser(User user) {
-		return playerRepository.findByUser(user);
+	public Optional<Player> findByUser(User user, Game game) {
+		return playerRepository.findByUser(user, game);
 	}
 	
 	@Transactional
