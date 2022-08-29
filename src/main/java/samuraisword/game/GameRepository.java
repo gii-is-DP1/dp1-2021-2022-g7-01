@@ -11,7 +11,9 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
 
+import samuraisword.character.Character;
 import samuraisword.samples.petclinic.card.Card;
+import samuraisword.samples.petclinic.user.User;
 
 
 
@@ -20,6 +22,8 @@ import samuraisword.samples.petclinic.card.Card;
 public interface GameRepository extends CrudRepository<Game, Integer>{
 	
 	Collection<Game> findAll();
+	
+	
 	
 
 }

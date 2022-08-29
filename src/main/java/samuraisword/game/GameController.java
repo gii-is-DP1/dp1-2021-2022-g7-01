@@ -141,6 +141,7 @@ public class GameController {
 		gameService.asignCharacterAndHearts(players);
 		gameService.asignRolAndHonor(players);
 		gameService.asignOrder(players);
+		
 
 		game.setListPlayers(players);
 		game.setCurrentPlayer(players.get(0));
@@ -181,17 +182,16 @@ public class GameController {
 					Boolean check = gameService.checkBushido(game);
 					if(!check) {
             gameService.processDrawPhase(game);
-					  if(game.getCurrentPlayer().getCharacter().getName().equals("Hideyoshi")) {
-						  Card card = game.getDeck().get(0);
-              game.getCurrentPlayer().getHand().add(card);
-              game.getDeck().remove(0);
-            }
+					  
 					}
 				}
 			} else {// fin de la partida cuando algun jugador no le quedan puntos de honor
 					// (honor<=0)
 				view = "/game/endgame";
 				Rol winnerRol = gameService.calcWinners(game);
+				for(Player p: game.getListPlayers()) {
+					game.getWonPlayers().add(p.getUser());
+				}
 				model.put("winnerRol", winnerRol);
 			}
 		}
@@ -355,6 +355,11 @@ public class GameController {
 					game.getListPlayers().get(i2).setCurrentHearts(game.getListPlayers().get(i2).getCurrentHearts()-i+game.getListPlayers().get(i2).getAntiDamageBonus());
 					}else{
 						game.getListPlayers().get(i2).setCurrentHearts(game.getListPlayers().get(i2).getCurrentHearts()-i);	
+					}
+					if(game.getCurrentPlayer().getCharacter().getName().equals("Tomoe")) {
+						Card card = game.getDeck().get(0);
+						game.getCurrentPlayer().getHand().add(card);
+						game.getDeck().remove(0);
 					}
 					if(game.getListPlayers().get(i2).getCurrentHearts()<=0) {
 						if(game.getListPlayers().get(i2).getHonor()>0) {
@@ -760,7 +765,8 @@ public class GameController {
 				if(!(game.getListPlayers().get(a).equals(game.getCurrentPlayer()))) {
 					game.getWaitingForPlayer().add(game.getListPlayers().get(a));
 				}
-				if(game.getListPlayers().get(a).getHand().size()==0 || game.getListPlayers().get(a).getCurrentHearts()<=0) {
+				if(game.getListPlayers().get(a).getHand().size()==0 || game.getListPlayers().get(a).getCurrentHearts()<=0
+						|| game.getListPlayers().get(a).getCharacter().equals("Chiyome")) {
 					game.getWaitingForPlayer().remove(game.getListPlayers().get(a));
 				}
 			}

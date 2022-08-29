@@ -41,7 +41,7 @@ public class GameService {
 	public Collection<Game> findAll() {
 		return gameRepository.findAll();
 	}
-	
+
 	public Optional<Game> findById(int idGame) {
 		return gameRepository.findById(idGame);
 	}
@@ -195,13 +195,15 @@ public class GameService {
 		List<Player> inRange = new ArrayList<>();
 		List<Player> auxPlayerList = new ArrayList<Player>(game.getListPlayers());
 		// Omitimos los jugadores inofensivos (disabled) para el calculo del rango
-	//	playerList.stream().filter(x -> x.getIndefence()).filter(x -> x.getHand().size()==0).filter(x -> x.getCurrentHearts()<=0).forEach(y -> playerList.remove(y));
-		for(Player pl : auxPlayerList) {
-			if(pl.getHand().size()<=0 || pl.getCurrentHearts()<=0){				
+		// playerList.stream().filter(x -> x.getIndefence()).filter(x ->
+		// x.getHand().size()==0).filter(x -> x.getCurrentHearts()<=0).forEach(y ->
+		// playerList.remove(y));
+		for (Player pl : auxPlayerList) {
+			if (pl.getHand().size() <= 0 || pl.getCurrentHearts() <= 0) {
 				playerList.remove(pl);
-				}
-			playerList.size();
 			}
+			playerList.size();
+		}
 		playerList.size();
 		// calculamos la distancia minima desde cada jugador al atacante
 		for (Player p : playerList) {
@@ -225,10 +227,8 @@ public class GameService {
 		return playersBetween;
 	}
 
-
 	public Boolean endTurn(Game game) {
 		Boolean correctMaxCardHand = game.getCurrentPlayer().getHand().size() <= MAX_CARDS_HAND;
-
 
 		if (correctMaxCardHand) {
 			Integer numPlayers = game.getListPlayers().size();
@@ -257,43 +257,46 @@ public class GameService {
 			player.getHand().add(card);
 			game.getDeck().remove(0);
 		}
+		if (game.getCurrentPlayer().getCharacter().getName().equals("Hideyoshi")) {
+			Card card = game.getDeck().get(0);
+			game.getCurrentPlayer().getHand().add(card);
+			game.getDeck().remove(0);
+		}
 		game.setGamePhase(GamePhase.MAIN);
 	}
-	
-	
-	
+
 	public Boolean checkBushido(Game game) {
 		Boolean check = false;
 		Card bush = new Card();
 		boolean hasBushido = false;
-		for(int o=0;o<game.getCurrentPlayer().getEquipment().size();o++) {
-			if(game.getCurrentPlayer().getEquipment().get(o).getName().equals("bushido")) {
+		for (int o = 0; o < game.getCurrentPlayer().getEquipment().size(); o++) {
+			if (game.getCurrentPlayer().getEquipment().get(o).getName().equals("bushido")) {
 				bush = game.getCurrentPlayer().getEquipment().get(o);
-				hasBushido=true;
+				hasBushido = true;
 			}
 		}
-		if(hasBushido) {
+		if (hasBushido) {
 			Card card = game.getDeck().get(0);
 			game.getDiscardPile().add(card);
 			game.getDeck().remove(0);
 			Integer numPlayers = game.getListPlayers().size();
 			Integer nextPlayerIndex = (game.getListPlayers().indexOf(game.getCurrentPlayer()) + 1) % numPlayers;
-			if(card.getColor().equals("Red")) {
+			if (card.getColor().equals("Red")) {
 				boolean hasRedCard = false;
-				for(int i = 0; i<game.getCurrentPlayer().getHand().size();i++) {
-					if(game.getCurrentPlayer().getHand().get(i).getColor().equals("Red")) {
+				for (int i = 0; i < game.getCurrentPlayer().getHand().size(); i++) {
+					if (game.getCurrentPlayer().getHand().get(i).getColor().equals("Red")) {
 						hasRedCard = true;
 					}
 				}
-				if(hasRedCard) {
+				if (hasRedCard) {
 					check = true;
 					game.setGamePhase(GamePhase.DISCARTRED);
-				}else {
-					game.getCurrentPlayer().setHonor(game.getCurrentPlayer().getHonor()-1);
+				} else {
+					game.getCurrentPlayer().setHonor(game.getCurrentPlayer().getHonor() - 1);
 					game.getCurrentPlayer().getEquipment().remove(bush);
 					game.getListPlayers().get(nextPlayerIndex).getEquipment().add(bush);
 				}
-			}else {
+			} else {
 				game.getCurrentPlayer().getEquipment().remove(bush);
 				game.getListPlayers().get(nextPlayerIndex).getEquipment().add(bush);
 			}
@@ -378,14 +381,14 @@ public class GameService {
 				.collect(Collectors.groupingBy(Player::getRol, Collectors.summingDouble(x -> x.getHonor())));
 	}
 
-	public void proceesDrawPhasePlayer(Game game,Player player,Integer cards) {
-        for(int i=0;i<cards;i++) {
-            Card card=game.getDeck().get(0);
-            player.getHand().add(card);
-            game.getDeck().remove(0);
+	public void proceesDrawPhasePlayer(Game game, Player player, Integer cards) {
+		for (int i = 0; i < cards; i++) {
+			Card card = game.getDeck().get(0);
+			player.getHand().add(card);
+			game.getDeck().remove(0);
 
-        }
-        game.setGamePhase(GamePhase.MAIN);
+		}
+		game.setGamePhase(GamePhase.MAIN);
 
-    }
+	}
 }
