@@ -1,5 +1,6 @@
 package samuraisword.player;
 
+import java.util.ArrayList;
 import java.util.List;
 import samuraisword.character.Character;
 import javax.persistence.CascadeType;
@@ -27,6 +28,11 @@ import samuraisword.samples.petclinic.user.User;
 @Entity
 @Table(name = "players")
 public class Player extends BaseEntity{
+	
+	public Player() {
+		hand = new ArrayList<>();
+		equipment = new ArrayList<>();
+	}
 	
 	@ManyToOne
 	private Game game;

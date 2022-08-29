@@ -79,10 +79,13 @@ public class GameController {
 		Player player = new Player();
 		player.setUser(user);
 		player.setGame(game);
-		game.setListPlayers(List.of(player));
+		List<Player> listPlayers = new ArrayList<>();
+		listPlayers.add(player);
+		game.setListPlayers(listPlayers);
 		gameService.saveGame(game);
 		userService.saveUser(user);
 		playerService.savePlayer(player);
+		GameSingleton.getInstance().getMapGames().put(game.getId(), game);
 		return "redirect:/game/" + game.getId();
 	}
 
@@ -102,8 +105,7 @@ public class GameController {
 			GameSingleton.getInstance().getMapGames().put(gameId, game);
 			return "game/game";
 		} else {
-			Game game = gameService.findById(gameId).get();
-			GameSingleton.getInstance().getMapGames().put(gameId, game);
+			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
 			if (game.getGamePhase().equals(GamePhase.LOBBY)) {
 				a.addHeader("Refresh", "3");
 				model.put("now", new Date());
@@ -111,13 +113,9 @@ public class GameController {
 				model.put("user", user.getUsername());
 				model.put("listPlayer", game.getListPlayers());
 				model.put("gameId", gameId);
-				GameSingleton.getInstance().getMapGames().put(gameId, game);
 				return "game/game";
 			}
-			
-			model.put("game", game);
-			model.put("POVplayer", user);
-			return "game/gameboard";
+			return "redirect:/game/continue/"+gameId;
 		}
 	}
 
@@ -150,6 +148,7 @@ public class GameController {
 
 		for (Player player : game.getListPlayers()) {
 			player.setGame(game);
+			player.setEquipment(new ArrayList<>());
 			playerService.savePlayer(player);
 		}
 
@@ -179,31 +178,53 @@ public class GameController {
 			if (gameService.checkAllPlayersHavePositiveHonor(game)) {
 				if (hasAdvancedPhase) {
 					gameService.processRecoveryPhase(game);
-					Boolean check = gameService.checkBushido(game);
+					List<Boolean> checks = gameService.checkBushido(game);
+					Boolean check = checks.get(0);
+					Boolean endGame = checks.get(1);
+					if(endGame) {
+						return this.endGame(game, model);
+					}
 					if(!check) {
-            gameService.processDrawPhase(game);
-					  
+						endGame = gameService.processDrawPhase(game);
+						if(endGame) {
+							return this.endGame(game, model);
+						}
+					  if(game.getCurrentPlayer().getCharacter().getName().equals("Hideyoshi")) {
+						  endGame = gameService.checkGameDeck(game);
+						  if(endGame) {
+								return this.endGame(game, model);
+							}
+						  Card card = game.getDeck().get(0);
+              game.getCurrentPlayer().getHand().add(card);
+              game.getDeck().remove(0);
+            }
 					}
 				}
 			} else {// fin de la partida cuando algun jugador no le quedan puntos de honor
 					// (honor<=0)
-				view = "/game/endgame";
+				view = endGame(game, model);
 				Rol winnerRol = gameService.calcWinners(game);
 				game.setWonPlayers(new ArrayList<User>());
 				for(Player p: game.getListPlayers()) {
 					if(p.getRol().equals(winnerRol) || (winnerRol.equals(Rol.SAMURAI) && p.getRol().equals(Rol.SHOGUN))) {
 					game.getWonPlayers().add(p.getUser());
 					}
-				}
-				model.put("winnerRol", winnerRol);
+        }
 			}
 		}
 		return view;
 	}
+	
+	public String endGame(Game game, Map<String, Object> model) {
+		Rol winnerRol = gameService.calcWinners(game);
+		model.put("winnerRol", winnerRol);
+		return "/game/endgame";
+	}
 
 	//--------------------------------------------------------------------------------------------------------------------------
 		@GetMapping(value = {"/game/continue/{id_game}"})
-		public String continueGame(@PathVariable("id_game") int gameId, Map<String, Object> model) {
+		public String continueGame(@PathVariable("id_game") int gameId, Map<String, Object> model, HttpServletResponse a) {
+			a.addHeader("Refresh", "3");
 			String view = "/game/gameboard";
 			UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			User user = userService.findUser(userDetails.getUsername()).get();
@@ -660,14 +681,19 @@ public class GameController {
             model.put("game",game);
             Player myPlayer= game.getCurrentPlayer();
 
-            gameService.proceesDrawPhasePlayer(game, myPlayer, 3);
-
+            Boolean endGame = gameService.proceesDrawPhasePlayer(game, myPlayer, 3);
+            if(endGame) {
+            	return endGame(game, model);
+            }
 
             List<Player> allOpponents= new ArrayList<>(game.getListPlayers());
             allOpponents.remove(myPlayer);
 
             for(Player pl:allOpponents) {
-                gameService.proceesDrawPhasePlayer(game, pl, 1);
+            	endGame = gameService.proceesDrawPhasePlayer(game, pl, 1);
+                if(endGame) {
+                	return endGame(game, model);
+                }
             }
 
             return view;
@@ -682,7 +708,10 @@ public class GameController {
 			model.put("game",game);
 			Player myPlayer= game.getCurrentPlayer();
 			
-			gameService.proceesDrawPhasePlayer(game, myPlayer, 2);
+			Boolean endGame = gameService.proceesDrawPhasePlayer(game, myPlayer, 2);
+            if(endGame) {
+            	return endGame(game, model);
+            }
 			
 			return view;
 		}
@@ -961,7 +990,10 @@ public class GameController {
 		Player myPlayer= game.getCurrentPlayer();
 		Player opponent= gameService.findPlayerInGameByName(game, playerName);
 		
-		gameService.proceesDrawPhasePlayer(game, opponent, 1);
+		Boolean endGame = gameService.proceesDrawPhasePlayer(game, opponent, 1);
+        if(endGame) {
+        	return endGame(game, model);
+        }
 		Integer maxLife= myPlayer.getCharacter().getLife();
 		
 		if(myPlayer.getCurrentHearts() !=maxLife) {
@@ -1053,10 +1085,22 @@ public class GameController {
 			if (gameService.checkAllPlayersHavePositiveHonor(game)) {
 				if (hasAdvancedPhase) {
 					gameService.processRecoveryPhase(game);
-					Boolean check = gameService.checkBushido(game);
+					List<Boolean> checks = gameService.checkBushido(game);
+					Boolean check = checks.get(0);
+					Boolean endGame = checks.get(1);
+					if(endGame) {
+						return this.endGame(game, model);
+					}
 					if(!check) {
-						gameService.processDrawPhase(game);
+						endGame = gameService.processDrawPhase(game);
+						if(endGame) {
+							return this.endGame(game, model);
+						}
 						if(game.getCurrentPlayer().getCharacter().getName().equals("Hideyoshi")) {
+						  endGame = gameService.checkGameDeck(game);
+						  if(endGame) {
+							return this.endGame(game, model);
+						  }
 						  Card card = game.getDeck().get(0);
 						  game.getCurrentPlayer().getHand().add(card);
 						  game.getDeck().remove(0);
@@ -1065,9 +1109,7 @@ public class GameController {
 				}
 			} else {// fin de la partida cuando algun jugador no le quedan puntos de honor
 					// (honor<=0)
-				view = "/game/endgame";
-				Rol winnerRol = gameService.calcWinners(game);
-				model.put("winnerRol", winnerRol);
+				return this.endGame(game, model);
 			}
 
 			return view;
@@ -1165,11 +1207,18 @@ public class GameController {
 				cardService.discard(card, game.getCurrentPlayer().getHand(), game.getDiscardPile());
 				cardService.discard("bushido", game.getCurrentPlayer().getEquipment(), game.getListPlayers().get(nextPlayerIndex).getEquipment());
 			}
-			gameService.processDrawPhase(game);
+			Boolean endGame = gameService.processDrawPhase(game);
+			if(endGame) {
+				return this.endGame(game, model);
+			}
       if(game.getCurrentPlayer().getCharacter().getName().equals("Hideyoshi")) {
-						  Card drawCard = game.getDeck().get(0);
-              game.getCurrentPlayer().getHand().add(drawCard);
-              game.getDeck().remove(0);
+    	  endGame = gameService.checkGameDeck(game);
+    	  if(endGame) {
+				return this.endGame(game, model);
+			}
+    	  Card drawCard = game.getDeck().get(0);
+    	  game.getCurrentPlayer().getHand().add(drawCard);
+    	  game.getDeck().remove(0);
       }
 			game.setGamePhase(GamePhase.MAIN);
 			return view;
