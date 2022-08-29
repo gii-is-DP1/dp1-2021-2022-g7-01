@@ -79,10 +79,13 @@ public class GameController {
 		Player player = new Player();
 		player.setUser(user);
 		player.setGame(game);
-		game.setListPlayers(List.of(player));
+		List<Player> listPlayers = new ArrayList<>();
+		listPlayers.add(player);
+		game.setListPlayers(listPlayers);
 		gameService.saveGame(game);
 		userService.saveUser(user);
 		playerService.savePlayer(player);
+		GameSingleton.getInstance().getMapGames().put(game.getId(), game);
 		return "redirect:/game/" + game.getId();
 	}
 
@@ -102,8 +105,7 @@ public class GameController {
 			GameSingleton.getInstance().getMapGames().put(gameId, game);
 			return "game/game";
 		} else {
-			Game game = gameService.findById(gameId).get();
-			GameSingleton.getInstance().getMapGames().put(gameId, game);
+			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
 			if (game.getGamePhase().equals(GamePhase.LOBBY)) {
 				a.addHeader("Refresh", "3");
 				model.put("now", new Date());
@@ -111,12 +113,9 @@ public class GameController {
 				model.put("user", user.getUsername());
 				model.put("listPlayer", game.getListPlayers());
 				model.put("gameId", gameId);
-				GameSingleton.getInstance().getMapGames().put(gameId, game);
 				return "game/game";
 			}
-			model.put("game", game);
-			model.put("POVplayer", user);
-			return "game/gameboard";
+			return "redirect:/game/continue/"+gameId;
 		}
 	}
 
@@ -137,26 +136,6 @@ public class GameController {
 
 		List<Player> players = game.getListPlayers();
 
-		// players de prueba
-//		Player p1 = playerService.findById(1).get();
-//
-//		Player p2 = playerService.findById(2).get();
-//
-//		Player p3 = playerService.findById(3).get();
-//
-//		Player p4 = playerService.findById(4).get();
-//
-//		Player p5 = playerService.findById(5).get();
-//
-//		Player p6 = playerService.findById(6).get();
-//
-//		players.add(p1);
-//		players.add(p2);
-//		players.add(p3);
-//		players.add(p4);
-//		players.add(p5);
-//		players.add(p6);
-
 		gameService.asignCharacterAndHearts(players);
 		gameService.asignRolAndHonor(players);
 		gameService.asignOrder(players);
@@ -164,14 +143,17 @@ public class GameController {
 
 		game.setListPlayers(players);
 		game.setCurrentPlayer(players.get(0));
+		game.getCurrentPlayer().setWeaponBonus(1);
+	
 
 		for (Player player : game.getListPlayers()) {
 			player.setGame(game);
+			player.setEquipment(new ArrayList<>());
 			playerService.savePlayer(player);
 		}
 
 		gameService.asignCards(game.getDeck(), players);
-
+		gameService.processDrawPhase(game);
 		game.setGamePhase(GamePhase.MAIN);
 		return view;
 	}
@@ -196,32 +178,74 @@ public class GameController {
 			if (gameService.checkAllPlayersHavePositiveHonor(game)) {
 				if (hasAdvancedPhase) {
 					gameService.processRecoveryPhase(game);
-					Boolean check = gameService.checkBushido(game);
+					List<Boolean> checks = gameService.checkBushido(game);
+					Boolean check = checks.get(0);
+					Boolean endGame = checks.get(1);
+					if(endGame) {
+						return this.endGame(game, model);
+					}
 					if(!check) {
-            gameService.processDrawPhase(game);
-					  
+						endGame = gameService.processDrawPhase(game);
+						if(endGame) {
+							return this.endGame(game, model);
+						}
+					  if(game.getCurrentPlayer().getCharacter().getName().equals("Hideyoshi")) {
+						  endGame = gameService.checkGameDeck(game);
+						  if(endGame) {
+								return this.endGame(game, model);
+							}
+						  Card card = game.getDeck().get(0);
+              game.getCurrentPlayer().getHand().add(card);
+              game.getDeck().remove(0);
+            }
 					}
 				}
 			} else {// fin de la partida cuando algun jugador no le quedan puntos de honor
 					// (honor<=0)
-				view = "/game/endgame";
+				view = endGame(game, model);
 				Rol winnerRol = gameService.calcWinners(game);
+				game.setWonPlayers(new ArrayList<User>());
 				for(Player p: game.getListPlayers()) {
+					if(p.getRol().equals(winnerRol) || (winnerRol.equals(Rol.SAMURAI) && p.getRol().equals(Rol.SHOGUN))) {
 					game.getWonPlayers().add(p.getUser());
-				}
-				model.put("winnerRol", winnerRol);
+					}
+        }
 			}
 		}
 		return view;
 	}
+	
+	public String endGame(Game game, Map<String, Object> model) {
+		Rol winnerRol = gameService.calcWinners(game);
+		model.put("winnerRol", winnerRol);
+		return "/game/endgame";
+	}
 
 	//--------------------------------------------------------------------------------------------------------------------------
 		@GetMapping(value = {"/game/continue/{id_game}"})
-		public String continueGame(@PathVariable("id_game") int gameId, Map<String, Object> model) {
+		public String continueGame(@PathVariable("id_game") int gameId, Map<String, Object> model, HttpServletResponse a) {
+			a.addHeader("Refresh", "3");
 			String view = "/game/gameboard";
 			UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			User user = userService.findUser(userDetails.getUsername()).get();
 			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
+			for(int i=0; i<game.getListPlayers().size();i++) {
+				game.getListPlayers().get(i).setNArmor(0);
+				game.getListPlayers().get(i).setNFastDraw(0);
+				game.getListPlayers().get(i).setNBushido(0);
+				game.getListPlayers().get(i).setNFocus(0);
+				for(int o=0; o<game.getListPlayers().get(i).getEquipment().size();o++) {
+					if(game.getListPlayers().get(i).getEquipment().get(o).getName().equals("armadura")) {
+						game.getListPlayers().get(i).setNArmor(game.getListPlayers().get(i).getNArmor()+1);
+					}if(game.getListPlayers().get(i).getEquipment().get(o).getName().equals("desenvainado rapido")) {
+						game.getListPlayers().get(i).setNFastDraw(game.getListPlayers().get(i).getNFastDraw()+1);
+					}if(game.getListPlayers().get(i).getEquipment().get(o).getName().equals("concentracion")) {
+						game.getListPlayers().get(i).setNFocus(game.getListPlayers().get(i).getNFocus()+1);
+					}if(game.getListPlayers().get(i).getEquipment().get(o).getName().equals("bushido")) {
+						game.getListPlayers().get(i).setNBushido(game.getListPlayers().get(i).getNBushido()+1);
+					}
+				}
+			}
 			
 			model.put("game", game);
 			
@@ -230,25 +254,7 @@ public class GameController {
 					.findFirst().get();
 			model.put("POVplayer", POVplayer);
 			model.put("gameStatus", game.getGamePhase().toString());
-			int nArmadura=0;
-			int nConcentracion=0;
-			int nDesenvainado=0;
 			
-			for(int i=0; i<game.getCurrentPlayer().getEquipment().size();i++) {
-				if(game.getCurrentPlayer().getEquipment().get(i).getName().equals("armadura")) {
-					nArmadura++;
-				}
-				if(game.getCurrentPlayer().getEquipment().get(i).getName().equals("concentracion")) {
-					nConcentracion++;
-				}
-				if(game.getCurrentPlayer().getEquipment().get(i).getName().equals("desenvainado rapido")) {
-					nDesenvainado++;
-				}
-			}
-			
-			model.put("nArmadura", nArmadura);
-			model.put("nConcentracion", nConcentracion);
-			model.put("nDesenvainado", nDesenvainado);
 			return view;
 		}
 
@@ -362,6 +368,10 @@ public class GameController {
 			//----------Aqui va el método
 			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
 			Card c= game.getUseCard();
+			Player p=playerService.findPlayerByUsernameAndGame(playerA, game);
+			int dano=cardService.findDamage(game.getUseCard().getName()).get();
+			game.setAttackerDamage(dano+game.getCurrentPlayer().getDamageBonus());
+			game.setAttackerPlayer(p);
 			int i=cardService.findDamage(c.getName()).get()+game.getCurrentPlayer().getDamageBonus();
 			for(int i2=0;i2<game.getListPlayers().size();i2++) {
 				if(game.getListPlayers().get(i2).getUser().getUsername().equals(playerA)) {
@@ -384,7 +394,7 @@ public class GameController {
 					}
 				}
 			}
-			game.setGamePhase(GamePhase.MAIN);
+			game.setGamePhase(GamePhase.AVISO);
 			return view;
 		}
 		
@@ -410,9 +420,19 @@ public class GameController {
 			} 
 			
 			if(!(game.getGamePhase().equals(GamePhase.PARADA))){
+				
 				 DoDamage(gameId, playerA, model);
 			}
 			}
+			return view;
+		}
+		
+		@PostMapping(value = {"/game/aviso/{id_game}"}) 
+		public String aviso(@PathVariable("id_game") int gameId, Map<String, Object> model) {
+			String view = "redirect:/game/continue/"+gameId;
+			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
+			game.setGamePhase(GamePhase.MAIN);
+			
 			return view;
 		}
 		
@@ -661,14 +681,19 @@ public class GameController {
             model.put("game",game);
             Player myPlayer= game.getCurrentPlayer();
 
-            gameService.proceesDrawPhasePlayer(game, myPlayer, 3);
-
+            Boolean endGame = gameService.proceesDrawPhasePlayer(game, myPlayer, 3);
+            if(endGame) {
+            	return endGame(game, model);
+            }
 
             List<Player> allOpponents= new ArrayList<>(game.getListPlayers());
             allOpponents.remove(myPlayer);
 
             for(Player pl:allOpponents) {
-                gameService.proceesDrawPhasePlayer(game, pl, 1);
+            	endGame = gameService.proceesDrawPhasePlayer(game, pl, 1);
+                if(endGame) {
+                	return endGame(game, model);
+                }
             }
 
             return view;
@@ -683,7 +708,10 @@ public class GameController {
 			model.put("game",game);
 			Player myPlayer= game.getCurrentPlayer();
 			
-			gameService.proceesDrawPhasePlayer(game, myPlayer, 2);
+			Boolean endGame = gameService.proceesDrawPhasePlayer(game, myPlayer, 2);
+            if(endGame) {
+            	return endGame(game, model);
+            }
 			
 			return view;
 		}
@@ -770,7 +798,7 @@ public class GameController {
 					game.getWaitingForPlayer().add(game.getListPlayers().get(a));
 				}
 				if(game.getListPlayers().get(a).getHand().size()==0 || game.getListPlayers().get(a).getCurrentHearts()<=0
-						|| game.getListPlayers().get(a).getCharacter().equals("Chiyome")) {
+						|| game.getListPlayers().get(a).getCharacter().getName().equals("Chiyome")) {
 					game.getWaitingForPlayer().remove(game.getListPlayers().get(a));
 				}
 			}
@@ -854,6 +882,9 @@ public class GameController {
 				game.getListPlayers().get(a).setIndefence(true);
 				game.getWaitingForPlayer().remove(game.getListPlayers().get(a));
 			}else {
+				if(game.getListPlayers().get(a).getCharacter().getName().equals("Chiyome")) {
+					game.getWaitingForPlayer().remove(game.getListPlayers().get(a));
+				}
 				game.getListPlayers().get(a).setIndefence(false);
 			}
 				
@@ -887,20 +918,17 @@ public class GameController {
 		
 		
 		
-		@PostMapping(value = {"/game/choose21/{id_game}/{playerA}"})
-		public String choose21(@PathVariable("id_game") int gameId, @PathVariable("playerA") String playerA, Map<String, Object> model) {
+		@PostMapping(value = {"/game/choose21/{cardName}/{id_game}/{playerA}"})
+		public String choose21(@PathVariable("id_game") int gameId, @PathVariable("cardName") String cardName, @PathVariable("playerA") String playerA, Map<String, Object> model) {
 			String view = "redirect:/game/continue/"+gameId;
 			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
 			
 			Player p=playerService.findPlayerByUsernameAndGame(playerA, game);
-			game.setGamePhase(GamePhase.DISCARDARM);
-			game.setPlayerChoose(p);
-			List<Card> lc= new ArrayList<>();
-			game.setListJiuJitsu(lc);
-			for(int i=0;i<p.getHand().size();i++) {
-				if(p.getHand().get(i).getColor().equals("Red")) {
-					game.getListJiuJitsu().add(p.getHand().get(i));
-				}
+			
+			cardService.discard(cardName, p.getHand(), game.getDiscardPile());
+			game.getWaitingForPlayer().remove(p);
+			if(game.getWaitingForPlayer().size()==0) {
+				game.setGamePhase(GamePhase.MAIN);
 			}
 //			for(int i=0;i<p.getHand().size();i++)
 //			if(p.getHand().get(i).equals(cardService.findByName("parada").get())) {
@@ -962,7 +990,10 @@ public class GameController {
 		Player myPlayer= game.getCurrentPlayer();
 		Player opponent= gameService.findPlayerInGameByName(game, playerName);
 		
-		gameService.proceesDrawPhasePlayer(game, opponent, 1);
+		Boolean endGame = gameService.proceesDrawPhasePlayer(game, opponent, 1);
+        if(endGame) {
+        	return endGame(game, model);
+        }
 		Integer maxLife= myPlayer.getCharacter().getLife();
 		
 		if(myPlayer.getCurrentHearts() !=maxLife) {
@@ -1054,21 +1085,31 @@ public class GameController {
 			if (gameService.checkAllPlayersHavePositiveHonor(game)) {
 				if (hasAdvancedPhase) {
 					gameService.processRecoveryPhase(game);
-					Boolean check = gameService.checkBushido(game);
+					List<Boolean> checks = gameService.checkBushido(game);
+					Boolean check = checks.get(0);
+					Boolean endGame = checks.get(1);
+					if(endGame) {
+						return this.endGame(game, model);
+					}
 					if(!check) {
-						gameService.processDrawPhase(game);
-            if(game.getCurrentPlayer().getCharacter().getName().equals("Hideyoshi")) {
+						endGame = gameService.processDrawPhase(game);
+						if(endGame) {
+							return this.endGame(game, model);
+						}
+						if(game.getCurrentPlayer().getCharacter().getName().equals("Hideyoshi")) {
+						  endGame = gameService.checkGameDeck(game);
+						  if(endGame) {
+							return this.endGame(game, model);
+						  }
 						  Card card = game.getDeck().get(0);
-              game.getCurrentPlayer().getHand().add(card);
-              game.getDeck().remove(0);
-            }
+						  game.getCurrentPlayer().getHand().add(card);
+						  game.getDeck().remove(0);
+						}
 					}
 				}
 			} else {// fin de la partida cuando algun jugador no le quedan puntos de honor
 					// (honor<=0)
-				view = "/game/endgame";
-				Rol winnerRol = gameService.calcWinners(game);
-				model.put("winnerRol", winnerRol);
+				return this.endGame(game, model);
 			}
 
 			return view;
@@ -1091,31 +1132,38 @@ public class GameController {
 				switch (cardName) {
 				case "hand":
 					List<Card>lh = p.getHand();
-					if(lh.size()!=0) {
+					if(lh.size()>0) {
 						game.setGamePhase(GamePhase.MAIN);
 						int i = 0 + (int)(Math.random() * ((lh.size() - 0)));
 						cardService.discard(lh.get(i).getName(), p.getHand(), game.getDiscardPile());
 					}
 					break;
 				case "armadura":
-					if(p.getDistanceBonus()!=0) {
-						p.setDistanceBonus(p.getDistanceBonus()-1);
-						game.setGamePhase(GamePhase.MAIN);
-						cardService.discard(cardName, p.getEquipment(), game.getDiscardPile());
+					if(p.getDistanceBonus()>0) {
+						if(!(p.getCharacter().getName().equals("Benkei") && p.getDistanceBonus()==1)) {
+							p.setDistanceBonus(p.getDistanceBonus()-1);
+							game.setGamePhase(GamePhase.MAIN);
+							cardService.discard(cardName, p.getEquipment(), game.getDiscardPile());
+						}
 					}
 					break;
 				case "concentracion":
-					if(p.getWeaponBonus()!=0) {
-						p.setWeaponBonus(p.getWeaponBonus()-1);
-						game.setGamePhase(GamePhase.MAIN);
-						cardService.discard(cardName, p.getEquipment(), game.getDiscardPile());
+					if(p.getWeaponBonus()>0) {
+						if(!(p.getCharacter().getName().equals("Goemon") && p.getWeaponBonus()==1)) {
+							p.setWeaponBonus(p.getWeaponBonus()-1);
+							game.setGamePhase(GamePhase.MAIN);
+							cardService.discard(cardName, p.getEquipment(), game.getDiscardPile());
+						}
 					}
 					break;
 				case "desenvainado rapido":
-					if(p.getWeaponBonus()!=0) {
-						p.setDamageBonus(p.getDamageBonus()+1);
-						game.setGamePhase(GamePhase.MAIN);
-						cardService.discard(cardName, p.getEquipment(), game.getDiscardPile());
+					if(p.getWeaponBonus()>0) {
+						if(!(p.getCharacter().getName().equals("Musashi") && p.getDamageBonus()==1)) {
+							p.setDamageBonus(p.getDamageBonus()+1);
+							game.setGamePhase(GamePhase.MAIN);
+							cardService.discard(cardName, p.getEquipment(), game.getDiscardPile());
+						}
+						
 					}
 					break;
 				default:
@@ -1151,7 +1199,7 @@ public class GameController {
 			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
 			if(card.equals("NONE")) {
 				game.getCurrentPlayer().setHonor(game.getCurrentPlayer().getHonor()-1);
-				cardService.discard(card, game.getCurrentPlayer().getEquipment(), game.getDiscardPile());
+				cardService.discard("bushido", game.getCurrentPlayer().getEquipment(), game.getDiscardPile());
 			}
 			else {
 				Integer numPlayers = game.getListPlayers().size();
@@ -1159,11 +1207,18 @@ public class GameController {
 				cardService.discard(card, game.getCurrentPlayer().getHand(), game.getDiscardPile());
 				cardService.discard("bushido", game.getCurrentPlayer().getEquipment(), game.getListPlayers().get(nextPlayerIndex).getEquipment());
 			}
-			gameService.processDrawPhase(game);
+			Boolean endGame = gameService.processDrawPhase(game);
+			if(endGame) {
+				return this.endGame(game, model);
+			}
       if(game.getCurrentPlayer().getCharacter().getName().equals("Hideyoshi")) {
-						  Card drawCard = game.getDeck().get(0);
-              game.getCurrentPlayer().getHand().add(drawCard);
-              game.getDeck().remove(0);
+    	  endGame = gameService.checkGameDeck(game);
+    	  if(endGame) {
+				return this.endGame(game, model);
+			}
+    	  Card drawCard = game.getDeck().get(0);
+    	  game.getCurrentPlayer().getHand().add(drawCard);
+    	  game.getDeck().remove(0);
       }
 			game.setGamePhase(GamePhase.MAIN);
 			return view;

@@ -70,6 +70,9 @@ public class Game extends BaseEntity{
 	private Player attackerPlayer;
 	
 	@Transient
+	private Integer attackerDamage;
+	
+	@Transient
 	private List<Player> waitingForPlayer;
 	
 	@Transient

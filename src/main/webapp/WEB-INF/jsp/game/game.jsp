@@ -82,16 +82,20 @@ img.estrella {
 							<spring:url value="start/{gameId}" var="startUrl">
 								<spring:param name="gameId" value="${gameId}" />
 							</spring:url>
+							<c:forEach items="${listPlayer}" var="player">
+							<c:if test="${player.user.username.contains(user)}">
 								<a href="${fn:escapeXml(startUrl)}" class="btn btn-success">Start
-								Game</a>
+								Game</a></c:if></c:forEach>
 						</c:if>
-						<c:if test="${listPlayer.size()<4}">
+						<c:if test="${listPlayer.size()<4 }">
 							<b>TIENEN QUE HABER AL MENOS 4 JUGADORES PARA EMPEZAR LA
 								PARTIDA</b>
 							<br>
+							
+							
 							<button disabled="disabled" class="btn btn-secondary">Empezar
-								partida</button>
-						</c:if>
+								partida</button></c:if>
+						
 						<c:if test="${listPlayer.get(0).getUser().getUsername()==user}">
 							<spring:url value="delete/{gameId}" var="editUrl">
 								<spring:param name="gameId" value="${gameId}" />
@@ -111,7 +115,9 @@ img.estrella {
 							<form:form class="form-horizontal"
 							action="/game/${gameId}/invitation/${listFriends.get(i).getUsername()}"
 							id="edit-invitation-form">
-							<button class="btn btn-default" type="submit">Invitar</button>
+							<c:forEach items="${listPlayer}" var="player">
+							<c:if test="${player.user.username.contains(user)}">
+							<button class="btn btn-default" type="submit">Invitar</button></c:if></c:forEach>
 						</form:form>					
 				</c:forEach>
 			</c:if>

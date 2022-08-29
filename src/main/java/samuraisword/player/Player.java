@@ -1,5 +1,6 @@
 package samuraisword.player;
 
+import java.util.ArrayList;
 import java.util.List;
 import samuraisword.character.Character;
 import javax.persistence.CascadeType;
@@ -28,6 +29,11 @@ import samuraisword.samples.petclinic.user.User;
 @Table(name = "players")
 public class Player extends BaseEntity{
 	
+	public Player() {
+		hand = new ArrayList<>();
+		equipment = new ArrayList<>();
+	}
+	
 	@ManyToOne
 	private Game game;
 	
@@ -49,8 +55,6 @@ public class Player extends BaseEntity{
     private Integer antiDamageBonus=0;
     private Integer weaponBonus=1;
     private Integer damageBonus=0;
-    
-    private Integer weaponUse=0;
 	
 	@ManyToOne
 	@JoinColumn(name="username")
@@ -70,6 +74,18 @@ public class Player extends BaseEntity{
 	
 	@Transient
 	private Boolean haveRedCard;
+	
+	@Transient
+	private Integer nArmor;
+	
+	@Transient
+	private Integer nFastDraw;
+	
+	@Transient
+	private Integer nFocus;
+	
+	@Transient
+	private Integer nBushido;
 	
 	@OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "character")

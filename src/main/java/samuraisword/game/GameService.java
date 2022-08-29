@@ -10,6 +10,9 @@ import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
+
+import javax.persistence.Tuple;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
@@ -19,6 +22,7 @@ import samuraisword.character.CharacterService;
 import samuraisword.player.Player;
 import samuraisword.player.Rol;
 import samuraisword.samples.petclinic.card.Card;
+import samuraisword.samples.petclinic.card.CardService;
 import samuraisword.samples.petclinic.card.RedCard;
 
 @Service
@@ -26,13 +30,15 @@ public class GameService {
 
 	private GameRepository gameRepository;
 	private final CharacterService characterService;
+	private final CardService cardService;
 	private final Integer MAX_CARDS_HAND = 7;
 	private final Integer NUM_CARD_DRAWN = 2;
 
 	@Autowired
-	public GameService(GameRepository gameRepository, CharacterService characterService) {
+	public GameService(GameRepository gameRepository, CharacterService characterService, CardService cardService) {
 		this.gameRepository = gameRepository;
 		this.characterService = characterService;
+		this.cardService = cardService;
 	}
 
 	public Collection<Game> findAll() {
@@ -247,9 +253,14 @@ public class GameService {
 		game.setGamePhase(GamePhase.DRAW);
 	}
 
-	public void processDrawPhase(Game game) {
+	public Boolean processDrawPhase(Game game) {
 		Player player = game.getCurrentPlayer();
+		Boolean endGame = false;
 		for (int i = 0; i < NUM_CARD_DRAWN; i++) {
+			endGame = this.checkGameDeck(game);
+			if(endGame) {
+				break;
+			}
 			Card card = game.getDeck().get(0);
 			player.getHand().add(card);
 			game.getDeck().remove(0);
@@ -260,12 +271,29 @@ public class GameService {
 			game.getDeck().remove(0);
 		}
 		game.setGamePhase(GamePhase.MAIN);
+		return endGame;
 	}
 
-	public Boolean checkBushido(Game game) {
+	public Boolean checkGameDeck(Game game) {
+		Boolean endGame = false;
+		if (game.getDeck().isEmpty()) {
+			game.setDeck(game.getDiscardPile());
+			Collections.shuffle(game.getDeck());
+			game.setDiscardPile(new ArrayList<>());
+			game.getListPlayers().stream().forEach(p -> p.setHonor(p.getHonor() - 1));
+			endGame = !checkAllPlayersHavePositiveHonor(game);
+			GameSingleton.getInstance().getMapGames().put(game.getId(), game);
+		}
+		return endGame;
+	}
+
+	// 1st element: check bushido
+	// 2nd element: endGame
+	public List<Boolean> checkBushido(Game game) {
 		Boolean check = false;
 		Card bush = new Card();
 		boolean hasBushido = false;
+		Boolean endGame = false;
 		for (int o = 0; o < game.getCurrentPlayer().getEquipment().size(); o++) {
 			if (game.getCurrentPlayer().getEquipment().get(o).getName().equals("bushido")) {
 				bush = game.getCurrentPlayer().getEquipment().get(o);
@@ -273,6 +301,7 @@ public class GameService {
 			}
 		}
 		if (hasBushido) {
+			endGame = this.checkGameDeck(game);
 			Card card = game.getDeck().get(0);
 			game.getDiscardPile().add(card);
 			game.getDeck().remove(0);
@@ -298,7 +327,7 @@ public class GameService {
 				game.getListPlayers().get(nextPlayerIndex).getEquipment().add(bush);
 			}
 		}
-		return check;
+		return List.of(check, endGame);
 	}
 
 	public void substractHearts(Player attacker, Player objective, RedCard attackWeapon) {
@@ -353,7 +382,20 @@ public class GameService {
 		// Sumamos puntos por equipos aplicando bonus
 		pointsPerRole.put(Rol.SAMURAI, pointsPerRole.get(Rol.SHOGUN) + pointsPerRole.get(Rol.SAMURAI) * bonusSamurai);
 		pointsPerRole.put(Rol.NINJA, pointsPerRole.get(Rol.NINJA) * bonusNinja);
+		if(game.getListPlayers().size()>4) {
 		pointsPerRole.put(Rol.RONIN, pointsPerRole.get(Rol.RONIN) * bonusRonin);
+		}
+		
+		for(int i=0;i<game.getListPlayers().size();i++) {
+			for(int a=0;a<game.getListPlayers().get(i).getHand().size();a++) {
+				if(game.getListPlayers().get(i).getHand().get(a).equals(cardService.findByName("daimio").get())){
+					Rol rol = game.getListPlayers().get(i).getRol();
+					rol = rol == Rol.SHOGUN ? Rol.SAMURAI : rol;
+					pointsPerRole.put(rol, pointsPerRole.get(rol) + 1);
+					
+				}
+			}
+		}
 
 		Entry<Rol, Double> winnerRol = pointsPerRole.entrySet().stream().max(Map.Entry.comparingByValue()).get();
 
@@ -365,14 +407,19 @@ public class GameService {
 				.collect(Collectors.groupingBy(Player::getRol, Collectors.summingDouble(x -> x.getHonor())));
 	}
 
-	public void proceesDrawPhasePlayer(Game game, Player player, Integer cards) {
+	public Boolean proceesDrawPhasePlayer(Game game, Player player, Integer cards) {
+		Boolean endGame = false;
 		for (int i = 0; i < cards; i++) {
+			endGame = this.checkGameDeck(game);
+			if(endGame) {
+				break;
+			}
 			Card card = game.getDeck().get(0);
 			player.getHand().add(card);
 			game.getDeck().remove(0);
 
 		}
 		game.setGamePhase(GamePhase.MAIN);
-
+		return endGame;
 	}
 }
