@@ -110,7 +110,7 @@ public class AchievementService {
 					Rol rol =Rol.valueOf(body[5]);
 					Optional<Player> p = playerService.findByUser(user);
 					for (Game g : listGames) {
-						if (p.isPresent() && g.getWonPlayers().contains(p.get()) && p.get().getCharacter().equals(rol)) {
+						if (p.isPresent() && g.getWonPlayers().contains(user) && p.get().getRol().equals(rol)) {
 							n++;
 
 						}
@@ -126,7 +126,7 @@ public class AchievementService {
 					Rol rol =Rol.valueOf(body[5]);
 					Optional<Player> p = playerService.findByUser(user);
 					for (Game g : listGames) {
-						if (p.isPresent() && g.getListPlayers().contains(p.get()) && p.get().getCharacter().equals(rol)) {
+						if (p.isPresent() && g.getListPlayers().contains(p.get()) && p.get().getRol().equals(rol)) {
 							n++;
 
 						}
@@ -143,9 +143,9 @@ public class AchievementService {
 					Rol rol =Rol.valueOf(body[5]);
 					Optional<Player> p = playerService.findByUser(user);
 					for (Game g : listGames) {
-						if (p.isPresent() && g.getListPlayers().contains(p.get()) && p.get().getCharacter().equals(rol)) {
+						if (p.isPresent() && g.getListPlayers().contains(p.get()) && p.get().getRol().equals(rol)) {
 							m++;
-							if (p.isPresent() && g.getWonPlayers().contains(p.get()) && p.get().getCharacter().equals(rol)) {
+							if (p.isPresent() && g.getWonPlayers().contains(user) && p.get().getRol().equals(rol)) {
 								n++;
 
 							}
