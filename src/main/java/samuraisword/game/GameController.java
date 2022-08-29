@@ -114,6 +114,7 @@ public class GameController {
 				GameSingleton.getInstance().getMapGames().put(gameId, game);
 				return "game/game";
 			}
+			
 			model.put("game", game);
 			model.put("POVplayer", user);
 			return "game/gameboard";
@@ -361,6 +362,10 @@ public class GameController {
 			//----------Aqui va el método
 			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
 			Card c= game.getUseCard();
+			Player p=playerService.findPlayerByUsernameAndGame(playerA, game);
+			int dano=cardService.findDamage(game.getUseCard().getName()).get();
+			game.setAttackerDamage(dano+game.getCurrentPlayer().getDamageBonus());
+			game.setAttackerPlayer(p);
 			int i=cardService.findDamage(c.getName()).get()+game.getCurrentPlayer().getDamageBonus();
 			for(int i2=0;i2<game.getListPlayers().size();i2++) {
 				if(game.getListPlayers().get(i2).getUser().getUsername().equals(playerA)) {
@@ -378,7 +383,7 @@ public class GameController {
 					}
 				}
 			}
-			game.setGamePhase(GamePhase.MAIN);
+			game.setGamePhase(GamePhase.AVISO);
 			return view;
 		}
 		
@@ -404,9 +409,19 @@ public class GameController {
 			} 
 			
 			if(!(game.getGamePhase().equals(GamePhase.PARADA))){
+				
 				 DoDamage(gameId, playerA, model);
 			}
 			}
+			return view;
+		}
+		
+		@PostMapping(value = {"/game/aviso/{id_game}"}) 
+		public String aviso(@PathVariable("id_game") int gameId, Map<String, Object> model) {
+			String view = "redirect:/game/continue/"+gameId;
+			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
+			game.setGamePhase(GamePhase.MAIN);
+			
 			return view;
 		}
 		
@@ -880,20 +895,17 @@ public class GameController {
 		
 		
 		
-		@PostMapping(value = {"/game/choose21/{id_game}/{playerA}"})
-		public String choose21(@PathVariable("id_game") int gameId, @PathVariable("playerA") String playerA, Map<String, Object> model) {
+		@PostMapping(value = {"/game/choose21/{cardName}/{id_game}/{playerA}"})
+		public String choose21(@PathVariable("id_game") int gameId, @PathVariable("cardName") String cardName, @PathVariable("playerA") String playerA, Map<String, Object> model) {
 			String view = "redirect:/game/continue/"+gameId;
 			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
 			
 			Player p=playerService.findPlayerByUsernameAndGame(playerA, game);
-			game.setGamePhase(GamePhase.DISCARDARM);
-			game.setPlayerChoose(p);
-			List<Card> lc= new ArrayList<>();
-			game.setListJiuJitsu(lc);
-			for(int i=0;i<p.getHand().size();i++) {
-				if(p.getHand().get(i).getColor().equals("Red")) {
-					game.getListJiuJitsu().add(p.getHand().get(i));
-				}
+			
+			cardService.discard(cardName, p.getHand(), game.getDiscardPile());
+			game.getWaitingForPlayer().remove(p);
+			if(game.getWaitingForPlayer().size()==0) {
+				game.setGamePhase(GamePhase.MAIN);
 			}
 //			for(int i=0;i<p.getHand().size();i++)
 //			if(p.getHand().get(i).equals(cardService.findByName("parada").get())) {
