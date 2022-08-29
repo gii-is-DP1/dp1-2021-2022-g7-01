@@ -350,7 +350,9 @@ public class GameService {
 		// Sumamos puntos por equipos aplicando bonus
 		pointsPerRole.put(Rol.SAMURAI, pointsPerRole.get(Rol.SHOGUN) + pointsPerRole.get(Rol.SAMURAI) * bonusSamurai);
 		pointsPerRole.put(Rol.NINJA, pointsPerRole.get(Rol.NINJA) * bonusNinja);
+		if(game.getListPlayers().size()>4) {
 		pointsPerRole.put(Rol.RONIN, pointsPerRole.get(Rol.RONIN) * bonusRonin);
+		}
 
 		Entry<Rol, Double> winnerRol = pointsPerRole.entrySet().stream().max(Map.Entry.comparingByValue()).get();
 
