@@ -197,11 +197,15 @@ public class GameController {
 					gameService.processRecoveryPhase(game);
 					Boolean check = gameService.checkBushido(game);
 					if(!check) {
-            gameService.processDrawPhase(game);
+            gameService.processDrawPhase(game);    
+            
 					  if(game.getCurrentPlayer().getCharacter().getName().equals("Hideyoshi")) {
-						  Card card = game.getDeck().get(0);
-              game.getCurrentPlayer().getHand().add(card);
-              game.getDeck().remove(0);
+//						  Card card = game.getDeck().get(0);
+//						  game.getCurrentPlayer().getHand().add(card);
+//						  game.getDeck().remove(0);
+						  gameService.proceesDrawPhasePlayer(game, game.getCurrentPlayer(), 1);
+              
+		             
             }
 					}
 				}
@@ -212,14 +216,6 @@ public class GameController {
 				model.put("winnerRol", winnerRol);
 			}
 		}
-		return view;
-	}
-	
-	@PostMapping(value= {"/game/shuffleDeck/{id_game}"})
-	public String shuffleDeckInGame(@PathVariable("id_game") int gameId, Map<String, Object> model) {
-		String view = "redirect:/game/continue/"+gameId;
-		Game game = GameSingleton.getInstance().getMapGames().get(gameId);
-		cardService.shuffleDeckInGame(game);
 		return view;
 	}
 	
@@ -665,7 +661,9 @@ public class GameController {
             Player myPlayer= game.getCurrentPlayer();
 
             gameService.proceesDrawPhasePlayer(game, myPlayer, 3);
-
+            if(game.getDeck().size()==0) {
+            	cardService.shuffleDeckInGame(game);
+             }
 
             List<Player> allOpponents= new ArrayList<>(game.getListPlayers());
             allOpponents.remove(myPlayer);
@@ -673,6 +671,9 @@ public class GameController {
             for(Player pl:allOpponents) {
                 gameService.proceesDrawPhasePlayer(game, pl, 1);
             }
+            if(game.getDeck().size()==0) {
+            	cardService.shuffleDeckInGame(game);
+             }
 
             return view;
         }
@@ -687,7 +688,9 @@ public class GameController {
 			Player myPlayer= game.getCurrentPlayer();
 			
 			gameService.proceesDrawPhasePlayer(game, myPlayer, 2);
-			
+			 if(game.getDeck().size()==0) {
+	            	cardService.shuffleDeckInGame(game);
+	             }
 			return view;
 		}
 		
@@ -965,6 +968,9 @@ public class GameController {
 		Player opponent= gameService.findPlayerInGameByName(game, playerName);
 		
 		gameService.proceesDrawPhasePlayer(game, opponent, 1);
+		 if(game.getDeck().size()==0) {
+         	cardService.shuffleDeckInGame(game);
+          }
 		Integer maxLife= myPlayer.getCharacter().getLife();
 		
 		if(myPlayer.getCurrentHearts() !=maxLife) {
@@ -1059,10 +1065,13 @@ public class GameController {
 					Boolean check = gameService.checkBushido(game);
 					if(!check) {
 						gameService.processDrawPhase(game);
+						 
 						if(game.getCurrentPlayer().getCharacter().getName().equals("Hideyoshi")) {
-						  Card card = game.getDeck().get(0);
-						  game.getCurrentPlayer().getHand().add(card);
-						  game.getDeck().remove(0);
+//							  Card card = game.getDeck().get(0);
+//							  game.getCurrentPlayer().getHand().add(card);
+//							  game.getDeck().remove(0);
+							gameService.proceesDrawPhasePlayer(game, game.getCurrentPlayer(), 1);
+						  
 						}
 					}
 				}
@@ -1169,10 +1178,13 @@ public class GameController {
 				cardService.discard("bushido", game.getCurrentPlayer().getEquipment(), game.getListPlayers().get(nextPlayerIndex).getEquipment());
 			}
 			gameService.processDrawPhase(game);
+			 
       if(game.getCurrentPlayer().getCharacter().getName().equals("Hideyoshi")) {
-						  Card drawCard = game.getDeck().get(0);
-              game.getCurrentPlayer().getHand().add(drawCard);
-              game.getDeck().remove(0);
+//				Card drawCard = game.getDeck().get(0);
+//				game.getCurrentPlayer().getHand().add(drawCard);
+//				game.getDeck().remove(0);
+    	  gameService.proceesDrawPhasePlayer(game, game.getCurrentPlayer(), 1);
+              
       }
 			game.setGamePhase(GamePhase.MAIN);
 			return view;

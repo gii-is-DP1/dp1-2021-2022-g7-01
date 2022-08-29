@@ -10,6 +10,8 @@ import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
@@ -19,12 +21,14 @@ import samuraisword.character.CharacterService;
 import samuraisword.player.Player;
 import samuraisword.player.Rol;
 import samuraisword.samples.petclinic.card.Card;
+import samuraisword.samples.petclinic.card.CardService;
 import samuraisword.samples.petclinic.card.RedCard;
 
 @Service
 public class GameService {
 
 	private GameRepository gameRepository;
+	private CardService cardService;
 	private final CharacterService characterService;
 	private final Integer MAX_CARDS_HAND = 7;
 	private final Integer NUM_CARD_DRAWN = 2;
@@ -250,12 +254,35 @@ public class GameService {
 	public void processDrawPhase(Game game) {
 		Player player = game.getCurrentPlayer();
 		for (int i = 0; i < NUM_CARD_DRAWN; i++) {
+			if(game.getDeck().size()==0) {
+				cardService.shuffleDeckInGame(game);
+			}
+			
+			
+			if(game.getDeck().size()>0) {
 			Card card = game.getDeck().get(0);
 			player.getHand().add(card);
 			game.getDeck().remove(0);
+			}
 		}
 		game.setGamePhase(GamePhase.MAIN);
 	}
+	
+	
+	public void proceesDrawPhasePlayer(Game game,Player player,Integer cards) {
+        for(int i=0;i<cards;i++) {
+        	if(game.getDeck().size()==0) {
+        		cardService.shuffleDeckInGame(game);
+        	}
+            Card card=game.getDeck().get(0);
+            player.getHand().add(card);
+            game.getDeck().remove(0);
+        	
+            
+        }
+        game.setGamePhase(GamePhase.MAIN);
+
+    }
 	
 	
 	
@@ -362,14 +389,5 @@ public class GameService {
 				.collect(Collectors.groupingBy(Player::getRol, Collectors.summingDouble(x -> x.getHonor())));
 	}
 
-	public void proceesDrawPhasePlayer(Game game,Player player,Integer cards) {
-        for(int i=0;i<cards;i++) {
-            Card card=game.getDeck().get(0);
-            player.getHand().add(card);
-            game.getDeck().remove(0);
-
-        }
-        game.setGamePhase(GamePhase.MAIN);
-
-    }
+	
 }
