@@ -225,10 +225,23 @@ public class GameController {
 	//--------------------------------------------------------------------------------------------------------------------------
 		@GetMapping(value = {"/game/continue/{id_game}"})
 		public String continueGame(@PathVariable("id_game") int gameId, Map<String, Object> model, HttpServletResponse a) {
+			
 			String view = "/game/gameboard";
 			UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			User user = userService.findUser(userDetails.getUsername()).get();
 			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
+			if(!gameService.checkAllPlayersHavePositiveHonor(game)) {
+				view = endGame(game, model);
+				Rol winnerRol = gameService.calcWinners(game);
+				game.setWonPlayers(new ArrayList<User>());
+				for(Player p: game.getListPlayers()) {
+					if(p.getRol().equals(winnerRol) || (winnerRol.equals(Rol.SAMURAI) && p.getRol().equals(Rol.SHOGUN))) {
+					game.getWonPlayers().add(p.getUser());
+					}
+        }
+				gameService.saveGame(game);
+				return view;
+			}
 			for(int i=0; i<game.getListPlayers().size();i++) {
 				game.getListPlayers().get(i).setNArmor(0);
 				game.getListPlayers().get(i).setNFastDraw(0);
