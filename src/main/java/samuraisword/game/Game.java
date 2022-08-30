@@ -34,6 +34,7 @@ public class Game extends BaseEntity{
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "game")
 	private List<Player> listPlayers;
 	
+	
 	@Transient
 	private List<Card> deck;
 	

@@ -41,6 +41,7 @@ public class GameController {
 	private final CardService cardService;
 	private final InvitationService invitationService;
 	private final CharacterService characterService;
+	
 
 	private static final String VIEWS_CREATE_GAME = "game/createGame"; 
 
@@ -122,10 +123,13 @@ public class GameController {
 
 	@GetMapping(value = { "/game/delete/{id_game}" })
 	public String deleteCommentForm(@PathVariable("id_game") int gameId, Map<String, Object> model) {
+		Game game = GameSingleton.getInstance().getMapGames().get(gameId);
+		invitationService.deleteInvitationsByGameId(game);
 		gameService.deleteGame(gameId);
+
 		return "redirect:/game/new";
 	}
-
+	
 	@GetMapping(value = { "/game/start/{id_game}" })
 	public String initGame(@PathVariable("id_game") int gameId, Map<String, Object> model) {
 		String view = "redirect:/game/continue/"+gameId;
