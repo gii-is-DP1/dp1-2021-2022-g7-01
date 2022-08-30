@@ -657,6 +657,8 @@ table {
 						<tr>
 							<h2>Selecciona a quiÃ©n quieres descartarle una carta</h2>
 							<input type="hidden" name="gameId" value="${ game.id }"></input>
+							<input hidden type="radio" value="ninguno" name="player" checked="checked"/>
+							<label  for="ninguno" hidden></label>
 							<c:forEach items="${listPlayer}" var ="player" varStatus="loop">
 								<c:if test="${!player.getUser().getUsername().equals(POVplayer.getUser().getUsername())}">
 								<input type="radio" value="${ player.getUser().getUsername() }" name="player" />
@@ -667,7 +669,7 @@ table {
 						<br>
 						<tr>
 							<h2>Selecciona el objeto que le quieres quitar</h2>
-							<input type="radio" value="hand" name="cardName"/>
+							<input type="radio" value="hand" name="cardName" />
 							<label for="hand">mano</label>
 							<input type="radio" value="armadura" name="cardName"/>
 							<label for="armadura">armadura</label>
@@ -675,6 +677,8 @@ table {
 							<label for="concentracion">concentración</label>
 							<input type="radio" value="desenvainado rapido" name="cardName"/>
 							<label for="desenvainado rapido">Desenvainado rapido</label>
+							<input hidden type="radio" value="ninguno" name="cardName" checked="checked"/>
+							<label  for="ninguno" hidden></label>
 						</tr>
 					</table>
 				</form:form>
