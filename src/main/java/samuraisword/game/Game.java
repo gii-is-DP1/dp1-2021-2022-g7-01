@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -22,6 +24,7 @@ import samuraisword.invitations.Invitation;
 import samuraisword.player.Player;
 import samuraisword.samples.petclinic.card.Card;
 import samuraisword.samples.petclinic.model.BaseEntity;
+import samuraisword.samples.petclinic.user.User;
 
 @Getter
 @Setter
@@ -34,6 +37,11 @@ public class Game extends BaseEntity{
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "game")
 	private List<Player> listPlayers;
 	
+
+	@Column
+	@ManyToMany(cascade = CascadeType.ALL)
+	private List<User> wonPlayers;
+
 	
 	@Transient
 	private List<Card> deck;
@@ -64,6 +72,9 @@ public class Game extends BaseEntity{
 	private Player attackerPlayer;
 	
 	@Transient
+	private Integer attackerDamage;
+	
+	@Transient
 	private List<Player> waitingForPlayer;
 	
 	@Transient
@@ -71,9 +82,13 @@ public class Game extends BaseEntity{
 	
 	@Transient
 	private Player playerChoose;
+	
+	@Transient
+	private String error;
 			
 	public Game() {
 		this.listPlayers = new ArrayList<>();
+		this.wonPlayers = new ArrayList<>();
 	}
 	
 	public Integer getNumPlayers() {

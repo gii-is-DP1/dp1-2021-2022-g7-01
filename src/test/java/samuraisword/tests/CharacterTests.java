@@ -2,7 +2,6 @@ package samuraisword.tests;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -36,7 +35,7 @@ import samuraisword.samples.petclinic.card.CardService;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
 public class CharacterTests {
-	
+
 	@Autowired
 	protected CharacterService characterService;
 	@Autowired
@@ -45,101 +44,149 @@ public class CharacterTests {
 	protected GameService gameService;
 	@Autowired
 	protected PlayerService playerService;
-	
-	
+
 	@Test
 	void allDifferentCharacters() {
-		Game g= new Game();
+		Game g = new Game();
 		createTestGame(g);
-		
+
 		Set<Character> characters = new HashSet<Character>();
-		for(Player p: g.getListPlayers()) {
+		for (Player p : g.getListPlayers()) {
 			characters.add(p.getCharacter());
 		}
-		
-		assertThat(characters.size()==g.getListPlayers().size());
-		
+
+		assertThat(characters.size() == g.getListPlayers().size());
+
 	}
-	
+
 	@Test
 	void checkBenkeiAction() {
-		Game g= new Game();
+		Game g = new Game();
 		createTestGame(g);
-		for(Player p: g.getListPlayers()) {
-			
-			if(p.getCharacter().getName().equals("Benkei")) {
+		for (Player p : g.getListPlayers()) {
+
+			if (p.getCharacter().getName().equals("Benkei")) {
 				System.out.println("Benkei");
-				assertThat(p.getDistanceBonus()==1);
-				
+				assertThat(p.getDistanceBonus() == 1);
+
 			}
 		}
-		
+
 	}
-	
+
 	@Test
 	void checkGoemonAction() {
-		Game g= new Game();
+		Game g = new Game();
 		createTestGame(g);
-		for(Player p: g.getListPlayers()) {
-			
-			if(p.getCharacter().getName().equals("Goemon")) {
+		for (Player p : g.getListPlayers()) {
+
+			if (p.getCharacter().getName().equals("Goemon")) {
 				System.out.println("Goemon");
-				assertThat(p.getWeaponBonus()==1);
+				assertThat(p.getWeaponBonus() == 1);
 			}
 		}
-		
+
 	}
-	
+
 	@Test
 	void checkGinchiyoAction() {
-		Game g= new Game();
+		Game g = new Game();
 		createTestGame(g);
-		for(Player p: g.getListPlayers()) {
-			
-			if(p.getCharacter().getName().equals("Ginchiyo")) {
+		for (Player p : g.getListPlayers()) {
+
+			if (p.getCharacter().getName().equals("Ginchiyo")) {
 				System.out.println("Ginchiyo");
-				assertThat(p.getAntiDamageBonus()==1);
+				assertThat(p.getAntiDamageBonus() == 1);
 			}
 		}
-		
+
 	}
-	
+
 	@Test
 	void checkHideyoshiAction() {
 		System.out.println("pepe");
-		Game g= new Game();
+		Game g = new Game();
 		createTestGame(g);
-		
-		for(Player p: g.getListPlayers()) {
-			
-			if(p.getCharacter().getName().equals("Hideyoshi")) {
-				System.out.println("Hideyoshi");
-				assertThat(p.getDrawCardBonus()==1);
+
+		for (Player p : g.getListPlayers()) {
+
+			if (p.getCharacter().getName().equals("Hideyoshi")) {
+				g.setCurrentPlayer(p);
+				int n = p.getHand().size();
+				gameService.processDrawPhase(g);
+				assertThat(p.getHand().size() == n + 3);
 			}
 		}
-		
+
 	}
-	
+
 	@Test
 	void checkMusashiAction() {
-		Game g= new Game();
+		Game g = new Game();
 		createTestGame(g);
-		for(Player p: g.getListPlayers()) {
-			
-			if(p.getCharacter().getName().equals("Musashi")) {
+		for (Player p : g.getListPlayers()) {
+
+			if (p.getCharacter().getName().equals("Musashi")) {
 				System.out.println("Musashi");
-				assertThat(p.getDamageBonus()==1);
+				assertThat(p.getDamageBonus() == 1);
 			}
 		}
-		
+
 	}
-	
+
+	@Test
+	void checkChiyomeAction() {
+		Game game = new Game();
+		createTestGame(game);
+
+		List<Player> lp = new ArrayList<>();
+		game.setWaitingForPlayer(lp);
+		for (int a = 0; a < game.getListPlayers().size(); a++) {
+			if (!(game.getListPlayers().get(a).equals(game.getCurrentPlayer()))) {
+				game.getWaitingForPlayer().add(game.getListPlayers().get(a));
+			}
+			if (game.getListPlayers().get(a).getHand().size() == 0
+					|| game.getListPlayers().get(a).getCurrentHearts() <= 0
+					|| game.getListPlayers().get(a).getCharacter().equals("Chiyome")) {
+				game.getWaitingForPlayer().remove(game.getListPlayers().get(a));
+			}
+		}
+		for (Player p : lp) {
+			assertThat(!p.getCharacter().getName().equals("Chiyome"));
+		}
+	}
+
+	@Test
+	void checkTomoeAction() {
+		System.out.println("pepe");
+		Game g = new Game();
+		createTestGame(g);
+		int n = 0;
+
+		for (Player p : g.getListPlayers()) {
+
+			if (p.getCharacter().getName().equals("Tomoe")) {
+				n+=p.getHand().size();
+				Card card = g.getDeck().get(0);
+				g.getCurrentPlayer().getHand().add(card);
+				g.getDeck().remove(0);
+			}
+		}
+		for (Player p : g.getListPlayers()) {
+
+			if (p.getCharacter().getName().equals("Tomoe")) {
+				assertThat(p.getHand().size()==n+1);
+			}
+		}
+
+	}
+
 	private void createTestGame(Game game) {
 		game.setDeck(cardService.createDeck());
 		game.setDiscardPile(new ArrayList<>());
 
 		List<Player> players = game.getListPlayers();
-		
+
 		// players de prueba
 		Player p1 = playerService.findById(1).get();
 
@@ -152,7 +199,7 @@ public class CharacterTests {
 		Player p5 = playerService.findById(5).get();
 
 		Player p6 = playerService.findById(6).get();
-		
+
 		Player p7 = playerService.findById(7).get();
 
 		players.add(p1);
@@ -176,9 +223,7 @@ public class CharacterTests {
 		}
 
 		gameService.asignCards(game.getDeck(), players);
-		
+
 	}
 
 }
-	
-

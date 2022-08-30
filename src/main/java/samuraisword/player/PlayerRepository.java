@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import samuraisword.achievements.RolType;
+import samuraisword.game.Game;
 import samuraisword.invitations.Invitation;
 import samuraisword.samples.petclinic.user.User;
 
@@ -21,8 +22,8 @@ public interface PlayerRepository extends CrudRepository<Player, Integer> {
 	List<RolType> findRolTypes() throws DataAccessException;
 	
 
-	@Query(value= "SELECT * FROM PLAYERS WHERE USERNAME=:username", nativeQuery=true)
-	Optional<Player> findByUser(User username);
+	@Query(value= "SELECT p FROM Player p WHERE p.user=:user AND p.game=:game")
+	Optional<Player> findByUser(User user, Game game);
 
 //	@Query("SELECT * FROM PLAYERS WHERE USERNAME=:username")
 //	Collection<Player> findByUser(String username);
