@@ -94,6 +94,10 @@ public class GameController {
 	public String showGame(@PathVariable("gameId") int gameId, Map<String, Object> model, HttpServletResponse a) {
 		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		User user = userService.findUser(userDetails.getUsername()).get();
+		Optional<Game> optionalGame = gameService.findById(gameId);
+		if(!optionalGame.isPresent()) {
+			return "redirect:/game/new";
+		}
 		if (!(GameSingleton.getInstance().getMapGames().containsKey(gameId))) {
 			a.addHeader("Refresh", "3");
 			Game game = gameService.findById(gameId).get();
@@ -123,6 +127,7 @@ public class GameController {
 	@GetMapping(value = { "/game/delete/{id_game}" })
 	public String deleteCommentForm(@PathVariable("id_game") int gameId, Map<String, Object> model) {
 		Game game = GameSingleton.getInstance().getMapGames().get(gameId);
+		GameSingleton.getInstance().getMapGames().remove(gameId);
 		invitationService.deleteInvitationsByGame(game);
 		gameService.deleteGame(gameId);
 
