@@ -613,7 +613,7 @@ table {
                    <form:form class="form-horizontal"
                             action="/game/distraccion/${game.id}/${player.getUser().getUsername()}"
                             id="edit-user-form">
-                             <c:if test="${(!(game.getCurrentPlayer().equals(player))) || player.getHand().size()==0}">
+                             <c:if test="${(!(game.getCurrentPlayer().equals(player))) && player.getHand().size()>0}">
 							<div id="sel">
 							
                             <button class="btn btn-default" type="submit">${player.getUser().getUsername()}</button></div></c:if>
