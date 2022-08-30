@@ -173,6 +173,7 @@ public class GameController {
 		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		User user = userService.findUser(userDetails.getUsername()).get();
 		Game game = GameSingleton.getInstance().getMapGames().get(gameId);
+		game.setError("");
 		if(user.getUsername().equals(game.getCurrentPlayer().getUser().getUsername())) {
 			Boolean hasAdvancedPhase = gameService.endTurn(game);
 			game.getCurrentPlayer().setWeaponBonus(1);
@@ -433,6 +434,7 @@ public class GameController {
 						game.getDeck().remove(0);
 					}
 					if(game.getListPlayers().get(i2).getCurrentHearts()<=0) {
+						game.getListPlayers().get(i2).setIndefence(true);
 						if(game.getListPlayers().get(i2).getHonor()>0) {
 //							game.getListPlayers().get(i2).setCurrentHearts(game.getListPlayers().get(i2).getCharacter().getLife());
 							game.getListPlayers().get(i2).setHonor(game.getListPlayers().get(i2).getHonor()-1);
@@ -1209,6 +1211,7 @@ public class GameController {
 				case "hand":
 					List<Card>lh = p.getHand();
 					if(lh.size()>0) {
+						game.setError("");
 						game.setGamePhase(GamePhase.MAIN);
 						int i = 0 + (int)(Math.random() * ((lh.size() - 0)));
 						cardService.discard(lh.get(i).getName(), p.getHand(), game.getDiscardPile());
@@ -1219,6 +1222,7 @@ public class GameController {
 				case "armadura":
 					if(p.getNArmor()>0) {
 						if(!(p.getCharacter().getName().equals("Benkei") && p.getDistanceBonus()==1)) {
+							game.setError("");
 							p.setDistanceBonus(p.getDistanceBonus()-1);
 							game.setGamePhase(GamePhase.MAIN);
 							cardService.discard(cardName, p.getEquipment(), game.getDiscardPile());
@@ -1230,6 +1234,7 @@ public class GameController {
 				case "concentracion":
 					if(p.getNFocus()>0) {
 						if(!(p.getCharacter().getName().equals("Goemon") && p.getWeaponBonus()==1)) {
+							game.setError("");
 							p.setWeaponBonus(p.getWeaponBonus()-1);
 							game.setGamePhase(GamePhase.MAIN);
 							cardService.discard(cardName, p.getEquipment(), game.getDiscardPile());
@@ -1241,6 +1246,7 @@ public class GameController {
 				case "desenvainado rapido":
 					if(p.getNFastDraw()>0) {
 						if(!(p.getCharacter().getName().equals("Musashi") && p.getDamageBonus()==1)) {
+							game.setError("");
 							p.setDamageBonus(p.getDamageBonus()+1);
 							game.setGamePhase(GamePhase.MAIN);
 							cardService.discard(cardName, p.getEquipment(), game.getDiscardPile());
