@@ -8,6 +8,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
 import samuraisword.game.Game;
+import samuraisword.game.GamePhase;
 import samuraisword.samples.petclinic.user.User;
 
 public interface InvitationRepository extends CrudRepository<Invitation, Integer>{
@@ -20,7 +21,12 @@ Collection<Invitation> findAll();
 	Collection<Invitation> findAllByUser(String username);
 	
 	
+	@Query(value = "SELECT i FROM Invitation i WHERE i.userAddresse=:user AND i.game.gamePhase=:gamePhase")
+    Collection<Invitation> findAllByUserAndGamePhase(User user, GamePhase gamePhase);
 	
+	@Modifying
+	@Query(value="delete from Invitation i where i.game=:game")
+	void deleleInvitationByGame(Game game);
 	
 	
 //	@Modifying

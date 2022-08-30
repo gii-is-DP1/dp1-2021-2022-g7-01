@@ -109,5 +109,10 @@ public class InvitationService {
 		
 	}
 	
+	@Transactional
+	public void deleteInvitationsByGame(Game game) throws DataAccessException{
+		invitationRepository.deleleInvitationByGame(game);
+	}
+	
 	
 }

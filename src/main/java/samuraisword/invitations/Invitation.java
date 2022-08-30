@@ -1,5 +1,6 @@
 package samuraisword.invitations;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -33,6 +34,10 @@ public class Invitation extends BaseEntity{
 	@JoinColumn(name="game_id")
 	private Game game;
 	
+	
+//	@ManyToOne
+//	@JoinColumn(name="game_id")
+//	private Game game;
 	
 	
 	
