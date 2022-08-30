@@ -399,7 +399,12 @@ public class GameController {
 			Player p=playerService.findPlayerByUsernameAndGame(playerA, game);
 			
 			int dano=cardService.findDamage(game.getUseCard().getName()).get();
-			game.setAttackerDamage(dano+game.getCurrentPlayer().getDamageBonus());
+			if(dano>1) {
+				game.setAttackerDamage(dano+game.getCurrentPlayer().getDamageBonus()-p.getAntiDamageBonus());
+				}else{
+					game.setAttackerDamage(dano+game.getCurrentPlayer().getDamageBonus());
+				}
+			
 			game.setAttackerPlayer(p);
 			int i=cardService.findDamage(c.getName()).get()+game.getCurrentPlayer().getDamageBonus();
 			for(int i2=0;i2<game.getListPlayers().size();i2++) {
@@ -1155,6 +1160,7 @@ public class GameController {
 			UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			User user = userService.findUser(userDetails.getUsername()).get();
 			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
+			
 			if(user.getUsername().equals(game.getCurrentPlayer().getUser().getUsername())) {
 				Player p = new Player();
 				for(int i=0; i<game.getListPlayers().size(); i++) {
@@ -1162,6 +1168,10 @@ public class GameController {
 						p = game.getListPlayers().get(i);
 					}
 				}
+				if(player ==null || cardName== null) {
+					game.setError("No ha seleccionado correctamente.");
+				}	
+				else {
 				switch (cardName) {
 				case "hand":
 					List<Card>lh = p.getHand();
@@ -1210,6 +1220,7 @@ public class GameController {
 				default:
 					game.setError("No ha seleccionado correctamente.");
 					break;
+				}
 				}
 			}
 			return view;

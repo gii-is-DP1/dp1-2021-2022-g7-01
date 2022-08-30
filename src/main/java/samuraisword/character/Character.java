@@ -43,7 +43,7 @@ public class Character extends BaseEntity{
 			p.setDistanceBonus(p.getDistanceBonus()+1);
 		}else if(p.getCharacter().getName().equals("Goemon")) {
 			p.setWeaponBonus(p.getWeaponBonus()+1);
-		}else if(p.getCharacter().getName().equals("Hideyoshi")) {
+		}else if(p.getCharacter().getName().equals("Ginchiyo")) {
 			p.setAntiDamageBonus(p.getAntiDamageBonus()+1);
 		}else if(p.getCharacter().getName().equals("Musashi")) {
 			p.setDamageBonus(p.getDamageBonus()+1);
