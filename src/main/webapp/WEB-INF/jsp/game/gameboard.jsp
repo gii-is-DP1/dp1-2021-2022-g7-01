@@ -392,7 +392,14 @@ table {
 
 	<!-- BUTTONS -->
 	<div class="buttons container">
-	<h2>${currentUser.username}</h2>
+	<c:choose>
+	<c:when test="${POVplayer.equals(game.currentPlayer)}">
+	<h2>Tu turno</h2>
+	</c:when>
+	<c:otherwise>
+	<h2>Eres ${POVplayer.getUser().getUsername()}</h2>
+	<h2>Turno de ${currentUser.username}</h2></c:otherwise>
+	</c:choose>
 	<c:if test="${POVplayer.equals(game.currentPlayer)}">
 		<c:choose>
 			<c:when test="${gameStatus=='MAIN'}">
