@@ -82,19 +82,19 @@ img.estrella {
 							<spring:url value="start/{gameId}" var="startUrl">
 								<spring:param name="gameId" value="${gameId}" />
 							</spring:url>
-							<c:forEach items="${listPlayer}" var="player">
-							<c:if test="${player.user.username.contains(user)}">
+							
+							<c:if test="${listPlayer.get(0).getUser().getUsername()==user}">
 								<a href="${fn:escapeXml(startUrl)}" class="btn btn-success">Start
-								Game</a></c:if></c:forEach>
+								Game</a></c:if>
 						</c:if>
 						<c:if test="${listPlayer.size()<4 }">
 							<b>TIENEN QUE HABER AL MENOS 4 JUGADORES PARA EMPEZAR LA
 								PARTIDA</b>
 							<br>
 							
-							
+							<c:if test="${listPlayer.get(0).getUser().getUsername()==user}">
 							<button disabled="disabled" class="btn btn-secondary">Empezar
-								partida</button></c:if>
+								partida</button></c:if></c:if>
 						
 						<c:if test="${listPlayer.get(0).getUser().getUsername()==user}">
 							<spring:url value="delete/{gameId}" var="editUrl">

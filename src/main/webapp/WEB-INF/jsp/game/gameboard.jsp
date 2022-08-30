@@ -529,7 +529,7 @@ table {
 							id="edit-user-form">
 							
 							<br><br>
-							<button class="btn btn-default" type="submit">Sufrir 1 de daÃ±o</button>
+							<button class="btn btn-default" type="submit">Sufrir 1 de daño</button>
 							
 							</form:form>
 							
@@ -553,7 +553,7 @@ table {
 							id="edit-user-form">
 							
 							<br><br><div id="dano">
-							<button class="btn btn-default" type="submit">Sufrir 1 de daÃ±o</button></div>
+							<button class="btn btn-default" type="submit">Sufrir 1 de daño</button></div>
 							
 							</form:form></div>
 							
@@ -599,7 +599,7 @@ table {
 	
 	    <c:if test="${ game.currentPlayer.getUser().getUsername().equals(POVplayer.getUser().getUsername()) }">
 	    
-        <c:if test="${game.getGamePhase().equals(GamePhase.DISCARDPLAYER) }">
+        <c:if test="${game.getGamePhase().equals(GamePhase.DISCARDPLAYER)}">
     	<div id="card res">
     		<p>DISCARD SOME PLAYER</p>
          	<!--  <img src="/resources/images/cards/distraccion.png" alt="card" style="height: 70%; width:auto" /> -->
@@ -613,9 +613,10 @@ table {
                    <form:form class="form-horizontal"
                             action="/game/distraccion/${game.id}/${player.getUser().getUsername()}"
                             id="edit-user-form">
-                              
+                             <c:if test="${(!(game.getCurrentPlayer().equals(player))) || player.getHand().size()==0}">
 							<div id="sel">
-                            <button class="btn btn-default" type="submit">${player.getUser().getUsername()}</button></div>
+							
+                            <button class="btn btn-default" type="submit">${player.getUser().getUsername()}</button></div></c:if>
                             </form:form> 
                     </c:forEach>
                             
@@ -655,7 +656,7 @@ table {
 				<form:form action="/game/discard-other-card" id = "discardForm">
 					<table>
 						<tr>
-							<h2>Selecciona a quiÃ©n quieres descartarle una carta</h2>
+							<h2>Selecciona a quién quieres descartarle una carta</h2>
 							<input type="hidden" name="gameId" value="${ game.id }"></input>
 							<c:forEach items="${listPlayer}" var ="player" varStatus="loop">
 								<c:if test="${!player.getUser().getUsername().equals(POVplayer.getUser().getUsername())}">
@@ -680,7 +681,7 @@ table {
 				</form:form>
 			</c:if>
 			<c:if test="${gameStatus=='BUSHIDO'}">
-				<h2>Selecciona a quiÃ©n quieres equiparle el bushido</h2>
+				<h2>Selecciona a quién quieres equiparle el bushido</h2>
 				<table>
 					<tr>
 						<c:forEach items="${listPlayer}" var ="player" varStatus="loop">

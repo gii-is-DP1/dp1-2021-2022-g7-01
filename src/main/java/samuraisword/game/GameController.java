@@ -280,6 +280,10 @@ public class GameController {
 				game.setError("No has seleccionado ninguna carta");
 				return "redirect:/game/continue/"+gameId;
 			}
+			if(cardService.findByName(cardName).get().getColor().equals("Red") && game.getCurrentPlayer().getWeaponBonus()==0) {
+				game.setError("No puedes atacar debido a que no tienes mas ataques restantes");
+				return "redirect:/game/continue/"+gameId;
+			}
 			UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			User user = userService.findUser(userDetails.getUsername()).get();
 			game.setUseCard(cardService.findByName(cardName).get());
@@ -378,7 +382,9 @@ public class GameController {
 			//----------Aqui va el método
 			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
 			Card c= game.getUseCard();
+			
 			Player p=playerService.findPlayerByUsernameAndGame(playerA, game);
+			
 			int dano=cardService.findDamage(game.getUseCard().getName()).get();
 			game.setAttackerDamage(dano+game.getCurrentPlayer().getDamageBonus());
 			game.setAttackerPlayer(p);
@@ -1155,7 +1161,7 @@ public class GameController {
 					}
 					break;
 				case "armadura":
-					if(p.getDistanceBonus()>0) {
+					if(p.getNArmor()>0) {
 						if(!(p.getCharacter().getName().equals("Benkei") && p.getDistanceBonus()==1)) {
 							p.setDistanceBonus(p.getDistanceBonus()-1);
 							game.setGamePhase(GamePhase.MAIN);
@@ -1166,7 +1172,7 @@ public class GameController {
 					}
 					break;
 				case "concentracion":
-					if(p.getWeaponBonus()>0) {
+					if(p.getNFocus()>0) {
 						if(!(p.getCharacter().getName().equals("Goemon") && p.getWeaponBonus()==1)) {
 							p.setWeaponBonus(p.getWeaponBonus()-1);
 							game.setGamePhase(GamePhase.MAIN);
@@ -1177,7 +1183,7 @@ public class GameController {
 					}
 					break;
 				case "desenvainado rapido":
-					if(p.getWeaponBonus()>0) {
+					if(p.getNFastDraw()>0) {
 						if(!(p.getCharacter().getName().equals("Musashi") && p.getDamageBonus()==1)) {
 							p.setDamageBonus(p.getDamageBonus()+1);
 							game.setGamePhase(GamePhase.MAIN);
