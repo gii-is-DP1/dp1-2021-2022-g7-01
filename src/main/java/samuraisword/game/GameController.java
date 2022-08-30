@@ -1168,7 +1168,7 @@ public class GameController {
 						p = game.getListPlayers().get(i);
 					}
 				}
-				if(player ==null || cardName== null) {
+				if(player.equals("ninguno") || cardName.equals("ninguno")) {
 					game.setError("No ha seleccionado correctamente.");
 				}	
 				else {
