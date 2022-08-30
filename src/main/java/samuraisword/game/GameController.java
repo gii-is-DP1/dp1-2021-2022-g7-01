@@ -280,6 +280,10 @@ public class GameController {
 				game.setError("No has seleccionado ninguna carta");
 				return "redirect:/game/continue/"+gameId;
 			}
+			if(cardService.findByName(cardName).get().getColor().equals("Red") && game.getCurrentPlayer().getWeaponBonus()==0) {
+				game.setError("No puedes atacar debido a que no tienes mas ataques restantes");
+				return "redirect:/game/continue/"+gameId;
+			}
 			UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			User user = userService.findUser(userDetails.getUsername()).get();
 			game.setUseCard(cardService.findByName(cardName).get());
@@ -378,7 +382,9 @@ public class GameController {
 			//----------Aqui va el método
 			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
 			Card c= game.getUseCard();
+			
 			Player p=playerService.findPlayerByUsernameAndGame(playerA, game);
+			
 			int dano=cardService.findDamage(game.getUseCard().getName()).get();
 			game.setAttackerDamage(dano+game.getCurrentPlayer().getDamageBonus());
 			game.setAttackerPlayer(p);

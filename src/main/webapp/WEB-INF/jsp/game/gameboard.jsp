@@ -599,7 +599,7 @@ table {
 	
 	    <c:if test="${ game.currentPlayer.getUser().getUsername().equals(POVplayer.getUser().getUsername()) }">
 	    
-        <c:if test="${game.getGamePhase().equals(GamePhase.DISCARDPLAYER) }">
+        <c:if test="${game.getGamePhase().equals(GamePhase.DISCARDPLAYER)}">
     	<div id="card res">
     		<p>DISCARD SOME PLAYER</p>
          	<!--  <img src="/resources/images/cards/distraccion.png" alt="card" style="height: 70%; width:auto" /> -->
@@ -613,9 +613,10 @@ table {
                    <form:form class="form-horizontal"
                             action="/game/distraccion/${game.id}/${player.getUser().getUsername()}"
                             id="edit-user-form">
-                              
+                             <c:if test="${(!(game.getCurrentPlayer().equals(player))) || player.getHand().size()==0}">
 							<div id="sel">
-                            <button class="btn btn-default" type="submit">${player.getUser().getUsername()}</button></div>
+							
+                            <button class="btn btn-default" type="submit">${player.getUser().getUsername()}</button></div></c:if>
                             </form:form> 
                     </c:forEach>
                             
