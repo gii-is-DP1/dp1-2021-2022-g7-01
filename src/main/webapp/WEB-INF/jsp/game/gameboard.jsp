@@ -88,6 +88,10 @@ body {
     position: absolute;
 }
 
+.player {
+	cursor: pointer;
+}
+
 .row {
 	display: flex;
 	flex-wrap: wrap;
@@ -95,70 +99,75 @@ body {
 
 .container {
 	margin: 5px;
+	background-color: rgba(209,209,209,0.7);
+	border-radius: 15px
 }
 
 .circle {
-	width: 400px;
+	width: 30%;
+	min-width: 400px;
 	height: 200px;
-	background-color: red;
 }
 
 .selected-player {
-	width: 600px;
+	width: 46%;
+	min-width: 600px;
 	height: 200px;
-	background-color: green;
 }
 
 .buttons {
-	width: 300px;
+	width: 22%;
+	min-width: 300px;
 	height: 200px;
-	background-color: blue;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 }
 
 .deck {
-	width: 400px;
+	width: 30%;
+	min-width: 400px;
     height: 200px;
-    background-color: pink;
     display:flex;
     flex-direction:row;
 }
 
 .your-player {
-	width: 400px;
+	width: 30%;
+	min-width: 400px;
 	height: 200px;
-	background-color: white;
 	display: flex;
 	
 }
 
 .error {
-	width: 400px;
+	width: 30%;
+	min-width: 400px;
 	height: 200px;
-	background-color: yellow;
 }
 
 .blank-space {
-	width: 500px;
+	width: 38%;
+	min-width: 500px;
 	height: 200px;
-	background-color: purple;
 }
 
 .discard {
-	width: 400px;
+	width: 30%;
+	min-width: 400px;
 	height: 200px;
-	background-color: black;
 }
 
 .equipment {
-    width: 500px;
+    width: 38%;
+    min-width: 500px;
     height: 200px;
-    background-color: silver;   
 }
 
 .hand {
 	width: 100%;
 	height: 200px;
-	background-color: grey;
 }
 
 table {
@@ -171,20 +180,31 @@ table {
 }
 
 #btn-end-turn{
-    background-color: gray;
-    margin-bottom: 3%;
+    background-color: #F35A5A;
+}
+
+#btn-end-turn:hover {
+	background-color: #F34949;
+}
+
+.btn-blue {
+	background-color: #5A88F3;
+	margin-left: 20px;
+}
+
+.btn-blue:hover {
+	background-color: #487CF4;
 }
 
 .button{
 	width:100px;
-	height: 25%;
+	height: 50px;
 	border-radius: 15px;
 	justify-content: center;
 	cursor: pointer;
   	outline: none;
 	border: none;
     color: black;
-    box-shadow: 0 9px #999;
 }
 
 .your-player-info-container {
@@ -294,17 +314,17 @@ table {
 			<table>
 				<tr>
 					<th>
-						<h2 style ="color:#f2f2f2" >Vida: ${ player.getCurrentHearts() }</h2>
+						<h2>Vida: ${ player.getCurrentHearts() }</h2>
 					</th>
 					<th>
-						<h2 style ="color:#f2f2f2" >Honor: ${ player.getHonor() }</h2>
+						<h2>Honor: ${ player.getHonor() }</h2>
 					</th>
 					<th>
-						<h2 style ="color:#f2f2f2" >Cartas: ${ player.getHand().size() }</h2>
+						<h2>Cartas: ${ player.getHand().size() }</h2>
 					</th>
 					<th>
 						<c:if test="${ player.getNBushido()>0 }">
-							<h2 style ="color:#f2f2f2" >Tiene Bushido</h2>
+							<h2>Tiene Bushido</h2>
 						</c:if>
 					</th>
 				</tr>
@@ -313,10 +333,10 @@ table {
 						<spring:url value="/resources/images/cards/armadura.png" htmlEscape="true" var="equipment1" /> 
 						<c:choose>
 							<c:when test="${ player.getNArmor()==0 }">
-								<p><img style="float: left; width: 80px; opacity: 0.5;" title="" src="${equipment1}" id="equipment1" /> x${ player.getNArmor() }</p>
+								<p><img style="float: left; height:150px; opacity: 0.5;" title="" src="${equipment1}" id="equipment1" /> x${ player.getNArmor() }</p>
 							</c:when>
 							<c:otherwise>
-								<p><img style="float: left; width: 80px;" title="" src="${equipment1}" id="equipment1" /> x${ player.getNArmor() }</p>
+								<p><img style="float: left; height:150px;" title="" src="${equipment1}" id="equipment1" /> x${ player.getNArmor() }</p>
 							</c:otherwise>
 						</c:choose>
 						
@@ -326,10 +346,10 @@ table {
 						<spring:url value="/resources/images/cards/desenvainado rapido.png" htmlEscape="true" var="equipment2" />
 						<c:choose>
 							<c:when test="${ player.getNFastDraw()==0 }">
-								<p><img style="float: left; width: 80px; opacity: 0.5;" title="" src="${equipment2}" id="equipment2" /> x${ player.getNFastDraw() } </p>
+								<p><img style="float: left; height:150px; opacity: 0.5;" title="" src="${equipment2}" id="equipment2" /> x${ player.getNFastDraw() } </p>
 							</c:when>
 							<c:otherwise>
-								<p><img style="float: left; width: 80px;" title="" src="${equipment2}" id="equipment2" /> x${ player.getNFastDraw() } </p>
+								<p><img style="float: left; height:150px;" title="" src="${equipment2}" id="equipment2" /> x${ player.getNFastDraw() } </p>
 							</c:otherwise>
 						</c:choose> 
 						
@@ -338,10 +358,10 @@ table {
 						<spring:url value="/resources/images/cards/concentracion.png" htmlEscape="true" var="equipment3" /> 
 						<c:choose>
 							<c:when test="${ player.getNFocus()==0 }">
-								<p><img style="float: left; width: 80px; opacity: 0.5;" title="" src="${equipment3}" id="equipment3" /> x${ player.getNFocus() } </p>
+								<p><img style="float: left; height:150px; opacity: 0.5;" title="" src="${equipment3}" id="equipment3" /> x${ player.getNFocus() } </p>
 							</c:when>
 							<c:otherwise>
-								<p><img style="float: left; width: 80px;" title="" src="${equipment3}" id="equipment3" /> x${ player.getNFocus() } </p>
+								<p><img style="float: left; height:150px;" title="" src="${equipment3}" id="equipment3" /> x${ player.getNFocus() } </p>
 	
 							</c:otherwise>
 						</c:choose>
@@ -349,18 +369,18 @@ table {
 					</td>
 					<td>
 						<spring:url value="/resources/images/${ player.getCharacter().getImage() }" htmlEscape="true" var="character" /> 
-						<img style="float: left; width: 80px;" title="" src="${character}" id="character" />
+						<img style="float: left; height:150px;" title="" src="${character}" id="character" />
 	
 					</td>
 					<td>
 						<c:choose>
 							<c:when test="${ player.getRol().toString().equals('SHOGUN') }">
 								<spring:url value="/resources/images/roles/${ player.getRol() }.png" htmlEscape="true" var="Rol" /> 
-								<img style="float: left; width: 80px;" title="" src="${Rol}" id="Rol" />
+								<img style="float: left; height:150px;" title="" src="${Rol}" id="Rol" />
 							</c:when>
 							<c:otherwise>
 								<spring:url value="/resources/images/roles/ninguno.png" htmlEscape="true" var="Rol" /> 
-								<img style="float: left; width: 80px;" title="" src="${Rol}" id="Rol" />
+								<img style="float: left; height:150px;" title="" src="${Rol}" id="Rol" />
 							</c:otherwise>
 						</c:choose>
 					</td>
@@ -372,6 +392,7 @@ table {
 
 	<!-- BUTTONS -->
 	<div class="buttons container">
+	<h2>${currentUser.username}</h2>
 	<c:if test="${POVplayer.equals(game.currentPlayer)}">
 		<c:choose>
 			<c:when test="${gameStatus=='MAIN'}">
@@ -393,32 +414,14 @@ table {
 
 	<!-- DECK -->
 	<div class="deck container">
-
-
-
-                <div style="border-radius: 10px; background-color: #DFDADA">
-                    <p style=" padding: 5px 10px 1px 50px;"> DECK</p>
-                    <p style=" padding: 1px 1px 10px 50px;color:red;">(${deck.size()})</p>
-                    <img src="/resources/images/roles/ninguno.png" alt="SHOGUN" style="width: 35%; height: 35%;padding:5px 35px ;" />
-
-                    <!-- <form:form action="/game/steal">
-                                                <input type="hidden" name="gameId" value="${ game.id }"></input>
-                                                  BOTÃƒÂ¯Ã‚Â¿Ã‚Â½N PARA ROBAR
-                                                <c:if test="${game.currentPlayer==POVplayer.getUser().username}">
-                                                <button class="btn btn-default" type="submit" style="padding:5px 25px">Select</button>
-                                                </c:if>
-                                               
-                                </form:form> -->
+				<div class="your-player-info-container">
+                    <h4 class="your-player-title"> DECK (${deck.size()})</h4>
+                    <img class="your-player-image" src="/resources/images/roles/ninguno.png" alt="SHOGUN" />
                 </div>
-                <div style="border-radius: 10px; background-color: #DFDADA">
-                    <p style=" padding: 5px 10px 1px 50px;"> DISCARD </p>
-                    <p style=" padding: 1px 1px 10px 50px;color:red;">(${discardPile.size()})</p>
-                    <img src="${discardImage}" alt="SHOGUN" style="width: 35%; height: 35%;  padding: 5px 35px" />
-
+                <div class="your-player-info-container">
+                    <h4 class="your-player-title"> DISCARD (${discardPile.size()})</h4>
+                    <img class="your-player-image" src="${discardImage}" alt="SHOGUN" />
                 </div>
-
-
-
     </div>
 
 	<!-- BLANK SPACE -->
@@ -582,7 +585,7 @@ table {
 			</div>
 			</c:if>											
 							                                    
-			<c:if test="${(game.getGamePhase().equals(GamePhase.JIUJITSU) || (game.getGamePhase().equals(GamePhase.DISCARDARM))) && game.getCurrentPlayer().equals(POVplayer)}">
+			<c:if test="${(game.getGamePhase().equals(GamePhase.JIUJITSU) || game.getGamePhase().equals(GamePhase.DISCARDARM)) && game.getCurrentPlayer().equals(POVplayer)}">
 			<div align="center">
 			<img src="/resources/images/reloj.gif" alt="card" style="height: 70%; width:auto" />
 		
@@ -754,9 +757,9 @@ table {
 
 	<!-- DISCARD -->
 	<div class="discard container">
-	<h2 style ="color:#f2f2f2" >Número de ataques restantes: ${ POVplayer.getWeaponBonus() }</h2>
-	<h2 style ="color:#f2f2f2" >Aumento de daño: +${ POVplayer.getDamageBonus() }</h2>
-	<h2 style ="color:#f2f2f2" >Distancia a la que te ven: +${ POVplayer.getDistanceBonus() }</h2>
+	<h2>Número de ataques restantes: ${ POVplayer.getWeaponBonus() }</h2>
+	<h2>Aumento de daño: +${ POVplayer.getDamageBonus() }</h2>
+	<h2>Distancia a la que te ven: +${ POVplayer.getDistanceBonus() }</h2>
 	
 	</div>
 
@@ -770,10 +773,10 @@ table {
 					<spring:url value="/resources/images/cards/armadura.png" htmlEscape="true" var="equipment1" /> 
 					<c:choose>
 						<c:when test="${ POVplayer.getNArmor()==0 }">
-							<p><img style="float: left; width: 80px; opacity: 0.5;" title="" src="${equipment1}" id="equipment1" /> x${ POVplayer.getNArmor() }</p>
+							<p><img style="float: left; height: 160px; opacity: 0.5;" title="" src="${equipment1}" id="equipment1" /> x${ POVplayer.getNArmor() }</p>
 						</c:when>
 						<c:otherwise>
-							<p><img style="float: left; width: 80px;" title="" src="${equipment1}" id="equipment1" /> x${ POVplayer.getNArmor() }</p>
+							<p><img style="float: left; height: 160px;" title="" src="${equipment1}" id="equipment1" /> x${ POVplayer.getNArmor() }</p>
 						</c:otherwise>
 					</c:choose>
 					
@@ -783,10 +786,10 @@ table {
 					<spring:url value="/resources/images/cards/desenvainado rapido.png" htmlEscape="true" var="equipment2" />
 					<c:choose>
 						<c:when test="${ POVplayer.getNFastDraw()==0 }">
-							<p><img style="float: left; width: 80px; opacity: 0.5;" title="" src="${equipment2}" id="equipment2" /> x${ POVplayer.getNFastDraw() } </p>
+							<p><img style="float: left; height: 160px; opacity: 0.5;" title="" src="${equipment2}" id="equipment2" /> x${ POVplayer.getNFastDraw() } </p>
 						</c:when>
 						<c:otherwise>
-							<p><img style="float: left; width: 80px;" title="" src="${equipment2}" id="equipment2" /> x${ POVplayer.getNFastDraw() } </p>
+							<p><img style="float: left; height: 160px;" title="" src="${equipment2}" id="equipment2" /> x${ POVplayer.getNFastDraw() } </p>
 						</c:otherwise>
 					</c:choose> 
 					
@@ -795,10 +798,10 @@ table {
 					<spring:url value="/resources/images/cards/concentracion.png" htmlEscape="true" var="equipment3" /> 
 					<c:choose>
 						<c:when test="${POVplayer.getNFocus()==0 }">
-							<p><img style="float: left; width: 80px; opacity: 0.5;" title="" src="${equipment3}" id="equipment3" /> x${ POVplayer.getNFocus() } </p>
+							<p><img style="float: left; height: 160px; opacity: 0.5;" title="" src="${equipment3}" id="equipment3" /> x${ POVplayer.getNFocus() } </p>
 						</c:when>
 						<c:otherwise>
-							<p><img style="float: left; width: 80px;" title="" src="${equipment3}" id="equipment3" /> x${ POVplayer.getNFocus() } </p>
+							<p><img style="float: left; height: 160px;" title="" src="${equipment3}" id="equipment3" /> x${ POVplayer.getNFocus() } </p>
 						</c:otherwise>
 					</c:choose>
 					
@@ -806,7 +809,7 @@ table {
 				<td>
 					<c:if test="${POVplayer.getNBushido()>0 }">
 						<spring:url value="/resources/images/cards/bushido.png" htmlEscape="true" var="equipment4" /> 
-						<p><img style="float: left; width: 80px;" title="" src="${equipment4}" id="equipment4" /></p>
+						<p><img style="float: left; height: 160px;" title="" src="${equipment4}" id="equipment4" /></p>
 					</c:if>
 				</td>
 				</tr>
@@ -829,33 +832,37 @@ table {
             	<c:if test="${ player.getUser().getUsername().equals(POVplayer.getUser().getUsername())}">
             		<c:choose>
 						<c:when test="${gameStatus=='DISCARD'}">
-							<form:form action="/game/discard-hand-card" style="width: 100%">
+							<form:form action="/game/discard-hand-card" style="width: 100%; display:flex; align-items:center">
 								<input type="hidden" name="gameId" value="${ game.id }"></input>
 								<c:forEach items="${ player.hand }" var ="card" varStatus="loop">
                                     <div style="display: inline-block; height:auto; width:12%">
-                                        <img style="height:auto; width:100%" src="/resources/images/cards/${card.name}.png" alt="${card.name}"/>
-                                        <input type="radio" value="${card.name}" name="cardName" />
+                                    	<label>
+                                        	<input type="radio" value="${card.name}" name="cardName" />
+                                        	<img style="height:auto; width:100%" src="/resources/images/cards/${card.name}.png" alt="${card.name}"/>
+                                    	</label>
                                     </div>
 								</c:forEach>
 								<input type="radio" value="no-selected" name="cardName" checked style="display: none" />
 								<c:if test="${POVplayer.hand.size()>0}">
-									<button id="btn-end-turn" class="button"> DESCARTAR CARTA </button>
+									<button class="btn-blue button"> DESCARTAR CARTA </button>
 								</c:if>
 							</form:form>
 						</c:when>
 						<c:when test="${gameStatus=='MAIN'}">
-							<form:form action="/game/use-card" style="width: 100%">
+							<form:form action="/game/use-card" style="width: 100%; display:flex; align-items:center">
 								<input type="hidden" name="gameId" value="${ game.id }"></input>
 								<c:forEach items="${ player.hand }" var ="card" varStatus="loop">
                                     <div style="display: inline-block; height:auto; width:12%">
-                                        <img style="height:auto; width:100%" src="/resources/images/cards/${card.name}.png" alt="${card.name}"/>
-                                        <input type="radio" value="${card.name}" name="cardName" />
+                                    	<label>
+                                    		<input type="radio" value="${card.name}" name="cardName" />
+                                        	<img id="card-${card.name}" style="height:auto; width:100%" src="/resources/images/cards/${card.name}.png" alt="${card.name}"/>
+                                        </label>
                                     </div>
 								</c:forEach>
 								<input type="radio" value="no-selected" name="cardName" checked style="display: none" />
 								<c:if test="${POVplayer.equals(game.currentPlayer)}">
 									<c:if test="${POVplayer.hand.size()>0}">
-										<button id="btn-end-turn" class="button"> USAR CARTA </button>
+										<button class="btn-blue button"> USAR CARTA </button>
 									</c:if>
 								
 								</c:if>
