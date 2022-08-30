@@ -26,7 +26,7 @@ Collection<Invitation> findAll();
 	
 	@Modifying
 	@Query(value="delete from Invitation i where i.game=:game")
-	void deleleInvitationByGameId(Game game);
+	void deleleInvitationByGame(Game game);
 	
 	
 //	@Modifying
