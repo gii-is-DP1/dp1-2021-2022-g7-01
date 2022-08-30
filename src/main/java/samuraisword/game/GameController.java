@@ -1161,7 +1161,7 @@ public class GameController {
 					}
 					break;
 				case "armadura":
-					if(p.getDistanceBonus()>0) {
+					if(p.getNArmor()>0) {
 						if(!(p.getCharacter().getName().equals("Benkei") && p.getDistanceBonus()==1)) {
 							p.setDistanceBonus(p.getDistanceBonus()-1);
 							game.setGamePhase(GamePhase.MAIN);
@@ -1172,7 +1172,7 @@ public class GameController {
 					}
 					break;
 				case "concentracion":
-					if(p.getWeaponBonus()>0) {
+					if(p.getNFocus()>0) {
 						if(!(p.getCharacter().getName().equals("Goemon") && p.getWeaponBonus()==1)) {
 							p.setWeaponBonus(p.getWeaponBonus()-1);
 							game.setGamePhase(GamePhase.MAIN);
@@ -1183,7 +1183,7 @@ public class GameController {
 					}
 					break;
 				case "desenvainado rapido":
-					if(p.getWeaponBonus()>0) {
+					if(p.getNFastDraw()>0) {
 						if(!(p.getCharacter().getName().equals("Musashi") && p.getDamageBonus()==1)) {
 							p.setDamageBonus(p.getDamageBonus()+1);
 							game.setGamePhase(GamePhase.MAIN);
