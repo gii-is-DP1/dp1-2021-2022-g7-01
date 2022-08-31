@@ -159,6 +159,9 @@ public class GameController {
 			player.setGame(game);
 			player.setEquipment(new ArrayList<>());
 			playerService.savePlayer(player);
+			if(player.getCharacter().getName().equals("Goemon")) {
+				player.setWeaponBonus(2);
+			}
 		}
 
 		gameService.asignCards(game.getDeck(), players);
@@ -301,11 +304,11 @@ public class GameController {
 			String view = "redirect:/game/"+cardName+"/"+gameId;
 			game.setError("");
 			if(cardName.equals("no-selected")) {
-				game.setError("No has seleccionado ninguna carta");
+				game.setError("You have not selected any card");
 				return "redirect:/game/continue/"+gameId;
 			}
 			if(cardService.findByName(cardName).get().getColor().equals("Red") && game.getCurrentPlayer().getWeaponBonus()==0) {
-				game.setError("No puedes atacar debido a que no tienes mas ataques restantes");
+				game.setError("You can't attack because you have no more attacks left");
 				return "redirect:/game/continue/"+gameId;
 			}
 			UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -330,6 +333,7 @@ public class GameController {
 							cardService.discard(cardName, game.getCurrentPlayer().getHand(), game.getCurrentPlayer().getEquipment());
 						}
 						else {
+							game.setError("You can't use bushido because another one is already in play");
 							view = "redirect:/game/continue/"+gameId;
 						}
 					}
@@ -345,7 +349,7 @@ public class GameController {
 						}
 					}else if(cardName.equals("parada")){
 						view = "redirect:/game/continue/"+gameId;
-						game.setError("No puedes descartar una parada");
+						game.setError("You can't play a parada");
 					}else {
 					cardService.discard(cardName, game.getCurrentPlayer().getHand(), game.getDiscardPile());
 					}
@@ -1116,7 +1120,7 @@ public class GameController {
 			String view = "redirect:/game/continue/"+gameId;
 			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
 			if(cardName.equals("no-selected")) {
-				game.setError("No has seleccionado ninguna carta");
+				game.setError("You have not selected any card");
 				return "redirect:/game/continue/"+gameId;
 			}
 			UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -1204,7 +1208,7 @@ public class GameController {
 					}
 				}
 				if(player.equals("ninguno") || cardName.equals("ninguno")) {
-					game.setError("No ha seleccionado correctamente.");
+					game.setError("You have not selected correctly.");
 				}	
 				else {
 				switch (cardName) {
@@ -1216,7 +1220,7 @@ public class GameController {
 						int i = 0 + (int)(Math.random() * ((lh.size() - 0)));
 						cardService.discard(lh.get(i).getName(), p.getHand(), game.getDiscardPile());
 					} else {
-						game.setError("No tiene cartas en mano.");
+						game.setError("He has no cards in hand.");
 					}
 					break;
 				case "armadura":
@@ -1228,7 +1232,7 @@ public class GameController {
 							cardService.discard(cardName, p.getEquipment(), game.getDiscardPile());
 						}
 					} else {
-						game.setError("No tiene ninguna armadura equipada.");
+						game.setError("He has no armadura equipped.");
 					}
 					break;
 				case "concentracion":
@@ -1240,7 +1244,7 @@ public class GameController {
 							cardService.discard(cardName, p.getEquipment(), game.getDiscardPile());
 						}
 					} else {
-						game.setError("No tiene ninguna concentración equipada.");
+						game.setError("He has no concentración equipped.");
 					}
 					break;
 				case "desenvainado rapido":
@@ -1253,11 +1257,11 @@ public class GameController {
 						}
 						
 					} else {
-						game.setError("No tiene ningún desenvainado rápido equipado.");
+						game.setError("He has no desenvainado rápido equipped.");
 					}
 					break;
 				default:
-					game.setError("No ha seleccionado correctamente.");
+					game.setError("You have not selected correctly.");
 					break;
 				}
 				}
