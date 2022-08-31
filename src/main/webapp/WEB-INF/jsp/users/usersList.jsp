@@ -34,7 +34,8 @@
                 <form:form class="form-horizontal"
 							action="/friendRequest/SendRequest/${user.username}"
 							id="edit-user-form">
-							<button class="btn btn-default" type="submit">send friend request</button>
+							<c:if test="${!listFriend.contains(user.username) && !user.username.equals(username)}">
+							<button class="btn btn-default" type="submit">send friend request</button></c:if>
 						</form:form>
                 </td>
                 

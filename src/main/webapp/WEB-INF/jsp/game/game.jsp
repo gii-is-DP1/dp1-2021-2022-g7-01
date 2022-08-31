@@ -19,11 +19,11 @@ img.estrella {
 	<div class="row">
 		<div class="col-sm-10">
 			<div align="center">
-				<h2>Bienvenido a la sala #${gameId} creada por
+				<h2>Welcome to the game #${gameId} created by
 					${listPlayer.get(0).getUser().getUsername()}</h2>
 				<h2>${now}</h2>
 				<p>
-					Jugadores en sala (<b>${listPlayer.size()}</b>)
+					Players in game (<b>${listPlayer.size()}</b>)
 				</p>
 				<br> <br>
 				<div class="container">
@@ -52,7 +52,7 @@ img.estrella {
 												<spring:param name="playerId" value="${player.id}" />
 												<spring:param name="gameId" value="${gameId}" />
 											</spring:url>
-											<a href="${fn:escapeXml(editUrl)}" class="btn btn-default">Echar
+											<a href="${fn:escapeXml(editUrl)}" class="btn btn-default">Kick
 												${player.user.username}</a>
 										</c:if>
 									</c:otherwise>
@@ -88,13 +88,11 @@ img.estrella {
 								Game</a></c:if>
 						</c:if>
 						<c:if test="${listPlayer.size()<4 }">
-							<b>TIENEN QUE HABER AL MENOS 4 JUGADORES PARA EMPEZAR LA
-								PARTIDA</b>
+							<b>THERE MUST BE AT LEAST 4 PLAYERS TO START THE GAME</b>
 							<br>
 							
 							<c:if test="${listPlayer.get(0).getUser().getUsername()==user}">
-							<button disabled="disabled" class="btn btn-secondary">Empezar
-								partida</button></c:if></c:if>
+							<button disabled="disabled" class="btn btn-secondary">Start Game</button></c:if></c:if>
 						
 						<c:if test="${listPlayer.get(0).getUser().getUsername()==user}">
 							<spring:url value="delete/{gameId}" var="editUrl">
@@ -108,7 +106,7 @@ img.estrella {
 			</div>
 		</div>
 		<div align="right" class="col-sm-2 ">
-			<h2>Amigos (${listFriends.size()})</h2>
+			<h2>Friends (${listFriends.size()})</h2>
 			<c:if test="${listFriends.size()!=0}">
 				<c:forEach var="i" begin="0" end="${listFriends.size()-1}">
 					<p>${listFriends.get(i).getUsername()}</p>					
@@ -117,7 +115,7 @@ img.estrella {
 							id="edit-invitation-form">
 							<c:forEach items="${listPlayer}" var="player">
 							<c:if test="${player.user.username.contains(user)}">
-							<button class="btn btn-default" type="submit">Invitar</button></c:if></c:forEach>
+							<button class="btn btn-default" type="submit">Invite</button></c:if></c:forEach>
 						</form:form>					
 				</c:forEach>
 			</c:if>

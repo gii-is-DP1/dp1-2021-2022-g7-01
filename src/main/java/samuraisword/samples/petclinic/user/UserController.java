@@ -119,6 +119,18 @@ public class UserController {
 			model.put("selections", results);
 			return "users/usersList";
 		} else {
+			UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
+					.getPrincipal();
+			User user1 = userService.findUser(userDetails.getUsername()).get();
+			Collection<String>listFriend = userService.getAllFriendOf(user1.getUsername());
+			
+			model.put("listFriend", listFriend);
+			model.put("username", user1.getUsername());
+//			if(listFriend.contains(u.getUsername()) || u.getUsername().equals(user1.getUsername())) {				
+//				b=true;
+//			}
+			
+			
 			// multiple owners found
 			model.put("selections", results);
 			return "users/usersList";
@@ -137,7 +149,9 @@ public class UserController {
 	public String procesSendController(@PathVariable("usernameProfile") String usernameProfile) {
 		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		String user1 = userDetails.getUsername();
-		userService.sendRequested(user1, usernameProfile);
+		if(!user1.equals(usernameProfile)) {
+			userService.sendRequested(user1, usernameProfile);
+		}
 		return "welcome";
 	}
 

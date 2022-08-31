@@ -33,7 +33,7 @@
 
 	</div>
 	
-	 <h2>Numero de invitaciones </h2>
+	 <h2>Number of invitations </h2>
 	 
         
     <table id="usersTable" class="table table-striped">
