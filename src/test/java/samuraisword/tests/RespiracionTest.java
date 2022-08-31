@@ -1,6 +1,7 @@
 package samuraisword.tests;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -8,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
-
+import static org.assertj.core.api.Assertions.assertThat;
 import samuraisword.game.Game;
 import samuraisword.game.GamePhase;
 import samuraisword.game.GameService;
@@ -27,22 +28,35 @@ public class RespiracionTest {
 	@Autowired
 	protected GameService gameService;
 	
-//	@Test
-//	void checkRespiracion() {
-//		Player myPlayer= game.getCurrentPlayer();
-//		Player opponent= gameService.findPlayerInGameByName(game, playerName);
-//		
-//		Boolean endGame = gameService.proceesDrawPhasePlayer(game, opponent, 1);
-//        if(endGame) {
-//        	return endGame(game, model);
-//        }
-//		Integer maxLife= myPlayer.getCharacter().getLife();
-//		
-//		if(myPlayer.getCurrentHearts() !=maxLife) {
-//			myPlayer.setCurrentHearts(maxLife);
-//		}
-//		game.setGamePhase(GamePhase.MAIN);
-//	}
+	@Test
+	void checkRespiracion() {
+	
+		Game g = new Game();
+		createTestGame(g);
+		Player myPlayer= g.getCurrentPlayer();
+		myPlayer.setCurrentHearts(myPlayer.getCurrentHearts()-1);
+		Integer heartsBefore= myPlayer.getCurrentHearts();
+		List<Player> allOpponents= new ArrayList<>(g.getListPlayers());
+        allOpponents.remove(myPlayer);
+        Collections.shuffle(allOpponents);
+		
+		Player opponent= allOpponents.get(0);
+		Integer opponentHandBefore= opponent.getHand().size();
+		Integer myHandBefore = myPlayer.getHand().size();
+		
+		gameService.proceesDrawPhasePlayer(g, opponent, 1);
+        assertThat(opponentHandBefore==(opponent.getHand().size()+1));
+        assertThat(myHandBefore==(myPlayer.getHand().size()-1));
+
+		
+		Integer maxLife= myPlayer.getCharacter().getLife();
+		
+		if(myPlayer.getCurrentHearts() !=maxLife) {
+			myPlayer.setCurrentHearts(maxLife);
+			assertThat(heartsBefore==(myPlayer.getCurrentHearts()-1));
+		}
+		
+	}
 	
 	
 	
