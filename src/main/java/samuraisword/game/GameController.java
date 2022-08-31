@@ -140,7 +140,6 @@ public class GameController {
 	public String initGame(@PathVariable("id_game") int gameId, Map<String, Object> model) {
 		String view = "redirect:/game/continue/"+gameId;
 		Game game = GameSingleton.getInstance().getMapGames().get(gameId);
-		game.setGamePhase(GamePhase.MAIN);
 		game.setStartDate(new Date());
 		invitationService.deleteInvitationsByGame(game);
 		game.setDeck(cardService.createDeck());
@@ -170,6 +169,7 @@ public class GameController {
 		gameService.asignCards(game.getDeck(), players);
 		gameService.processDrawPhase(game);
 		game.setGamePhase(GamePhase.MAIN);
+		gameService.saveGame(game);
 		return view;
 	}
 

@@ -31,7 +31,7 @@
 							<spring:param name="username" value="${game.creator.username}" />
 						</spring:url> <a href="${fn:escapeXml(userUrl)}"><c:out
 								value="${game.creator.username}" /></a></td>
-					<td><c:forEach items="${game.listPlayer}" var="player">
+					<td><c:forEach items="${game.listPlayers}" var="player">
 							<spring:url value="/users/profile/{username}" var="userUrl">
 								<spring:param name="username" value="${player.user.username}" />
 							</spring:url>
