@@ -1,6 +1,7 @@
 package samuraisword.samples.petclinic.card;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.Query;
@@ -26,6 +27,9 @@ public interface CardRepository extends CrudRepository<Card, Integer> {
 	
 	@Query(value = "SELECT damage FROM Cards WHERE name = :name" , nativeQuery = true)
 	Optional<Integer> findDamage(@Param("name") String name);
+	
+	
+	
 	
 	
 }
