@@ -99,6 +99,15 @@ public class UserController {
 		return "redirect:/";
 	}
 
+	@GetMapping(value = "/users/friends/delete/{id_user}")
+	public String processDeleteFriendForm(@PathVariable("id_user") String id_user, Map<String, Object> model) {
+		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		User user = userService.findUser(userDetails.getUsername()).get();
+		userService.deleteFriends(id_user, user.getUsername());
+		
+		return "redirect:/";
+	}
+	
 	@GetMapping(value = "/users/find")
 	public String initFindForm(Map<String, Object> model) {
 		model.put("user", new User());
