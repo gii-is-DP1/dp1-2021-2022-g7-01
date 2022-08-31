@@ -287,6 +287,7 @@ table {
 				    	<c:when test="${ player.getRol().toString().equals('SHOGUN') }">
 				    		<button class = "player" style="border-radius: 10px; background-color: yellow;" onclick="myFunction(${player.getUser().getUsername()})"> ${ player.getUser().getUsername() } </button>
 				    	</c:when>
+				    	
 				    	<c:when test="${ player.getUser().getUsername().equals(POVplayer.getUser().getUsername()) }">
 				    		<button class = "player" style="border-radius: 10px; background-color: #40CFFF;" onclick="myFunction(${player.getUser().getUsername()})"> ${ player.getUser().getUsername() } </button>
 				    	</c:when>
@@ -397,7 +398,9 @@ table {
 	<h2>Your turn</h2>
 	</c:when>
 	<c:otherwise>
+	<c:if test="${b==true}">
 	<h2>You are ${POVplayer.getUser().getUsername()}</h2>
+	</c:if>
 	<h2>Turn of ${currentUser.username}</h2></c:otherwise>
 	</c:choose>
 	<c:if test="${POVplayer.equals(game.currentPlayer)}">
@@ -433,6 +436,7 @@ table {
 
 	<!-- BLANK SPACE -->
 	<div class="blank-space container">	
+	<c:if test="${b==true}">
                         <c:if test="${ game.currentPlayer.getUser().getUsername().equals(POVplayer.getUser().getUsername()) }">
                   <c:if test="${game.getGamePhase().equals(GamePhase.ATTACK) }">
                         <div id="card">
@@ -738,11 +742,13 @@ table {
 				</table>
 			</c:if>
 		</c:if>
+		</c:if>
 	</div>
+	
 
 	<!-- YOUR PLAYER INFO -->
 	<div class="your-player container">
-	
+	<c:if test="${b==true}">
 	<c:forEach items="${ listPlayer }" var ="player" varStatus="loop">
 			    		<c:if test="${ player.getUser().getUsername().equals(POVplayer.getUser().getUsername()) }">
 			    		
@@ -761,7 +767,9 @@ table {
 			    			
 			    			
 			    		</c:if>
-			    </c:forEach>	</div>
+			    </c:forEach>	
+			    </c:if>
+			    </div>
 
 </div>
 
@@ -769,14 +777,16 @@ table {
 
 	<!-- DISCARD -->
 	<div class="discard container">
+	<c:if test="${b==true}">
 	<h2>Number of remaining attacks: ${ POVplayer.getWeaponBonus() }</h2>
 	<h2>Damage Increase: +${ POVplayer.getDamageBonus() }</h2>
 	<h2>Distance bonus: +${ POVplayer.getDistanceBonus() }</h2>
-	
+	</c:if>
 	</div>
 
 	<!-- YOUR EQUIPMENT -->
 	<div class="equipment container">
+	<c:if test="${b==true}">
 	<table>
 	<th>Your equipamient:</th>
 	
@@ -826,7 +836,7 @@ table {
 				</td>
 				</tr>
 				</table>
-				
+				</c:if>
 							</div>
 	<div class="error container">
 		<c:if test="${POVplayer.equals(game.currentPlayer)}">
@@ -838,6 +848,7 @@ table {
 
 	<!-- HAND -->
 	<div class="hand container">
+	<c:if test="${b==true}">
 	<div  style="width:100%; background-color: #DFDADA; border-radius:15px; justify-self:end;">
 		<div style="width:98%; display:inline">
         	<c:forEach items="${ listPlayer }" var ="player" varStatus="loop">
@@ -892,6 +903,7 @@ table {
                     </c:forEach>
                     </div>
     </div>
+    </c:if>
 	</div>
 
 </div>

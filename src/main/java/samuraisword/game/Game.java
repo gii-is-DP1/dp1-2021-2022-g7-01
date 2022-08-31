@@ -2,6 +2,7 @@ package samuraisword.game;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -11,6 +12,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -37,6 +39,9 @@ public class Game extends BaseEntity{
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "game")
 	private List<Player> listPlayers;
 	
+	
+	@ManyToOne
+	private User creator;
 
 	@Column
 	@ManyToMany(cascade = CascadeType.ALL)
@@ -58,9 +63,9 @@ public class Game extends BaseEntity{
 	@Transient
 	private GameStatus status;
 	
-	private LocalDateTime startDate;
+	private Date startDate;
 	
-	private LocalDateTime endDate;
+	private Date endDate;
 	
 	@Transient
 	private List<Player> playersInRange;

@@ -3,17 +3,10 @@ package samuraisword.game;
 
 
 import java.util.Collection;
-import java.util.Optional;
+import java.util.List;
 
-import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.Repository;
-import org.springframework.data.repository.query.Param;
-
-import samuraisword.character.Character;
-import samuraisword.samples.petclinic.card.Card;
-import samuraisword.samples.petclinic.user.User;
 
 
 
@@ -22,6 +15,12 @@ import samuraisword.samples.petclinic.user.User;
 public interface GameRepository extends CrudRepository<Game, Integer>{
 	
 	Collection<Game> findAll();
+
+	@Query(value = "SELECT g FROM Game g WHERE g.gamePhase<>:lobby AND g.endDate IS NULL")
+	List<Game> findGamesInProgress(GamePhase lobby);
+
+	@Query(value = "SELECT g FROM Game g WHERE g.endDate IS NOT NULL")
+	List<Game> findGamesEnded();
 	
 	
 	

@@ -171,8 +171,7 @@ INSERT INTO cards(name,image,cards_Per_Deck,color,CARD_COLOR, damage, range) VAL
 INSERT INTO cards(name,image,cards_Per_Deck,color,CARD_COLOR, damage, range) VALUES ('wakizashi','attack/wakizashi.png',1,'Red','Red',3, 1);
 
 
-INSERT INTO games(id,end_date,start_date) VALUES (1, parsedatetime('24-11-2021 18:47:52', 'dd-MM-yyyy hh:mm:ss'),parsedatetime('24-11-2021 19:08:13', 'dd-MM-yyyy hh:mm:ss'));
-INSERT INTO games(id,end_date,start_date) VALUES (2, parsedatetime('27-11-2021 18:47:52', 'dd-MM-yyyy hh:mm:ss'),parsedatetime('27-11-2021 16:08:13', 'dd-MM-yyyy hh:mm:ss'));
+INSERT INTO games(id,end_date,start_date,creator_username) VALUES (1, parsedatetime('24-11-2021 18:47:52', 'dd-MM-yyyy hh:mm:ss'),parsedatetime('24-11-2021 19:08:13', 'dd-MM-yyyy hh:mm:ss'),'diecrequi');
 
 INSERT INTO players(id,current_hearts,honor,max_hearts,rol,won_game,game_id,username, disabled) VALUES (1,0,0,0,1,false,1,'diecrequi', false);
 INSERT INTO players(id,current_hearts,honor,max_hearts,rol,won_game,game_id,username, disabled) VALUES (2,0,0,0,1,false,1,'alefr99', false);
@@ -194,9 +193,3 @@ INSERT INTO characters(id,name,life,image) VALUES (4,'Goemon',5,'characters/goem
 INSERT INTO characters(id,name,life,image) VALUES (5,'Hideyoshi',4,'characters/hideyoshi.png');
 INSERT INTO characters(id,name,life,image) VALUES (6,'Musashi',5,'characters/musashi.png');
 INSERT INTO characters(id,name,life,image) VALUES (7,'Tomoe',5,'characters/tomoe.png');
-
-
-INSERT INTO invitation(user_sender, user_addresse, game_id) VALUES ('alefr99', 'alfcadmor', 1);
-INSERT INTO invitation(user_sender, user_addresse, game_id) VALUES ('alefr99', 'DonShelby', 1);
---Hay que comentarlo porque la entidad player no funciona bien todavia
---INSERT INTO players (id, game, photo, max_hearts, current_hearts, honor, position, rol, username) VALUES (1, 'jugador1', 'foto', 5, 5, 1, 1, 5, 'admin1');
