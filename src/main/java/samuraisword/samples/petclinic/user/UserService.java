@@ -21,11 +21,11 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import samuraisword.samples.petclinic.owner.Owner;
-import samuraisword.samples.petclinic.pet.exceptions.DuplicatedPetNameException;
 import samuraisword.samples.petclinic.pet.exceptions.DuplicatedUserNameException;
 
 /**
@@ -76,11 +76,20 @@ public class UserService {
 	public Optional<User> findUser(String username) {
 		return userRepository.findById(username);
 	}
-	
+	public void deleteUser(String username) {
+		userRepository.delete(userRepository.findById(username).get());
+	}
 
 	@Transactional(readOnly = true)
-	public Collection<User> findUserByUsername(String username) throws DataAccessException {
-		return userRepository.findByUsername(username);
+	public Collection<User> findUserByUsername(String username,int i) throws DataAccessException {
+		Pageable p = PageRequest.of(i, 5);
+		return userRepository.findByUsername(username,p);
+	}
+	
+	@Transactional(readOnly = true)
+	public Integer nPagesByUsername(String username) throws DataAccessException {
+		int res = userRepository.findByUsername(username).size()/5;
+		return res;
 	}
 	
 	public Collection<String> getAllFriendOf(String username) {

@@ -41,8 +41,10 @@ public class CardController {
 
 	@GetMapping(value = { "/cards" })
 	public String listCards(Map<String, Object> model) {
+		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		Collection<Card> listCards = CardService.findAll();
 		model.put("cards", listCards);
+		model.put("authority", userDetails.getAuthorities().toString().contains("admin"));
 		return "cards/cardsList";
 	}
 

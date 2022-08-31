@@ -15,6 +15,7 @@
             <th style="width: 150px;">UserName</th>
             <th style="width: 200px;">Email</th>
             <th style="text-align: center;">Send request</th>
+            <th style="text-align: center;">Admin</th>
             
         </tr>
         </thead>
@@ -38,9 +39,20 @@
 							<button class="btn btn-default" type="submit">send friend request</button></c:if>
 						</form:form>
                 </td>
+                <td>
+                	<div style="width: 100%; display: flex; justify-content: flex-end">
+                	<c:if test="${authority==true}">
+						<a href="/users/delete/${user.username}" class="btn btn-default">Delete User</a>
+					</c:if>
+					</div>
+                </td>
                 
             </tr>
         </c:forEach>
         </tbody>
     </table>
+    
+    <c:forEach items="${pages}" var="page">
+    	<a href="/users/${page}"><c:out value="${page}"></c:out></a>
+    </c:forEach>
 </petclinic:layout>

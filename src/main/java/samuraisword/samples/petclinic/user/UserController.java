@@ -15,15 +15,14 @@
  */
 package samuraisword.samples.petclinic.user;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -35,7 +34,6 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import samuraisword.achievements.Achievement;
 import samuraisword.samples.petclinic.pet.exceptions.DuplicatedUserNameException;
 
 /**
@@ -90,6 +88,16 @@ public class UserController {
 			return "redirect:/";
 		}
 	}
+	
+	@GetMapping(value = "/users/delete/{id_user}")
+	public String processDeleteForm(@PathVariable("id_user") String id_user, Map<String, Object> model) {
+		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		User user = userService.findUser(userDetails.getUsername()).get();
+		if(userDetails.getAuthorities().toString().contains("admin") || user.getUsername().equals(id_user)) {
+			userService.deleteUser(id_user);
+		}
+		return "redirect:/";
+	}
 
 	@GetMapping(value = "/users/find")
 	public String initFindForm(Map<String, Object> model) {
@@ -98,8 +106,8 @@ public class UserController {
 
 	}
 
-	@GetMapping(value = "/users")
-	public String processFindForm(User user, BindingResult result, Map<String, Object> model) {
+	@GetMapping(value = "/users/{page}")
+	public String processFindForm(@PathVariable("page") int page, User user, BindingResult result, Map<String, Object> model) {
 
 		// allow parameterless GET request for /owners to return all records
 		if (user.getUsername() == null) {
@@ -107,7 +115,7 @@ public class UserController {
 		}
 
 		// find owners by last name
-		Collection<User> results = this.userService.findUserByUsername(user.getUsername());
+		Collection<User> results = this.userService.findUserByUsername(user.getUsername(),page);
 		if (results.isEmpty()) {
 			// no owners found
 			result.rejectValue("username", "notFound", "not found");
@@ -126,12 +134,26 @@ public class UserController {
 			
 			model.put("listFriend", listFriend);
 			model.put("username", user1.getUsername());
+			List<Integer>lPages = new ArrayList<Integer>();
+			if(this.userService.nPagesByUsername(user.getUsername())%5==0) {
+				for(int i=0; i<this.userService.nPagesByUsername(user.getUsername()); i++) {
+					lPages.add(i);
+				}
+			}else {
+				for(int i=0; i<=this.userService.nPagesByUsername(user.getUsername()); i++) {
+					lPages.add(i);
+				}
+			}
+			
+			model.put("pages", lPages);
 //			if(listFriend.contains(u.getUsername()) || u.getUsername().equals(user1.getUsername())) {				
 //				b=true;
 //			}
 			
 			
 			// multiple owners found
+			model.put("authority", userDetails.getAuthorities().toString().contains("admin"));
+			model.put("currentPage", page);
 			model.put("selections", results);
 			return "users/usersList";
 		}
