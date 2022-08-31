@@ -157,7 +157,7 @@ public class GameService {
 		// para el reparto de cartas ya que en funcion de los jugadores que hayan entre
 		// un jugador y el SHOGUN se le
 		// reparten mas o menos cartas.
-
+		Collections.shuffle(listPlayers);
 		Player shogun = listPlayers.get(0);
 		listPlayers.remove(0);
 		Collections.shuffle(listPlayers);

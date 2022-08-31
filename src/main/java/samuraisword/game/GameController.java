@@ -1,5 +1,6 @@
 package samuraisword.game;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -77,6 +78,7 @@ public class GameController {
 		game.setGamePhase(GamePhase.LOBBY);
 		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		User user = userService.findUser(userDetails.getUsername()).get();
+		game.setCreator(user);
 		Player player = new Player();
 		player.setUser(user);
 		player.setGame(game);
@@ -139,6 +141,7 @@ public class GameController {
 		String view = "redirect:/game/continue/"+gameId;
 		Game game = GameSingleton.getInstance().getMapGames().get(gameId);
 		game.setGamePhase(GamePhase.MAIN);
+		game.setStartDate(new Date());
 		invitationService.deleteInvitationsByGame(game);
 		game.setDeck(cardService.createDeck());
 		game.setDiscardPile(new ArrayList<>());
@@ -218,6 +221,7 @@ public class GameController {
 				view = endGame(game, model);
 				Rol winnerRol = gameService.calcWinners(game);
 				game.setWonPlayers(new ArrayList<User>());
+				game.setEndDate(new Date());
 				for(Player p: game.getListPlayers()) {
 					if(p.getRol().equals(winnerRol) || (winnerRol.equals(Rol.SAMURAI) && p.getRol().equals(Rol.SHOGUN))) {
 					game.getWonPlayers().add(p.getUser());
@@ -232,6 +236,7 @@ public class GameController {
 	public String endGame(Game game, Map<String, Object> model) {
 		Rol winnerRol = gameService.calcWinners(game);
 		model.put("winnerRol", winnerRol);
+		game.setEndDate(new Date());
 		return "/game/endgame";
 	}
 
@@ -245,6 +250,7 @@ public class GameController {
 			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
 			if(!gameService.checkAllPlayersHavePositiveHonor(game)) {
 				view = endGame(game, model);
+				game.setEndDate(new Date());
 				Rol winnerRol = gameService.calcWinners(game);
 				game.setWonPlayers(new ArrayList<User>());
 				for(Player p: game.getListPlayers()) {
