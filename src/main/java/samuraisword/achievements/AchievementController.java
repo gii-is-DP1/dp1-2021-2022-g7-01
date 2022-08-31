@@ -17,8 +17,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import samuraisword.comment.Comment;
-import samuraisword.comment.CommentService;
 import samuraisword.samples.petclinic.user.User;
 import samuraisword.samples.petclinic.user.UserService;
 
@@ -47,6 +45,7 @@ public class AchievementController {
 		model.put("listAchievements", listAchievements);
 		model.put("mapPersonal", mapAchievement);
 		model.put("username", userDetails.getUsername());
+		model.put("authority", userDetails.getAuthorities().toString().contains("admin"));
 		
 		return "achievements/listAchievements";
 	}

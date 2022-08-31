@@ -1,6 +1,5 @@
 package samuraisword.achievements;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -13,10 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import samuraisword.comment.CommentRepository;
-import samuraisword.comment.CommentService;
 import samuraisword.game.Game;
 import samuraisword.game.GameRepository;
-import samuraisword.game.GameService;
 import samuraisword.player.Player;
 import samuraisword.player.PlayerService;
 import samuraisword.player.Rol;
