@@ -43,4 +43,8 @@
         </c:forEach>
         </tbody>
     </table>
+    
+    <c:forEach items="${pages}" var="page">
+    	<a href="/users/${page}"><c:out value="${page}"></c:out></a>
+    </c:forEach>
 </petclinic:layout>

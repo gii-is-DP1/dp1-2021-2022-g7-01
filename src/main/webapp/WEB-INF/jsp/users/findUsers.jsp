@@ -13,7 +13,7 @@
     <h2>Find Users</h2>
 
     
-    <form:form modelAttribute="user" action="/users" method="get" class="form-horizontal"
+    <form:form modelAttribute="user" action="/users/0" method="get" class="form-horizontal"
                id="search-user-form">
         <div class="form-group">
             <div class="control-group" id="username">
