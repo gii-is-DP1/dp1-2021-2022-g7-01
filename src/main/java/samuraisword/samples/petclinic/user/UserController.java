@@ -88,6 +88,16 @@ public class UserController {
 			return "redirect:/";
 		}
 	}
+	
+	@GetMapping(value = "/users/delete/{id_user}")
+	public String processDeleteForm(@PathVariable("id_user") String id_user, Map<String, Object> model) {
+		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		User user = userService.findUser(userDetails.getUsername()).get();
+		if(userDetails.getAuthorities().toString().contains("admin") || user.getUsername().equals(id_user)) {
+			userService.deleteUser(id_user);
+		}
+		return "redirect:/";
+	}
 
 	@GetMapping(value = "/users/find")
 	public String initFindForm(Map<String, Object> model) {
@@ -125,9 +135,16 @@ public class UserController {
 			model.put("listFriend", listFriend);
 			model.put("username", user1.getUsername());
 			List<Integer>lPages = new ArrayList<Integer>();
-			for(int i=0; i<=this.userService.nPagesByUsername(user.getUsername()); i++) {
-				lPages.add(i);
+			if(this.userService.nPagesByUsername(user.getUsername())%5==0) {
+				for(int i=0; i<this.userService.nPagesByUsername(user.getUsername()); i++) {
+					lPages.add(i);
+				}
+			}else {
+				for(int i=0; i<=this.userService.nPagesByUsername(user.getUsername()); i++) {
+					lPages.add(i);
+				}
 			}
+			
 			model.put("pages", lPages);
 //			if(listFriend.contains(u.getUsername()) || u.getUsername().equals(user1.getUsername())) {				
 //				b=true;
@@ -135,7 +152,7 @@ public class UserController {
 			
 			
 			// multiple owners found
-			
+			model.put("authority", userDetails.getAuthorities().toString().contains("admin"));
 			model.put("currentPage", page);
 			model.put("selections", results);
 			return "users/usersList";

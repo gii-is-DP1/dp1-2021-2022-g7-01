@@ -76,7 +76,9 @@ public class UserService {
 	public Optional<User> findUser(String username) {
 		return userRepository.findById(username);
 	}
-	
+	public void deleteUser(String username) {
+		userRepository.delete(userRepository.findById(username).get());
+	}
 
 	@Transactional(readOnly = true)
 	public Collection<User> findUserByUsername(String username,int i) throws DataAccessException {
