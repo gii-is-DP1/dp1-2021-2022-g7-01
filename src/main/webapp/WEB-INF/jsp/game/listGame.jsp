@@ -17,6 +17,7 @@
 				<th style="width: 200px;">End date</th>
 				<th style="width: 200px;">Creator</th>
 				<th style="width: 200px;">List of players</th>
+				<th style="width: 200px;">View</th>
 
 			</tr>
 		</thead>
@@ -38,6 +39,13 @@
 							<a href="${fn:escapeXml(userUrl)}"><c:out
 									value="${player.user.username} " /></a>
 						</c:forEach></td>
+						
+					<td><div style="width: 100%; display: flex; justify-content: flex-end">
+
+				<a href="/game/continue/${game.id}" class="btn btn-default">View</a>
+
+			</div>
+						</td>
 				</tr>
 			</c:forEach>
 		</tbody>
