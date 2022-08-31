@@ -18,5 +18,16 @@
 		<div class="form-group">
 			<button class="btn btn-default" type="submit">Update user</button>
 		</div>
+		<div style="visibility:hidden; ">
+			<petclinic:inputField label="listFriends" name="listFriends" ></petclinic:inputField>
+			<petclinic:inputField label="listFriendsOf" name="listFriendsOf"></petclinic:inputField>
+			<petclinic:inputField label="listPlayers" name="listPlayers" ></petclinic:inputField>
+			<petclinic:inputField label="avatar" name="avatar" ></petclinic:inputField>
+			<petclinic:inputField label="enabled" name="enabled" ></petclinic:inputField>
+			<petclinic:inputField label="listRequests" name="listRequests" ></petclinic:inputField>
+			<petclinic:inputField label="listRequestsOf" name="listRequestsOf" ></petclinic:inputField>
+			<petclinic:inputField label="listRequests" name="listRequests" ></petclinic:inputField>
+		</div>
+		
 	</form:form>
 </petclinic:layout>
