@@ -41,6 +41,7 @@ public class GameController {
 	private final CardService cardService;
 	private final InvitationService invitationService;
 	private final CharacterService characterService;
+	
 
 	private static final String VIEWS_CREATE_GAME = "game/createGame"; 
 
@@ -93,6 +94,10 @@ public class GameController {
 	public String showGame(@PathVariable("gameId") int gameId, Map<String, Object> model, HttpServletResponse a) {
 		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		User user = userService.findUser(userDetails.getUsername()).get();
+		Optional<Game> optionalGame = gameService.findById(gameId);
+		if(!optionalGame.isPresent()) {
+			return "redirect:/game/new";
+		}
 		if (!(GameSingleton.getInstance().getMapGames().containsKey(gameId))) {
 			a.addHeader("Refresh", "3");
 			Game game = gameService.findById(gameId).get();
@@ -121,16 +126,20 @@ public class GameController {
 
 	@GetMapping(value = { "/game/delete/{id_game}" })
 	public String deleteCommentForm(@PathVariable("id_game") int gameId, Map<String, Object> model) {
+		Game game = GameSingleton.getInstance().getMapGames().get(gameId);
+		GameSingleton.getInstance().getMapGames().remove(gameId);
+		invitationService.deleteInvitationsByGame(game);
 		gameService.deleteGame(gameId);
+
 		return "redirect:/game/new";
 	}
-
+	
 	@GetMapping(value = { "/game/start/{id_game}" })
 	public String initGame(@PathVariable("id_game") int gameId, Map<String, Object> model) {
 		String view = "redirect:/game/continue/"+gameId;
 		Game game = GameSingleton.getInstance().getMapGames().get(gameId);
-
 		game.setGamePhase(GamePhase.MAIN);
+		invitationService.deleteInvitationsByGame(game);
 		game.setDeck(cardService.createDeck());
 		game.setDiscardPile(new ArrayList<>());
 
@@ -150,6 +159,9 @@ public class GameController {
 			player.setGame(game);
 			player.setEquipment(new ArrayList<>());
 			playerService.savePlayer(player);
+			if(player.getCharacter().getName().equals("Goemon")) {
+				player.setWeaponBonus(2);
+			}
 		}
 
 		gameService.asignCards(game.getDeck(), players);
@@ -164,6 +176,7 @@ public class GameController {
 		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		User user = userService.findUser(userDetails.getUsername()).get();
 		Game game = GameSingleton.getInstance().getMapGames().get(gameId);
+		game.setError("");
 		if(user.getUsername().equals(game.getCurrentPlayer().getUser().getUsername())) {
 			Boolean hasAdvancedPhase = gameService.endTurn(game);
 			game.getCurrentPlayer().setWeaponBonus(1);
@@ -225,10 +238,23 @@ public class GameController {
 	//--------------------------------------------------------------------------------------------------------------------------
 		@GetMapping(value = {"/game/continue/{id_game}"})
 		public String continueGame(@PathVariable("id_game") int gameId, Map<String, Object> model, HttpServletResponse a) {
+			
 			String view = "/game/gameboard";
 			UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			User user = userService.findUser(userDetails.getUsername()).get();
 			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
+			if(!gameService.checkAllPlayersHavePositiveHonor(game)) {
+				view = endGame(game, model);
+				Rol winnerRol = gameService.calcWinners(game);
+				game.setWonPlayers(new ArrayList<User>());
+				for(Player p: game.getListPlayers()) {
+					if(p.getRol().equals(winnerRol) || (winnerRol.equals(Rol.SAMURAI) && p.getRol().equals(Rol.SHOGUN))) {
+					game.getWonPlayers().add(p.getUser());
+					}
+        }
+				gameService.saveGame(game);
+				return view;
+			}
 			for(int i=0; i<game.getListPlayers().size();i++) {
 				game.getListPlayers().get(i).setNArmor(0);
 				game.getListPlayers().get(i).setNFastDraw(0);
@@ -278,7 +304,11 @@ public class GameController {
 			String view = "redirect:/game/"+cardName+"/"+gameId;
 			game.setError("");
 			if(cardName.equals("no-selected")) {
-				game.setError("No has seleccionado ninguna carta");
+				game.setError("You have not selected any card");
+				return "redirect:/game/continue/"+gameId;
+			}
+			if(cardService.findByName(cardName).get().getColor().equals("Red") && game.getCurrentPlayer().getWeaponBonus()==0) {
+				game.setError("You can't attack because you have no more attacks left");
 				return "redirect:/game/continue/"+gameId;
 			}
 			UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -303,6 +333,7 @@ public class GameController {
 							cardService.discard(cardName, game.getCurrentPlayer().getHand(), game.getCurrentPlayer().getEquipment());
 						}
 						else {
+							game.setError("You can't use bushido because another one is already in play");
 							view = "redirect:/game/continue/"+gameId;
 						}
 					}
@@ -318,7 +349,7 @@ public class GameController {
 						}
 					}else if(cardName.equals("parada")){
 						view = "redirect:/game/continue/"+gameId;
-						game.setError("No puedes descartar una parada");
+						game.setError("You can't play a parada");
 					}else {
 					cardService.discard(cardName, game.getCurrentPlayer().getHand(), game.getDiscardPile());
 					}
@@ -382,9 +413,16 @@ public class GameController {
 			//----------Aqui va el método
 			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
 			Card c= game.getUseCard();
+			
 			Player p=playerService.findPlayerByUsernameAndGame(playerA, game);
+			
 			int dano=cardService.findDamage(game.getUseCard().getName()).get();
-			game.setAttackerDamage(dano+game.getCurrentPlayer().getDamageBonus());
+			if(dano>1) {
+				game.setAttackerDamage(dano+game.getCurrentPlayer().getDamageBonus()-p.getAntiDamageBonus());
+				}else{
+					game.setAttackerDamage(dano+game.getCurrentPlayer().getDamageBonus());
+				}
+			
 			game.setAttackerPlayer(p);
 			int i=cardService.findDamage(c.getName()).get()+game.getCurrentPlayer().getDamageBonus();
 			for(int i2=0;i2<game.getListPlayers().size();i2++) {
@@ -400,6 +438,7 @@ public class GameController {
 						game.getDeck().remove(0);
 					}
 					if(game.getListPlayers().get(i2).getCurrentHearts()<=0) {
+						game.getListPlayers().get(i2).setIndefence(true);
 						if(game.getListPlayers().get(i2).getHonor()>0) {
 //							game.getListPlayers().get(i2).setCurrentHearts(game.getListPlayers().get(i2).getCharacter().getLife());
 							game.getListPlayers().get(i2).setHonor(game.getListPlayers().get(i2).getHonor()-1);
@@ -1081,7 +1120,7 @@ public class GameController {
 			String view = "redirect:/game/continue/"+gameId;
 			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
 			if(cardName.equals("no-selected")) {
-				game.setError("No has seleccionado ninguna carta");
+				game.setError("You have not selected any card");
 				return "redirect:/game/continue/"+gameId;
 			}
 			UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -1160,6 +1199,7 @@ public class GameController {
 			UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			User user = userService.findUser(userDetails.getUsername()).get();
 			Game game = GameSingleton.getInstance().getMapGames().get(gameId);
+			
 			if(user.getUsername().equals(game.getCurrentPlayer().getUser().getUsername())) {
 				Player p = new Player();
 				for(int i=0; i<game.getListPlayers().size(); i++) {
@@ -1167,54 +1207,63 @@ public class GameController {
 						p = game.getListPlayers().get(i);
 					}
 				}
+				if(player.equals("ninguno") || cardName.equals("ninguno")) {
+					game.setError("You have not selected correctly.");
+				}	
+				else {
 				switch (cardName) {
 				case "hand":
 					List<Card>lh = p.getHand();
 					if(lh.size()>0) {
+						game.setError("");
 						game.setGamePhase(GamePhase.MAIN);
 						int i = 0 + (int)(Math.random() * ((lh.size() - 0)));
 						cardService.discard(lh.get(i).getName(), p.getHand(), game.getDiscardPile());
 					} else {
-						game.setError("No tiene cartas en mano.");
+						game.setError("He has no cards in hand.");
 					}
 					break;
 				case "armadura":
-					if(p.getDistanceBonus()>0) {
+					if(p.getNArmor()>0) {
 						if(!(p.getCharacter().getName().equals("Benkei") && p.getDistanceBonus()==1)) {
+							game.setError("");
 							p.setDistanceBonus(p.getDistanceBonus()-1);
 							game.setGamePhase(GamePhase.MAIN);
 							cardService.discard(cardName, p.getEquipment(), game.getDiscardPile());
 						}
 					} else {
-						game.setError("No tiene ninguna armadura equipada.");
+						game.setError("He has no armadura equipped.");
 					}
 					break;
 				case "concentracion":
-					if(p.getWeaponBonus()>0) {
+					if(p.getNFocus()>0) {
 						if(!(p.getCharacter().getName().equals("Goemon") && p.getWeaponBonus()==1)) {
+							game.setError("");
 							p.setWeaponBonus(p.getWeaponBonus()-1);
 							game.setGamePhase(GamePhase.MAIN);
 							cardService.discard(cardName, p.getEquipment(), game.getDiscardPile());
 						}
 					} else {
-						game.setError("No tiene ninguna concentración equipada.");
+						game.setError("He has no concentración equipped.");
 					}
 					break;
 				case "desenvainado rapido":
-					if(p.getWeaponBonus()>0) {
+					if(p.getNFastDraw()>0) {
 						if(!(p.getCharacter().getName().equals("Musashi") && p.getDamageBonus()==1)) {
+							game.setError("");
 							p.setDamageBonus(p.getDamageBonus()+1);
 							game.setGamePhase(GamePhase.MAIN);
 							cardService.discard(cardName, p.getEquipment(), game.getDiscardPile());
 						}
 						
 					} else {
-						game.setError("No tiene ningún desenvainado rápido equipado.");
+						game.setError("He has no desenvainado rápido equipped.");
 					}
 					break;
 				default:
-					game.setError("No ha seleccionado correctamente.");
+					game.setError("You have not selected correctly.");
 					break;
+				}
 				}
 			}
 			return view;

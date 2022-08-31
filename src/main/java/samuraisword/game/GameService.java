@@ -241,7 +241,7 @@ public class GameService {
 			game.setError("");
 		} else {
 			game.setGamePhase(GamePhase.DISCARD);
-			game.setError("Debes descartar cartas hasta tener 7");
+			game.setError("You must discard cards until you have 7");
 		}
 		return correctMaxCardHand;
 	}
@@ -319,17 +319,17 @@ public class GameService {
 				if (hasRedCard) {
 					check = true;
 					game.setGamePhase(GamePhase.DISCARTRED);
-					game.setError("Si no descartas perderás uno de honor pero descartarás el bushido. En caso contrario el bushido seguirá");
+					game.setError("If you don't discard you will lose one of honor but you will discard the bushido. Otherwise, bushido will continue");
 				} else {
 					game.getCurrentPlayer().setHonor(game.getCurrentPlayer().getHonor() - 1);
 					game.getCurrentPlayer().getEquipment().remove(bush);
 					game.getListPlayers().get(nextPlayerIndex).getEquipment().add(bush);
-					game.setError("Perdiste uno de honor porque no tenías arma y la primera carta del mazo era una roja. El bushido se pierde");
+					game.setError("You lost one of honor because you had no weapon and the top card of the deck was a red card. Bushido is lost");
 				}
 			} else {
 				game.getCurrentPlayer().getEquipment().remove(bush);
 				game.getListPlayers().get(nextPlayerIndex).getEquipment().add(bush);
-				game.setError("Como no ha salido arma, pasas el bushido al siguiente jugador");
+				game.setError("Since no weapon has come out, you pass the bushido to the next player");
 			}
 		}
 		return List.of(check, endGame);

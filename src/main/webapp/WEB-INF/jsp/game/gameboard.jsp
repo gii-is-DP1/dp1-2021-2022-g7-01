@@ -88,6 +88,10 @@ body {
     position: absolute;
 }
 
+.player {
+	cursor: pointer;
+}
+
 .row {
 	display: flex;
 	flex-wrap: wrap;
@@ -95,70 +99,75 @@ body {
 
 .container {
 	margin: 5px;
+	background-color: rgba(209,209,209,0.7);
+	border-radius: 15px
 }
 
 .circle {
-	width: 400px;
+	width: 30%;
+	min-width: 400px;
 	height: 200px;
-	background-color: red;
 }
 
 .selected-player {
-	width: 600px;
+	width: 46%;
+	min-width: 600px;
 	height: 200px;
-	background-color: green;
 }
 
 .buttons {
-	width: 300px;
+	width: 22%;
+	min-width: 300px;
 	height: 200px;
-	background-color: blue;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 }
 
 .deck {
-	width: 400px;
+	width: 30%;
+	min-width: 400px;
     height: 200px;
-    background-color: pink;
     display:flex;
     flex-direction:row;
 }
 
 .your-player {
-	width: 400px;
+	width: 30%;
+	min-width: 400px;
 	height: 200px;
-	background-color: white;
 	display: flex;
 	
 }
 
 .error {
-	width: 400px;
+	width: 30%;
+	min-width: 400px;
 	height: 200px;
-	background-color: yellow;
 }
 
 .blank-space {
-	width: 500px;
+	width: 38%;
+	min-width: 500px;
 	height: 200px;
-	background-color: purple;
 }
 
 .discard {
-	width: 400px;
+	width: 30%;
+	min-width: 400px;
 	height: 200px;
-	background-color: black;
 }
 
 .equipment {
-    width: 500px;
+    width: 38%;
+    min-width: 500px;
     height: 200px;
-    background-color: silver;   
 }
 
 .hand {
 	width: 100%;
 	height: 200px;
-	background-color: grey;
 }
 
 table {
@@ -171,20 +180,31 @@ table {
 }
 
 #btn-end-turn{
-    background-color: gray;
-    margin-bottom: 3%;
+    background-color: #F35A5A;
+}
+
+#btn-end-turn:hover {
+	background-color: #F34949;
+}
+
+.btn-blue {
+	background-color: #5A88F3;
+	margin-left: 20px;
+}
+
+.btn-blue:hover {
+	background-color: #487CF4;
 }
 
 .button{
 	width:100px;
-	height: 25%;
+	height: 50px;
 	border-radius: 15px;
 	justify-content: center;
 	cursor: pointer;
   	outline: none;
 	border: none;
     color: black;
-    box-shadow: 0 9px #999;
 }
 
 .your-player-info-container {
@@ -294,17 +314,17 @@ table {
 			<table>
 				<tr>
 					<th>
-						<h2 style ="color:#f2f2f2" >Vida: ${ player.getCurrentHearts() }</h2>
+						<h2>Hearts: ${ player.getCurrentHearts() }</h2>
 					</th>
 					<th>
-						<h2 style ="color:#f2f2f2" >Honor: ${ player.getHonor() }</h2>
+						<h2>Honor: ${ player.getHonor() }</h2>
 					</th>
 					<th>
-						<h2 style ="color:#f2f2f2" >Cartas: ${ player.getHand().size() }</h2>
+						<h2>Cards: ${ player.getHand().size() }</h2>
 					</th>
 					<th>
 						<c:if test="${ player.getNBushido()>0 }">
-							<h2 style ="color:#f2f2f2" >Tiene Bushido</h2>
+							<h2>Has Bushido</h2>
 						</c:if>
 					</th>
 				</tr>
@@ -313,10 +333,10 @@ table {
 						<spring:url value="/resources/images/cards/armadura.png" htmlEscape="true" var="equipment1" /> 
 						<c:choose>
 							<c:when test="${ player.getNArmor()==0 }">
-								<p><img style="float: left; width: 80px; opacity: 0.5;" title="" src="${equipment1}" id="equipment1" /> x${ player.getNArmor() }</p>
+								<p><img style="float: left; height:150px; opacity: 0.5;" title="" src="${equipment1}" id="equipment1" /> x${ player.getNArmor() }</p>
 							</c:when>
 							<c:otherwise>
-								<p><img style="float: left; width: 80px;" title="" src="${equipment1}" id="equipment1" /> x${ player.getNArmor() }</p>
+								<p><img style="float: left; height:150px;" title="" src="${equipment1}" id="equipment1" /> x${ player.getNArmor() }</p>
 							</c:otherwise>
 						</c:choose>
 						
@@ -326,10 +346,10 @@ table {
 						<spring:url value="/resources/images/cards/desenvainado rapido.png" htmlEscape="true" var="equipment2" />
 						<c:choose>
 							<c:when test="${ player.getNFastDraw()==0 }">
-								<p><img style="float: left; width: 80px; opacity: 0.5;" title="" src="${equipment2}" id="equipment2" /> x${ player.getNFastDraw() } </p>
+								<p><img style="float: left; height:150px; opacity: 0.5;" title="" src="${equipment2}" id="equipment2" /> x${ player.getNFastDraw() } </p>
 							</c:when>
 							<c:otherwise>
-								<p><img style="float: left; width: 80px;" title="" src="${equipment2}" id="equipment2" /> x${ player.getNFastDraw() } </p>
+								<p><img style="float: left; height:150px;" title="" src="${equipment2}" id="equipment2" /> x${ player.getNFastDraw() } </p>
 							</c:otherwise>
 						</c:choose> 
 						
@@ -338,10 +358,10 @@ table {
 						<spring:url value="/resources/images/cards/concentracion.png" htmlEscape="true" var="equipment3" /> 
 						<c:choose>
 							<c:when test="${ player.getNFocus()==0 }">
-								<p><img style="float: left; width: 80px; opacity: 0.5;" title="" src="${equipment3}" id="equipment3" /> x${ player.getNFocus() } </p>
+								<p><img style="float: left; height:150px; opacity: 0.5;" title="" src="${equipment3}" id="equipment3" /> x${ player.getNFocus() } </p>
 							</c:when>
 							<c:otherwise>
-								<p><img style="float: left; width: 80px;" title="" src="${equipment3}" id="equipment3" /> x${ player.getNFocus() } </p>
+								<p><img style="float: left; height:150px;" title="" src="${equipment3}" id="equipment3" /> x${ player.getNFocus() } </p>
 	
 							</c:otherwise>
 						</c:choose>
@@ -349,18 +369,18 @@ table {
 					</td>
 					<td>
 						<spring:url value="/resources/images/${ player.getCharacter().getImage() }" htmlEscape="true" var="character" /> 
-						<img style="float: left; width: 80px;" title="" src="${character}" id="character" />
+						<img style="float: left; height:150px;" title="" src="${character}" id="character" />
 	
 					</td>
 					<td>
 						<c:choose>
 							<c:when test="${ player.getRol().toString().equals('SHOGUN') }">
 								<spring:url value="/resources/images/roles/${ player.getRol() }.png" htmlEscape="true" var="Rol" /> 
-								<img style="float: left; width: 80px;" title="" src="${Rol}" id="Rol" />
+								<img style="float: left; height:150px;" title="" src="${Rol}" id="Rol" />
 							</c:when>
 							<c:otherwise>
 								<spring:url value="/resources/images/roles/ninguno.png" htmlEscape="true" var="Rol" /> 
-								<img style="float: left; width: 80px;" title="" src="${Rol}" id="Rol" />
+								<img style="float: left; height:150px;" title="" src="${Rol}" id="Rol" />
 							</c:otherwise>
 						</c:choose>
 					</td>
@@ -372,6 +392,14 @@ table {
 
 	<!-- BUTTONS -->
 	<div class="buttons container">
+	<c:choose>
+	<c:when test="${POVplayer.equals(game.currentPlayer)}">
+	<h2>Your turn</h2>
+	</c:when>
+	<c:otherwise>
+	<h2>You are ${POVplayer.getUser().getUsername()}</h2>
+	<h2>Turn of ${currentUser.username}</h2></c:otherwise>
+	</c:choose>
 	<c:if test="${POVplayer.equals(game.currentPlayer)}">
 		<c:choose>
 			<c:when test="${gameStatus=='MAIN'}">
@@ -381,7 +409,7 @@ table {
 			        </form:form>
 			</c:when>
 			<c:when test="${gameStatus=='DISCARDOTHER'}">
-				<button id="btn-end-turn" class="button" form="discardForm"> DESCARTAR CARTA </button>
+				<button id="btn-end-turn" class="button" form="discardForm"> DISCARD CARD </button>
 			</c:when>
 		</c:choose>
 	</c:if>
@@ -393,32 +421,14 @@ table {
 
 	<!-- DECK -->
 	<div class="deck container">
-
-
-
-                <div style="border-radius: 10px; background-color: #DFDADA">
-                    <p style=" padding: 5px 10px 1px 50px;"> DECK</p>
-                    <p style=" padding: 1px 1px 10px 50px;color:red;">(${deck.size()})</p>
-                    <img src="/resources/images/roles/ninguno.png" alt="SHOGUN" style="width: 35%; height: 35%;padding:5px 35px ;" />
-
-                    <!-- <form:form action="/game/steal">
-                                                <input type="hidden" name="gameId" value="${ game.id }"></input>
-                                                  BOT√É¬Ø√Ç¬ø√Ç¬ΩN PARA ROBAR
-                                                <c:if test="${game.currentPlayer==POVplayer.getUser().username}">
-                                                <button class="btn btn-default" type="submit" style="padding:5px 25px">Select</button>
-                                                </c:if>
-                                               
-                                </form:form> -->
+				<div class="your-player-info-container">
+                    <h4 class="your-player-title"> DECK (${deck.size()})</h4>
+                    <img class="your-player-image" src="/resources/images/roles/ninguno.png" alt="SHOGUN" />
                 </div>
-                <div style="border-radius: 10px; background-color: #DFDADA">
-                    <p style=" padding: 5px 10px 1px 50px;"> DISCARD </p>
-                    <p style=" padding: 1px 1px 10px 50px;color:red;">(${discardPile.size()})</p>
-                    <img src="${discardImage}" alt="SHOGUN" style="width: 35%; height: 35%;  padding: 5px 35px" />
-
+                <div class="your-player-info-container">
+                    <h4 class="your-player-title"> DISCARD (${discardPile.size()})</h4>
+                    <img class="your-player-image" src="${discardImage}" alt="SHOGUN" />
                 </div>
-
-
-
     </div>
 
 	<!-- BLANK SPACE -->
@@ -466,7 +476,7 @@ table {
 							id="edit-user-form">
 							  <c:if test="${game.getGamePhase().equals(GamePhase.ATTACK) }">
 							<br><br>
-							<button class="btn btn-default" type="submit">Me he arrepentido</button></c:if>
+							<button class="btn btn-default" type="submit">I have regretted</button></c:if>
 							
 							</form:form> 
 			  </div>
@@ -478,13 +488,13 @@ table {
 		 <img src="/resources/images/cards/${game.getUseCard().getName()}.png" alt="card" style="height: 70%; width:auto" />
 	
 	</div>
-			<p>Estas siendo atacado. øQuieres usar una parada?</p>
+			<p>You are being attacked. Do you want to use a parada?</p>
 			 <form:form class="form-horizontal"
 							action="/game/parada/${game.id}/${game.getAttackerPlayer()}"
 							id="edit-user-form">
 							
 							<br><br>
-							<button class="btn btn-default" type="submit">SI</button>
+							<button class="btn btn-default" type="submit">YES</button>
 							
 							</form:form>
 							
@@ -501,9 +511,9 @@ table {
 			<c:if test="${game.getGamePhase().equals(GamePhase.AVISO) && game.getAttackerPlayer().equals(POVplayer)}">
 			<div id="mes">
 			<c:if test="${game.getCurrentPlayer().getDamageBonus()==0}">
-			<p>${ game.getCurrentPlayer()} te ha atacado y te ha hecho ${game.getAttackerDamage()} de daÒo</p></c:if>
+			<p>${ game.getCurrentPlayer()} has attacked you and made you ${game.getAttackerDamage()} of damage</p></c:if>
 			<c:if test="${game.getCurrentPlayer().getDamageBonus()>0}">
-			<p>${ game.getCurrentPlayer()} te ha atacado y te ha hecho ${game.getAttackerDamage()} de daÒo (Bonus de daÒo incluido)</p></c:if>
+			<p>${ game.getCurrentPlayer()} has attacked you and made you ${game.getAttackerDamage()} of damage (Damage bonus included)</p></c:if>
 		 <img src="/resources/images/cards/${game.getUseCard().getName()}.png" alt="card" style="height: 70%; width:auto" />
 	
 		</div>
@@ -523,13 +533,13 @@ table {
 			
 			
 			<c:if test="${game.getGamePhase().equals(GamePhase.GRITODEBATALLA) && (!(game.getCurrentPlayer().equals(POVplayer))) && game.waitingForPlayer.contains(POVplayer) && POVplayer.getIndefence()==false}">
-			<p>Han usado Grito de batalla. ¬øQue quieres hacer?</p>
+			<p>They have used Grito de batalla. What you want to do?</p>
 			 <form:form class="form-horizontal"
 							action="/game/choose1/${game.id}/${POVplayer}"
 							id="edit-user-form">
 							
 							<br><br>
-							<button class="btn btn-default" type="submit">Sufrir 1 de da√±o</button>
+							<button class="btn btn-default" type="submit">Take 1 damage</button>
 							
 							</form:form>
 							
@@ -540,20 +550,20 @@ table {
 							id="edit-user-form">
 							
 							<br><br>
-							<button class="btn btn-default" type="submit">Descartar parada</button>
+							<button class="btn btn-default" type="submit">Discard parada</button>
 							
 							</form:form>  </c:if>
 			</c:if>
 			
 			<c:if test="${game.getGamePhase().equals(GamePhase.JIUJITSU) && (!(game.getCurrentPlayer().equals(POVplayer))) && game.waitingForPlayer.contains(POVplayer) && POVplayer.getIndefence()==false}">
-			<p>Han usado JIU-JITSU. ¬øQue quieres hacer?</p>
+			<p>They have used JIU-JITSU. What you want to do?</p>
 			<div id="dano1">
 			 <form:form class="form-horizontal"
 							action="/game/choose11/${game.id}/${POVplayer}"
 							id="edit-user-form">
 							
 							<br><br><div id="dano">
-							<button class="btn btn-default" type="submit">Sufrir 1 de da√±o</button></div>
+							<button class="btn btn-default" type="submit">Take 1 damage</button></div>
 							
 							</form:form></div>
 							
@@ -565,41 +575,41 @@ table {
 							id="edit-user-form">
 							
 							<c:if test="${hand.color=='Red'}"><div id="select" > 
-							<button id="but" class="btn btn-default" type="submit">Descartar ${hand.getName() }</button></div></c:if>
+							<button id="but" class="btn btn-default" type="submit">Discard ${hand.getName() }</button></div></c:if>
 							
 							</form:form></c:forEach></c:if></c:if>
 			
 			
 			
 			<c:if test="${game.getGamePhase().equals(GamePhase.DISCARDARM) && (!(game.getCurrentPlayer().equals(POVplayer))) && game.waitingForPlayer.contains(POVplayer) && (!(game.getPlayerChoose().equals(POVplayer)))}">
-			<p>EL JUGADOR ${ game.getPlayerChoose()} EST√Å DESCARTANDO UN ARMA. POR FAVOR ESPERE</p>
+			<p>THE PLAYER ${ game.getPlayerChoose()} IS DISPOSING OF A WEAPON. PLEASE WAIT</p>
 			</c:if>
 			
 			<c:if test="${game.getGamePhase().equals(GamePhase.GRITODEBATALLA) && game.getCurrentPlayer().equals(POVplayer)}">
 			<div align="center">
 			<img src="/resources/images/reloj.gif" alt="card" style="height: 70%; width:auto" />
-			<p>${game.waitingForPlayer.size()} JUGADORES ESTAN DECIDIENDO QUE HACER</p>
+			<p>${game.waitingForPlayer.size()} PLAYERS ARE DECIDING WHAT TO DO</p>
 			</div>
 			</c:if>											
 							                                    
-			<c:if test="${(game.getGamePhase().equals(GamePhase.JIUJITSU) || (game.getGamePhase().equals(GamePhase.DISCARDARM))) && game.getCurrentPlayer().equals(POVplayer)}">
+			<c:if test="${(game.getGamePhase().equals(GamePhase.JIUJITSU) || game.getGamePhase().equals(GamePhase.DISCARDARM)) && game.getCurrentPlayer().equals(POVplayer)}">
 			<div align="center">
 			<img src="/resources/images/reloj.gif" alt="card" style="height: 70%; width:auto" />
 		
-			<p>${game.waitingForPlayer.size()} JUGADORES ESTAN DECIDIENDO QUE HACER</p>
+			<p>${game.waitingForPlayer.size()} PLAYERS ARE DECIDING WHAT TO DO</p>
 			</div>
 			</c:if>	
 			
 			<c:if test="${game.getGamePhase().equals(GamePhase.PARADA)  && game.getCurrentPlayer().equals(POVplayer)}">
 			<div align="center">
 			<img src="/resources/images/reloj.gif" alt="card" style="height: 70%; width:auto" />
-			<p>EL JUGADOR QUE HAS ATACADO TIENE PARADA Y ESTA DECIDIENDO QUE HACER</p>
+			<p>THE PLAYER YOU ATTACKED HAS PARADA AND IS DECIDING WHAT TO DO</p>
 			</div>
 			</c:if>	
 	
 	    <c:if test="${ game.currentPlayer.getUser().getUsername().equals(POVplayer.getUser().getUsername()) }">
 	    
-        <c:if test="${game.getGamePhase().equals(GamePhase.DISCARDPLAYER) }">
+        <c:if test="${game.getGamePhase().equals(GamePhase.DISCARDPLAYER)}">
     	<div id="card res">
     		<p>DISCARD SOME PLAYER</p>
          	<!--  <img src="/resources/images/cards/distraccion.png" alt="card" style="height: 70%; width:auto" /> -->
@@ -613,9 +623,10 @@ table {
                    <form:form class="form-horizontal"
                             action="/game/distraccion/${game.id}/${player.getUser().getUsername()}"
                             id="edit-user-form">
-                              
+                             <c:if test="${(!(game.getCurrentPlayer().equals(player))) && player.getHand().size()>0}">
 							<div id="sel">
-                            <button class="btn btn-default" type="submit">${player.getUser().getUsername()}</button></div>
+							
+                            <button class="btn btn-default" type="submit">${player.getUser().getUsername()}</button></div></c:if>
                             </form:form> 
                     </c:forEach>
                             
@@ -655,8 +666,10 @@ table {
 				<form:form action="/game/discard-other-card" id = "discardForm">
 					<table>
 						<tr>
-							<h2>Selecciona a qui√©n quieres descartarle una carta</h2>
+							<h2>Select who you want to discard a card to</h2>
 							<input type="hidden" name="gameId" value="${ game.id }"></input>
+							<input hidden type="radio" value="ninguno" name="player" checked="checked"/>
+							<label  for="ninguno" hidden></label>
 							<c:forEach items="${listPlayer}" var ="player" varStatus="loop">
 								<c:if test="${!player.getUser().getUsername().equals(POVplayer.getUser().getUsername())}">
 								<input type="radio" value="${ player.getUser().getUsername() }" name="player" />
@@ -666,21 +679,23 @@ table {
 						</tr>
 						<br>
 						<tr>
-							<h2>Selecciona el objeto que le quieres quitar</h2>
-							<input type="radio" value="hand" name="cardName"/>
-							<label for="hand">mano</label>
+							<h2>Select the object you want to remove</h2>
+							<input type="radio" value="hand" name="cardName" />
+							<label for="hand">hand</label>
 							<input type="radio" value="armadura" name="cardName"/>
 							<label for="armadura">armadura</label>
-							<input type="radio" value="concentracion" name="cardName"/>
-							<label for="concentracion">concentraciÛn</label>
 							<input type="radio" value="desenvainado rapido" name="cardName"/>
 							<label for="desenvainado rapido">Desenvainado rapido</label>
+							<input type="radio" value="concentracion" name="cardName"/>
+							<label for="concentracion">concentraciÛn</label>							
+							<input hidden type="radio" value="ninguno" name="cardName" checked="checked"/>
+							<label  for="ninguno" hidden></label>
 						</tr>
 					</table>
 				</form:form>
 			</c:if>
 			<c:if test="${gameStatus=='BUSHIDO'}">
-				<h2>Selecciona a qui√©n quieres equiparle el bushido</h2>
+				<h2>Select who you want to equip bushido to</h2>
 				<table>
 					<tr>
 						<c:forEach items="${listPlayer}" var ="player" varStatus="loop">
@@ -698,7 +713,7 @@ table {
 				</table>
 			</c:if>
 			<c:if test="${gameStatus=='DISCARTRED'}">
-				<h2>Selecciona la carta que quieras eliminar por culpa del bushido</h2>
+				<h2>Select the card you want to remove because of bushido</h2>
 				<table>
 					<tr>
 						<c:forEach items="${POVplayer.getHand()}" var ="hand" varStatus="loop">
@@ -716,7 +731,7 @@ table {
 						<form:form action="/game/pass-bushido" id = "discardForm">
 							<input type="hidden" name="gameId" value="${ game.id }"></input>
 							<input type="hidden" name="card" value="NONE"></input>
-							<button> No descartar </button>
+							<button> No discard </button>
 						</form:form>
 						</th>
 					</tr>
@@ -734,12 +749,12 @@ table {
 			    		
 			    				
 			    				<div class="your-player-info-container">
-			    				<h4 class="your-player-title">TU PERSONAJE</h4>
+			    				<h4 class="your-player-title">YOUR CHARACTER</h4>
 			    						<img class="your-player-image" src="/resources/images/${ player.getCharacter().getImage() }" alt="character" />
 			    				</div>
 			    				
 			    				<div class="your-player-info-container">
-			    			<h4 class="your-player-title">TU ROL</h4>
+			    			<h4 class="your-player-title">YOUR ROL</h4>
 			    			<img class="your-player-image" src="/resources/images/roles/${player.getRol()}.png" alt="charactere" />
 			    				</div>
 			    				
@@ -754,26 +769,26 @@ table {
 
 	<!-- DISCARD -->
 	<div class="discard container">
-	<h2 style ="color:#f2f2f2" >N˙mero de ataques restantes: ${ POVplayer.getWeaponBonus() }</h2>
-	<h2 style ="color:#f2f2f2" >Aumento de daÒo: +${ POVplayer.getDamageBonus() }</h2>
-	<h2 style ="color:#f2f2f2" >Distancia a la que te ven: +${ POVplayer.getDistanceBonus() }</h2>
+	<h2>Number of remaining attacks: ${ POVplayer.getWeaponBonus() }</h2>
+	<h2>Damage Increase: +${ POVplayer.getDamageBonus() }</h2>
+	<h2>Distance bonus: +${ POVplayer.getDistanceBonus() }</h2>
 	
 	</div>
 
 	<!-- YOUR EQUIPMENT -->
 	<div class="equipment container">
 	<table>
-	<th>Tu equipamiento:</th>
+	<th>Your equipamient:</th>
 	
 	<tr>
 	<td >
 					<spring:url value="/resources/images/cards/armadura.png" htmlEscape="true" var="equipment1" /> 
 					<c:choose>
 						<c:when test="${ POVplayer.getNArmor()==0 }">
-							<p><img style="float: left; width: 80px; opacity: 0.5;" title="" src="${equipment1}" id="equipment1" /> x${ POVplayer.getNArmor() }</p>
+							<p><img style="float: left; height: 160px; opacity: 0.5;" title="" src="${equipment1}" id="equipment1" /> x${ POVplayer.getNArmor() }</p>
 						</c:when>
 						<c:otherwise>
-							<p><img style="float: left; width: 80px;" title="" src="${equipment1}" id="equipment1" /> x${ POVplayer.getNArmor() }</p>
+							<p><img style="float: left; height: 160px;" title="" src="${equipment1}" id="equipment1" /> x${ POVplayer.getNArmor() }</p>
 						</c:otherwise>
 					</c:choose>
 					
@@ -783,10 +798,10 @@ table {
 					<spring:url value="/resources/images/cards/desenvainado rapido.png" htmlEscape="true" var="equipment2" />
 					<c:choose>
 						<c:when test="${ POVplayer.getNFastDraw()==0 }">
-							<p><img style="float: left; width: 80px; opacity: 0.5;" title="" src="${equipment2}" id="equipment2" /> x${ POVplayer.getNFastDraw() } </p>
+							<p><img style="float: left; height: 160px; opacity: 0.5;" title="" src="${equipment2}" id="equipment2" /> x${ POVplayer.getNFastDraw() } </p>
 						</c:when>
 						<c:otherwise>
-							<p><img style="float: left; width: 80px;" title="" src="${equipment2}" id="equipment2" /> x${ POVplayer.getNFastDraw() } </p>
+							<p><img style="float: left; height: 160px;" title="" src="${equipment2}" id="equipment2" /> x${ POVplayer.getNFastDraw() } </p>
 						</c:otherwise>
 					</c:choose> 
 					
@@ -795,10 +810,10 @@ table {
 					<spring:url value="/resources/images/cards/concentracion.png" htmlEscape="true" var="equipment3" /> 
 					<c:choose>
 						<c:when test="${POVplayer.getNFocus()==0 }">
-							<p><img style="float: left; width: 80px; opacity: 0.5;" title="" src="${equipment3}" id="equipment3" /> x${ POVplayer.getNFocus() } </p>
+							<p><img style="float: left; height: 160px; opacity: 0.5;" title="" src="${equipment3}" id="equipment3" /> x${ POVplayer.getNFocus() } </p>
 						</c:when>
 						<c:otherwise>
-							<p><img style="float: left; width: 80px;" title="" src="${equipment3}" id="equipment3" /> x${ POVplayer.getNFocus() } </p>
+							<p><img style="float: left; height: 160px;" title="" src="${equipment3}" id="equipment3" /> x${ POVplayer.getNFocus() } </p>
 						</c:otherwise>
 					</c:choose>
 					
@@ -806,7 +821,7 @@ table {
 				<td>
 					<c:if test="${POVplayer.getNBushido()>0 }">
 						<spring:url value="/resources/images/cards/bushido.png" htmlEscape="true" var="equipment4" /> 
-						<p><img style="float: left; width: 80px;" title="" src="${equipment4}" id="equipment4" /></p>
+						<p><img style="float: left; height: 160px;" title="" src="${equipment4}" id="equipment4" /></p>
 					</c:if>
 				</td>
 				</tr>
@@ -829,33 +844,37 @@ table {
             	<c:if test="${ player.getUser().getUsername().equals(POVplayer.getUser().getUsername())}">
             		<c:choose>
 						<c:when test="${gameStatus=='DISCARD'}">
-							<form:form action="/game/discard-hand-card" style="width: 100%">
+							<form:form action="/game/discard-hand-card" style="width: 100%; display:flex; align-items:center">
 								<input type="hidden" name="gameId" value="${ game.id }"></input>
 								<c:forEach items="${ player.hand }" var ="card" varStatus="loop">
                                     <div style="display: inline-block; height:auto; width:12%">
-                                        <img style="height:auto; width:100%" src="/resources/images/cards/${card.name}.png" alt="${card.name}"/>
-                                        <input type="radio" value="${card.name}" name="cardName" />
+                                    	<label>
+                                        	<input type="radio" value="${card.name}" name="cardName" />
+                                        	<img style="height:auto; width:100%" src="/resources/images/cards/${card.name}.png" alt="${card.name}"/>
+                                    	</label>
                                     </div>
 								</c:forEach>
 								<input type="radio" value="no-selected" name="cardName" checked style="display: none" />
 								<c:if test="${POVplayer.hand.size()>0}">
-									<button id="btn-end-turn" class="button"> DESCARTAR CARTA </button>
+									<button class="btn-blue button"> DISCARD CARD </button>
 								</c:if>
 							</form:form>
 						</c:when>
 						<c:when test="${gameStatus=='MAIN'}">
-							<form:form action="/game/use-card" style="width: 100%">
+							<form:form action="/game/use-card" style="width: 100%; display:flex; align-items:center">
 								<input type="hidden" name="gameId" value="${ game.id }"></input>
 								<c:forEach items="${ player.hand }" var ="card" varStatus="loop">
                                     <div style="display: inline-block; height:auto; width:12%">
-                                        <img style="height:auto; width:100%" src="/resources/images/cards/${card.name}.png" alt="${card.name}"/>
-                                        <input type="radio" value="${card.name}" name="cardName" />
+                                    	<label>
+                                    		<input type="radio" value="${card.name}" name="cardName" />
+                                        	<img id="card-${card.name}" style="height:auto; width:100%" src="/resources/images/cards/${card.name}.png" alt="${card.name}"/>
+                                        </label>
                                     </div>
 								</c:forEach>
 								<input type="radio" value="no-selected" name="cardName" checked style="display: none" />
 								<c:if test="${POVplayer.equals(game.currentPlayer)}">
 									<c:if test="${POVplayer.hand.size()>0}">
-										<button id="btn-end-turn" class="button"> USAR CARTA </button>
+										<button class="btn-blue button"> USE CARD </button>
 									</c:if>
 								
 								</c:if>

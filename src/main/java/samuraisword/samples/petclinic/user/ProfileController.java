@@ -52,6 +52,14 @@ public class ProfileController {
 			UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
 					.getPrincipal();
 			Collection<String>listFriend = userService.getAllFriendOf(usernameProfile);
+			User user = userService.findUser(userDetails.getUsername()).get();
+			Boolean b=null;
+			if(listFriend.contains(user.getUsername())) {				
+				b=true;
+			}else {
+				b=false;
+			}
+			model.put("b", b);
 			model.put("userProfile", userOptional.get());
 			model.put("friends", listFriend);
 			model.put("username", userDetails.getUsername());

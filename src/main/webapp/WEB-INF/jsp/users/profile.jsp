@@ -33,8 +33,9 @@
 			        <br />
 			    </c:otherwise>
 			</c:choose>
+			<c:if test="${userProfile.username.equals(username)}">
 			<a class="btn btn-default"
-			href="<c:url value="/users/profile/changeAvatar/${userProfile.username}" />">Change avatar</a>
+			href="<c:url value="/users/profile/changeAvatar/${userProfile.username}" />">Change avatar</a></c:if>
 			</div>
 			<div class="col-sm-8">
 				<div class="row" style="margin: 0 0 20px 0">
@@ -55,7 +56,8 @@
 						<form:form class="form-horizontal"
 							action="/friendRequest/SendRequest/${userProfile.username}"
 							id="edit-user-form">
-							<button class="btn btn-default" type="submit">Send friend request</button>
+							<c:if test="${b==false}">
+							<button class="btn btn-default" type="submit">Send friend request</button></c:if>
 						</form:form>
 					</c:if>
 					<a class="btn btn-default"
