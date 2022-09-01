@@ -38,17 +38,15 @@ public class CeremoniaDelTeTest {
 		 Player myPlayer= g.getCurrentPlayer();
 		 Integer handBefore=myPlayer.getHand().size();
          gameService.proceesDrawPhasePlayer(g, myPlayer, 3);
-         assertThat(handBefore==(myPlayer.getHand().size()-3));
+         assertThat(handBefore==(myPlayer.getHand().size()-3)).isTrue();
          
          List<Player> allOpponents= new ArrayList<>(g.getListPlayers());
          allOpponents.remove(myPlayer);
 
          for(Player pl:allOpponents) {
         	Integer opponentHand = pl.getHand().size();
-        	Integer discardBefore = g.getDiscardPile().size();
          	gameService.proceesDrawPhasePlayer(g, pl, 1);
-         	assertThat(opponentHand==(pl.getHand().size()-1));
-         	assertThat(discardBefore==(g.getDiscardPile().size()+1));
+         	assertThat(opponentHand==(pl.getHand().size()-1)).isTrue();
              
          }
 	}

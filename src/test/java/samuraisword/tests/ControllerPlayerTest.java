@@ -20,7 +20,9 @@ import samuraisword.cardhand.CardHandRepository;
 import samuraisword.cardhand.CardHandService;
 import samuraisword.comment.CommentController;
 import samuraisword.comment.CommentService;
+import samuraisword.game.Game;
 import samuraisword.game.GameService;
+import samuraisword.player.Player;
 import samuraisword.player.PlayerController;
 import samuraisword.player.PlayerRepository;
 import samuraisword.player.PlayerService;
@@ -60,13 +62,5 @@ public class ControllerPlayerTest {
     
    
     
-    @WithMockUser(value = "admin1")
-    @Test
-	void testDeleteComment() throws Exception {
-    	
-		mockMvc.perform(get("/game/{id_game}/players/delete/{id_player}", 1, 1))
-		.andExpect(status().is3xxRedirection())
-		.andExpect(view().name("redirect:/game/{id_game}"));
-	}
     
 }

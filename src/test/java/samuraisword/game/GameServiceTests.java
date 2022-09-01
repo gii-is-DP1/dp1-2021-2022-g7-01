@@ -51,6 +51,9 @@ import samuraisword.samples.petclinic.user.UserService;
 		@Test
 		@Transactional
 		void shouldDeleteGame() {
+			Game g = new Game();
+			gService.saveGame(g);
+			
 			Collection<Game> lPrev=this.gService.findAll();
 			Integer iPrev=lPrev.size();
 			this.gService.deleteGame(2);

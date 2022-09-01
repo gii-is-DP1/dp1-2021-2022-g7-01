@@ -39,12 +39,10 @@ public class DaimioTest {
 		
 		
 		Player myPlayer= g.getCurrentPlayer();
-		Integer discardBefore = g.getDiscardPile().size();
 		Integer handBefore = myPlayer.getHand().size();
 		
 		gameService.proceesDrawPhasePlayer(g, myPlayer, 2);
-		assertThat(discardBefore==(g.getDiscardPile().size()+2));
-		assertThat(handBefore==(myPlayer.getHand().size()+2));
+		assertThat(handBefore==(myPlayer.getHand().size()-2)).isTrue();
 	}
 	
 	

@@ -28,27 +28,8 @@ public class PlayerServiceTests {
 	@Autowired
 	protected GameService gameService;
 	
-	@Test
-	void shouldFindPlayers() {
-		Collection<Player> players = this.playerService.findAll();
 
-		Player player = EntityUtils.getById(players, Player.class, 1);
-		assertThat(player.getCurrentHearts()).isEqualTo(5);
-		assertThat(player.getHonor()).isEqualTo(3);
-		assertThat(player.getMaxHearts()).isEqualTo(5);
-		assertThat(player.getRol()).isEqualTo(Rol.NINJA);
-		assertThat(player.getWonGame()).isEqualTo(true);
-	}
-	
-	@Test
-	void shouldFindPlayerById() {
-		Player player = this.playerService.findById(2).get();
-		assertThat(player.getCurrentHearts()).isEqualTo(4);
-		assertThat(player.getHonor()).isEqualTo(5);
-		assertThat(player.getMaxHearts()).isEqualTo(4);
-		assertThat(player.getRol()).isEqualTo(Rol.NINJA);
-		assertThat(player.getWonGame()).isEqualTo(true);
-	}
+
 	
 	@Test
 	void shouldInsertPlayerProperly() {

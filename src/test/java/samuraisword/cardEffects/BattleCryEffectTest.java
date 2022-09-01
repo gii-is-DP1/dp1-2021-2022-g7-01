@@ -69,22 +69,22 @@ public class BattleCryEffectTest {
 						if (usaParada == 1) {
 							cardService.discard(c.getName(), p.getHand(), g.getDiscardPile());
 							assertThat(p.getHand().size() == i - 1 && g.getDiscardPile().size() == j + 1
-									&& p.getCurrentHearts() == k);
+									&& p.getCurrentHearts() == k).isTrue();
 						} else {
 							p.setCurrentHearts(p.getCurrentHearts()-1);
 							assertThat(p.getHand().size() == i && g.getDiscardPile().size() == j
-									&& p.getCurrentHearts() == k-1);
+									&& p.getCurrentHearts() == k-1).isTrue();
 						}
 					} else {
 						p.setCurrentHearts(p.getCurrentHearts()-1);
 						assertThat(p.getHand().size() == i && g.getDiscardPile().size() == j
-								&& p.getCurrentHearts() == k-1);
+								&& p.getCurrentHearts() == k-1).isTrue();
 					}
 				}
 			}else {
 				p.setCurrentHearts(p.getCurrentHearts()-1);
 				assertThat(p.getHand().size() == i && g.getDiscardPile().size() == j
-						&& p.getCurrentHearts() == k-1);
+						&& p.getCurrentHearts() == k-1).isTrue();
 			}
 
 		}
