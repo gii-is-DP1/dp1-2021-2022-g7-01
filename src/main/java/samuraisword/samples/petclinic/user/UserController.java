@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -93,11 +94,39 @@ public class UserController {
 	public String processDeleteForm(@PathVariable("id_user") String id_user, Map<String, Object> model) {
 		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		User user = userService.findUser(userDetails.getUsername()).get();
-		if(userDetails.getAuthorities().toString().contains("admin") || user.getUsername().equals(id_user)) {
+		if(userDetails.getAuthorities().toString().contains("admin")) {
 			userService.deleteUser(id_user);
+			if(user.getUsername().equals(id_user)) {
+			return "redirect:/logout";
 		}
+		}
+		
 		return "redirect:/";
 	}
+	
+	@GetMapping(value = "/users/update/{id_user}")
+	public String processUpdateForm(@PathVariable("id_user") String id_user, Map<String, Object> model) {		
+		Optional<User> userOptional = userService.findUser(id_user);
+		if (userOptional.isEmpty() || !userOptional.get().getUsername().equals(id_user)) {
+			return "exception";
+		} else {
+			model.put("user", userOptional.get());
+			return "users/update";
+		}
+	}
+	
+	
+	@PostMapping(value = "/users/update/user")
+	public String processUpdate2Form(@Valid User user, BindingResult result, Map<String, Object> model) {
+		if (result.hasErrors()) {
+			model.put("user", user);
+			return "users/update";
+		} else {
+			userService.saveUser(user);
+			return "redirect:/";
+		}
+	}
+	
 
 	@GetMapping(value = "/users/friends/delete/{id_user}")
 	public String processDeleteFriendForm(@PathVariable("id_user") String id_user, Map<String, Object> model) {
