@@ -72,7 +72,7 @@
 			<thead>
 	        <tr>
 	            <th>Friends</th>
-	            
+	            <th>Delete</th>
 	        </tr>
 	        </thead>
         	<tbody>
@@ -83,6 +83,11 @@
                         <spring:param name="username" value="${friend}"/>
                     </spring:url>
                     <a href="${fn:escapeXml(userUrl)}"><c:out value="${friend}"/>
+        		</td>
+        		<td>
+	        		<div style="width: 100%; display: flex; justify-content: flex-end">
+						<a href="/users/friends/delete/${friend}" class="btn btn-default">Delete friend</a>
+					</div>
         		</td>
         		</tr>
         	</c:forEach>

@@ -291,7 +291,9 @@ table {
 				    	<c:when test="${ player.getUser().getUsername().equals(POVplayer.getUser().getUsername()) }">
 				    		<button class = "player" style="border-radius: 10px; background-color: #40CFFF;" onclick="myFunction(${player.getUser().getUsername()})"> ${ player.getUser().getUsername() } </button>
 				    	</c:when>
-				    	
+				    	<c:when test="${ player.getCurrentHearts()<=0 || player.getHand().size()<=0}">
+				    		<button class = "player" style="border-radius: 10px; background-color: #9BA3AC;" onclick="myFunction(${player.getUser().getUsername()})"> ${ player.getUser().getUsername() } </button>
+				    	</c:when>
 				    	<c:otherwise>
 				    		<button class = "player" style="border-radius: 10px;" onclick="myFunction(${player.getUser().getUsername()})"> ${ player.getUser().getUsername() } </button>
 				    	</c:otherwise>
