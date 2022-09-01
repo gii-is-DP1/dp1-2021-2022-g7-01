@@ -369,7 +369,7 @@ table {
 					<td>
 						<c:choose>
 							<c:when test="${ player.getRol().toString().equals('SHOGUN') }">
-								<spring:url value="/resources/images/roles/${ player.getRol() }.png" htmlEscape="true" var="Rol" /> 
+								<spring:url value="/resources/images/roles/${ player.getRol().toString().toLowerCase() }.png" htmlEscape="true" var="Rol" /> 
 								<img style="float: left; height:150px;" title="" src="${Rol}" id="Rol" />
 							</c:when>
 							<c:otherwise>
@@ -378,7 +378,7 @@ table {
 								<img style="float: left; height:150px;" title="" src="${Rol}" id="Rol" />
 							</c:if>
 							<c:if test="${b==false}">
-							<spring:url value="/resources/images/roles/${ player.getRol() }.png" htmlEscape="true" var="Rol" /> 
+							<spring:url value="/resources/images/roles/${ player.getRol().toString().toLowerCase() }.png" htmlEscape="true" var="Rol" /> 
 								<img style="float: left; height:150px;" title="" src="${Rol}" id="Rol" />
 							</c:if>
 							</c:otherwise>
@@ -760,7 +760,7 @@ table {
 			    				
 			    				<div class="your-player-info-container">
 			    			<h4 class="your-player-title">YOUR ROL</h4>
-			    			<img class="your-player-image" src="/resources/images/roles/${player.getRol()}.png" alt="charactere" />
+			    			<img class="your-player-image" src="/resources/images/roles/${player.getRol().toString().toLowerCase()}.png" alt="charactere" />
 			    				</div>
 			    				
 			    			

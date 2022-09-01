@@ -105,9 +105,9 @@ public class ProfileController {
 		List<Player> listPlayer = user.getListPlayers();
 		Integer playedGames = listPlayer.size();
 		model.put("playedGames", playedGames);
-		Integer wonGames = (int) listPlayer.stream().filter(player -> player.getWonGame()).count();
+		Integer wonGames = (int) listPlayer.stream().filter(player -> player.getGame().getWonPlayers().contains(player.getUser())).count();
 		model.put("wonGames", wonGames);
-		Integer lostGames = (int) listPlayer.stream().filter(player -> !player.getWonGame()).count();
+		Integer lostGames = (int) listPlayer.stream().filter(player -> !player.getGame().getWonPlayers().contains(player.getUser())).count();
 		model.put("lostGames", lostGames);
 		Integer shogunGames = (int) listPlayer.stream().filter(player -> player.getRol().equals(Rol.SHOGUN)).count();
 		model.put("shogunGames", shogunGames);

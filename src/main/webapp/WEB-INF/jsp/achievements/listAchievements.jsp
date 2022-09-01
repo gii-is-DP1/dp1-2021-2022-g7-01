@@ -66,13 +66,12 @@ th, td {
 		<div id="${Rol}" class="division">
 			<c:set value="0" var="vueltas" />
 			<div align="center">
-				<spring:url value="/resources/images/roles/${Rol}.png"
+				<spring:url value="/resources/images/roles/${Rol.toString().toLowerCase()}.png"
 					htmlEscape="true" var="rol" />
 				<h2>
 					${Rol} <img class="img-responsive" src="${rol}" align="bottom"
 						id="rol">
 				</h2>
-
 				<table>
 					<tr>
 						<c:forEach items="${mapPersonal}" var="achievement">
