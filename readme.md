@@ -1,6 +1,7 @@
 # Samurai Sword
 
 Este repositorio almacena el proyecto de desarrollo del juego de mesa [Samurai Sword](https://www.dvgiochi.com/catalogo/samurai-sword/?lang=eng). 
+Además se encuentra desplegado en [Heroku](http://dp-samurai-sword.herokuapp.com/), aunque la funcionalidad de cambiar foto de perfil no funciona por problemas de compatibilidad.
 
 # IMPORTANTE 
 
