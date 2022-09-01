@@ -41,51 +41,11 @@ public class CardController {
 
 	@GetMapping(value = { "/cards" })
 	public String listCards(Map<String, Object> model) {
+		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		Collection<Card> listCards = CardService.findAll();
 		model.put("cards", listCards);
+		model.put("authority", userDetails.getAuthorities().toString().contains("admin"));
 		return "cards/cardsList";
-	}
-
-	@GetMapping(value = { "/cards/new" })
-	public String newAchievementForm(Map<String, Object> model) {
-		Card card = new Card();
-		model.put("card", card);
-		return FORM_CARD;
-	}
-
-	@Valid
-	@PostMapping(value = "/cards/new")
-	public String processCreationForm(@Valid Card card, BindingResult result, ModelMap model) {
-		if (result.hasErrors()) {
-			model.put("cards", card);
-			return FORM_CARD;
-		} else {
-			UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-			User user = userService.findUser(userDetails.getUsername()).get();
-			card.setUser(user);
-			CardService.saveCard(card);
-			return "redirect:/cards";
-		}
-	}
-	
-
-	@GetMapping(value = { "/cards/edit/{id_card}" })
-	public String editCardForm(@PathVariable("id_card") int idCard, Map<String, Object> model) {
-		Card card = CardService.findById(idCard).get();
-		model.put("card", card);
-		return FORM_CARD;
-	}
-	
-	@PostMapping(value = { "/cards/edit/{id_card}" })
-	public String processEditForm(@PathVariable("id_card") int idCard, @Valid Card card, BindingResult result, Map<String, Object> model) {
-		if (result.hasErrors()) {
-			model.put("card", card);
-			return FORM_CARD;
-		}
-		Card cardToUpdate = CardService.findById(idCard).get();
-		BeanUtils.copyProperties(card, cardToUpdate, "id","user");
-		CardService.saveCard(cardToUpdate);
-		return "redirect:/cards";
 	}
 	
 	@GetMapping(value = { "/cards/delete/{id_card}" })

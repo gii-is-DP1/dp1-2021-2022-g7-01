@@ -7,9 +7,6 @@
 
 <petclinic:layout pageName="achievements/manage">
     <h2>Manage achievements</h2>
-    <div style="width: 100%; display: flex; justify-content: flex-end">
-			<a href="/achievements/new" class="btn btn-default">Create achievement</a>
-		</div>
 		
     <table id="cardsTable" class="table table-striped">
         <thead>
@@ -40,14 +37,6 @@
 					style="width: 150px;" />
                 </td>
                  <td>
-                <spring:url value="edit/{id_achievement}" var="editUrl">
-						<spring:param name="id_achievement" value="${achievement.id}" />
-					</spring:url>
-					<a href="${fn:escapeXml(editUrl)}" class="btn btn-default">Edit
-						Achievement</a>
-                    <spring:url value="delete/{id_achievement}" var="editUrl">
-							<spring:param name="id_achievement" value="${achievement.id}" />
-						</spring:url>
 					<a href="${fn:escapeXml(editUrl)}" class="btn btn-default">Delete
 						Achievement</a>
                 </td>

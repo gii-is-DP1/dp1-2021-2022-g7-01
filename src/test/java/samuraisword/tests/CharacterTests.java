@@ -66,8 +66,7 @@ public class CharacterTests {
 		for (Player p : g.getListPlayers()) {
 
 			if (p.getCharacter().getName().equals("Benkei")) {
-				System.out.println("Benkei");
-				assertThat(p.getDistanceBonus() == 1);
+				assertThat(p.getDistanceBonus() == 1).isTrue();
 
 			}
 		}
@@ -81,8 +80,7 @@ public class CharacterTests {
 		for (Player p : g.getListPlayers()) {
 
 			if (p.getCharacter().getName().equals("Goemon")) {
-				System.out.println("Goemon");
-				assertThat(p.getWeaponBonus() == 1);
+				assertThat(p.getWeaponBonus() == 1).isTrue();
 			}
 		}
 
@@ -95,8 +93,7 @@ public class CharacterTests {
 		for (Player p : g.getListPlayers()) {
 
 			if (p.getCharacter().getName().equals("Ginchiyo")) {
-				System.out.println("Ginchiyo");
-				assertThat(p.getAntiDamageBonus() == 1);
+				assertThat(p.getAntiDamageBonus() == 1).isTrue();
 			}
 		}
 
@@ -104,7 +101,6 @@ public class CharacterTests {
 
 	@Test
 	void checkHideyoshiAction() {
-		System.out.println("pepe");
 		Game g = new Game();
 		createTestGame(g);
 
@@ -114,7 +110,7 @@ public class CharacterTests {
 				g.setCurrentPlayer(p);
 				int n = p.getHand().size();
 				gameService.processDrawPhase(g);
-				assertThat(p.getHand().size() == n + 3);
+				assertThat(p.getHand().size() == n + 3).isTrue();
 			}
 		}
 
@@ -127,8 +123,7 @@ public class CharacterTests {
 		for (Player p : g.getListPlayers()) {
 
 			if (p.getCharacter().getName().equals("Musashi")) {
-				System.out.println("Musashi");
-				assertThat(p.getDamageBonus() == 1);
+				assertThat(p.getDamageBonus() == 1).isTrue();
 			}
 		}
 
@@ -145,14 +140,13 @@ public class CharacterTests {
 			if (!(game.getListPlayers().get(a).equals(game.getCurrentPlayer()))) {
 				game.getWaitingForPlayer().add(game.getListPlayers().get(a));
 			}
-			if (game.getListPlayers().get(a).getHand().size() == 0
-					|| game.getListPlayers().get(a).getCurrentHearts() <= 0
-					|| game.getListPlayers().get(a).getCharacter().equals("Chiyome")) {
+			if (game.getListPlayers().get(a).getCharacter().getName().equals("Chiyome")) {
 				game.getWaitingForPlayer().remove(game.getListPlayers().get(a));
 			}
 		}
-		for (Player p : lp) {
-			assertThat(!p.getCharacter().getName().equals("Chiyome"));
+		for (Player p : game.getWaitingForPlayer()) {
+			System.out.println("pepe"+ p.getCharacter().getName());
+			assertThat(p.getCharacter().getName().equals("Chiyomee")).isFalse();
 		}
 	}
 
@@ -162,20 +156,22 @@ public class CharacterTests {
 		Game g = new Game();
 		createTestGame(g);
 		int n = 0;
+		int m = g.getDeck().size();
+		
 
 		for (Player p : g.getListPlayers()) {
 
 			if (p.getCharacter().getName().equals("Tomoe")) {
-				n+=p.getHand().size();
+				n=p.getHand().size();
 				Card card = g.getDeck().get(0);
-				g.getCurrentPlayer().getHand().add(card);
+				p.getHand().add(card);
 				g.getDeck().remove(0);
 			}
 		}
 		for (Player p : g.getListPlayers()) {
 
 			if (p.getCharacter().getName().equals("Tomoe")) {
-				assertThat(p.getHand().size()==n+1);
+				assertThat(p.getHand().size()==(n+1) && g.getDeck().size()==(m-1)).isTrue();
 			}
 		}
 

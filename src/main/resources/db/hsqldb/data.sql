@@ -1,8 +1,8 @@
 -- One admin user, named admin1 with passwor 4dm1n and authority admin
-INSERT INTO users(username,email,password,enabled) VALUES ('admin1','eladmin@gmail.com','4dm1n',TRUE);
+INSERT INTO users(username,email,password,enabled) VALUES ('admin1','eladmin@gmail.com','adminadmin',TRUE);
 INSERT INTO authorities(id,username,authority) VALUES (1,'admin1','admin');
 
-INSERT INTO users(username,email,password,enabled) VALUES ('alefr99','alefraile1@gmail.com','123123',TRUE);
+INSERT INTO users(username,email,password,enabled) VALUES ('alefr99','alefraile1@gmail.com','123123123',TRUE);
 INSERT INTO authorities(id,username,authority) VALUES (4,'alefr99','admin');
 
 INSERT INTO users(username,email,password,enabled) VALUES ('DonShelby','golfoman@gmail.com','DonShelby',TRUE);
@@ -20,10 +20,10 @@ INSERT INTO authorities(id,username,authority) VALUES (7,'pedolirod','admin');
 INSERT INTO users(username,email,password,enabled) VALUES ('antquiher1','antquiher1@gmail.com','antquiher1',TRUE);
 INSERT INTO authorities(id,username,authority) VALUES (8,'antquiher1','admin');
 
-INSERT INTO users(username,email,password,enabled) VALUES ('juanlo','juanlo@gmail.com','juanlo',TRUE);
+INSERT INTO users(username,email,password,enabled) VALUES ('juanlo','juanlo@gmail.com','juanloooo',TRUE);
 INSERT INTO authorities(id,username,authority) VALUES (9,'juanlo','admin');
 
-INSERT INTO users(username,email,password,enabled) VALUES ('prueba','prueba@gmail.com','prueba',TRUE);
+INSERT INTO users(username,email,password,enabled) VALUES ('prueba','prueba@gmail.com','prueba123',TRUE);
 INSERT INTO authorities(id,username,authority) VALUES (10,'prueba','admin');
 
 INSERT INTO friends(id_user, id_user_friend) VALUES ('diecrequi', 'alefr99');
@@ -84,63 +84,63 @@ INSERT INTO types2 VALUES (4, 'Ronin');
 INSERT INTO types2 VALUES (5, 'Ninguno');
 
 
-INSERT INTO achievements (id, title, body, typeL, typeR, username) VALUES (1, 'Hello world', 'Write 1 comment', 1, 5, 'admin1');
-INSERT INTO achievements (id, title, body, typeL, typeR, username) VALUES (2, 'Stalker', 'Send 5 friend requests', 2, 5, 'admin1');
-INSERT INTO achievements (id, title, body, typeL, typeR, username) VALUES (3, 'Friends with benefits', 'Be friend with 3 users', 3, 5, 'admin1');
-INSERT INTO achievements (id, title, body, typeL, typeR, username) VALUES (4, 'Center of atention', 'Be friend with 5 users', 4, 5, 'admin1');
-INSERT INTO achievements (id, title, body, typeL, typeR, username) VALUES (9, 'Initiated', 'Create an account', 1, 5, 'admin1');
+INSERT INTO achievements (id, title, body, typeL, typeR) VALUES (1, 'Hello world', 'Write 1 comment', 1, 5);
+INSERT INTO achievements (id, title, body, typeL, typeR) VALUES (2, 'Stalker', 'Send 5 friend requests', 2, 5);
+INSERT INTO achievements (id, title, body, typeL, typeR) VALUES (3, 'Friends with benefits', 'Be friend with 3 users', 3, 5);
+INSERT INTO achievements (id, title, body, typeL, typeR) VALUES (4, 'Center of atention', 'Be friend with 5 users', 4, 5);
+INSERT INTO achievements (id, title, body, typeL, typeR) VALUES (9, 'Initiated', 'Create an account', 1, 5);
 
-INSERT INTO achievements (id, title, body, typeL, typeR, username) VALUES (5, 'Shogun amateur', 'Win 1 game being a SHOGUN', 1, 1, 'admin1');
-INSERT INTO achievements (id, title, body, typeL, typeR, username) VALUES (10, 'Shogun junior', 'Win 3 game being a SHOGUN', 2, 1, 'admin1');
-INSERT INTO achievements (id, title, body, typeL, typeR, username) VALUES (11, 'Shogun senior', 'Win 5 game being a SHOGUN', 3, 1, 'admin1');
-INSERT INTO achievements (id, title, body, typeL, typeR, username) VALUES (12, 'Shogun master', 'Win 8 game being a SHOGUN', 4, 1, 'admin1');
-INSERT INTO achievements (id, title, body, typeL, typeR, username) VALUES (22, 'First time Shogun', 'Play 1 game being a SHOGUN', 1, 1, 'admin1');
-INSERT INTO achievements (id, title, body, typeL, typeR, username) VALUES (23, 'Silver Shogun', 'Play 3 game being a SHOGUN', 2, 1, 'admin1');
-INSERT INTO achievements (id, title, body, typeL, typeR, username) VALUES (24, 'Gold Shogun', 'Play 5 game being a SHOGUN', 3, 1, 'admin1');
-INSERT INTO achievements (id, title, body, typeL, typeR, username) VALUES (25, 'Diamond Shogun', 'Play 8 game being a SHOGUN', 4, 1, 'admin1');
-INSERT INTO achievements (id, title, body, typeL, typeR, username) VALUES (38, 'Mediocre Shogun', 'Lose 1 game being a SHOGUN', 1, 1, 'admin1');
-INSERT INTO achievements (id, title, body, typeL, typeR, username) VALUES (39, 'Bad Shogun', 'Lose 3 game being a SHOGUN', 2, 1, 'admin1');
-INSERT INTO achievements (id, title, body, typeL, typeR, username) VALUES (53, 'Horrible Shogun', 'Lose 5 game being a SHOGUN', 3, 1, 'admin1');
-INSERT INTO achievements (id, title, body, typeL, typeR, username) VALUES (40, 'The worst Shogun', 'Lose 8 game being a SHOGUN', 4, 1, 'admin1');
+INSERT INTO achievements (id, title, body, typeL, typeR) VALUES (5, 'Shogun amateur', 'Win 1 game being a SHOGUN', 1, 1);
+INSERT INTO achievements (id, title, body, typeL, typeR) VALUES (10, 'Shogun junior', 'Win 3 game being a SHOGUN', 2, 1);
+INSERT INTO achievements (id, title, body, typeL, typeR) VALUES (11, 'Shogun senior', 'Win 5 game being a SHOGUN', 3, 1);
+INSERT INTO achievements (id, title, body, typeL, typeR) VALUES (12, 'Shogun master', 'Win 8 game being a SHOGUN', 4, 1);
+INSERT INTO achievements (id, title, body, typeL, typeR) VALUES (22, 'First time Shogun', 'Play 1 game being a SHOGUN', 1, 1);
+INSERT INTO achievements (id, title, body, typeL, typeR) VALUES (23, 'Silver Shogun', 'Play 3 game being a SHOGUN', 2, 1);
+INSERT INTO achievements (id, title, body, typeL, typeR) VALUES (24, 'Gold Shogun', 'Play 5 game being a SHOGUN', 3, 1);
+INSERT INTO achievements (id, title, body, typeL, typeR) VALUES (25, 'Diamond Shogun', 'Play 8 game being a SHOGUN', 4, 1);
+INSERT INTO achievements (id, title, body, typeL, typeR) VALUES (38, 'Mediocre Shogun', 'Lose 1 game being a SHOGUN', 1, 1);
+INSERT INTO achievements (id, title, body, typeL, typeR) VALUES (39, 'Bad Shogun', 'Lose 3 game being a SHOGUN', 2, 1);
+INSERT INTO achievements (id, title, body, typeL, typeR) VALUES (53, 'Horrible Shogun', 'Lose 5 game being a SHOGUN', 3, 1);
+INSERT INTO achievements (id, title, body, typeL, typeR) VALUES (40, 'The worst Shogun', 'Lose 8 game being a SHOGUN', 4, 1);
 
-INSERT INTO achievements (id, title, body, typeL, typeR, username) VALUES (6, 'Ninja amateur', 'Win 1 game being a NINJA', 1, 2, 'admin1');
-INSERT INTO achievements (id, title, body, typeL, typeR, username) VALUES (13, 'Ninja junior', 'Win 3 game being a NINJA', 2, 2, 'admin1');
-INSERT INTO achievements (id, title, body, typeL, typeR, username) VALUES (14, 'Ninja senior', 'Win 5 game being a NINJA', 3, 2, 'admin1');
-INSERT INTO achievements (id, title, body, typeL, typeR, username) VALUES (15, 'Ninja master', 'Win 8 game being a NINJA', 4, 2, 'admin1');
-INSERT INTO achievements (id, title, body, typeL, typeR, username) VALUES (26, 'First time Ninja', 'Play 1 game being a NINJA', 1, 2, 'admin1');
-INSERT INTO achievements (id, title, body, typeL, typeR, username) VALUES (27, 'Silver Ninja', 'Play 3 game being a NINJA', 2, 2, 'admin1');
-INSERT INTO achievements (id, title, body, typeL, typeR, username) VALUES (28, 'Gold Ninja', 'Play 5 game being a NINJA', 3, 2, 'admin1');
-INSERT INTO achievements (id, title, body, typeL, typeR, username) VALUES (29, 'Diamond Ninja', 'Play 8 game being a NINJA', 4, 2, 'admin1');
-INSERT INTO achievements (id, title, body, typeL, typeR, username) VALUES (41, 'Mediocre Ninja', 'Lose 1 game being a NINJA', 1, 2, 'admin1');
-INSERT INTO achievements (id, title, body, typeL, typeR, username) VALUES (42, 'Bad Ninja', 'Lose 3 game being a NINJA', 2, 2, 'admin1');
-INSERT INTO achievements (id, title, body, typeL, typeR, username) VALUES (43, 'Horrible Ninja', 'Lose 5 game being a NINJA', 3, 2, 'admin1');
-INSERT INTO achievements (id, title, body, typeL, typeR, username) VALUES (44, 'The worst Ninja', 'Lose 8 game being a NINJA', 4, 2, 'admin1');
+INSERT INTO achievements (id, title, body, typeL, typeR) VALUES (6, 'Ninja amateur', 'Win 1 game being a NINJA', 1, 2);
+INSERT INTO achievements (id, title, body, typeL, typeR) VALUES (13, 'Ninja junior', 'Win 3 game being a NINJA', 2, 2);
+INSERT INTO achievements (id, title, body, typeL, typeR) VALUES (14, 'Ninja senior', 'Win 5 game being a NINJA', 3, 2);
+INSERT INTO achievements (id, title, body, typeL, typeR) VALUES (15, 'Ninja master', 'Win 8 game being a NINJA', 4, 2);
+INSERT INTO achievements (id, title, body, typeL, typeR) VALUES (26, 'First time Ninja', 'Play 1 game being a NINJA', 1, 2);
+INSERT INTO achievements (id, title, body, typeL, typeR) VALUES (27, 'Silver Ninja', 'Play 3 game being a NINJA', 2, 2);
+INSERT INTO achievements (id, title, body, typeL, typeR) VALUES (28, 'Gold Ninja', 'Play 5 game being a NINJA', 3, 2);
+INSERT INTO achievements (id, title, body, typeL, typeR) VALUES (29, 'Diamond Ninja', 'Play 8 game being a NINJA', 4, 2);
+INSERT INTO achievements (id, title, body, typeL, typeR) VALUES (41, 'Mediocre Ninja', 'Lose 1 game being a NINJA', 1, 2);
+INSERT INTO achievements (id, title, body, typeL, typeR) VALUES (42, 'Bad Ninja', 'Lose 3 game being a NINJA', 2, 2);
+INSERT INTO achievements (id, title, body, typeL, typeR) VALUES (43, 'Horrible Ninja', 'Lose 5 game being a NINJA', 3, 2);
+INSERT INTO achievements (id, title, body, typeL, typeR) VALUES (44, 'The worst Ninja', 'Lose 8 game being a NINJA', 4, 2);
 
-INSERT INTO achievements (id, title, body, typeL, typeR, username) VALUES (7, 'Samurai amateur', 'Win 1 game being a SAMURAI', 1, 3, 'admin1');
-INSERT INTO achievements (id, title, body, typeL, typeR, username) VALUES (16, 'Samurai junior', 'Win 3 game being a SAMURAI', 2, 3, 'admin1');
-INSERT INTO achievements (id, title, body, typeL, typeR, username) VALUES (17, 'Samurai senior', 'Win 5 game being a SAMURAI', 3, 3, 'admin1');
-INSERT INTO achievements (id, title, body, typeL, typeR, username) VALUES (18, 'Samurai master', 'Win 8 game being a SAMURAI', 4, 3, 'admin1');
-INSERT INTO achievements (id, title, body, typeL, typeR, username) VALUES (30, 'First time Samurai', 'Play 1 game being a SAMURAI', 1, 3, 'admin1');
-INSERT INTO achievements (id, title, body, typeL, typeR, username) VALUES (31, 'Silver Samurai', 'Play 3 game being a SAMURAI', 2, 3, 'admin1');
-INSERT INTO achievements (id, title, body, typeL, typeR, username) VALUES (32, 'Gold Samurai', 'Play 5 game being a SAMURAI', 3, 3, 'admin1');
-INSERT INTO achievements (id, title, body, typeL, typeR, username) VALUES (33, 'Diamond Samurai', 'Play 8 game being a SAMURAI', 4, 3, 'admin1');
-INSERT INTO achievements (id, title, body, typeL, typeR, username) VALUES (45, 'Mediocre Samurai', 'Lose 1 game being a SAMURAI', 1, 3, 'admin1');
-INSERT INTO achievements (id, title, body, typeL, typeR, username) VALUES (46, 'Bad Samurai', 'Lose 3 game being a SAMURAI', 2, 3, 'admin1');
-INSERT INTO achievements (id, title, body, typeL, typeR, username) VALUES (47, 'Horrible Samurai', 'Lose 5 game being a SAMURAI', 3, 3, 'admin1');
-INSERT INTO achievements (id, title, body, typeL, typeR, username) VALUES (48, 'The worst Samurai', 'Lose 8 game being a SAMURAI', 4, 3, 'admin1');
+INSERT INTO achievements (id, title, body, typeL, typeR) VALUES (7, 'Samurai amateur', 'Win 1 game being a SAMURAI', 1, 3);
+INSERT INTO achievements (id, title, body, typeL, typeR) VALUES (16, 'Samurai junior', 'Win 3 game being a SAMURAI', 2, 3);
+INSERT INTO achievements (id, title, body, typeL, typeR) VALUES (17, 'Samurai senior', 'Win 5 game being a SAMURAI', 3, 3);
+INSERT INTO achievements (id, title, body, typeL, typeR) VALUES (18, 'Samurai master', 'Win 8 game being a SAMURAI', 4, 3);
+INSERT INTO achievements (id, title, body, typeL, typeR) VALUES (30, 'First time Samurai', 'Play 1 game being a SAMURAI', 1, 3);
+INSERT INTO achievements (id, title, body, typeL, typeR) VALUES (31, 'Silver Samurai', 'Play 3 game being a SAMURAI', 2, 3);
+INSERT INTO achievements (id, title, body, typeL, typeR) VALUES (32, 'Gold Samurai', 'Play 5 game being a SAMURAI', 3, 3);
+INSERT INTO achievements (id, title, body, typeL, typeR) VALUES (33, 'Diamond Samurai', 'Play 8 game being a SAMURAI', 4, 3);
+INSERT INTO achievements (id, title, body, typeL, typeR) VALUES (45, 'Mediocre Samurai', 'Lose 1 game being a SAMURAI', 1, 3);
+INSERT INTO achievements (id, title, body, typeL, typeR) VALUES (46, 'Bad Samurai', 'Lose 3 game being a SAMURAI', 2, 3);
+INSERT INTO achievements (id, title, body, typeL, typeR) VALUES (47, 'Horrible Samurai', 'Lose 5 game being a SAMURAI', 3, 3);
+INSERT INTO achievements (id, title, body, typeL, typeR) VALUES (48, 'The worst Samurai', 'Lose 8 game being a SAMURAI', 4, 3);
 
-INSERT INTO achievements (id, title, body, typeL, typeR, username) VALUES (8, 'Ronin amateur', 'Win 1 game being a RONIN', 1, 4, 'admin1');
-INSERT INTO achievements (id, title, body, typeL, typeR, username) VALUES (19, 'Ronin junior', 'Win 3 game being a RONIN', 2, 4, 'admin1');
-INSERT INTO achievements (id, title, body, typeL, typeR, username) VALUES (20, 'Ronin senior', 'Win 5 game being a RONIN', 3, 4, 'admin1');
-INSERT INTO achievements (id, title, body, typeL, typeR, username) VALUES (21, 'Ronin master', 'Win 8 game being a RONIN', 4, 4, 'admin1');
-INSERT INTO achievements (id, title, body, typeL, typeR, username) VALUES (34, 'First time Ronin', 'Play 1 game being a RONIN', 1, 4, 'admin1');
-INSERT INTO achievements (id, title, body, typeL, typeR, username) VALUES (35, 'Silver Ronin', 'Play 3 game being a RONIN', 2, 4, 'admin1');
-INSERT INTO achievements (id, title, body, typeL, typeR, username) VALUES (36, 'Gold Ronin', 'Play 5 game being a RONIN', 3, 4, 'admin1');
-INSERT INTO achievements (id, title, body, typeL, typeR, username) VALUES (37, 'Diamond Ronin', 'Play 8 game being a RONIN', 4, 4, 'admin1');
-INSERT INTO achievements (id, title, body, typeL, typeR, username) VALUES (49, 'Mediocre Ronin', 'Lose 1 game being a RONIN', 1, 4, 'admin1');
-INSERT INTO achievements (id, title, body, typeL, typeR, username) VALUES (50, 'Bad Ronin', 'Lose 3 game being a RONIN', 2, 4, 'admin1');
-INSERT INTO achievements (id, title, body, typeL, typeR, username) VALUES (51, 'Horrible Ronin', 'Lose 5 game being a RONIN', 3, 4, 'admin1');
-INSERT INTO achievements (id, title, body, typeL, typeR, username) VALUES (52, 'The worst Ronin', 'Lose 8 game being a RONIN', 4, 4, 'admin1');
+INSERT INTO achievements (id, title, body, typeL, typeR) VALUES (8, 'Ronin amateur', 'Win 1 game being a RONIN', 1, 4);
+INSERT INTO achievements (id, title, body, typeL, typeR) VALUES (19, 'Ronin junior', 'Win 3 game being a RONIN', 2, 4);
+INSERT INTO achievements (id, title, body, typeL, typeR) VALUES (20, 'Ronin senior', 'Win 5 game being a RONIN', 3, 4);
+INSERT INTO achievements (id, title, body, typeL, typeR) VALUES (21, 'Ronin master', 'Win 8 game being a RONIN', 4, 4);
+INSERT INTO achievements (id, title, body, typeL, typeR) VALUES (34, 'First time Ronin', 'Play 1 game being a RONIN', 1, 4);
+INSERT INTO achievements (id, title, body, typeL, typeR) VALUES (35, 'Silver Ronin', 'Play 3 game being a RONIN', 2, 4);
+INSERT INTO achievements (id, title, body, typeL, typeR) VALUES (36, 'Gold Ronin', 'Play 5 game being a RONIN', 3, 4);
+INSERT INTO achievements (id, title, body, typeL, typeR) VALUES (37, 'Diamond Ronin', 'Play 8 game being a RONIN', 4, 4);
+INSERT INTO achievements (id, title, body, typeL, typeR) VALUES (49, 'Mediocre Ronin', 'Lose 1 game being a RONIN', 1, 4);
+INSERT INTO achievements (id, title, body, typeL, typeR) VALUES (50, 'Bad Ronin', 'Lose 3 game being a RONIN', 2, 4);
+INSERT INTO achievements (id, title, body, typeL, typeR) VALUES (51, 'Horrible Ronin', 'Lose 5 game being a RONIN', 3, 4);
+INSERT INTO achievements (id, title, body, typeL, typeR) VALUES (52, 'The worst Ronin', 'Lose 8 game being a RONIN', 4, 4);
 
 INSERT INTO cards(name,image,cards_Per_Deck,color,CARD_COLOR) VALUES ('armadura','property/armadura.png',4,'Blue','Blue');
 INSERT INTO cards(name,image,cards_Per_Deck,color,CARD_COLOR) VALUES ('bushido','property/bushido.png',3,'Blue','Blue');

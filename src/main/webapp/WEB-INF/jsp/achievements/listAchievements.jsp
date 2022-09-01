@@ -51,11 +51,13 @@ th, td {
 
 <petclinic:layout pageName="achievements">
 	<h1 align="center">Achievements</h1>
+	
 	<div class="container" >
-		<div style="width: 100%; display: flex; justify-content: flex-end">
-			<a href="/achievements/manage" class="btn btn-default">Manage achievement</a>
-		</div>
-		
+		<c:if test="${authority==true}">
+			<div style="width: 100%; display: flex; justify-content: flex-end">
+				<a href="/achievements/manage" class="btn btn-default">Manage achievement</a>
+			</div>
+		</c:if>
 		<c:forEach items="${types2}" var="Rol">
 		<button onclick="myFunction(${Rol})">${Rol}</button>
 		</c:forEach>

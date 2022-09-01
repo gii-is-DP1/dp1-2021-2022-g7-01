@@ -106,6 +106,7 @@ img.estrella {
 			</div>
 		</div>
 		<div align="right" class="col-sm-2 ">
+			<c:if test="${listPlayer.size()<7 }">
 			<h2>Friends (${listFriends.size()})</h2>
 			<c:if test="${listFriends.size()!=0}">
 				<c:forEach var="i" begin="0" end="${listFriends.size()-1}">
@@ -118,6 +119,7 @@ img.estrella {
 							<button class="btn btn-default" type="submit">Invite</button></c:if></c:forEach>
 						</form:form>					
 				</c:forEach>
+			</c:if>
 			</c:if>
 			<br>
 

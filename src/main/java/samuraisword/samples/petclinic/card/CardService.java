@@ -37,6 +37,19 @@ public class CardService {
 	public Optional<RedCard> findRedCardByName(String name) {
 		return cardRepository.findRedCardByName(name);
 	}
+	
+	public List<Card> findAllRedCards(){
+		List<Card> cards = (List<Card>) cardRepository.findAll();
+		List<Card> redCards = new ArrayList<Card>();
+		for(Card c: cards) {
+			if(c.getColor().equals("Red")) {
+				redCards.add(c);
+			}
+		}
+		
+		return redCards;
+	}
+	
 
 	@Transactional
 	public void saveCard(Card card) {

@@ -1,13 +1,13 @@
 package samuraisword.samples.petclinic.user;
 
 import java.util.Collection;
+import java.util.List;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
-
-import samuraisword.achievements.Achievement;
 
 
 
@@ -17,7 +17,10 @@ public interface UserRepository extends  CrudRepository<User, String>{
 	Collection<User> findAll();
 	
 	@Query("SELECT DISTINCT user FROM User user WHERE user.username LIKE :username%")
-	public Collection<User> findByUsername(@Param("username") String username);
+	public List<User> findByUsername(@Param("username") String username, Pageable pageable);
+	
+	@Query("SELECT DISTINCT user FROM User user WHERE user.username LIKE :username%")
+	public List<User> findByUsername(@Param("username") String username);
 	
 	@Query(value = "SELECT ID_USER FROM FRIEND_REQUESTS WHERE ID_USER_REQUESTED=:userRequest", nativeQuery=true)
 	Collection<String> listRequestAll(String userRequest);
@@ -48,4 +51,8 @@ public interface UserRepository extends  CrudRepository<User, String>{
 	@Modifying
 	@Query(value="delete from FRIEND_REQUESTS where ID_USER_REQUESTED=:user2 AND ID_USER=:user1", nativeQuery=true)
 	void deleteRequest(@Param("user2") String ID_USER_REQUESTED, @Param("user1") String ID_USER);
+	
+	@Modifying
+	@Query(value="delete from FRIENDS where ID_USER_FRIEND=:user2 AND ID_USER=:user1", nativeQuery=true)
+	void deleteFriends(@Param("user2") String ID_USER_REQUESTED, @Param("user1") String ID_USER);
 }

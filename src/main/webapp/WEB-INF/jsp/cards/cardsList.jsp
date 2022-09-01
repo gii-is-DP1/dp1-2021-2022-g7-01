@@ -7,9 +7,6 @@
 
 <petclinic:layout pageName="cards">
     <h2>Cards</h2>
-    <div style="width: 100%; display: flex; justify-content: flex-end">
-			<a href="/cards/new" class="btn btn-default">Create card</a>
-		</div>
 		
     <table id="cardsTable" class="table table-striped">
         <thead>
@@ -35,16 +32,9 @@
                     <c:out value="${card.cardsPerDeck}"/>
                 </td>
                 <td>
-                <spring:url value="cards/edit/{id_card}" var="editUrl">
-						<spring:param name="id_card" value="${card.id}" />
-					</spring:url>
-					<a href="${fn:escapeXml(editUrl)}" class="btn btn-default">Edit
-						Card</a>
-                    <spring:url value="cards/delete/{id_card}" var="editUrl">
-						<spring:param name="id_card" value="${card.id}" />
-					</spring:url>
+                <c:if test="${authority==true}">
 					<a href="${fn:escapeXml(editUrl)}" class="btn btn-default">Delete
-						Card</a>
+						Card</a></c:if>
                 </td>
             </tr>
         </c:forEach>
