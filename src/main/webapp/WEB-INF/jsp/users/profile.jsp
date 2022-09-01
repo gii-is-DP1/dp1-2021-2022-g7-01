@@ -72,7 +72,9 @@
 			<thead>
 	        <tr>
 	            <th>Friends</th>
+	            <c:if test="${userProfile.username == username}">
 	            <th>Delete</th>
+	            </c:if>
 	        </tr>
 	        </thead>
         	<tbody>
@@ -84,11 +86,13 @@
                     </spring:url>
                     <a href="${fn:escapeXml(userUrl)}"><c:out value="${friend}"/>
         		</td>
+        		<c:if test="${userProfile.username == username}">
         		<td>
 	        		<div style="width: 100%; display: flex; justify-content: flex-end">
 						<a href="/users/friends/delete/${friend}" class="btn btn-default">Delete friend</a>
 					</div>
         		</td>
+        		</c:if>
         		</tr>
         	</c:forEach>
         	</tbody>

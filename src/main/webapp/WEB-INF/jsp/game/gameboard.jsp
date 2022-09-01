@@ -382,8 +382,14 @@ table {
 								<img style="float: left; height:150px;" title="" src="${Rol}" id="Rol" />
 							</c:when>
 							<c:otherwise>
+							<c:if test="${b==true}">
 								<spring:url value="/resources/images/roles/ninguno.png" htmlEscape="true" var="Rol" /> 
 								<img style="float: left; height:150px;" title="" src="${Rol}" id="Rol" />
+							</c:if>
+							<c:if test="${b==false}">
+							<spring:url value="/resources/images/roles/${ player.getRol() }.png" htmlEscape="true" var="Rol" /> 
+								<img style="float: left; height:150px;" title="" src="${Rol}" id="Rol" />
+							</c:if>
 							</c:otherwise>
 						</c:choose>
 					</td>
