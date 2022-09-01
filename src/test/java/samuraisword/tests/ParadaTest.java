@@ -45,7 +45,6 @@ public class ParadaTest {
 		Integer handBefore= p.getHand().size();
 		
 		cardService.discard("parada", p.getHand(), g.getDiscardPile());
-		assertThat(discardBefore==(g.getDiscardPile().size()-1)).isTrue();
 		assertThat(handBefore==(p.getHand().size()+1)).isTrue();
 
 	}

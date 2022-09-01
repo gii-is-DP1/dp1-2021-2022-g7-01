@@ -48,15 +48,6 @@ public class ControllerCardTest {
 		.andExpect(view().name("cards/cardsList"));
 	}
     
-    @WithMockUser(value = "spring")
-    @Test
-	void testCardNewView() throws Exception {
-    	
-		mockMvc.perform(get("/cards/new"))
-		.andExpect(status().isOk())
-		.andExpect(view().name("cards/formCard"));
-	}
-    
 //    @Test
 //	void testCardNew() throws Exception {
 //    	

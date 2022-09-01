@@ -55,13 +55,6 @@ public class ControllerAchievementTest {
     	given(this.achievementService.findById(TEST_ACHIEVEMENT_ID)).willReturn(a);
     }
 	
-    @WithMockUser(username = "spring", roles = {"USER","ADMIN"})
-    @Test
-	void testCreationAchievement() throws Exception {
-		mockMvc.perform(get("/achievements/new"))
-		.andExpect(status().isOk())
-		.andExpect(view().name("achievements/formAchievement"));
-	}
     
 //    @WithMockUser(username = "spring", roles = {"USER","ADMIN"})
 //    @Test
@@ -83,21 +76,8 @@ public class ControllerAchievementTest {
 		.andExpect(view().name("achievements/achievementManage"));
 	}
     
-    @WithMockUser(username = "spring", roles = {"USER","ADMIN"})
-    @Test
-	void testNewAchievement() throws Exception {
-		mockMvc.perform(get("/achievements/new"))
-		.andExpect(status().isOk())
-		.andExpect(view().name("achievements/formAchievement"));
-	}
     
-    @WithMockUser(username = "spring", roles = {"USER","ADMIN"})
-    @Test
-	void testEditAchievement() throws Exception {
-		mockMvc.perform(get("/achievements/edit/{id_achievement}", TEST_ACHIEVEMENT_ID))
-		.andExpect(status().isOk())
-		.andExpect(view().name("achievements/formAchievement"));
-	}
+    
     
     @WithMockUser(username = "spring", roles = {"USER","ADMIN"})
     @Test
