@@ -153,7 +153,8 @@ public class GameController {
 			gameService.asignOrder(players);
 			
 
-			game.setListPlayers(players);		
+			game.setListPlayers(players);
+		
 
 			for (Player player : game.getListPlayers()) {
 				player.setGame(game);
@@ -165,11 +166,11 @@ public class GameController {
 			}
 
 			gameService.asignCards(game.getDeck(), players);
-			gameService.processDrawPhase(game);
 			game.setGamePhase(GamePhase.MAIN);
 			Player shogun = game.getListPlayers().stream().filter(p -> p.getRol().equals(Rol.SHOGUN)).findFirst().get();
 			game.setCurrentPlayer(shogun);
 			game.getCurrentPlayer().setWeaponBonus(1);
+			gameService.processDrawPhase(game);
 			gameService.saveGame(game);
 		}
 		

@@ -187,8 +187,8 @@ public class GameService {
 			player.setHand(new ArrayList<>());
 			player.setEquipment(new ArrayList<Card>());
 			for (int e = 0; e < cardsGiven; e++) {
-				player.getHand().add(gameDeck.get(e));
-				gameDeck.remove(e);
+				player.getHand().add(gameDeck.get(0));
+				gameDeck.remove(0);
 			}
 		}
 	}
