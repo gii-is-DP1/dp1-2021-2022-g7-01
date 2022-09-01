@@ -51,6 +51,7 @@
 		</tbody>
 	</table>
 	<c:if test="${gamesInProgress.isEmpty()}"><p style="margin-top:-10px; margin-bottom: 20px">There's no game in progress</p></c:if>
+	<c:if test="${authority==true }">
 	<h2>Games ended</h2>
 		<table id="gamesEndedTable" class="table table-striped" style="min-width:720px">
 			<thead>
@@ -85,4 +86,5 @@
 			</tbody>
 		</table>
 		<c:if test="${gamesEnded.isEmpty()}"><p style="margin-top:-10px;">There's no game ended</p></c:if>
+		</c:if>
 </petclinic:layout>

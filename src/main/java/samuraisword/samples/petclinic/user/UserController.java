@@ -134,7 +134,7 @@ public class UserController {
 		User user = userService.findUser(userDetails.getUsername()).get();
 		userService.deleteFriends(id_user, user.getUsername());
 		
-		return "redirect:/";
+		return "redirect:/users/profile/"+user.getUsername();
 	}
 	
 	@GetMapping(value = "/users/find")
