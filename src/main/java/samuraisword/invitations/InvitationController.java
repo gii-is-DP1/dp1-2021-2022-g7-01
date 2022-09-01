@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import antlr.collections.List;
+import samuraisword.game.Game;
 import samuraisword.game.GameService;
+import samuraisword.game.GameSingleton;
 import samuraisword.samples.petclinic.user.UserService;
 
 
@@ -68,8 +70,16 @@ private GameService gameService;
 	
 	@PostMapping(value = "/game/{gameId}/invitation/accept/{invitationId}")
 	public String acceptController(@PathVariable("gameId") Integer gameId, @PathVariable("invitationId") Integer invitationId) {
+		Game game= GameSingleton.getInstance().getMapGames().get(gameId);
+
+		if((game.getListPlayers().size())>=7) {
+			invitationService.deleteInvitationsByGame(game);
+			return "redirect:/game/new";
+		}
 		Optional<Invitation> inv= invitationService.findById(invitationId);
 		invitationService.acceptInvitation(inv.get());
+		
+		
 		return "redirect:/game/"+gameId;
 	}
 	
