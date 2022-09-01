@@ -787,7 +787,7 @@ table {
 	<div class="equipment container">
 	<c:if test="${b==true}">
 	<table>
-	<th>Your equipamient:</th>
+	<th>Your equipment:</th>
 	
 	<tr>
 	<td >
