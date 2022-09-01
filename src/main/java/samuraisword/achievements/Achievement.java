@@ -2,6 +2,7 @@ package samuraisword.achievements;
 
 
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -56,9 +57,7 @@ public class Achievement extends BaseEntity {
 	
 
 	
-	@ManyToOne
-	@JoinColumn(name="username")
-	private User user;
+	
 	
 
 	
