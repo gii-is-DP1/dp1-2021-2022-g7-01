@@ -438,11 +438,11 @@ public class GameController {
 			
 			Player p=playerService.findPlayerByUsernameAndGame(playerA, game);
 			
-			int dano=cardService.findDamage(game.getUseCard().getName()).get();
+			int dano=cardService.findDamage(game.getUseCard().getName()).get()+game.getCurrentPlayer().getDamageBonus();
 			if(dano>1) {
-				game.setAttackerDamage(dano+game.getCurrentPlayer().getDamageBonus()-p.getAntiDamageBonus());
+				game.setAttackerDamage(dano-p.getAntiDamageBonus());
 				}else{
-					game.setAttackerDamage(dano+game.getCurrentPlayer().getDamageBonus());
+					game.setAttackerDamage(dano);
 				}
 			
 			game.setAttackerPlayer(p);
