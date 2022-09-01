@@ -86,7 +86,7 @@ public class UserController {
 
 			// try catch
 			// creating owner, user, and authority
-			return "redirect:/";
+			return "redirect:/users/find";
 		}
 	}
 	
@@ -95,13 +95,15 @@ public class UserController {
 		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		User user = userService.findUser(userDetails.getUsername()).get();
 		if(userDetails.getAuthorities().toString().contains("admin")) {
-			userService.deleteUser(id_user);
 			if(user.getUsername().equals(id_user)) {
-			return "redirect:/logout";
-		}
+				SecurityContextHolder.getContext().setAuthentication(null);
+				
+			}			
+			userService.deleteUser(id_user);
+			
 		}
 		
-		return "redirect:/";
+		return "redirect:/users/find";
 	}
 	
 	@GetMapping(value = "/users/update/{id_user}")
@@ -123,7 +125,7 @@ public class UserController {
 			return "users/update";
 		} else {
 			userService.saveUser(user);
-			return "redirect:/";
+			return "redirect:/users/profile/"+user.getUsername();
 		}
 	}
 	
@@ -233,7 +235,7 @@ public class UserController {
 		if(!user1.equals(usernameProfile)) {
 			userService.sendRequested(user1, usernameProfile);
 		}
-		return "welcome";
+		return "redirect:/users/profile/"+usernameProfile;
 	}
 
 	@PostMapping(value = "friendRequest/AcceptRequest/{usernameProfile}")
@@ -241,7 +243,7 @@ public class UserController {
 		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		String user1 = userDetails.getUsername();
 		userService.acceptRequest(user1, usernameProfile);
-		return "welcome";
+		return "redirect:/friendRequest";
 	}
 
 	@PostMapping(value = "friendRequest/declineRequest/{usernameProfile}")
@@ -249,6 +251,6 @@ public class UserController {
 		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		String user1 = userDetails.getUsername();
 		userService.declineRequest(user1, usernameProfile);
-		return "welcome";
+		return "redirect:/friendRequest";
 	}
 }

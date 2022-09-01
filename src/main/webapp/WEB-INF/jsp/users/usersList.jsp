@@ -54,9 +54,11 @@
                 <td>
                 	<div style="width: 100%; display: flex; justify-content: flex-end">
                 	<c:if test="${authority==true}">
+                	<c:if test="${!user.username.equals(username)}">
                 		<a class="btn btn-default"
 							href="<c:url value="/users/update/${user.username}" />">Edit
 							User</a>
+					</c:if>
 						<a href="/users/delete/${user.username}" class="btn btn-default">Delete User</a>
 					</c:if>
 					</div>

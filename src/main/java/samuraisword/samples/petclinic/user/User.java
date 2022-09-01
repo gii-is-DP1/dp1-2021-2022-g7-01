@@ -25,7 +25,9 @@ import org.springframework.core.style.ToStringCreator;
 import lombok.Getter;
 import lombok.Setter;
 import samuraisword.achievements.AchievementType;
+import samuraisword.achievements.PersonalAchievement;
 import samuraisword.achievements.RolType;
+import samuraisword.comment.Comment;
 import samuraisword.game.Game;
 import samuraisword.invitations.Invitation;
 import samuraisword.player.Player;
@@ -57,6 +59,11 @@ public class User {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "creator")
 	List<Game> createdGames;
 
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+	List<Comment> createdComment;
+	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+	List<PersonalAchievement> personalAchevements;
 	
 	private String avatar;
 	
