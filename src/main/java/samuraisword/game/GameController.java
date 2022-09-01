@@ -140,36 +140,39 @@ public class GameController {
 	public String initGame(@PathVariable("id_game") int gameId, Map<String, Object> model) {
 		String view = "redirect:/game/continue/"+gameId;
 		Game game = GameSingleton.getInstance().getMapGames().get(gameId);
-		game.setStartDate(new Date());
-		invitationService.deleteInvitationsByGame(game);
-		game.setDeck(cardService.createDeck());
-		game.setDiscardPile(new ArrayList<>());
+		if(game.getGamePhase().equals(GamePhase.LOBBY)) {
+			game.setStartDate(new Date());
+			invitationService.deleteInvitationsByGame(game);
+			game.setDeck(cardService.createDeck());
+			game.setDiscardPile(new ArrayList<>());
 
-		List<Player> players = game.getListPlayers();
+			List<Player> players = game.getListPlayers();
 
-		gameService.asignCharacterAndHearts(players);
-		gameService.asignRolAndHonor(players);
-		gameService.asignOrder(players);
+			gameService.asignCharacterAndHearts(players);
+			gameService.asignRolAndHonor(players);
+			gameService.asignOrder(players);
+			
+
+			game.setListPlayers(players);
+			game.setCurrentPlayer(players.get(0));
+			game.getCurrentPlayer().setWeaponBonus(1);
 		
 
-		game.setListPlayers(players);
-		game.setCurrentPlayer(players.get(0));
-		game.getCurrentPlayer().setWeaponBonus(1);
-	
-
-		for (Player player : game.getListPlayers()) {
-			player.setGame(game);
-			player.setEquipment(new ArrayList<>());
-			playerService.savePlayer(player);
-			if(player.getCharacter().getName().equals("Goemon")) {
-				player.setWeaponBonus(2);
+			for (Player player : game.getListPlayers()) {
+				player.setGame(game);
+				player.setEquipment(new ArrayList<>());
+				playerService.savePlayer(player);
+				if(player.getCharacter().getName().equals("Goemon")) {
+					player.setWeaponBonus(2);
+				}
 			}
-		}
 
-		gameService.asignCards(game.getDeck(), players);
-		gameService.processDrawPhase(game);
-		game.setGamePhase(GamePhase.MAIN);
-		gameService.saveGame(game);
+			gameService.asignCards(game.getDeck(), players);
+			gameService.processDrawPhase(game);
+			game.setGamePhase(GamePhase.MAIN);
+			gameService.saveGame(game);
+		}
+		
 		return view;
 	}
 
@@ -285,11 +288,24 @@ public class GameController {
 			}
 			
 			model.put("game", game);
+			Boolean b=false;
+			for(Player p:game.getListPlayers()) {
+				if(p.getUser().getUsername().equals(user.getUsername())) {
+					b=true;
+				}
+			}
+			model.put("b", b);
+			if(b) {
+				Player POVplayer = game.getListPlayers().stream()
+						.filter(p -> p.getUser().getUsername().equals(user.getUsername()))
+						.findFirst().get();
+				model.put("POVplayer", POVplayer);
+			}else {
+				Player POVplayer = new Player();
+				POVplayer.setUser(user);
+				model.put("POVplayer", POVplayer);
+			}
 			
-			Player POVplayer = game.getListPlayers().stream()
-					.filter(p -> p.getUser().getUsername().equals(user.getUsername()))
-					.findFirst().get();
-			model.put("POVplayer", POVplayer);
 			model.put("gameStatus", game.getGamePhase().toString());
 			String discardImage;
 			if(game.getDiscardPile().isEmpty()) {

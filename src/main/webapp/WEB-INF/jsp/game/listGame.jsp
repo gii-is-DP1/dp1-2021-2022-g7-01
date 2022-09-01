@@ -12,10 +12,11 @@
 	<table id="gamesInProgressTable" class="table table-striped" style="min-width: 720px">
 		<thead>
 			<tr>
-				<th style="width: 4%">Id</th>
-				<th style="width: 16%">Start date</th>
-				<th style="width: 13%">Creator</th>
-				<th style="width: 64%">List of players</th>
+				<th style="width: 100px;">Id</th>
+				<th style="width: 200px;">Start date</th>
+				<th style="width: 200px;">Creator</th>
+				<th style="width: 200px;">List of players</th>
+				<th style="width: 200px;">View</th>
 
 			</tr>
 		</thead>
@@ -36,6 +37,13 @@
 							<a href="${fn:escapeXml(userUrl)}"><c:out
 									value="${player.user.username} " /></a>
 						</c:forEach></td>
+						
+					<td><div style="width: 100%; display: flex; justify-content: flex-end">
+
+				<a href="/game/continue/${game.id}" class="btn btn-default">View</a>
+
+			</div>
+						</td>
 				</tr>
 			</c:forEach>
 		</tbody>
