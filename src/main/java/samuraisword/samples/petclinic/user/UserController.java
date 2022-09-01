@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -93,12 +94,49 @@ public class UserController {
 	public String processDeleteForm(@PathVariable("id_user") String id_user, Map<String, Object> model) {
 		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		User user = userService.findUser(userDetails.getUsername()).get();
-		if(userDetails.getAuthorities().toString().contains("admin") || user.getUsername().equals(id_user)) {
+		if(userDetails.getAuthorities().toString().contains("admin")) {
 			userService.deleteUser(id_user);
+			if(user.getUsername().equals(id_user)) {
+			return "redirect:/logout";
 		}
+		}
+		
 		return "redirect:/";
 	}
+	
+	@GetMapping(value = "/users/update/{id_user}")
+	public String processUpdateForm(@PathVariable("id_user") String id_user, Map<String, Object> model) {		
+		Optional<User> userOptional = userService.findUser(id_user);
+		if (userOptional.isEmpty() || !userOptional.get().getUsername().equals(id_user)) {
+			return "exception";
+		} else {
+			model.put("user", userOptional.get());
+			return "users/update";
+		}
+	}
+	
+	
+	@PostMapping(value = "/users/update/user")
+	public String processUpdate2Form(@Valid User user, BindingResult result, Map<String, Object> model) {
+		if (result.hasErrors()) {
+			model.put("user", user);
+			return "users/update";
+		} else {
+			userService.saveUser(user);
+			return "redirect:/";
+		}
+	}
+	
 
+	@GetMapping(value = "/users/friends/delete/{id_user}")
+	public String processDeleteFriendForm(@PathVariable("id_user") String id_user, Map<String, Object> model) {
+		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		User user = userService.findUser(userDetails.getUsername()).get();
+		userService.deleteFriends(id_user, user.getUsername());
+		
+		return "redirect:/users/profile/"+user.getUsername();
+	}
+	
 	@GetMapping(value = "/users/find")
 	public String initFindForm(Map<String, Object> model) {
 		model.put("user", new User());
@@ -124,6 +162,27 @@ public class UserController {
 			// 1 owner found
 			// user = results.iterator().next();
 			// return "redirect:/users/" + user.getUsername();
+			UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
+					.getPrincipal();
+			User user1 = userService.findUser(userDetails.getUsername()).get();
+			Collection<String>listFriend = userService.getAllFriendOf(user1.getUsername());
+			
+			model.put("listFriend", listFriend);
+			model.put("username", user1.getUsername());
+			List<Integer>lPages = new ArrayList<Integer>();
+			if(this.userService.nPagesByUsername(user.getUsername())%5==0) {
+				for(int i=0; i<this.userService.nPagesByUsername(user.getUsername()); i++) {
+					lPages.add(i);
+				}
+			}else {
+				for(int i=0; i<=this.userService.nPagesByUsername(user.getUsername()); i++) {
+					lPages.add(i);
+				}
+			}
+			model.put("pages", lPages); 
+			// multiple owners found
+			model.put("authority", userDetails.getAuthorities().toString().contains("admin"));
+			model.put("currentPage", page);
 			model.put("selections", results);
 			return "users/usersList";
 		} else {

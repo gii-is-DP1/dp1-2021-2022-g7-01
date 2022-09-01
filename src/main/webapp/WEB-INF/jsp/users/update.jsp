@@ -9,11 +9,12 @@
 <petclinic:layout pageName="owners">
 	<h2>Edit ${user.username}</h2>
 	<form:form modelAttribute="user" class="form-horizontal"
-		action="/users/profile/edit" id="edit-user-form">
-		<div class="form-group has-feedback">
+		action="/users/update/user" id="edit-user-form">
+		<div class="form-group has-feedback">			
 			<form:hidden path="username" />
 			<petclinic:inputField label="Email" name="email" />
-			<petclinic:inputField label="Password" name="password" />
+			<form:hidden path="password" />
+			
 		</div>
 		<div class="form-group">
 			<button class="btn btn-default" type="submit">Update user</button>

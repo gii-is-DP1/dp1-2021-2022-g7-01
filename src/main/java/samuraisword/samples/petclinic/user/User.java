@@ -26,6 +26,7 @@ import lombok.Getter;
 import lombok.Setter;
 import samuraisword.achievements.AchievementType;
 import samuraisword.achievements.RolType;
+import samuraisword.game.Game;
 import samuraisword.invitations.Invitation;
 import samuraisword.player.Player;
 
@@ -53,6 +54,8 @@ public class User {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
 	List<Player> listPlayers;
 	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "creator")
+	List<Game> createdGames;
 
 	
 	private String avatar;

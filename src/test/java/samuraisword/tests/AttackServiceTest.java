@@ -76,6 +76,7 @@ public class AttackServiceTest {
 				if(i>1) {
 				g.getListPlayers().get(i2).setCurrentHearts(g.getListPlayers().get(i2).getCurrentHearts()-i+g.getListPlayers().get(i2).getAntiDamageBonus());
 				assertThat(p.getCurrentHearts()==n-i+g.getListPlayers().get(i2).getAntiDamageBonus()).isTrue();
+
 				}else{
 					g.getListPlayers().get(i2).setCurrentHearts(g.getListPlayers().get(i2).getCurrentHearts()-i);
 				assertThat(p.getCurrentHearts()==n-i).isTrue();

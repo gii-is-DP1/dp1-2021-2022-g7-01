@@ -125,4 +125,9 @@ public class UserService {
 		userRepository.deleteRequest(username1,username2);
 		userRepository.deleteRequest(username2,username1);
 	}
+	@Transactional
+	public void deleteFriends(String username1, String username2) throws DataAccessException{
+		userRepository.deleteFriends(username1,username2);
+		userRepository.deleteFriends(username2,username1);
+	}
 }

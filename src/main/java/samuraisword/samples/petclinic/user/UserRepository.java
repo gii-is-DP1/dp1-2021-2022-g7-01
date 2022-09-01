@@ -51,4 +51,8 @@ public interface UserRepository extends  CrudRepository<User, String>{
 	@Modifying
 	@Query(value="delete from FRIEND_REQUESTS where ID_USER_REQUESTED=:user2 AND ID_USER=:user1", nativeQuery=true)
 	void deleteRequest(@Param("user2") String ID_USER_REQUESTED, @Param("user1") String ID_USER);
+	
+	@Modifying
+	@Query(value="delete from FRIENDS where ID_USER_FRIEND=:user2 AND ID_USER=:user1", nativeQuery=true)
+	void deleteFriends(@Param("user2") String ID_USER_REQUESTED, @Param("user1") String ID_USER);
 }

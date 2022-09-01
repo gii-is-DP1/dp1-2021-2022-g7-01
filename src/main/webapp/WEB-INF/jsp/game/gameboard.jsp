@@ -280,22 +280,15 @@ table {
 				<!-- div intermediario para corregir la rotacion dentro -->
 			    <div style="transform: rotate(calc(360deg - var(--angle)* ${ loop.index })">
 			    	<div style="border-radius: 10px;">
-				    <c:choose>
-				    	<c:when test="${ game.currentPlayer.equals(player) }">
-				    		<button class = "player" style="border-radius: 10px; background-color: green;" onclick="myFunction(${player.getUser().getUsername()})"> ${player.getUser().getUsername()} </button>
-				    	</c:when>
-				    	<c:when test="${ player.getRol().toString().equals('SHOGUN') }">
-				    		<button class = "player" style="border-radius: 10px; background-color: yellow;" onclick="myFunction(${player.getUser().getUsername()})"> ${ player.getUser().getUsername() } </button>
-				    	</c:when>
+			    	<c:set value="${ player.getRol().toString().equals('SHOGUN')?'background-color:yellow;':''}" var="shogunStyle" />
+				    <c:set value="${game.currentPlayer.equals(player) ?'padding:5px;':''}" var="currentPlayerStyle" />
+				    <c:set value="${player.getCurrentHearts()<=0 || player.getHand().size()<=0 ?'opacity: 50%;':''}" var="indefenceStyle" />
+				   
 				    	
-				    	<c:when test="${ player.getUser().getUsername().equals(POVplayer.getUser().getUsername()) }">
-				    		<button class = "player" style="border-radius: 10px; background-color: #40CFFF;" onclick="myFunction(${player.getUser().getUsername()})"> ${ player.getUser().getUsername() } </button>
-				    	</c:when>
+				    <button class = "player" style="border-radius: 10px; ${currentPlayerStyle} ${indefenceStyle}  ${shogunStyle} " onclick="myFunction(${player.getUser().getUsername()})"> ${player.getUser().getUsername()} </button>
 				    	
-				    	<c:otherwise>
-				    		<button class = "player" style="border-radius: 10px;" onclick="myFunction(${player.getUser().getUsername()})"> ${ player.getUser().getUsername() } </button>
-				    	</c:otherwise>
-				    </c:choose>
+				    	
+				   
 				    
 			    	
 						<!-- <div style="display: inline-block;" class="img-wrap">
@@ -380,8 +373,14 @@ table {
 								<img style="float: left; height:150px;" title="" src="${Rol}" id="Rol" />
 							</c:when>
 							<c:otherwise>
+							<c:if test="${b==true}">
 								<spring:url value="/resources/images/roles/ninguno.png" htmlEscape="true" var="Rol" /> 
 								<img style="float: left; height:150px;" title="" src="${Rol}" id="Rol" />
+							</c:if>
+							<c:if test="${b==false}">
+							<spring:url value="/resources/images/roles/${ player.getRol() }.png" htmlEscape="true" var="Rol" /> 
+								<img style="float: left; height:150px;" title="" src="${Rol}" id="Rol" />
+							</c:if>
 							</c:otherwise>
 						</c:choose>
 					</td>

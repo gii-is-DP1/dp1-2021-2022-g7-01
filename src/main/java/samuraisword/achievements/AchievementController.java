@@ -60,27 +60,6 @@ public class AchievementController {
 		return "achievements/achievementManage";
 	}
 
-	@GetMapping(value = { "/achievements/new" })
-	public String newAchievementForm(Map<String, Object> model) {
-		Achievement achievement = new Achievement();
-		model.put("achievement", achievement);
-		return FORM_LOGRO;
-	}
-
-	@Valid
-	@PostMapping(value = "/achievements/new")
-	public String processCreationForm(@Valid Achievement achievement, BindingResult result, ModelMap model) {
-		if (result.hasErrors()) {
-			model.put("achievements", achievement);
-			return FORM_LOGRO;
-		} else {
-			UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-			User user = userService.findUser(userDetails.getUsername()).get();
-			achievement.setUser(user);
-			achievementService.saveAchievements(achievement);
-			return "redirect:/achievements/manage";
-		}
-	}
 	
 	@ModelAttribute("types1")
 	public Collection<AchievementType> populateachievementTypes() {
@@ -90,27 +69,6 @@ public class AchievementController {
 	@ModelAttribute("types2")
 	public Collection<RolType> populateRolTypes() {
 		return this.achievementService.findRolTypes();
-	}
-	
-	@GetMapping(value = { "/achievements/edit/{id_achievement}" })
-	public String editAchievementForm(@PathVariable("id_achievement") int idAchievement, Map<String, Object> model) {
-		
-		Achievement achievement = achievementService.findById(idAchievement).get();
-		model.put("achievement", achievement);
-		return FORM_LOGRO;
-	}
-	
-	@Valid
-	@PostMapping(value = { "/achievements/edit/{id_achievement}" })
-	public String processEditForm(@PathVariable("id_achievement") int idAchievement, @Valid Achievement achievement, BindingResult result, Map<String, Object> model) {
-		if (result.hasErrors()) {
-			model.put("achievement", achievement);
-			return FORM_LOGRO;
-		}
-		Achievement achievementToUpdate = achievementService.findById(idAchievement).get();
-		BeanUtils.copyProperties(achievement, achievementToUpdate, "id","user");
-		achievementService.saveAchievements(achievementToUpdate);
-		return "redirect:/achievements/manage";
 	}
 	
 	@GetMapping(value = { "/achievements/delete/{id_achievement}" })
