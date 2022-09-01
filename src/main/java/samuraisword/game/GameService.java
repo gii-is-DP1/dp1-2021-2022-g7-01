@@ -360,7 +360,7 @@ public class GameService {
 		return game.getListPlayers().stream().allMatch(x -> x.getHonor() > 0);
 	}
 
-	public Rol calcWinners(Game game) {
+	public Map<Rol, Double> calcWinners(Game game) {
 		Double bonusNinja = 1.;
 		Double bonusSamurai = 0.;
 		Double bonusRonin = 0.;
@@ -401,10 +401,7 @@ public class GameService {
 				}
 			}
 		}
-
-		Entry<Rol, Double> winnerRol = pointsPerRole.entrySet().stream().max(Map.Entry.comparingByValue()).get();
-
-		return winnerRol.getKey();
+		return pointsPerRole;
 	}
 
 	private Map<Rol, Double> calcPointsPerRole(Game game) {

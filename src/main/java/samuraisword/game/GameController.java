@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
-
+import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -219,9 +219,10 @@ public class GameController {
 			} else {// fin de la partida cuando algun jugador no le quedan puntos de honor
 					// (honor<=0)
 				view = endGame(game, model);
-				Rol winnerRol = gameService.calcWinners(game);
+				Map<Rol, Double> pointsPerRol = gameService.calcWinners(game);
 				game.setWonPlayers(new ArrayList<User>());
 				game.setEndDate(new Date());
+				Rol winnerRol = pointsPerRol.entrySet().stream().max(Map.Entry.comparingByValue()).get().getKey();
 				for(Player p: game.getListPlayers()) {
 					if(p.getRol().equals(winnerRol) || (winnerRol.equals(Rol.SAMURAI) && p.getRol().equals(Rol.SHOGUN))) {
 					game.getWonPlayers().add(p.getUser());
@@ -234,8 +235,11 @@ public class GameController {
 	}
 	
 	public String endGame(Game game, Map<String, Object> model) {
-		Rol winnerRol = gameService.calcWinners(game);
+		Map<Rol,Double> pointsPerRol = gameService.calcWinners(game);
+		Rol winnerRol = pointsPerRol.entrySet().stream().max(Map.Entry.comparingByValue()).get().getKey();
 		model.put("winnerRol", winnerRol);
+		model.put("pointsPerRol", pointsPerRol);
+		model.put("game", game);
 		game.setEndDate(new Date());
 		return "/game/endgame";
 	}
@@ -251,7 +255,8 @@ public class GameController {
 			if(!gameService.checkAllPlayersHavePositiveHonor(game)) {
 				view = endGame(game, model);
 				game.setEndDate(new Date());
-				Rol winnerRol = gameService.calcWinners(game);
+				Map<Rol, Double> pointsPerRol = gameService.calcWinners(game);
+				Rol winnerRol = pointsPerRol.entrySet().stream().max(Map.Entry.comparingByValue()).get().getKey();
 				game.setWonPlayers(new ArrayList<User>());
 				for(Player p: game.getListPlayers()) {
 					if(p.getRol().equals(winnerRol) || (winnerRol.equals(Rol.SAMURAI) && p.getRol().equals(Rol.SHOGUN))) {
@@ -1185,7 +1190,8 @@ public class GameController {
 				} else {// fin de la partida cuando algun jugador no le quedan puntos de honor
 						// (honor<=0)
 					view = endGame(game, model);
-					Rol winnerRol = gameService.calcWinners(game);
+					Map<Rol, Double> pointsPerRol = gameService.calcWinners(game);
+					Rol winnerRol = pointsPerRol.entrySet().stream().max(Map.Entry.comparingByValue()).get().getKey();
 					game.setWonPlayers(new ArrayList<User>());
 					for(Player p: game.getListPlayers()) {
 						if(p.getRol().equals(winnerRol) || (winnerRol.equals(Rol.SAMURAI) && p.getRol().equals(Rol.SHOGUN))) {
