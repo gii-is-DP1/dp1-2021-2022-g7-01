@@ -60,6 +60,7 @@ public class AttackServiceTest {
 		
 		
 		Player p=playerService.findPlayerByUsernameAndGame(playerA, g);
+		int n = p.getCurrentHearts();
 		
 		int dano=cardService.findDamage(g.getUseCard().getName()).get();
 		if(dano>1) {
@@ -74,10 +75,10 @@ public class AttackServiceTest {
 			if(g.getListPlayers().get(i2).getUser().getUsername().equals(playerA)) {
 				if(i>1) {
 				g.getListPlayers().get(i2).setCurrentHearts(g.getListPlayers().get(i2).getCurrentHearts()-i+g.getListPlayers().get(i2).getAntiDamageBonus());
-				assertThat(p.getCurrentHearts()==p.getCurrentHearts()-i+g.getListPlayers().get(i2).getAntiDamageBonus());
+				assertThat(p.getCurrentHearts()==n-i+g.getListPlayers().get(i2).getAntiDamageBonus()).isTrue();
 				}else{
 					g.getListPlayers().get(i2).setCurrentHearts(g.getListPlayers().get(i2).getCurrentHearts()-i);
-				assertThat(p.getCurrentHearts()==p.getCurrentHearts()-i);
+				assertThat(p.getCurrentHearts()==n-i).isTrue();
 				}
 				if(g.getCurrentPlayer().getCharacter().getName().equals("Tomoe")) {
 					Card card = g.getDeck().get(0);

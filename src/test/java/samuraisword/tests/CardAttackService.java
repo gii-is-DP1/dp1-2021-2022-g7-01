@@ -50,9 +50,9 @@ public class CardAttackService {
 			
 			}
 		g.setPlayersInRange(lp);
-		assertThat(!g.getPlayersInRange().contains(POVplayer));
+		assertThat(!g.getPlayersInRange().contains(POVplayer)).isTrue();
 		g.setGamePhase(GamePhase.ATTACK);
-		assertThat(g.getGamePhase().equals(GamePhase.ATTACK));
+		assertThat(g.getGamePhase().equals(GamePhase.ATTACK)).isTrue();
 		
 	}
 	

@@ -50,10 +50,13 @@ public class DistractionEffectTest {
 		Game g = new Game();
 		createTestGame(g);
 		Player p = g.getListPlayers().get(0);
+		int n = p.getHand().size();
+		int m = g.getDiscardPile().size();
 		
 		List<Card>lh = p.getHand();
 		int i = 0 + (int)(Math.random() * ((lh.size() - 0)));
 		cardService.discard(lh.get(i).getName(), p.getHand(), g.getDiscardPile());
+		assertThat(p.getHand().size()==(n-1) && g.getDiscardPile().size()==(m+1)).isTrue();
 		
 	}
 

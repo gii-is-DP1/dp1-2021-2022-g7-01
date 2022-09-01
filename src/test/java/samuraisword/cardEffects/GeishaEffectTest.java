@@ -50,29 +50,29 @@ public class GeishaEffectTest {
 		Game g = new Game();
 		createTestGame(g);
 		Player p = g.getListPlayers().get(0);
-		p.setDistanceBonus(p.getDistanceBonus()+1);p.setNArmor(p.getNArmor()+1);
-		p.setWeaponBonus(p.getWeaponBonus()+1);p.setNFocus(p.getNFocus()+1);
-		p.setDamageBonus(p.getDamageBonus()+1);p.setNFastDraw(p.getNFastDraw()+1);
+		p.getEquipment().add(cardService.findByName("armadura").get());p.setDistanceBonus(p.getDistanceBonus()+1);p.setNArmor(p.getNArmor()+1);
+		p.getEquipment().add(cardService.findByName("concentracion").get());;p.setWeaponBonus(p.getWeaponBonus()+1);p.setNFocus(p.getNFocus()+1);
+		p.getEquipment().add(cardService.findByName("desenvainado rapido").get());;p.setDamageBonus(p.getDamageBonus()+1);p.setNFastDraw(p.getNFastDraw()+1);
 		
 		int  i = p.getHand().size();
 		int j = g.getDiscardPile().size();
 		geishaEffect(g, "hand", p);
-		assertThat(p.getHand().size()==(i+1)&& g.getDiscardPile().size()==(j+1));
+		assertThat(p.getHand().size()==(i-1)&& g.getDiscardPile().size()==(j+1)).isTrue();
 		
 		i=p.getNArmor();
 		j = g.getDiscardPile().size();
 		geishaEffect(g, "armadura", p);
-		assertThat(p.getNArmor()==(i+1)&& g.getDiscardPile().size()==(j+1));
+		assertThat(p.getNArmor()==(i-1)&& g.getDiscardPile().size()==(j+1)).isTrue();
 		
 		i=p.getNFastDraw();
 		j = g.getDiscardPile().size();
 		geishaEffect(g, "desenvainado rapido", p);
-		assertThat(p.getNFastDraw()==(i+1)&& g.getDiscardPile().size()==(j+1));
+		assertThat(p.getNFastDraw()==(i-1)&& g.getDiscardPile().size()==(j+1)).isTrue();
 		
 		i=p.getNFocus();
 		j = g.getDiscardPile().size();
 		geishaEffect(g, "concentracion", p);
-		assertThat(p.getNFocus()==(i+1)&& g.getDiscardPile().size()==(j+1));
+		assertThat(p.getNFocus()==(i-1)&& g.getDiscardPile().size()==(j+1)).isTrue();
 		
 	}
 	
@@ -95,6 +95,7 @@ public class GeishaEffectTest {
 					game.setError("");
 					p.setDistanceBonus(p.getDistanceBonus()-1);
 					game.setGamePhase(GamePhase.MAIN);
+					p.setNArmor(p.getNArmor()-1);
 					cardService.discard(cardName, p.getEquipment(), game.getDiscardPile());
 				}
 			} else {
@@ -107,6 +108,7 @@ public class GeishaEffectTest {
 					game.setError("");
 					p.setWeaponBonus(p.getWeaponBonus()-1);
 					game.setGamePhase(GamePhase.MAIN);
+					p.setNFocus(p.getNFocus()-1);
 					cardService.discard(cardName, p.getEquipment(), game.getDiscardPile());
 				}
 			} else {
@@ -119,6 +121,7 @@ public class GeishaEffectTest {
 					game.setError("");
 					p.setDamageBonus(p.getDamageBonus()+1);
 					game.setGamePhase(GamePhase.MAIN);
+					p.setNFastDraw(p.getNFastDraw()-1);
 					cardService.discard(cardName, p.getEquipment(), game.getDiscardPile());
 				}
 				
@@ -182,6 +185,7 @@ public class GeishaEffectTest {
 		game.setGamePhase(GamePhase.MAIN);
 
 		gameService.asignCards(game.getDeck(), players);
+		gameService.saveGame(game);
 
 	}
 

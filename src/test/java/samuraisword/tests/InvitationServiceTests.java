@@ -51,6 +51,8 @@ import samuraisword.samples.petclinic.user.UserService;
 		@Test
 		@Transactional
 		void shouldDeclineInvitation() {
+			Invitation invi = new Invitation();
+			inviService.saveInvitation(invi);
 			Optional<Invitation> inv=inviService.findById(1);
 			
 			this.inviService.declineInvitation(inv.get());

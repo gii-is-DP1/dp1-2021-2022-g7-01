@@ -73,13 +73,13 @@ public class BushidoEffectTest {
 					game.getCurrentPlayer().setHonor(game.getCurrentPlayer().getHonor() - 1);
 					game.getCurrentPlayer().getEquipment().remove(bush.get());
 					game.getListPlayers().get(nextPlayerIndex).getEquipment().add(bush.get());
-					assertThat(game.getListPlayers().get(nextPlayerIndex).getEquipment().contains(bush.get()));
-					assertThat(game.getCurrentPlayer().getHonor()==n-1);
+					assertThat(game.getListPlayers().get(nextPlayerIndex).getEquipment().contains(bush.get())).isTrue();
+					assertThat(game.getCurrentPlayer().getHonor()==n-1).isTrue();
 				}
 			} else {
 				game.getCurrentPlayer().getEquipment().remove(bush.get());
 				game.getListPlayers().get(nextPlayerIndex).getEquipment().add(bush.get());
-				assertThat(game.getListPlayers().get(nextPlayerIndex).getEquipment().contains(bush.get()));
+				assertThat(game.getListPlayers().get(nextPlayerIndex).getEquipment().contains(bush.get())).isTrue();
 			}
 		}
 
